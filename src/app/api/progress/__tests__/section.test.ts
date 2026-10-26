@@ -38,14 +38,14 @@ describe("POST /api/progress/section", () => {
 
   it("opens the discount for a free learner", async () => {
     sub.mockResolvedValue({ active: false } as never);
-    grant.mockResolvedValue({ code: "SCRIBE-ABC234", expiresAt: new Date("2026-09-18T00:00:00Z"), source: "section-complete", percentOff: 33 });
+    grant.mockResolvedValue({ code: "AEO-ABC234", expiresAt: new Date("2026-09-18T00:00:00Z"), source: "section-complete", percentOff: 33 });
     const res = await post({ lessonId: "expedition-begins", section: 1 });
     expect(grant).toHaveBeenCalledWith("a@example.com", "section-complete");
     expect(await res.json()).toEqual({
       ok: true,
       paid: false,
       freeUnlock: false,
-      offer: { code: "SCRIBE-ABC234", expiresAt: "2026-09-18T00:00:00.000Z", percentOff: 33, source: "section-complete" },
+      offer: { code: "AEO-ABC234", expiresAt: "2026-09-18T00:00:00.000Z", percentOff: 33, source: "section-complete" },
     });
   });
 

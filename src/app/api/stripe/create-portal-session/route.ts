@@ -6,8 +6,8 @@ import { prisma } from "@/lib/db";
 
 /**
  * POST /api/stripe/create-portal-session → { url }
- * Billing portal for the user's Stripe customer: their own purchase /
- * Expedition Pass.
+ * Billing portal for the user's Stripe customer: their own Lifetime purchase /
+ * Monthly subscription.
  */
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);

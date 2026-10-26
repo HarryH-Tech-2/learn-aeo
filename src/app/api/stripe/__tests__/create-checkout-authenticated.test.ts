@@ -64,15 +64,24 @@ describe("POST /api/stripe/create-checkout (authenticated)", () => {
     expect(mockCreate).not.toHaveBeenCalled();
   });
 
-  it("a Lifetime holder cannot buy the monthly pass either, but can still buy a licence", async () => {
+  it("a Lifetime holder cannot buy the monthly plan either", async () => {
     mockedGetServerSession.mockResolvedValue({ user: { email: "paid@example.com" } } as any);
     mockedCheckSubscription.mockResolvedValue({ ...noAccess, active: true, via: "lifetime" } as any);
     process.env.STRIPE_PRICE_MONTHLY = "price_month";
-    process.env.STRIPE_PRICE_CLASSROOM = "price_class";
     const monthly = await POST(new NextRequest("http://localhost/api/stripe/create-checkout", { method: "POST", body: JSON.stringify({ plan: "monthly" }) }));
     expect((await monthly.json()).alreadyActive).toBe(true);
-    const classroom = await POST(new NextRequest("http://localhost/api/stripe/create-checkout", { method: "POST", body: JSON.stringify({ plan: "classroom" }) }));
-    expect((await classroom.json()).url).toContain("checkout.stripe.com");
+    expect(mockCreate).not.toHaveBeenCalled();
+  });
+
+  it("rejects any plan this site does not sell (old classroom/school ids, junk) with a 400", async () => {
+    mockedGetServerSession.mockResolvedValue({ user: { email: "t@example.com" } } as any);
+    process.env.STRIPE_PRICE_MONTHLY = "price_month";
+    for (const plan of ["classroom", "school", "gold", "", 42, null]) {
+      const res = await POST(new NextRequest("http://localhost/api/stripe/create-checkout", { method: "POST", body: JSON.stringify({ plan }) }));
+      expect(res.status).toBe(400);
+      expect((await res.json()).error).toMatch(/plan/i);
+    }
+    expect(mockCreate).not.toHaveBeenCalled();
   });
 
   it("a monthly subscriber may still upgrade to Lifetime", async () => {
@@ -144,24 +153,25 @@ describe("POST /api/stripe/create-checkout (authenticated)", () => {
     expect(response.status).toBe(401);
     expect(mockCreate).not.toHaveBeenCalled();
   });
-  it("subscription plans use mode=subscription and carry the plan in metadata", async () => {
+  it("the monthly plan uses mode=subscription and carries the plan in metadata", async () => {
     mockedGetServerSession.mockResolvedValue({ user: { email: "t@example.com", id: "user_1" } });
-    process.env.STRIPE_PRICE_CLASSROOM = "price_class";
+    process.env.STRIPE_PRICE_MONTHLY = "price_month";
 
     const response = await POST(
       new NextRequest("http://localhost/api/stripe/create-checkout", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ plan: "classroom" }),
+        body: JSON.stringify({ plan: "monthly" }),
       })
     );
     expect(response.status).toBe(200);
     const args = mockCreate.mock.calls[0][0];
     expect(args.mode).toBe("subscription");
-    expect(args.line_items[0].price).toBe("price_class");
-    expect(args.metadata.plan).toBe("classroom");
-    expect(args.subscription_data.metadata.plan).toBe("classroom");
-    expect(args.success_url).toContain("/teachers/licence?checkout=success&plan=classroom");
+    expect(args.line_items[0].price).toBe("price_month");
+    expect(args.metadata.plan).toBe("monthly");
+    expect(args.subscription_data.metadata.plan).toBe("monthly");
+    expect(args.success_url).toContain("/dashboard?checkout=success&plan=monthly");
+    expect(args.success_url).not.toContain("/teachers");
     expect(args.customer_creation).toBeUndefined();
   });
 
@@ -184,7 +194,7 @@ describe("POST /api/stripe/create-checkout (authenticated)", () => {
     const response = await POST(req);
     expect(response.status).toBe(200);
     const args = mockCreate.mock.calls[0][0];
-    expect(args.discounts).toEqual([{ coupon: "PPP_TIER_D" }]);
+    expect(args.discounts).toEqual([{ coupon: "AEO_PPP_D" }]);
     expect(args.allow_promotion_codes).toBeUndefined();
     expect(args.metadata.ppp_country).toBe("IN");
     expect(args.metadata.ppp_tier).toBe("D");
@@ -207,7 +217,7 @@ describe("POST /api/stripe/create-checkout (authenticated)", () => {
     expect(mockCreate.mock.calls[0][0].allow_promotion_codes).toBe(true);
     await POST(new NextRequest("http://localhost/api/stripe/create-checkout", { method: "POST", headers: { cookie: "aeo_cc=IN" }, body: JSON.stringify({ promo: true }) }));
     const args = mockCreate.mock.calls[1][0];
-    expect(args.discounts).toEqual([{ coupon: "PPP_TIER_D" }]);
+    expect(args.discounts).toEqual([{ coupon: "AEO_PPP_D" }]);
     expect(args.allow_promotion_codes).toBeUndefined();
   });
 

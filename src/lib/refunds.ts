@@ -20,10 +20,11 @@ export function purchaseKind(metadata: Record<string, string> | null | undefined
   const md = metadata ?? {};
   if (md.product) return { kind: "product", label: md.product };
   const plan = planById(md.plan);
-  // sessions from before checkout wrote a plan were all Lifetime (the webhook assumes the same)
-  if (!plan || plan.id === "lifetime") return { kind: "lifetime", label: "Lifetime access" };
-  if (plan.id === "monthly") return { kind: "monthly", label: plan.name };
-  return { kind: "unknown", label: plan.name };
+  // A missing or unsold plan (old classroom/school metadata) was never granted access by the webhook, so its
+  // refund takes none away: the owner is told to check it in Stripe.
+  if (!plan) return { kind: "unknown", label: md.plan ? `the unsold plan "${md.plan}"` : "a checkout with no plan" };
+  if (plan.id === "lifetime") return { kind: "lifetime", label: "Lifetime access" };
+  return { kind: "monthly", label: plan.name };
 }
 
 export function formatMoney(minor: number, currency: string): string {

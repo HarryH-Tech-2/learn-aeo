@@ -189,7 +189,7 @@ export default function AccountContent() {
                   <span className="inline-block w-2 h-2 rounded-full bg-turquoise" />
                   <span className="font-body text-sm text-sand-100">
                     {subscription.via === "monthly"
-                      ? "Expedition Pass"
+                      ? "Monthly plan"
                       : subscription.via === "free-unlock"
                         ? "Full course, open to you free"
                         : "Lifetime Access"}

@@ -115,7 +115,7 @@
  *                         site (referrer hostname) / its credit link clicked
  *   cartouche_print_click   — "Get the print" pressed on the translator (name_length, currency, theme, format) [2026-09-24; theme + format 2026-09-25; names, the count on a family print, 2026-10-16]
  *   cartouche_print_view    — the print card was a third on screen, once per name (name_length, currency) [2026-10-15]
- *   cartouche_print_format  — a format picked on the print card: framed / print / image (format, name_length) [2026-09-25; digital dropped from the card 2026-09-26; image, the $3.99 HD picture, 2026-10-15]
+ *   cartouche_print_format  — a format picked on the print card: framed / print / image (format, name_length) [2026-09-25; digital dropped from the card 2026-09-26; image, the paid HD picture, 2026-10-15]
  *   cartouche_print_theme   — a paper swatch picked on the print card (theme, name_length) [2026-09-25]
  *   cartouche_print_add_name — "Add another name" pressed on the print card (names: names on the print once the
  *                             new box is filled, 2–4) [2026-10-16]; the card's begin_checkout carries names too

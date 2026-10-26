@@ -5,7 +5,7 @@ import { authOptions } from "@/lib/auth";
 import { createCheckoutSession, getStripe } from "@/lib/stripe";
 import { getActiveOffer, promotionCodeIdFor } from "@/lib/offers";
 import { COUNTRY_COOKIE, currencyForCountry } from "@/lib/pricing";
-import { PLANS, isLicencePlan, planById, stripePriceIdFor } from "@/lib/plans";
+import { PLANS, planById, stripePriceIdFor } from "@/lib/plans";
 import { pppFor } from "@/lib/ppp";
 import { checkoutSubmitText } from "@/lib/checkout-copy";
 import { checkSubscription } from "@/lib/subscription";
@@ -18,11 +18,11 @@ import { REFERRER_COOKIE, decodeReferrer } from "@/lib/referrer";
 const SESSION_TTL_SECONDS = 2 * 60 * 60;
 
 /**
- * POST /api/stripe/create-checkout  { plan?: "lifetime" | "monthly" | "classroom" | "school", from?: string, promo?: boolean }
- * → { url }  Defaults to lifetime. `from` is the page the buyer came from, where Cancel takes them back to
- * (src/lib/checkout-return.ts); `promo` shows Stripe's promotion-code box. One-off plans use mode "payment", the
- * rest "subscription"; the plan travels in metadata so the webhook knows
- * what was bought.
+ * POST /api/stripe/create-checkout  { plan?: "lifetime" | "monthly", from?: string, promo?: boolean }
+ * → { url }  Defaults to lifetime when no plan is given; any other plan value is a 400. `from` is the page the
+ * buyer came from, where Cancel takes them back to (src/lib/checkout-return.ts); `promo` shows Stripe's
+ * promotion-code box. Lifetime uses mode "payment", monthly "subscription"; the plan travels in metadata so the
+ * webhook knows what was bought.
  *
  * An account that already holds the plan (or Lifetime, which covers the
  * monthly pass) is sent to the dashboard instead of to Stripe:
@@ -44,18 +44,20 @@ export async function POST(request: NextRequest) {
     } catch {
       body = {};
     }
-    const plan = planById(typeof body.plan === "string" ? body.plan : "lifetime") ?? PLANS.lifetime;
+    // Only the two plans this site sells. No plan at all means Lifetime; anything else (an old classroom or
+    // school link, junk) is refused rather than quietly sold as Lifetime.
+    const plan = body.plan === undefined ? PLANS.lifetime : planById(typeof body.plan === "string" ? body.plan : null);
+    if (!plan) {
+      return NextResponse.json({ error: "Unknown plan. Choose Lifetime or Monthly." }, { status: 400 });
+    }
 
-    // Never sell someone what they already own. Licence plans are bought for
-    // other people, so they stay open to everyone.
-    if (!isLicencePlan(plan)) {
-      const access = await checkSubscription(email).catch(() => null);
-      // (the free-unlock test's free group has the course already: src/lib/access-test.ts)
-      const owned = access?.active && (access.via === "lifetime" || access.via === "free-unlock" || (access.via === "monthly" && plan.id === "monthly"));
-      if (owned) {
-        console.log(`[create-checkout] ${email} already has ${access?.via} access; skipping ${plan.id} checkout`);
-        return NextResponse.json({ url: "/dashboard?already=active", alreadyActive: true });
-      }
+    // Never sell someone what they already own.
+    const access = await checkSubscription(email).catch(() => null);
+    // (the free-unlock test's free group has the course already: src/lib/access-test.ts)
+    const owned = access?.active && (access.via === "lifetime" || access.via === "free-unlock" || (access.via === "monthly" && plan.id === "monthly"));
+    if (owned) {
+      console.log(`[create-checkout] ${email} already has ${access?.via} access; skipping ${plan.id} checkout`);
+      return NextResponse.json({ url: "/dashboard?already=active", alreadyActive: true });
     }
 
     const priceId = stripePriceIdFor(plan);
@@ -93,7 +95,6 @@ export async function POST(request: NextRequest) {
 
     // (NEXTAUTH_URL ends in "/" in production, which made every return link "…com//dashboard")
     const base = (process.env.NEXTAUTH_URL ?? "").replace(/\/+$/, "");
-    const successPath = isLicencePlan(plan) ? "/teachers/licence" : "/dashboard";
     const ref = decodeReferrer(request.cookies.get(REFERRER_COOKIE)?.value);
     const metadata = {
       email,
@@ -123,7 +124,7 @@ export async function POST(request: NextRequest) {
       metadata,
       // {CHECKOUT_SESSION_ID} is filled in by Stripe; the dashboard uses it as the
       // GA4 purchase transaction_id so a refresh can't double-count.
-      success_url: `${base}${successPath}?checkout=success&plan=${plan.id}&session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${base}/dashboard?checkout=success&plan=${plan.id}&session_id={CHECKOUT_SESSION_ID}`,
       // back to the page they came from, not always /pricing
       cancel_url: cancelUrlFor(base, typeof body.from === "string" ? body.from : null),
     };

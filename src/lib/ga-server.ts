@@ -41,7 +41,7 @@ export type ServerPurchase = {
   clientId?: string | null;
   sessionId?: string | null;
   transactionId: string;
-  /** Major units, e.g. 14.99 */
+  /** Major units, e.g. 100 or 66.99 */
   value: number;
   currency: string;
   plan: string;

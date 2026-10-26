@@ -4,7 +4,7 @@ import { PLANS } from "@/lib/plans";
 
 describe("ppp tiers", () => {
   it("maps countries to tiers, case-insensitively, and unknowns to full price", () => {
-    expect(pppFor("IN")).toMatchObject({ tier: "D", percentOff: 65, couponId: "PPP_TIER_D" });
+    expect(pppFor("IN")).toMatchObject({ tier: "D", percentOff: 65, couponId: "AEO_PPP_D" });
     expect(pppFor("eg")?.tier).toBe("D");
     expect(pppFor("BR")?.tier).toBe("C");
     expect(pppFor("PL")?.tier).toBe("B");
@@ -22,10 +22,10 @@ describe("ppp tiers", () => {
   it("every tier has a percentage and a coupon id", () => {
     for (const t of ["B", "C", "D"] as const) {
       expect(PPP_PERCENT[t]).toBeGreaterThan(0);
-      expect(PPP_COUPON_ID[t]).toMatch(/^PPP_TIER_[BCD]$/);
+      expect(PPP_COUPON_ID[t]).toBe(`AEO_PPP_${t}`);
     }
-    expect(PPP_PERCENT.B).toBeLessThan(PPP_PERCENT.C);
-    expect(PPP_PERCENT.C).toBeLessThan(PPP_PERCENT.D);
+    expect(PPP_COUPON_ID.D).toBe("AEO_PPP_D");
+    expect(PPP_PERCENT).toEqual({ B: 30, C: 50, D: 65 });
   });
 
   it("all listed codes are two upper-case letters", () => {
@@ -34,15 +34,15 @@ describe("ppp tiers", () => {
 });
 
 describe("parity price", () => {
-  it("matches Stripe's coupon arithmetic (verified against sandbox sessions)", () => {
-    expect(parityPrice(19.99, 65)).toBe(7);
-    expect(parityPrice(59, 50)).toBe(29.5);
-    expect(parityPrice(4.99, 30)).toBe(3.49);
-    expect(parityPrice(19.99, 30)).toBe(13.99);
+  it("matches Stripe's coupon arithmetic (minor units, rounded to the nearest unit)", () => {
+    expect(parityPrice(100, 65)).toBe(35);
+    expect(parityPrice(80, 50)).toBe(40);
+    expect(parityPrice(10, 30)).toBe(7);
+    expect(parityPrice(8, 65)).toBe(2.8);
     expect(parityPrice(249, 65)).toBe(87.15);
     expect(parityPrice(0.01, 65)).toBe(0.01);
     expect(formatParity(7)).toBe("7");
-    expect(formatParity(29.5)).toBe("29.50");
+    expect(formatParity(2.8)).toBe("2.80");
     expect(formatParity(3.49)).toBe("3.49");
   });
 

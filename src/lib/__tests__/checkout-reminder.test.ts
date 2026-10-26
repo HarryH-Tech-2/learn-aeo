@@ -69,19 +69,21 @@ describe("formatSessionPrice", () => {
   it("formats what Stripe charged, in its currency", () => {
     expect(formatSessionPrice(1339, "usd")).toBe("$13.39");
     expect(formatSessionPrice(1850, "eur")).toBe("€18.50");
-    expect(formatSessionPrice(1599, "gbp")).toBe("£15.99");
+    expect(formatSessionPrice(8000, "gbp")).toBe("£80");
+    expect(formatSessionPrice(10000, "usd")).toBe("$100");
+    expect(formatSessionPrice(6699, "usd")).toBe("$66.99");
   });
 
   it("gives null when the amount or currency is missing", () => {
     expect(formatSessionPrice(null, "usd")).toBeNull();
-    expect(formatSessionPrice(1999, null)).toBeNull();
+    expect(formatSessionPrice(10000, null)).toBeNull();
   });
 });
 
 describe("reminderCheckoutUrl", () => {
   it("returns to checkout for the same plan, tagged for attribution", () => {
-    expect(reminderCheckoutUrl("https://www.learnaeo.com/", PLANS.classroom)).toBe(
-      "https://www.learnaeo.com/checkout?plan=classroom&utm_source=email&utm_medium=email&utm_campaign=checkout_reminder"
+    expect(reminderCheckoutUrl("https://www.learnaeo.com/", PLANS.monthly)).toBe(
+      "https://www.learnaeo.com/checkout?plan=monthly&utm_source=email&utm_medium=email&utm_campaign=checkout_reminder"
     );
   });
 });

@@ -84,9 +84,9 @@ describe("renderFeedbackEmail", () => {
     expect(e.text).not.toMatch(/https?:\/\//);
   });
 
-  it("has a monthly variant that mentions the Expedition Pass", () => {
+  it("has a monthly variant that mentions the monthly plan", () => {
     const e = renderFeedbackEmail("Mo", "monthly");
-    expect(e.text).toContain("since you started the Expedition Pass");
+    expect(e.text).toContain("since you started the monthly plan");
     expect(e.text).not.toContain("bought the course");
   });
 

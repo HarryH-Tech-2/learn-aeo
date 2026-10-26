@@ -68,7 +68,7 @@ function Spinner() {
 
 /**
  * The sign-up line for someone on their way to pay: the plan they picked and the price they will be charged
- * (local currency and purchasing-power discount, via <Price>), not a hard-coded "$19.99".
+ * (local currency and purchasing-power discount, via <Price>), never a hard-coded amount.
  */
 function BuyIntro({ destination }: { destination: string }) {
   const plan = planById(planIdFromCheckoutPath(destination)) ?? PLANS.lifetime;
@@ -86,8 +86,7 @@ function BuyIntro({ destination }: { destination: string }) {
   }
   return (
     <>
-      Create your account, then start the {plan.name}
-      {plan.id === "classroom" || plan.id === "school" ? " licence" : ""}: <Price plan={plan} /> {planPeriodLabel(plan)}.
+      Create your account, then start the {plan.name} plan: <Price plan={plan} /> {planPeriodLabel(plan)}.
     </>
   );
 }

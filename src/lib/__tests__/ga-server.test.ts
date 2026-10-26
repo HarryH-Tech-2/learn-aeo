@@ -30,7 +30,7 @@ describe("gaSessionIdFromCookie", () => {
 });
 
 describe("sendPurchaseToGA4", () => {
-  const purchase = { clientId: "1.2", transactionId: "cs_live_x", value: 14.99, currency: "usd", plan: "lifetime", planName: "Lifetime" };
+  const purchase = { clientId: "1.2", transactionId: "cs_live_x", value: 100, currency: "usd", plan: "lifetime", planName: "Lifetime" };
   const original = process.env.GA4_MP_API_SECRET;
   beforeEach(() => {
     delete process.env.GA4_MP_API_SECRET;
@@ -56,8 +56,8 @@ describe("sendPurchaseToGA4", () => {
     const body = JSON.parse(init.body);
     expect(body.client_id).toBe("1.2");
     expect(body.events[0].name).toBe("purchase");
-    expect(body.events[0].params).toMatchObject({ transaction_id: "cs_live_x", value: 14.99, currency: "USD" });
-    expect(body.events[0].params.items[0]).toMatchObject({ item_id: "lifetime", price: 14.99, quantity: 1 });
+    expect(body.events[0].params).toMatchObject({ transaction_id: "cs_live_x", value: 100, currency: "USD" });
+    expect(body.events[0].params.items[0]).toMatchObject({ item_id: "lifetime", price: 100, quantity: 1 });
     expect(body.events[0].params.engagement_time_msec).toBe(1);
     expect(body.events[0].params.session_id).toBeUndefined();
     await sendPurchaseToGA4({ ...purchase, sessionId: "1700000000" }, f as any);

@@ -1,35 +1,27 @@
 #!/usr/bin/env node
 /**
- * Create the plan catalogue in Stripe (src/lib/plans.ts): one Product and
- * one Price per plan, USD default with a GBP currency option. Prints the
- * environment variables to set. Run once per Stripe mode:
+ * Create the plan catalogue in the Learn AEO Stripe account (src/lib/plans.ts): one Product and one Price per
+ * plan, USD default with a GBP currency option, statement descriptor LEARNAEO. Prints the environment
+ * variables to set. Run once per Stripe mode:
  *
  *   STRIPE_SECRET_KEY=sk_test_... node scripts/stripe-create-plans.mjs
- *   STRIPE_SECRET_KEY=sk_live_... node scripts/stripe-create-plans.mjs
+ *   STRIPE_SECRET_KEY=sk_live_... node scripts/stripe-create-plans.mjs --live
+ *
+ * A live key is refused without --live (scripts/lib/stripe-key.mjs).
  *
  * Idempotent: products are looked up by metadata.plan and reused; a new
  * Price is only created when no active Price matches the amounts.
  */
-import Stripe from "stripe";
+import { stripeFromEnv } from "./lib/stripe-key.mjs";
 
-const key = process.env.STRIPE_SECRET_KEY;
-if (!key) {
-  console.error("Set STRIPE_SECRET_KEY in the environment.");
-  process.exit(1);
-}
-const stripe = new Stripe(key);
-const mode = /^(sk|rk)_live/.test(key) ? "LIVE" : "test";
+const { stripe, mode } = stripeFromEnv();
 
-// Keep in sync with src/lib/plans.ts and src/lib/cartouche-print.ts
+const STATEMENT_DESCRIPTOR = "LEARNAEO";
+
+// Keep in sync with src/lib/plans.ts (amounts in minor units).
 const PLANS = [
-  { id: "lifetime", name: "Learn AEO · Lifetime", description: "All eight chambers, every game, every future lesson. One payment.", usd: 1999, gbp: 1599, recurring: null, envKey: "STRIPE_PRICE_ID" },
-  { id: "monthly", name: "Learn AEO · Expedition Pass", description: "The full course, month by month. Cancel any time.", usd: 499, gbp: 399, recurring: { interval: "month" }, envKey: "STRIPE_PRICE_MONTHLY" },
-  { id: "classroom", name: "Learn AEO · Classroom licence", description: "One teacher and up to 30 pupils for a year, with pupil progress and Classroom mode.", usd: 2950, gbp: 2450, recurring: { interval: "year" }, envKey: "STRIPE_PRICE_CLASSROOM" },
-  { id: "school", name: "Learn AEO · School licence", description: "Unlimited pupils and teachers at one school for a year.", usd: 12450, gbp: 9950, recurring: { interval: "year" }, envKey: "STRIPE_PRICE_SCHOOL" },
-  // Not a plan: a one-off digital good sold from the translator (src/lib/cartouche-print.ts).
-  { id: "cartouche-print", name: "Cartouche Print · Digital PDF", description: "A print-ready A4 PDF of one name in a cartouche, with a sign-by-sign key and the story of the cartouche.", usd: 1999, gbp: 1599, recurring: null, envKey: "STRIPE_PRICE_CARTOUCHE" },
-  { id: "cartouche-print-a4", name: "Cartouche Print · A4 print, posted", description: "One name in a cartouche, giclée on 200 gsm fine-art paper, printed and posted. The PDF included.", usd: 3499, gbp: 2799, recurring: null, envKey: "STRIPE_PRICE_CARTOUCHE_PRINT" },
-  { id: "cartouche-print-framed", name: "Cartouche Print · Framed A4 print", description: "One name in a cartouche, printed and framed in black wood behind glass, posted ready to hang. The PDF included.", usd: 7999, gbp: 4999, recurring: null, envKey: "STRIPE_PRICE_CARTOUCHE_FRAMED" },
+  { id: "lifetime", name: "Learn AEO — Lifetime", description: "The full answer engine optimisation course: every lesson as it's released, tools, templates and certificate. One payment.", usd: 10000, gbp: 8000, recurring: null, envKey: "STRIPE_PRICE_ID" },
+  { id: "monthly", name: "Learn AEO — Monthly", description: "The full answer engine optimisation course, month by month. Cancel any time.", usd: 1000, gbp: 800, recurring: { interval: "month" }, envKey: "STRIPE_PRICE_MONTHLY" },
 ];
 
 async function findProduct(planId) {
@@ -49,15 +41,27 @@ async function findPrice(productId, plan) {
   );
 }
 
+/** 10000 → "100", 6699 → "66.99" */
+const money = (minor) => (minor % 100 === 0 ? String(minor / 100) : (minor / 100).toFixed(2));
+
 console.log(`Stripe mode: ${mode}\n`);
 const env = [];
 for (const plan of PLANS) {
   let product = await findProduct(plan.id);
   if (!product) {
-    product = await stripe.products.create({ name: plan.name, description: plan.description, metadata: { plan: plan.id } });
+    product = await stripe.products.create({
+      name: plan.name,
+      description: plan.description,
+      statement_descriptor: STATEMENT_DESCRIPTOR,
+      metadata: { plan: plan.id },
+    });
     console.log(`created product ${product.id} (${plan.id})`);
   } else {
     console.log(`product ${product.id} (${plan.id}) exists`);
+    if (product.name !== plan.name || product.statement_descriptor !== STATEMENT_DESCRIPTOR) {
+      product = await stripe.products.update(product.id, { name: plan.name, description: plan.description, statement_descriptor: STATEMENT_DESCRIPTOR });
+      console.log("  updated name / statement descriptor");
+    }
   }
 
   let price = await findPrice(product.id, plan);
@@ -70,7 +74,7 @@ for (const plan of PLANS) {
       ...(plan.recurring ? { recurring: plan.recurring } : {}),
       metadata: { plan: plan.id },
     });
-    console.log(`  created price ${price.id}: $${(plan.usd / 100).toFixed(2)} / £${(plan.gbp / 100).toFixed(2)}${plan.recurring ? ` per ${plan.recurring.interval}` : ""}`);
+    console.log(`  created price ${price.id}: $${money(plan.usd)} / £${money(plan.gbp)}${plan.recurring ? ` per ${plan.recurring.interval}` : ""}`);
   } else {
     console.log(`  price ${price.id} matches`);
   }

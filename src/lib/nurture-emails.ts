@@ -441,7 +441,7 @@ export function sampleContext(baseUrl: string, over: Partial<NurtureEmailContext
     unsubscribeUrl: `${baseUrl}/api/email/unsubscribe?u=preview&t=preview`,
     lesson1Completed: false,
     lesson1Started: false,
-    offer: { code: "SCRIBE-PREVIEW", expiresAt: new Date(Date.now() + 60 * 3_600_000), percentOff: 33 },
+    offer: { code: "AEO-PREVIEW", expiresAt: new Date(Date.now() + 60 * 3_600_000), percentOff: 33 },
     ...over,
   };
 }

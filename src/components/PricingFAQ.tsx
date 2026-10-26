@@ -1,61 +1,56 @@
 "use client";
 
+/**
+ * The pricing page's FAQ, with FAQPage schema. Prices are read from src/lib/plans.ts (formatPlanPrice), never
+ * typed here, so they always match the cards and Stripe.
+ */
 import { useState } from "react";
 import { reveal } from "@/components/reveal";
 import { useFreeCourseGuest } from "@/components/useFreeCourseGuest";
+import { PLANS, formatPlanPrice } from "@/lib/plans";
+
+const both = (plan: (typeof PLANS)[keyof typeof PLANS]) => `${formatPlanPrice(plan, "USD")} (${formatPlanPrice(plan, "GBP")})`;
+const MONTHS_TO_LIFETIME = Math.round(PLANS.lifetime.usd / PLANS.monthly.usd);
 
 const faqs = [
   {
     question: "Is Lifetime really a one-time payment?",
-    answer:
-      "Yes. You pay $19.99 (£15.99) once and receive lifetime access to the full course: every lesson, game and future chamber. No recurring charge, no expiring licence.",
+    answer: `Yes. You pay ${both(PLANS.lifetime)} once and keep the full course for good: every lesson, including each new one as it's released, plus the tools, templates and certificate. No recurring charge.`,
   },
   {
-    question: "What is the Expedition Pass?",
-    answer:
-      "The full course for $4.99 (£3.99) a month, for people who would rather not pay up front. Cancel any time from your account page; your progress is kept if you come back. Four months costs about the same as Lifetime, so if you know you'll finish, Lifetime is the better deal.",
-  },
-  {
-    question: "How do Classroom and School licences work?",
-    answer:
-      "A teacher buys the licence and gets a class code. Pupils create a free account, enter the code at /join, and have the full course while the licence runs. Classroom covers you and up to 30 pupils for a year ($29.50 / £24.50); School has no seat limit ($124.50 / £99.50). Your licence page shows every pupil's progress. Schools that need a purchase order can contact us.",
+    question: "How does the Monthly plan work?",
+    answer: `The full course for ${both(PLANS.monthly)} a month, for people who would rather not pay up front. Cancel any time from your account page; your progress is kept if you come back. ${MONTHS_TO_LIFETIME} months costs the same as Lifetime, so if you know you'll finish, Lifetime is the better deal.`,
   },
   {
     question: "Can I try a lesson before I buy?",
-    answer:
-      "Yes. Our first lesson, 'The Expedition Begins', is completely free with a free account. Work through it to get a feel for the teaching style before committing.",
+    answer: "Yes. The first lesson is completely free with a free account. Work through it to get a feel for the teaching before you pay anything.",
   },
   {
     question: "What exactly does 'lifetime access' cover?",
-    answer:
-      "Every lesson, exercise, game and quiz currently on the platform, plus any new content we add in the future. No extra charges, no upgrade tiers.",
+    answer: "Every lesson, tool, template and quiz on the platform now, plus any new lessons we add as answer engines change. No extra charges, no upgrade tiers.",
   },
   {
     question: "Do I need any prior knowledge?",
-    answer:
-      "No prior knowledge is needed. The course starts from scratch with the 24 uniliteral signs (the hieroglyphic alphabet) and builds up from there. It's designed for complete beginners.",
+    answer: "No. If you work in marketing you have everything you need. The course starts from how answer engines pick their sources and builds up from there.",
   },
   {
     question: "How long does it take to complete the course?",
-    answer:
-      "Most learners complete all 8 lessons in 4 to 8 weeks, studying a few hours per week. The course is entirely self-paced, so you can go faster or slower depending on your schedule.",
+    answer: "Most learners finish all 8 lessons in a few weeks, a couple of hours a week. It's entirely self-paced, so you can go faster or slower.",
   },
   {
     question: "Will new lessons be added?",
-    answer:
-      "Yes. New lessons are added regularly. Your one-time purchase includes access to all current and future content at no additional cost.",
+    answer: "Yes. New lessons are added as answer engines change. Lifetime includes every current and future lesson at no extra cost.",
   },
   {
     question: "Do you offer refunds?",
-    answer:
-      "If you're unhappy with the course within 14 days of purchase, contact us and we'll refund you in full, no questions asked.",
+    answer: "If you're unhappy with the course within 14 days of purchase, contact us and we'll refund you in full, no questions asked.",
   },
 ];
 
 // The free-unlock test's free group (src/lib/access-test.ts) is not asked to buy, so the buying questions give way
 // to one about the free course. (The FAQ schema below keeps the full list for crawlers.)
-const PAID_ONLY = new Set(["Is Lifetime really a one-time payment?", "What is the Expedition Pass?", "Can I try a lesson before I buy?", "What exactly does 'lifetime access' cover?", "Do you offer refunds?"]);
-const FREE_FAQ = { question: "Is the course really free?", answer: "For you, the whole course is free: make an account and all eight lessons, the 3D levels, the Journey and the certificate open on it, with nothing to pay. Teachers can still buy a Classroom or School licence for a class." };
+const PAID_ONLY = new Set(["Is Lifetime really a one-time payment?", "How does the Monthly plan work?", "Can I try a lesson before I buy?", "What exactly does 'lifetime access' cover?", "Do you offer refunds?"]);
+const FREE_FAQ = { question: "Is the course really free?", answer: "For you, the whole course is free: make an account and all eight lessons, the tools and the certificate open on it, with nothing to pay." };
 
 export default function PricingFAQ() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);

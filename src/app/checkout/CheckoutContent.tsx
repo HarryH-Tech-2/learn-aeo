@@ -68,12 +68,20 @@ export default function CheckoutContent() {
   const triggered = useRef(false);
   const router = useRouter();
   const params = useSearchParams();
-  const plan = planById(params.get("plan")) ?? PLANS.lifetime;
+  const requested = params.get("plan");
+  const plan = planById(requested) ?? PLANS.lifetime;
+  // An old link naming a plan this site doesn't sell (classroom, school) goes to the pricing page, not to a
+  // Lifetime checkout the buyer never chose.
+  const unknownPlan = requested !== null && !planById(requested);
   // Shown when the browser brings this page back from its cache after Stripe (see the pageshow handler).
   const [left, setLeft] = useState(false);
   const [from, setFrom] = useState<string | null>(null);
 
   const start = useCallback(() => {
+    if (unknownPlan) {
+      router.replace("/pricing");
+      return;
+    }
     const back = returnPath(params.get("from"));
     setFrom(back);
     fetch("/api/stripe/create-checkout", {
@@ -97,7 +105,7 @@ export default function CheckoutContent() {
       .catch(() => {
         router.replace("/pricing?checkout=error");
       });
-  }, [params, plan, router]);
+  }, [params, plan, router, unknownPlan]);
 
   useEffect(() => {
     if (status === "loading") return;

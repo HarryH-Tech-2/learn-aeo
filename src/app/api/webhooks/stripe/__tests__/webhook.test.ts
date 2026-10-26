@@ -41,6 +41,8 @@ vi.mock("@/lib/leads", () => ({ recordLead: mockRecordLead, normaliseEmail: (e: 
 vi.mock("@/lib/offers", () => ({ grantOffer: mockGrantOffer, OFFER_PERCENT_OFF: 33 }));
 const mockReminder = vi.hoisted(() => vi.fn().mockResolvedValue("sent"));
 vi.mock("@/lib/checkout-reminder", () => ({ sendCheckoutReminderIfDue: mockReminder }));
+const mockGA4 = vi.hoisted(() => vi.fn().mockResolvedValue(true));
+vi.mock("@/lib/ga-server", () => ({ sendPurchaseToGA4: mockGA4 }));
 
 import { POST } from "@/app/api/webhooks/stripe/route";
 
@@ -60,6 +62,7 @@ describe("POST /api/webhooks/stripe", () => {
     mockSendRecovery.mockResolvedValue(true);
     mockReminder.mockResolvedValue("sent");
     process.env.STRIPE_WEBHOOK_SECRET = "whsec_test";
+    process.env.STRIPE_PRICE_MONTHLY = "price_monthly";
   });
 
   it("returns 400 when stripe-signature header is missing", async () => {
@@ -88,13 +91,34 @@ describe("POST /api/webhooks/stripe", () => {
     expect(mockSendWelcome).toHaveBeenCalledWith("Harry", "buyer@example.com", "lifetime");
   });
 
-  it("checkout with no plan metadata (old sessions) is treated as lifetime", async () => {
+  it("does not grant access for a checkout with an unknown or missing plan", async () => {
+    const { notifyOwner } = await import("@/lib/notify");
+    const errors = vi.spyOn(console, "error").mockImplementation(() => {});
+    const paid = (metadata?: Record<string, string>) => ({
+      type: "checkout.session.completed",
+      data: { object: { id: "cs_u", payment_status: "paid", amount_total: 10000, currency: "usd", customer_email: "a@b.co", customer: "cus_u", subscription: "sub_u", customer_details: { name: "A" }, ...(metadata ? { metadata } : {}) } },
+    });
+    for (const event of [paid({ plan: "classroom", email: "a@b.co" }), paid({ plan: "school" }), paid({ email: "a@b.co" }), paid()]) {
+      mockConstructEvent.mockReturnValue(event);
+      const res = await send();
+      expect(res.status).toBe(200);
+    }
+    expect(mockActivate).not.toHaveBeenCalled();
+    expect(mockSendWelcome).not.toHaveBeenCalled();
+    expect(mockGA4).not.toHaveBeenCalled();
+    expect(mockSubscriptionsRetrieve).not.toHaveBeenCalled();
+    expect(errors.mock.calls.filter((c) => c[0] === "[stripe] unknown plan")).toHaveLength(4);
+    expect(notifyOwner).toHaveBeenCalledWith(expect.objectContaining({ subject: expect.stringMatching(/unknown plan/i) }));
+    errors.mockRestore();
+  });
+
+  it("records a paid lifetime sale in GA4", async () => {
     mockConstructEvent.mockReturnValue({
       type: "checkout.session.completed",
-      data: { object: { payment_status: "paid", customer_email: "buyer@example.com", customer: "cus_123", customer_details: null } },
+      data: { object: { id: "cs_l", payment_status: "paid", amount_total: 10000, currency: "usd", customer_email: "buyer@example.com", customer: "cus_123", customer_details: null, metadata: { plan: "lifetime" } } },
     });
     await send();
-    expect(mockActivate).toHaveBeenCalledWith("buyer@example.com", "cus_123", expect.objectContaining({ plan: "lifetime" }));
+    expect(mockGA4).toHaveBeenCalledWith(expect.objectContaining({ transactionId: "cs_l", value: 100, plan: "lifetime" }));
   });
 
   it("still returns 200 when welcome email fails (payment is primary)", async () => {
@@ -140,12 +164,11 @@ describe("POST /api/webhooks/stripe", () => {
       expect(notifyOwner).toHaveBeenCalledWith(expect.objectContaining({ subject: expect.stringMatching(/nothing paid/i) }));
     });
 
-    it("an unpaid monthly or licence checkout unlocks nothing", async () => {
-      mockConstructEvent.mockReturnValue({ type: "checkout.session.completed", data: { object: lifetime({ payment_status: "unpaid", subscription: "sub_t", metadata: { plan: "classroom" } }) } });
-      await send();
-        mockConstructEvent.mockReturnValue({ type: "checkout.session.completed", data: { object: lifetime({ payment_status: "unpaid", subscription: "sub_m", metadata: { plan: "monthly" } }) } });
+    it("an unpaid monthly checkout unlocks nothing", async () => {
+      mockConstructEvent.mockReturnValue({ type: "checkout.session.completed", data: { object: lifetime({ payment_status: "unpaid", subscription: "sub_m", metadata: { plan: "monthly" } }) } });
       await send();
       expect(mockActivate).not.toHaveBeenCalled();
+      expect(mockGA4).not.toHaveBeenCalled();
     });
 
     it("the delayed payment arriving later unlocks the course then", async () => {
@@ -186,18 +209,6 @@ describe("POST /api/webhooks/stripe", () => {
     expect(mockSendWelcome).toHaveBeenCalledWith("Mo", "m@example.com", "monthly");
   });
 
-  it("classroom checkout: no licence branch any more, so nothing is created or granted", async () => {
-    mockConstructEvent.mockReturnValue({
-      type: "checkout.session.completed",
-      data: { object: { payment_status: "paid", customer_email: "t@example.com", customer: "cus_t", subscription: "sub_t", customer_details: { name: "Ms T" }, metadata: { plan: "classroom" } } },
-    });
-    mockSubscriptionsRetrieve.mockResolvedValue({ id: "sub_t", items: { data: [{ current_period_end: 1_800_000_000 }] } });
-    const res = await send();
-    expect(res.status).toBe(200);
-    expect(mockActivate).not.toHaveBeenCalled();
-    expect(mockSendWelcome).not.toHaveBeenCalled();
-  });
-
   it("subscription.updated for a known monthly row is synced, not routed to the legacy path", async () => {
     mockConstructEvent.mockReturnValue({ type: "customer.subscription.updated", data: { object: { id: "sub_m", status: "past_due", customer: "cus_m", items: { data: [{ current_period_end: 1_800_000_000 }] } } } });
     mockSyncMonthly.mockResolvedValue(true);
@@ -207,13 +218,32 @@ describe("POST /api/webhooks/stripe", () => {
     expect(mockCustomersRetrieve).not.toHaveBeenCalled();
   });
 
-  it("legacy subscription.updated (unknown id) with status active → activates by customer email", async () => {
-    mockConstructEvent.mockReturnValue({ type: "customer.subscription.updated", data: { object: { id: "sub_1", status: "active", customer: "cus_456" } } });
+  it("legacy subscription.updated (unknown id) on the monthly price with status active → activates by customer email", async () => {
+    mockConstructEvent.mockReturnValue({ type: "customer.subscription.updated", data: { object: { id: "sub_1", status: "active", customer: "cus_456", items: { data: [{ price: { id: "price_monthly" } }] } } } });
     mockCustomersRetrieve.mockResolvedValue({ email: "user@example.com" });
     const res = await send();
     expect(res.status).toBe(200);
     expect(mockActivate).toHaveBeenCalledWith("user@example.com", "cus_456", expect.objectContaining({ plan: "monthly" }));
     expect(mockDeactivate).not.toHaveBeenCalled();
+  });
+
+  it("legacy subscription.updated for an active subscription on any other price grants nothing", async () => {
+    const errors = vi.spyOn(console, "error").mockImplementation(() => {});
+    mockCustomersRetrieve.mockResolvedValue({ email: "user@example.com" });
+    for (const items of [{ data: [{ price: { id: "price_classroom_yearly" } }] }, { data: [] }, undefined]) {
+      mockConstructEvent.mockReturnValue({ type: "customer.subscription.updated", data: { object: { id: "sub_2", status: "active", customer: "cus_456", ...(items ? { items } : {}) } } });
+      expect((await send()).status).toBe(200);
+    }
+    expect(mockActivate).not.toHaveBeenCalled();
+    errors.mockRestore();
+  });
+
+  it("legacy subscription.updated grants nothing when STRIPE_PRICE_MONTHLY is unset", async () => {
+    delete process.env.STRIPE_PRICE_MONTHLY;
+    mockConstructEvent.mockReturnValue({ type: "customer.subscription.updated", data: { object: { id: "sub_3", status: "active", customer: "cus_456", items: { data: [{ price: { id: "price_monthly" } }] } } } });
+    mockCustomersRetrieve.mockResolvedValue({ email: "user@example.com" });
+    expect((await send()).status).toBe(200);
+    expect(mockActivate).not.toHaveBeenCalled();
   });
 
   it("legacy subscription.updated with status canceled → deactivates", async () => {
@@ -257,7 +287,7 @@ describe("POST /api/webhooks/stripe", () => {
     });
 
     it("sends the discount email, not the plain reminder, when an offer is made", async () => {
-      mockGrantOffer.mockResolvedValueOnce({ code: "SCRIBE-ABC123", expiresAt: new Date(), percentOff: 33, source: "checkout-abandoned" });
+      mockGrantOffer.mockResolvedValueOnce({ code: "AEO-ABC123", expiresAt: new Date(), percentOff: 33, source: "checkout-abandoned" });
       mockConstructEvent.mockReturnValue(expired({ plan: "lifetime" }));
       expect((await send()).status).toBe(200);
       expect(mockReminder).not.toHaveBeenCalled();
@@ -275,13 +305,20 @@ describe("POST /api/webhooks/stripe", () => {
       expect(mockReminder).toHaveBeenCalledTimes(1);
     });
 
-    it("sends the plain reminder for the monthly pass and licences, with no discount", async () => {
+    it("sends the plain reminder for the monthly plan and unknown plans, with no discount", async () => {
       for (const plan of ["monthly", "classroom", "school"]) {
         mockConstructEvent.mockReturnValue(expired({ plan }));
         expect((await send()).status).toBe(200);
       }
       expect(mockGrantOffer).not.toHaveBeenCalled();
       expect(mockReminder).toHaveBeenCalledTimes(3);
+    });
+
+    it("a checkout with no plan in its metadata earns no discount (it is not assumed to be Lifetime)", async () => {
+      mockConstructEvent.mockReturnValue(expired({}));
+      expect((await send()).status).toBe(200);
+      expect(mockGrantOffer).not.toHaveBeenCalled();
+      expect(mockReminder).toHaveBeenCalledTimes(1);
     });
 
     it("falls back to the reminder when making the offer fails", async () => {
@@ -301,7 +338,7 @@ describe("POST /api/webhooks/stripe", () => {
       const sources = () => mockRecordLead.mock.calls.map((c) => c[0].source);
 
       it("the expiry and a new discount email", async () => {
-        mockGrantOffer.mockResolvedValueOnce({ code: "SCRIBE-ABC123", expiresAt: new Date(), percentOff: 33, source: "checkout-abandoned" });
+        mockGrantOffer.mockResolvedValueOnce({ code: "AEO-ABC123", expiresAt: new Date(), percentOff: 33, source: "checkout-abandoned" });
         mockConstructEvent.mockReturnValue(expired({ plan: "lifetime" }));
         await send();
         expect(sources()).toEqual(["checkout-expired:cs_x", "checkout-recovery-sent:cs_x"]);
@@ -309,7 +346,7 @@ describe("POST /api/webhooks/stripe", () => {
       });
 
       it("a repeat of an offer they already held", async () => {
-        mockGrantOffer.mockResolvedValueOnce({ code: "SCRIBE-OLD111", expiresAt: new Date(), percentOff: 33, source: "nurture", reused: true });
+        mockGrantOffer.mockResolvedValueOnce({ code: "AEO-OLD111", expiresAt: new Date(), percentOff: 33, source: "nurture", reused: true });
         mockConstructEvent.mockReturnValue(expired({ plan: "lifetime" }));
         await send();
         expect(sources()).toEqual(["checkout-expired:cs_x", "checkout-recovery-resent:cs_x"]);
@@ -329,7 +366,7 @@ describe("POST /api/webhooks/stripe", () => {
       });
 
       it("a discount email Resend refused counts as not sent and falls back to the reminder", async () => {
-        mockGrantOffer.mockResolvedValueOnce({ code: "SCRIBE-ABC123", expiresAt: new Date(), percentOff: 33, source: "checkout-abandoned" });
+        mockGrantOffer.mockResolvedValueOnce({ code: "AEO-ABC123", expiresAt: new Date(), percentOff: 33, source: "checkout-abandoned" });
         mockSendRecovery.mockResolvedValueOnce(false);
         mockConstructEvent.mockReturnValue(expired({ plan: "lifetime" }));
         await send();

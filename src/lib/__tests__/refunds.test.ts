@@ -22,8 +22,8 @@ function charge(over: Partial<Stripe.Charge> = {}): Stripe.Charge {
   return {
     id: "ch_1",
     payment_intent: "pi_1",
-    amount: 1999,
-    amount_refunded: 1999,
+    amount: 10000,
+    amount_refunded: 10000,
     refunded: true,
     currency: "usd",
     created: Math.floor(Date.now() / 1000) - 3 * 86400,
@@ -38,9 +38,10 @@ beforeEach(() => vi.clearAllMocks());
 describe("purchaseKind", () => {
   it("reads the plan or product from the checkout metadata", () => {
     expect(purchaseKind({ plan: "lifetime" }, true).kind).toBe("lifetime");
-    expect(purchaseKind({}, true).kind).toBe("lifetime");
+    expect(purchaseKind({}, true).kind).toBe("unknown"); // the webhook never granted a checkout with no plan
     expect(purchaseKind({ plan: "monthly" }, true).kind).toBe("monthly");
     expect(purchaseKind({ plan: "classroom" }, true).kind).toBe("unknown");
+    expect(purchaseKind({ plan: "school" }, true).kind).toBe("unknown");
     expect(purchaseKind({ product: "unit-pack", plan: "lifetime" }, true).kind).toBe("product");
     expect(purchaseKind(null, false).kind).toBe("unknown");
   });
@@ -48,7 +49,7 @@ describe("purchaseKind", () => {
 
 describe("formatMoney / heldFor", () => {
   it("formats", () => {
-    expect(formatMoney(1999, "usd")).toBe("US$19.99");
+    expect(formatMoney(10000, "usd")).toBe("US$100.00");
     expect(formatMoney(1199, "gbp")).toBe("£11.99");
     expect(heldFor(0, 3600)).toBe("under a day");
     expect(heldFor(0, 86400)).toBe("1 day");
@@ -63,7 +64,7 @@ describe("handleRefund", () => {
     expect(mockRevoke).toHaveBeenCalledWith("buyer@example.com");
     const mail = mockNotify.mock.calls[0][0];
     expect(mail.subject).toBe("Refund: buyer@example.com");
-    expect(mail.text).toContain("US$19.99 of US$19.99 for Lifetime access, 3 days after paying");
+    expect(mail.text).toContain("US$100.00 of US$100.00 for Lifetime access, 3 days after paying");
     expect(mail.text).toContain("lifetime access has been removed");
   });
 
@@ -91,7 +92,7 @@ describe("handleRefund", () => {
 
 describe("handleDispute", () => {
   const dispute = (over: Partial<Stripe.Dispute> = {}) =>
-    ({ id: "dp_1", charge: "ch_1", amount: 1999, currency: "usd", reason: "fraudulent", status: "needs_response", evidence_details: { due_by: 1800000000 }, ...over }) as unknown as Stripe.Dispute;
+    ({ id: "dp_1", charge: "ch_1", amount: 10000, currency: "usd", reason: "fraudulent", status: "needs_response", evidence_details: { due_by: 1800000000 }, ...over }) as unknown as Stripe.Dispute;
 
   beforeEach(() => {
     mockChargesRetrieve.mockResolvedValue(charge({ refunded: false }));

@@ -15,7 +15,7 @@ import { prisma } from "@/lib/db";
 import { checkSubscription } from "@/lib/subscription";
 import { getStripe } from "@/lib/stripe";
 
-export const OFFER_COUPON_ID = "NEXT-CHAMBER-33";
+export const OFFER_COUPON_ID = "NEXT-DISTRICT-33";
 export const OFFER_PERCENT_OFF = 33;
 
 export type OfferSource = "section-complete" | "lesson-complete" | "checkout-abandoned" | "nurture";
@@ -40,7 +40,7 @@ function randomCode(): string {
   const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   let s = "";
   for (let i = 0; i < 6; i++) s += alphabet[Math.floor(Math.random() * alphabet.length)];
-  return `SCRIBE-${s}`;
+  return `AEO-${s}`;
 }
 
 async function ensureCoupon(): Promise<void> {
@@ -52,7 +52,7 @@ async function ensureCoupon(): Promise<void> {
       id: OFFER_COUPON_ID,
       percent_off: OFFER_PERCENT_OFF,
       duration: "once",
-      name: "Next chamber offer",
+      name: "Learn AEO offer · 33% off",
     });
   }
 }

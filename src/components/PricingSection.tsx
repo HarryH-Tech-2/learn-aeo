@@ -1,9 +1,9 @@
 "use client";
 
 /**
- * The pricing page's plan cards. Three visible tiers for learners
- * (Expedition Pass, Lifetime, Classroom) and a quiet School row for the
- * office. All amounts come from src/lib/plans.ts.
+ * The pricing page's plan cards: Monthly and Lifetime, the only two plans
+ * (src/lib/plans.ts). Every amount on this page comes from PLANS via
+ * formatPlanPrice / <Price>, so "$100" and "$10" are never typed here.
  */
 import { trackEvent } from "@/lib/analytics";
 import Price, { useLocalCurrency } from "@/components/Price";
@@ -33,7 +33,7 @@ function CheckoutNotice() {
       <p className={`font-body text-sm ${checkout === "error" ? "text-terracotta" : "text-sand-300"}`}>
         {checkout === "error"
           ? "Something went wrong starting checkout. You have not been charged. Please try again below."
-          : "Checkout cancelled. You have not been charged. Whenever you're ready, your expedition awaits."}
+          : "Checkout cancelled. You have not been charged. The course is here whenever you're ready."}
       </p>
     </div>
   );
@@ -60,7 +60,8 @@ function GuaranteeLine() {
   );
 }
 
-const GLYPH: Record<PlanId, string> = { lifetime: "𓆣", monthly: "𓇳", classroom: "𓀀", school: "𓉐" };
+/** How many months of Monthly cost the same as Lifetime, from the plan amounts. */
+const MONTHS_TO_LIFETIME = Math.round(PLANS.lifetime.usd / PLANS.monthly.usd);
 
 export default function PricingSection() {
   const { data: session } = useSession();
@@ -70,7 +71,7 @@ export default function PricingSection() {
   const [loading, setLoading] = useState<PlanId | null>(null);
   // What the signed-in visitor already holds, so we never offer it again.
   const [owned, setOwned] = useState<"lifetime" | "monthly" | "free-unlock" | null>(null);
-  // The free-unlock test's free group (src/lib/access-test.ts): the course is free, so only the licences are sold here
+  // The free-unlock test's free group (src/lib/access-test.ts): the course is free, so nothing is sold here
   const freeGuest = useFreeCourseGuest();
   const freeCourse = freeGuest || owned === "free-unlock";
   useEffect(() => {
@@ -148,7 +149,7 @@ export default function PricingSection() {
     }
   };
 
-  const cards: Plan[] = freeCourse ? [PLANS.classroom] : [PLANS.monthly, PLANS.lifetime, PLANS.classroom];
+  const cards: Plan[] = freeCourse ? [] : [PLANS.monthly, PLANS.lifetime];
 
   return (
     <section id="pricing" className="relative py-20">
@@ -166,14 +167,14 @@ export default function PricingSection() {
             <span className="h-px w-12 bg-gold-700" />
           </div>
           <h2 className="reveal font-display text-4xl md:text-5xl lg:text-6xl font-light text-sand-100 mb-6" style={reveal(0.1, { y: 30 })}>
-            Begin Your
+            Get cited by
             <br />
-            <span className="text-gradient-gold font-medium">Expedition</span>
+            <span className="text-gradient-gold font-medium">answer engines</span>
           </h2>
           <p className="reveal font-body text-base md:text-lg text-sand-400 max-w-xl mx-auto font-light leading-relaxed" style={reveal(0.2)}>
             {freeCourse
-              ? "Every chamber is free for you: make an account and the whole course opens. Teaching a class? The licences are below."
-              : "The first chamber is free. After that, pay once and keep it forever, dig a month at a time, or bring your whole class."}
+              ? "Every lesson is free for you: make an account and the whole course opens."
+              : "The first lesson is free. After that, pay once and keep the course for good, or learn a month at a time."}
           </p>
         </div>
 
@@ -194,7 +195,7 @@ export default function PricingSection() {
         {!freeCourse && <PppBanner />}
 
 
-        <div className={`grid gap-5 lg:gap-8 items-stretch ${freeCourse ? "md:grid-cols-2 max-w-4xl mx-auto" : "md:grid-cols-3"}`}>
+        <div className={`grid gap-5 lg:gap-8 items-stretch ${freeCourse ? "max-w-xl mx-auto" : "md:grid-cols-2 max-w-4xl mx-auto"}`}>
           {freeCourse && (
             <div className="reveal relative flex order-first" style={reveal(0.3, { y: 40 })}>
               <div className="relative flex-1 flex flex-col [&>div]:flex-1 [&>div]:flex [&>div]:flex-col [&>div]:justify-center [&>div]:p-8 md:[&>div]:p-10">
@@ -210,7 +211,7 @@ export default function PricingSection() {
             const featured = !!plan.featured;
             const covered = (owned === "lifetime" && (plan.id === "lifetime" || plan.id === "monthly")) || (owned === "monthly" && plan.id === "monthly");
             return (
-              // Lifetime ("Most chosen") first on phones, in the middle from md up
+              // Lifetime ("Most chosen") first on phones, on the right from md up
               <div key={plan.id} className={`reveal relative flex ${featured ? "order-first md:order-none md:-my-4" : ""}`} style={reveal(0.3 + i * 0.1, { y: 40 })}>
                 {featured && <div className="absolute -inset-px bg-gradient-to-b from-gold-500/40 via-gold-700/10 to-gold-500/40 blur-sm" />}
                 <div className={`relative flex-1 flex flex-col bg-obsidian-light border p-8 md:p-10 lg:p-12 ${featured ? "border-gold-500/50" : "border-gold-700/25"}`}>
@@ -225,9 +226,6 @@ export default function PricingSection() {
                   )}
 
                   <div className="flex items-center gap-2 mb-4">
-                    <span className="text-2xl text-gold-400" style={{ fontFamily: "'Noto Sans Egyptian Hieroglyphs', serif" }} aria-hidden="true">
-                      {GLYPH[plan.id]}
-                    </span>
                     <span className="font-body text-sm tracking-[0.2em] uppercase text-gold-400">{plan.name}</span>
                   </div>
 
@@ -253,7 +251,7 @@ export default function PricingSection() {
 
                   {covered ? (
                     <Link href="/dashboard" className={`${featured ? "btn-primary" : "btn-secondary"} w-full justify-center text-base py-4`}>
-                      {plan.id === "lifetime" ? "You have Lifetime access · Dashboard" : owned === "lifetime" ? "Covered by your Lifetime access" : "Your pass is active · Dashboard"}
+                      {plan.id === "lifetime" ? "You have Lifetime access · Dashboard" : owned === "lifetime" ? "Covered by your Lifetime access" : "Your plan is active · Dashboard"}
                     </Link>
                   ) : (
                     <button
@@ -267,20 +265,14 @@ export default function PricingSection() {
                           ? owned === "monthly"
                             ? "Upgrade to Lifetime"
                             : "Get Lifetime Access"
-                          : plan.id === "monthly"
-                            ? "Start the Expedition Pass"
-                            : "Buy a Classroom licence"}
+                          : "Start Monthly"}
                     </button>
                   )}
                   {error?.plan === plan.id && <CheckoutError message={error.message} />}
                   {!covered && <GuaranteeLine />}
-                  {plan.id === "monthly" && <p className="font-body text-xs text-sand-500 text-center mt-4">Cancel any time from your account. Four months costs about the same as Lifetime.</p>}
-                  {plan.id === "classroom" && (
+                  {plan.id === "monthly" && (
                     <p className="font-body text-xs text-sand-500 text-center mt-4">
-                      Pupils join with a class code, no card needed.{" "}
-                      <Link href="/teachers" className="text-gold-500 hover:text-gold-300">
-                        For teachers
-                      </Link>
+                      Cancel any time from your account. {MONTHS_TO_LIFETIME} months costs the same as Lifetime.
                     </p>
                   )}
                 </div>
@@ -289,49 +281,13 @@ export default function PricingSection() {
           })}
         </div>
 
-        {/* School: the quiet row */}
-        <div id="teachers" className="reveal mt-10 md:mt-14 border border-gold-700/20 bg-obsidian-light/60 p-8 md:p-10 lg:p-12 flex flex-col md:flex-row md:items-center gap-8" style={reveal(0.6)}>
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-xl text-gold-400" style={{ fontFamily: "'Noto Sans Egyptian Hieroglyphs', serif" }} aria-hidden="true">
-                {GLYPH.school}
-              </span>
-              <span className="font-body text-xs tracking-[0.2em] uppercase text-gold-400">{PLANS.school.name} licence</span>
-            </div>
-            <p className="font-display text-2xl text-sand-100 mb-2">{PLANS.school.tagline}</p>
-            <p className="font-body text-base text-sand-400">
-              {PLANS.school.features.join(" · ")}. One invoice, and every teacher at the school runs their own classes on it.
-            </p>
-          </div>
-          <div className="text-center md:text-right">
-            <p className="font-display text-5xl text-sand-100">
-              <PlanPrice plan={PLANS.school} big={false} />
-              <span className="font-body text-sm text-sand-500 ml-2">{planPeriodLabel(PLANS.school)}</span>
-            </p>
-            <div className="flex flex-col sm:flex-row md:flex-col gap-2 mt-3">
-              <button onClick={() => startCheckout(PLANS.school)} disabled={loading !== null} className="btn-secondary justify-center text-sm py-3 px-6 disabled:opacity-50">
-                {loading === "school" ? "Preparing…" : "Buy a School licence"}
-              </button>
-              {error?.plan === "school" && <CheckoutError message={error.message} />}
-              <GuaranteeLine />
-              <Link href="/teachers/licence?invoice=1&plan=school#invoice" className="font-body text-xs text-gold-400 hover:text-gold-300 underline underline-offset-4 self-center">
-                Pay by invoice or PO instead
-              </Link>
-              <p className="font-body text-[11px] text-sand-500 self-center">No auto-renewal on invoices: we remind you a month before it ends.</p>
-            </div>
-          </div>
-        </div>
-
         <div className="mt-10 grid sm:grid-cols-3 gap-4 text-center">
           {[
-            ["𓂀", "14-day guarantee", "Not for you? Email us within 14 days for a full refund, no questions asked."],
-            ["𓊖", "Always improving", "New chambers and games land regularly, included on every plan."],
-            ["𓏞", "Cancel in one click", "Passes and licences stop from your account page. No emails, no phone calls."],
-          ].map(([g, t, d]) => (
+            ["14-day guarantee", "Not for you? Email us within 14 days for a full refund, no questions asked."],
+            ["Always up to date", "New lessons land as answer engines change, included on both plans."],
+            ["Cancel in one click", "Monthly stops from your account page. No emails, no phone calls."],
+          ].map(([t, d]) => (
             <div key={t} className="reveal" style={reveal(0.7)}>
-              <span className="text-2xl text-gold-500" style={{ fontFamily: "'Noto Sans Egyptian Hieroglyphs', serif" }} aria-hidden="true">
-                {g}
-              </span>
               <p className="font-body text-sm text-sand-200 font-medium mt-1">{t}</p>
               <p className="font-body text-xs text-sand-500 mt-1">{d}</p>
             </div>

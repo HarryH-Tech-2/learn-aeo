@@ -18,7 +18,7 @@ describe("renderNurtureEmail", () => {
   it("links the welcome to the free lesson and the offer to checkout with the code", () => {
     expect(renderNurtureEmail("welcome", sampleContext(base)).html).toContain(`${base}/lessons/expedition-begins`);
     const offer = renderNurtureEmail("offer", sampleContext(base));
-    expect(offer.html).toContain("SCRIBE-PREVIEW");
+    expect(offer.html).toContain("AEO-PREVIEW");
     expect(offer.html).toContain(`${base}/get-started?next=checkout`);
   });
 

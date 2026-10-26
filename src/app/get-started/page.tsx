@@ -3,11 +3,12 @@ import { absoluteUrl } from "@/lib/site";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import GetStartedContent from "./GetStartedContent";
+import { PLANS, formatPlanPrice } from "@/lib/plans";
 
 export const metadata: Metadata = {
   title: "Start Learning Hieroglyphics | Free First Lesson",
   description:
-    "Create a free account and start your first hieroglyphics lesson. Unlock the full course anytime with a one-time $19.99 payment.",
+    `Create a free account and start your first lesson. Unlock the full course anytime with a one-time ${formatPlanPrice(PLANS.lifetime, "USD")} payment.`,
   alternates: {
     canonical: absoluteUrl("/get-started"),
   },
@@ -23,7 +24,7 @@ export default function GetStartedPage() {
         <p>
           Create a free account and begin your first lesson right away. When
           you&apos;re ready, unlock the full hieroglyphics course for a single
-          one-time payment of $19.99, or dig month by month for $4.99.
+          one-time payment of {formatPlanPrice(PLANS.lifetime, "USD")}, or learn month by month for {formatPlanPrice(PLANS.monthly, "USD")}.
           Every current and future lesson included.
         </p>
         <h2>What you&apos;ll learn</h2>

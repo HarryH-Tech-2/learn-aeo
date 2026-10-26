@@ -1,3 +1,11 @@
+/**
+ * POST /api/webhooks/stripe: Stripe's events for this site's two plans (src/lib/plans.ts).
+ *
+ * Access is granted only for money received on a plan this site sells: a paid Lifetime or Monthly checkout,
+ * or a legacy subscription on the monthly Price. A checkout naming any other plan (old classroom/school
+ * metadata) or no plan at all is logged, the owner told, and acknowledged with a 200 so Stripe stops
+ * retrying; nothing is granted and no purchase is sent to GA4.
+ */
 import { NextRequest, NextResponse } from "next/server";
 import { notifyOwner } from "@/lib/notify";
 import Stripe from "stripe";
@@ -7,7 +15,7 @@ import { sendWelcomeEmail, sendCheckoutRecoveryEmail } from "@/lib/email";
 import { OFFER_PERCENT_OFF, grantOffer } from "@/lib/offers";
 import { pppBeatsOffer } from "@/lib/ppp";
 import { prisma } from "@/lib/db";
-import { PLANS, planById } from "@/lib/plans";
+import { PLANS, planById, stripePriceIdFor } from "@/lib/plans";
 import { sendPurchaseToGA4 } from "@/lib/ga-server";
 import { describeSource } from "@/lib/referrer";
 import { handleDispute, handleRefund } from "@/lib/refunds";
@@ -15,6 +23,14 @@ import { sendCheckoutReminderIfDue } from "@/lib/checkout-reminder";
 import { recordCheckoutLog, type CheckoutLogOutcome } from "@/lib/checkout-recovery-log";
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+
+/** Is this subscription on the monthly Price (STRIPE_PRICE_MONTHLY)? False when the variable is unset. */
+function isMonthlyPriceSubscription(sub: Stripe.Subscription): boolean {
+  const monthlyPrice = stripePriceIdFor(PLANS.monthly);
+  if (!monthlyPrice) return false;
+  const items = sub.items?.data ?? [];
+  return items.length > 0 && items.every((item) => item.price?.id === monthlyPrice);
+}
 
 function periodEnd(sub: Stripe.Subscription): Date | null {
   // API 2025+ moved current_period_end onto the item; older shapes keep it on the subscription.
@@ -33,8 +49,20 @@ async function fulfilCheckout(session: Stripe.Checkout.Session) {
     const email = session.customer_email ?? session.customer_details?.email ?? null;
 
     const customerId = typeof session.customer === "string" ? session.customer : (session.customer?.id ?? null);
-    const plan = planById(session.metadata?.plan) ?? PLANS.lifetime;
+    const plan = planById(session.metadata?.plan);
     const name = session.customer_details?.name;
+
+    // A plan this site doesn't sell (old classroom/school metadata) or none at all: never fall back to Lifetime.
+    // Checked before anything else, so no grant, welcome email or GA4 purchase can follow. Answered with a 200.
+    if (!plan) {
+      console.error("[stripe] unknown plan", { plan: session.metadata?.plan ?? null, session: session.id, email, customer: customerId, paid: session.payment_status });
+      void notifyOwner({
+        subject: `Checkout for an unknown plan, no access given: ${email ?? "unknown buyer"}`,
+        text: `Checkout session ${session.id} (${session.payment_status ?? "no payment status"}) named plan "${session.metadata?.plan ?? "(none)"}", which this site does not sell. ${email ?? "The buyer"} was not given access. Stripe customer ${customerId ?? "(none)"}. Refund or grant access by hand.`,
+        ...(email ? { replyTo: email } : {}),
+      });
+      return;
+    }
 
     console.log(`[stripe:checkout.session.completed] email=${email} customer=${customerId} plan=${plan.id} paid=${session.payment_status}`);
     if (!email || !customerId) return;
@@ -125,8 +153,8 @@ async function fulfilCheckout(session: Stripe.Checkout.Session) {
     if (plan.id === "monthly") {
       await activateSubscription(email, customerId, { plan: "monthly", stripeSubscriptionId: subId, currentPeriodEnd: end });
       void notifyOwner({
-        subject: `New Expedition Pass: ${email}`,
-        text: `${name ?? "Someone"} <${email}> started the monthly Expedition Pass. Stripe customer ${customerId}, subscription ${subId}.${pppNote}${sourceNote}`,
+        subject: `New monthly plan: ${email}`,
+        text: `${name ?? "Someone"} <${email}> started the monthly plan. Stripe customer ${customerId}, subscription ${subId}.${pppNote}${sourceNote}`,
         replyTo: email,
       });
       try {
@@ -137,6 +165,9 @@ async function fulfilCheckout(session: Stripe.Checkout.Session) {
       return;
     }
 
+    // Every PlanId is handled above: a new plan added to src/lib/plans.ts fails to compile here until it is.
+    const unhandled: never = plan.id;
+    console.error("[stripe] unknown plan", { plan: unhandled, session: session.id });
 }
 
 export async function POST(request: NextRequest) {
@@ -173,7 +204,7 @@ export async function POST(request: NextRequest) {
         console.log(`[stripe:checkout.session.async_payment_failed] email=${email} session=${session.id}`);
         void notifyOwner({
           subject: `Payment failed, no access given: ${email ?? "unknown buyer"}`,
-          text: `A delayed payment for checkout session ${session.id} failed (${session.metadata?.plan ?? session.metadata?.product ?? "lifetime"}). ${email ?? "The buyer"} was not given access or sent anything.`,
+          text: `A delayed payment for checkout session ${session.id} failed (${session.metadata?.plan ?? "no plan"}). ${email ?? "The buyer"} was not given access or sent anything.`,
           ...(email ? { replyTo: email } : {}),
         });
         break;
@@ -184,7 +215,8 @@ export async function POST(request: NextRequest) {
         // create-checkout). Offer a time-limited discount to come back.
         const session = event.data.object as Stripe.Checkout.Session;
         const email = session.customer_email ?? session.customer_details?.email ?? null;
-        const plan = session.metadata?.plan ?? "lifetime";
+        // (no plan in the metadata is not assumed to be Lifetime: it earns the plain reminder, never a discount)
+        const plan = session.metadata?.plan ?? "";
         console.log(`[stripe:checkout.session.expired] email=${email} plan=${plan}`);
         // Every step below is kept in EmailLead (src/lib/checkout-recovery-log.ts) so /admin/marketing can count
         // expired sessions, emails sent and who bought afterwards.
@@ -248,11 +280,16 @@ export async function POST(request: NextRequest) {
         // New-style rows are keyed by subscription id: monthly passes.
         if (await syncMonthlySubscription(subscription.id, status, end)) break;
 
-        // Legacy rows (pre-2026 monthly plan) were keyed by customer email.
+        // Legacy rows were keyed by customer email. Only a subscription on the monthly Price may grant monthly
+        // access this way: any other subscription on the account (a price this site doesn't sell) grants nothing.
         const customerId = typeof subscription.customer === "string" ? subscription.customer : subscription.customer.id;
         const customer = (await getStripe().customers.retrieve(customerId)) as Stripe.Customer;
         if (customer.email) {
           if (status === "active" || status === "trialing") {
+            if (!isMonthlyPriceSubscription(subscription)) {
+              console.error("[stripe] subscription not on the monthly price, no access given", { subscription: subscription.id, customer: customerId });
+              break;
+            }
             await activateSubscription(customer.email, customerId, { plan: "monthly", stripeSubscriptionId: subscription.id, currentPeriodEnd: end });
           } else if (status === "past_due" || status === "canceled" || status === "unpaid") {
             await deactivateSubscription(customer.email);

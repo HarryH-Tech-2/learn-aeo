@@ -1,6 +1,6 @@
 import { Resend } from "resend";
 import { SITE } from "@/lib/site";
-import { isLicencePlan, type Plan } from "@/lib/plans";
+import type { Plan } from "@/lib/plans";
 import { lessons } from "@/lib/lessons";
 import { ownerEmail } from "@/lib/notify";
 import {
@@ -64,7 +64,7 @@ function codePanel(label: string | null, code: string, under: string): string {
 export type WelcomePlan = "lifetime" | "monthly";
 
 /**
- * Sent by the Stripe webhook after a Lifetime or Expedition Pass (monthly) purchase. Opens with a short
+ * Sent by the Stripe webhook after a Lifetime or Monthly purchase. Opens with a short
  * thank-you from the Learn AEO team; replies go to the owner inbox (CONTACT_TO_EMAIL, see notify.ts).
  */
 export async function sendWelcomeEmail(
@@ -80,13 +80,13 @@ export async function sendWelcomeEmail(
   const monthly = plan === "monthly";
 
   const thanks = monthly
-    ? `Thank you for picking up the Expedition Pass. It genuinely means a lot: Learn AEO is a small independent team, and every pass helps keep it going.`
+    ? `Thank you for starting the monthly plan. It genuinely means a lot: Learn AEO is a small independent team, and every subscriber helps keep it going.`
     : `Thank you for buying the course. It genuinely means a lot: Learn AEO is a small independent team, and every purchase helps keep it going.`;
   const access = monthly
-    ? `Your Expedition Pass is active, so every lesson, exercise and reading practice is open to you for as long as the pass runs.`
+    ? `Your monthly plan is active, so every lesson, tool and template is open to you for as long as it runs.`
     : `Your lifetime access is active, so every lesson, exercise and reading practice is yours to keep, forever.`;
   const footer = monthly
-    ? `Expedition Pass: renews monthly, cancel any time. Your progress is kept if you come back.`
+    ? `Monthly plan: renews monthly, cancel any time. Your progress is kept if you come back.`
     : `One-time payment. Lifetime access.`;
 
   const bullet = `<span style="color:${C.gold};">&#9670;</span>&nbsp;`;
@@ -94,7 +94,7 @@ export async function sendWelcomeEmail(
     from: personalFrom(),
     to: email,
     replyTo: ownerEmail(),
-    subject: monthly ? `Thank you, ${displayName}: your Expedition Pass is active 𓂀` : `Thank you, ${displayName}: welcome to the Academy 𓂀`,
+    subject: monthly ? `Thank you, ${displayName}: your monthly plan is active` : `Thank you, ${displayName}: welcome to the Academy 𓂀`,
     html: emailLayout({
       baseUrl: layoutBase(),
       preheader: access,
@@ -112,7 +112,7 @@ export async function sendWelcomeEmail(
           </p>`
         )}
         ${button(dashboardUrl, "Begin Your Studies")}`,
-      reason: `You are getting this because you ${monthly ? "picked up the Expedition Pass" : "bought the course"} at learnaeo.com.<br/>${footer}<br/>${footLink(accountUrl, "Manage your account")}`,
+      reason: `You are getting this because you ${monthly ? "started the monthly plan" : "bought the course"} at learnaeo.com.<br/>${footer}<br/>${footLink(accountUrl, "Manage your account")}`,
     }),
     text: [
       `Hi ${greetingName},`,
@@ -221,7 +221,7 @@ export async function sendCheckoutReminderEmail(input: {
   checkoutUrl: string;
   unsubscribeUrl: string;
 }): Promise<boolean> {
-  const displayName = esc(input.name || (isLicencePlan(input.plan) ? "Teacher" : "Scholar"));
+  const displayName = esc(input.name || "there");
   const planName = esc(input.plan.name);
   // the guarantee gets its own paragraph below, so it is left out of the list
   const features = input.plan.features.filter((f) => !/guarantee/i.test(f));

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { offerEndsLabel, usableOffer } from "../offer-price";
 
 const NOW = Date.parse("2026-10-15T12:00:00Z");
-const offer = { percentOff: 33, expiresAt: "2026-10-16T12:00:00Z", code: "SCRIBE-X" };
+const offer = { percentOff: 33, expiresAt: "2026-10-16T12:00:00Z", code: "AEO-X" };
 
 describe("usableOffer", () => {
   it("uses a live offer when there is no parity discount", () => {

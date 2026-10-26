@@ -1,5 +1,6 @@
 import { blogPosts } from "@/lib/blog-posts";
 import { SITE } from "@/lib/site";
+import { PLANS, formatPlanPrice } from "@/lib/plans";
 import { lessons } from "@/lib/lessons";
 import { stripMarkdown } from "@/app/blog/blog-text";
 
@@ -21,7 +22,7 @@ export function GET() {
   const lines: string[] = [
     `# ${SITE.name}`,
     "",
-    "> An online course that teaches you to read and write ancient Egyptian hieroglyphics from scratch: the 25-sign alphabet, determinatives, numerals, royal cartouches, the offering formula and real monumental inscriptions. The first lesson is free; everything else is a one-time $19.99 lifetime purchase, or a $4.99/month Expedition Pass.",
+    `> An online course that teaches you to read and write ancient Egyptian hieroglyphics from scratch: the 25-sign alphabet, determinatives, numerals, royal cartouches, the offering formula and real monumental inscriptions. The first lesson is free; everything else is a one-time ${formatPlanPrice(PLANS.lifetime, "USD")} lifetime purchase, or ${formatPlanPrice(PLANS.monthly, "USD")} a month.`,
     "",
     "## Quick facts",
     "",
@@ -29,7 +30,7 @@ export function GET() {
     "- Format: self-paced interactive lessons (sign cards with audio, quick checks after each sign group, a signature exercise per lesson, a real inscription to read, and a final Site Report quiz).",
     `- Lessons: ${orderedLessons.length}, roughly ${orderedLessons.reduce((acc, l) => acc + (parseInt(l.duration, 10) || 0), 0)} minutes of guided study in total.`,
     `- Free: ${freeLesson ? `"${freeLesson.title}" (${freeLesson.subtitle})` : "the first lesson"}, free with a Google or email sign-in at ${BASE}/get-started.`,
-    "- Price: one-time $19.99 (£15.99) for lifetime access to all lessons and future content; or $4.99 (£3.99) a month.",
+    `- Price: one-time ${formatPlanPrice(PLANS.lifetime, "USD")} (${formatPlanPrice(PLANS.lifetime, "GBP")}) for lifetime access to all lessons and future content; or ${formatPlanPrice(PLANS.monthly, "USD")} (${formatPlanPrice(PLANS.monthly, "GBP")}) a month.`,
     "- Progress: XP, levels, streaks, badges, a public leaderboard (first name + last initial only) and a personalised certificate on completing all lessons.",
     "- Audience: complete beginners, including history enthusiasts, museum-goers, students and aspiring Egyptologists. No prior language study needed.",
     "",

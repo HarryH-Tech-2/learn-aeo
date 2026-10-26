@@ -1,36 +1,27 @@
 #!/usr/bin/env node
 /**
  * Check that every Stripe Price the site sells through matches the amounts
- * the site shows (src/lib/plans.ts, src/lib/cartouche-print.ts, mirrored in
- * scripts/stripe-create-plans.mjs). Reads the STRIPE_PRICE_* ids and the key
- * from the environment, so run it once per mode:
+ * the site shows (src/lib/plans.ts, mirrored in scripts/stripe-create-plans.mjs).
+ * Reads the STRIPE_PRICE_* ids and the key from the environment, so run it
+ * once per mode:
  *
- *   node --env-file=.env.local scripts/stripe-audit-prices.mjs        (sandbox)
- *   node --env-file=<pulled production env> scripts/stripe-audit-prices.mjs
+ *   node --env-file=.env.local scripts/stripe-audit-prices.mjs                 (sandbox)
+ *   node --env-file=<pulled production env> scripts/stripe-audit-prices.mjs --live
+ *
+ * A live key is refused without --live (scripts/lib/stripe-key.mjs). Read-only.
  *
  * Exits 1 when any Price is missing, inactive or priced differently. Also
  * lists other active Prices on the same Products, which are harmless but
  * worth archiving so the dashboard shows one price per product.
  */
-import Stripe from "stripe";
+import { stripeFromEnv } from "./lib/stripe-key.mjs";
 
-const key = process.env.STRIPE_SECRET_KEY;
-if (!key) {
-  console.error("Set STRIPE_SECRET_KEY in the environment.");
-  process.exit(1);
-}
-const stripe = new Stripe(key);
-const mode = /^(sk|rk)_live/.test(key) ? "LIVE" : "test";
+const { stripe, mode } = stripeFromEnv();
 
-// The amounts the site shows, in minor units. Keep in sync with the two libs.
+// The amounts the site shows, in minor units. Keep in sync with src/lib/plans.ts.
 const EXPECTED = [
-  { id: "lifetime", usd: 1999, gbp: 1599, interval: null, envKey: "STRIPE_PRICE_ID" },
-  { id: "monthly", usd: 499, gbp: 399, interval: "month", envKey: "STRIPE_PRICE_MONTHLY" },
-  { id: "classroom", usd: 2950, gbp: 2450, interval: "year", envKey: "STRIPE_PRICE_CLASSROOM" },
-  { id: "school", usd: 12450, gbp: 9950, interval: "year", envKey: "STRIPE_PRICE_SCHOOL" },
-  { id: "cartouche-print", usd: 1999, gbp: 1599, interval: null, envKey: "STRIPE_PRICE_CARTOUCHE" },
-  { id: "cartouche-print-a4", usd: 3499, gbp: 2799, interval: null, envKey: "STRIPE_PRICE_CARTOUCHE_PRINT" },
-  { id: "cartouche-print-framed", usd: 7999, gbp: 4999, interval: null, envKey: "STRIPE_PRICE_CARTOUCHE_FRAMED" },
+  { id: "lifetime", usd: 10000, gbp: 8000, interval: null, envKey: "STRIPE_PRICE_ID" },
+  { id: "monthly", usd: 1000, gbp: 800, interval: "month", envKey: "STRIPE_PRICE_MONTHLY" },
 ];
 
 const money = (minor) => (minor == null ? "—" : (minor / 100).toFixed(2));
@@ -38,9 +29,10 @@ let bad = 0;
 console.log(`Stripe mode: ${mode}\n`);
 for (const e of EXPECTED) {
   const id = process.env[e.envKey];
-  const label = `${e.id.padEnd(22)} ${e.envKey}`;
+  const label = `${e.id.padEnd(10)} ${e.envKey}`;
   if (!id) {
-    console.log(`MISSING  ${label}: env var not set (checkout falls back to inline price_data at the site's amounts)`);
+    console.log(`MISSING  ${label}: env var not set (checkout answers 503 for this plan)`);
+    bad++;
     continue;
   }
   let price;

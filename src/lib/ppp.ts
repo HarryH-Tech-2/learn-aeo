@@ -1,7 +1,7 @@
 /**
  * Purchasing-power parity pricing. Visitors from countries where a dollar
  * goes further get a percentage off every plan, applied automatically at
- * checkout as a Stripe coupon (one coupon per tier, id PPP_TIER_<X>,
+ * checkout as a Stripe coupon (one coupon per tier, id AEO_PPP_<X>,
  * duration "forever" so subscriptions keep it).
  *
  * Country comes from Vercel's geo header via the middleware cookie
@@ -14,7 +14,7 @@ export type PppTier = "B" | "C" | "D";
 
 export const PPP_PERCENT: Record<PppTier, number> = { B: 30, C: 50, D: 65 };
 
-export const PPP_COUPON_ID: Record<PppTier, string> = { B: "PPP_TIER_B", C: "PPP_TIER_C", D: "PPP_TIER_D" };
+export const PPP_COUPON_ID: Record<PppTier, string> = { B: "AEO_PPP_B", C: "AEO_PPP_C", D: "AEO_PPP_D" };
 
 /** ISO-3166 alpha-2 → tier. Anything missing pays full price. */
 export const COUNTRY_TIER: Record<string, PppTier> = {
@@ -45,8 +45,8 @@ export function pppFor(country: string | null | undefined): Ppp | null {
 
 /**
  * The price a visitor will actually pay: the same arithmetic Stripe applies
- * to the coupon, in minor units, rounded to the nearest unit. 19.99 at 65%
- * off is 7.00, not a "friendly" 6.99, because the banner promises the price
+ * to the coupon, in minor units, rounded to the nearest unit. 8 at 65%
+ * off is 2.80, not a "friendly" 2.79, because the banner promises the price
  * shown is the price charged.
  */
 export function parityPrice(amount: number, percentOff: number): number {
@@ -55,7 +55,7 @@ export function parityPrice(amount: number, percentOff: number): number {
   return Math.max(1, paid) / 100;
 }
 
-/** "7.00", "29.50", "30" */
+/** "35", "2.80", "66.99" */
 export function formatParity(amount: number): string {
   return Number.isInteger(amount) ? String(amount) : amount.toFixed(2);
 }
@@ -80,7 +80,7 @@ export function flagEmoji(code: string): string {
 /**
  * Does the visitor's parity discount already match or beat a time-limited offer of `percentOff`?
  * Checkout applies whichever is larger, so such an offer would never be the price paid: it is not
- * granted, emailed or shown (a "$12.99 for 24 hours" to someone who pays $7.00 anyway).
+ * granted, emailed or shown (a "$66.99 for 24 hours" to someone who pays $35 anyway).
  */
 export function pppBeatsOffer(country: string | null | undefined, percentOff: number): boolean {
   const p = pppFor(country);

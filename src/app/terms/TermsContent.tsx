@@ -5,6 +5,7 @@ import { SITE } from "@/lib/site";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { PLANS, formatPlanPrice } from "@/lib/plans";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -32,7 +33,8 @@ const sections = [
     id: "purchase-and-billing",
     title: "3. Purchase & Billing",
     content:
-      "Learn AEO offers lifetime access to the full course for a single one-time payment of $19.99 (£15.99). After payment, your account is granted permanent access to all current and future course content at no additional cost.\n\nWe also offer an Expedition Pass ($4.99 / £3.99 per month) and Classroom ($29.50 / £24.50 per year, one teacher and up to 30 pupils) and School ($124.50 / £99.50 per year, unlimited pupils) licences. These renew automatically until cancelled from your account page or the billing portal; access continues to the end of the paid period. Pupils joined to a licence lose access when it lapses.\n\nPurchasing-power parity: visitors from countries with lower purchasing power are offered a percentage discount, applied automatically at checkout based on the country they browse from. We do not verify residence and we do not revoke access when a discount was claimed from elsewhere; we ask that you pay the full price if you can.\n\nWe offer a 14-day money-back guarantee. If you are unhappy with the course within 14 days of purchase, contact hello@learnaeo.com and we will issue a full refund.\n\nAll payments are processed securely by Stripe. By purchasing, you also agree to Stripe\u2019s terms of service.",
+      `Learn AEO offers lifetime access to the full course for a single one-time payment of ${formatPlanPrice(PLANS.lifetime, "USD")} (${formatPlanPrice(PLANS.lifetime, "GBP")}). After payment, your account is granted permanent access to all current and future course content at no additional cost.\n\nWe also offer a Monthly plan (${formatPlanPrice(PLANS.monthly, "USD")} / ${formatPlanPrice(PLANS.monthly, "GBP")} per month). It renews automatically until cancelled from your account page or the billing portal; access continues to the end of the paid period.\n\n` +
+      "Purchasing-power parity: visitors from countries with lower purchasing power are offered a percentage discount, applied automatically at checkout based on the country they browse from. We do not verify residence and we do not revoke access when a discount was claimed from elsewhere; we ask that you pay the full price if you can.\n\nWe offer a 14-day money-back guarantee. If you are unhappy with the course within 14 days of purchase, contact hello@learnaeo.com and we will issue a full refund.\n\nAll payments are processed securely by Stripe. By purchasing, you also agree to Stripe\u2019s terms of service.",
   },
   {
     id: "free-content",

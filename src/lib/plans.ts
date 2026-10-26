@@ -1,11 +1,12 @@
 /**
- * The plan catalogue. Four ways to pay, one source of truth for the pricing
+ * The plan catalogue. Two ways to pay, one source of truth for the pricing
  * page, checkout, the webhook and the account page.
  *
- *   lifetime   one payment, the anchor
- *   monthly    Expedition Pass, cancel any time
- *   classroom  yearly, one teacher and a class of 30 pupils
- *   school     yearly, unlimited classes at one school
+ *   lifetime   one payment of $100 (£80), the anchor
+ *   monthly    $10 (£8) a month, cancel any time
+ *
+ * Nothing else is sold. A Stripe event naming any other plan (or none) is
+ * logged and acknowledged by the webhook without granting access.
  *
  * Stripe Price ids come from the environment (see scripts/stripe-create-plans.mjs,
  * which creates the products and prints the variables). Amounts here must
@@ -14,7 +15,7 @@
  */
 import type { Currency } from "@/lib/pricing";
 
-export type PlanId = "lifetime" | "monthly" | "classroom" | "school";
+export type PlanId = "lifetime" | "monthly";
 
 export type Plan = {
   id: PlanId;
@@ -22,12 +23,10 @@ export type Plan = {
   tagline: string;
   /** Stripe Checkout mode */
   mode: "payment" | "subscription";
-  interval?: "month" | "year";
+  interval?: "month";
   /** Amounts in major units */
   usd: number;
   gbp: number;
-  /** Pupil seats included (0 = unlimited; undefined = not a licence) */
-  seats?: number;
   /** Who it is for, one line */
   audience: string;
   features: string[];
@@ -41,56 +40,35 @@ export const PLANS: Record<PlanId, Plan> = {
   lifetime: {
     id: "lifetime",
     name: "Lifetime",
-    tagline: "Pay once. Learn forever.",
+    tagline: "Pay once. Keep it for good.",
     mode: "payment",
-    usd: 19.99,
-    gbp: 15.99,
-    audience: "For one learner, for good",
-    features: ["All 8 chambers and every future one", "Every 3D practice game", "The Journey: relics, seals and the sealed door", "Shareable completion certificate", "14-day money-back guarantee"],
+    usd: 100,
+    gbp: 80,
+    audience: "For marketers who want the whole course, for good",
+    features: [
+      "All 8 lessons, including every lesson as it's released",
+      "Free AEO tools and templates",
+      "Certificate to share on LinkedIn",
+      "14-day money-back guarantee",
+    ],
     envKey: "STRIPE_PRICE_ID",
     featured: true,
   },
   monthly: {
     id: "monthly",
-    name: "Expedition Pass",
-    tagline: "Dig for a month at a time.",
+    name: "Monthly",
+    tagline: "Learn a month at a time.",
     mode: "subscription",
     interval: "month",
-    usd: 4.99,
-    gbp: 3.99,
+    usd: 10,
+    gbp: 8,
     audience: "For trying the whole course without paying up front",
     features: ["Everything in Lifetime while it runs", "Cancel any time from your account", "Progress kept if you come back"],
     envKey: "STRIPE_PRICE_MONTHLY",
   },
-  classroom: {
-    id: "classroom",
-    name: "Classroom",
-    tagline: "One teacher, one class, a year.",
-    mode: "subscription",
-    interval: "year",
-    usd: 29.5,
-    gbp: 24.5,
-    seats: 30,
-    audience: "For a teacher and up to 30 pupils",
-    features: ["Full course for you and 30 pupils", "A class code pupils join with", "Pupil progress on one page", "Classroom mode live quizzes", "Printable worksheets and answer keys"],
-    envKey: "STRIPE_PRICE_CLASSROOM",
-  },
-  school: {
-    id: "school",
-    name: "School",
-    tagline: "Every class at one school.",
-    mode: "subscription",
-    interval: "year",
-    usd: 124.5,
-    gbp: 99.5,
-    seats: 0,
-    audience: "For a whole school, unlimited pupils",
-    features: ["Everything in Classroom", "Unlimited pupils and teachers", "One invoice for the school office", "Priority support"],
-    envKey: "STRIPE_PRICE_SCHOOL",
-  },
 };
 
-export const PLAN_IDS: PlanId[] = ["lifetime", "monthly", "classroom", "school"];
+export const PLAN_IDS: PlanId[] = ["lifetime", "monthly"];
 
 export function isPlanId(x: unknown): x is PlanId {
   return typeof x === "string" && (PLAN_IDS as string[]).includes(x);
@@ -117,14 +95,7 @@ export function formatPlanPrice(plan: Plan, currency: Currency): string {
 }
 
 export function planPeriodLabel(plan: Plan): string {
-  if (plan.mode === "payment") return "one payment";
-  return plan.interval === "year" ? "per year" : "per month";
-}
-
-/** Licence plans grant access to a group, not one account. */
-export function isLicencePlan(plan: Plan | PlanId): boolean {
-  const id = typeof plan === "string" ? plan : plan.id;
-  return id === "classroom" || id === "school";
+  return plan.mode === "payment" ? "one payment" : "per month";
 }
 
 export function stripePriceIdFor(plan: Plan): string | undefined {

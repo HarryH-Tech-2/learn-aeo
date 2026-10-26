@@ -71,11 +71,11 @@ describe("sendWelcomeEmail", () => {
     expect(mockSend.mock.calls[0][0].html).toContain("lifetime access is active");
   });
 
-  it("monthly: talks about the Expedition Pass and never promises lifetime access", async () => {
+  it("monthly: talks about the monthly plan and never promises lifetime access", async () => {
     await sendWelcomeEmail("Mo", "m@example.com", "monthly");
     const { html, text, subject } = mockSend.mock.calls[0][0];
-    expect(subject).toContain("Expedition Pass");
-    expect(html).toContain("Thank you for picking up the Expedition Pass");
+    expect(subject).toContain("monthly plan");
+    expect(html).toContain("Thank you for starting the monthly plan");
     expect(html).toContain("cancel any time");
     for (const body of [html, text]) {
       expect(body.toLowerCase()).not.toContain("lifetime");

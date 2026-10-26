@@ -50,7 +50,7 @@ describe("isBuyIntent", () => {
 
 describe("planIdFromCheckoutPath", () => {
   it("reads the plan from a /checkout destination", () => {
-    expect(planIdFromCheckoutPath("/checkout?plan=classroom&from=%2Fteachers")).toBe("classroom");
+    expect(planIdFromCheckoutPath("/checkout?plan=monthly&from=%2Fpricing")).toBe("monthly");
     expect(planIdFromCheckoutPath("/checkout")).toBeNull();
     expect(planIdFromCheckoutPath("/dashboard?plan=school")).toBeNull();
   });

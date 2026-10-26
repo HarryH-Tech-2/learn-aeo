@@ -1,5 +1,5 @@
 /**
- * One plain-text email from the Learn AEO team about five days after a Lifetime or Expedition Pass (monthly) purchase,
+ * One plain-text email from the Learn AEO team about five days after a Lifetime or Monthly purchase,
  * asking "What's one thing that would make the course better?" and inviting a reply. Sent once per buyer by
  * the daily nurture cron (src/lib/purchase-feedback-run.ts).
  *
@@ -66,7 +66,7 @@ export function renderFeedbackEmail(name: string | null | undefined, plan: Feedb
   const hi = first === "Scholar" ? "Hi," : `Hi ${first},`;
   const opener =
     plan === "monthly"
-      ? "It's been about five days since you started the Expedition Pass, so I wanted to ask you one thing:"
+      ? "It's been about five days since you started the monthly plan, so I wanted to ask you one thing:"
       : "It's been about five days since you bought the course, so I wanted to ask you one thing:";
   const thanks = plan === "monthly" ? "Thanks again for giving it a go." : "Thanks again for your support.";
   const text = [

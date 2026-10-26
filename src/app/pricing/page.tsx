@@ -4,12 +4,11 @@ import Navbar from "@/components/Navbar";
 import PricingSection from "@/components/PricingSection";
 import PricingFAQ from "@/components/PricingFAQ";
 import Footer from "@/components/Footer";
-import { PLANS, PLAN_IDS } from "@/lib/plans";
+import { PLANS, PLAN_IDS, formatPlanPrice } from "@/lib/plans";
 
 export const metadata: Metadata = {
-  title: "Pricing: Lifetime, Monthly Pass and Classroom Licences | Learn AEO",
-  description:
-    "Lifetime access for one payment of $19.99, an Expedition Pass at $4.99 a month, or Classroom and School licences for teachers. The first lesson is free.",
+  title: "Pricing: Lifetime or Monthly | Learn AEO",
+  description: `Lifetime access to the answer engine optimisation course for one payment of ${formatPlanPrice(PLANS.lifetime, "USD")}, or ${formatPlanPrice(PLANS.monthly, "USD")} a month. The first lesson is free.`,
   alternates: {
     canonical: absoluteUrl("/pricing"),
   },
@@ -26,7 +25,7 @@ export default function PricingPage() {
             "@type": "Course",
             name: "Learn AEO",
             description:
-              "Interactive online course covering the hieroglyphic alphabet, cartouches, temple inscriptions, and Book of the Dead.",
+              "Online course for marketers on answer engine optimisation (AEO): how to get your brand cited by ChatGPT, Perplexity, Google AI Overviews and other answer engines.",
             provider: {
               "@type": "Organization",
               name: "Learn AEO",
@@ -34,8 +33,8 @@ export default function PricingPage() {
             },
             offers: PLAN_IDS.map((id) => ({
               "@type": "Offer",
-              name: `${PLANS[id].name}${PLANS[id].mode === "subscription" ? ` (${PLANS[id].interval}ly)` : ""}`,
-              price: PLANS[id].usd.toFixed(2),
+              name: PLANS[id].name,
+              price: String(PLANS[id].usd),
               priceCurrency: "USD",
               availability: "https://schema.org/InStock",
               url: absoluteUrl("/pricing"),

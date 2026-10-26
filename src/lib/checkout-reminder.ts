@@ -45,13 +45,15 @@ export function reminderDecision(f: ReminderFacts): { send: true } | { send: fal
   return { send: true };
 }
 
-/** "$19.99", "£15.99", "$13.39" — what Stripe actually asked them to pay, parity discount and all. */
+/** "$100", "£80", "$35" — what Stripe actually asked them to pay, parity discount and all. */
 export function formatSessionPrice(amountMinor: number | null | undefined, currency: string | null | undefined): string | null {
   if (amountMinor == null || !currency) return null;
   try {
     // en-GB writes dollars as "US$", so pounds use en-GB and everything else en-US ("$13.39", "€18.50")
     const locale = currency.toLowerCase() === "gbp" ? "en-GB" : "en-US";
-    return new Intl.NumberFormat(locale, { style: "currency", currency: currency.toUpperCase() }).format(amountMinor / 100);
+    // whole amounts without ".00": "$100", "£80" (the pricing page's style), "$66.99" otherwise
+    const digits = amountMinor % 100 === 0 ? 0 : 2;
+    return new Intl.NumberFormat(locale, { style: "currency", currency: currency.toUpperCase(), minimumFractionDigits: digits, maximumFractionDigits: digits }).format(amountMinor / 100);
   } catch {
     return null;
   }
