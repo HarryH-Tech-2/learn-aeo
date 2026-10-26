@@ -114,7 +114,7 @@ function PaidPitch({ paid, offer: given, location, progressLine }: Props) {
           onClick={() => trackEvent("upgrade_panel_click", { location, target: "pricing" })}
           className="underline underline-offset-4 hover:text-gold-400"
         >
-          See every plan, including classrooms
+          See every plan
         </Link>{" "}
         {location === "dashboard" ? "· Lesson 1 stays free either way." : "· Your place in this lesson is saved either way."}
       </p>

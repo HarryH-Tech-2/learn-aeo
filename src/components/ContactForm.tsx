@@ -62,7 +62,7 @@ export default function ContactForm({ idPrefix = "contact" }: { idPrefix?: strin
     <form onSubmit={handleSubmit} className="letter-card p-6 sm:p-8 md:p-10">
       <div className="mb-8">
         <p className="font-display text-3xl sm:text-4xl font-light text-sand-100 leading-tight">Dear scribes,</p>
-        <p className="font-body text-sm text-sand-400 mt-1.5">Questions, ideas, help with your account or a school order.</p>
+        <p className="font-body text-sm text-sand-400 mt-1.5">Questions, ideas, or help with your account.</p>
       </div>
 
       <div className="grid sm:grid-cols-2 gap-x-6 gap-y-6">

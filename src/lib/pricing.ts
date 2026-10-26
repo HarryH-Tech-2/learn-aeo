@@ -20,17 +20,19 @@ export function currencyForCountry(country: string | null | undefined): Currency
   return country?.toUpperCase() === "GB" ? "GBP" : "USD";
 }
 
-/** "$100", "£80", "$66.99": whole amounts print without ".00". */
+/** "$100", "£80", "£53.60": whole amounts print without ".00". */
 export function formatPrice(currency: Currency, amount = PRICES[currency].amount): string {
   const { symbol } = PRICES[currency];
   return `${symbol}${Number.isInteger(amount) ? String(amount) : amount.toFixed(2)}`;
 }
 
-/** e.g. 33 % off 100 → 66.99 (always ends in .99 so it reads like a price). */
+/**
+ * The exact amount Stripe charges with a percent_off coupon: round(minor × (1 − pct/100))
+ * in minor units, so 33 % off is $67 and £53.60 (same arithmetic as parityPrice in ppp.ts).
+ */
 export function discounted(currency: Currency, percentOff: number): number {
-  const raw = PRICES[currency].amount * (1 - percentOff / 100);
-  // Nearest ".99" at or below the exact figure: 100 → 67 → 66.99; 80 → 53.60 → 52.99.
-  return Math.max(0.99, Math.round((Math.floor(raw) - 0.01) * 100) / 100);
+  const paid = Math.round((PRICES[currency].minor * (100 - percentOff)) / 100);
+  return Math.max(1, paid) / 100;
 }
 
 export function readCountryCookie(): string | null {

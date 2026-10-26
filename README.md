@@ -1,6 +1,6 @@
 # Learn AEO
 
-Learn AEO is a course for marketers on answer engine optimisation: how to get a brand cited and recommended by ChatGPT, Perplexity, Google AI Overviews and other answer engines. It is a Next.js app (App Router, Prisma, NextAuth, Stripe, Resend) forked from the learn-hieroglyphics codebase, with the hieroglyph-specific features removed. Pricing is $100 lifetime or $10 a month (GBP options at 80 and 8).
+Learn AEO is a course for marketers on answer engine optimisation: how to get a brand cited and recommended by ChatGPT, Perplexity, Google AI Overviews and other answer engines. It is a Next.js app (App Router, Prisma, NextAuth, Stripe, Resend) forked from the learn-hieroglyphics codebase, with the hieroglyph-specific features removed. Pricing is $100 lifetime or $10 a month (GBP options at £80 and £8).
 
 Status: Plan 1 (fork, strip, rebrand, pricing) is done. Plan 2 (lesson model, lesson player, lessons 1-3) comes next.
 
@@ -58,6 +58,8 @@ A `sk_live_` key is refused unless you pass `--live`. The scripts are idempotent
 - Google OAuth: create a client, set `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` with the production and localhost callback URLs.
 - Resend: verify the learnaeo.com domain, set `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `RESEND_AUDIENCE_ID`.
 - Stripe: run the plan scripts, add a webhook to `/api/webhooks/stripe` and set `STRIPE_WEBHOOK_SECRET`, and set the account default statement descriptor to `LEARNAEO`.
+  - Webhook events to subscribe: `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, `checkout.session.expired`, `customer.subscription.updated`, `customer.subscription.deleted`, `charge.refunded`, `charge.dispute.created`, `charge.dispute.closed`.
+  - Before going live: restrict the NEXT-DISTRICT-33 coupon to the Lifetime product (applies_to) in Stripe.
 - GA4: create a property, set `NEXT_PUBLIC_GA_ID` and `GA4_MP_API_SECRET`.
 
 ## Next

@@ -7,7 +7,7 @@ import { useFreeCourseGuest } from "@/components/useFreeCourseGuest";
 import { PLANS, formatPlanPrice } from "@/lib/plans";
 
 // What the free-unlock test's free group reads instead (src/lib/access-test.ts); the FAQ schema keeps the real answer.
-const FREE_PRICING_ANSWER = "For you, the whole course is free: make an account and all eight lessons, the 3D levels, the Journey and the certificate open on it, with nothing to pay. Teachers can still buy a Classroom or School licence for a class.";
+const FREE_PRICING_ANSWER = "For you, the whole course is free: make an account and all eight lessons, the 3D levels, the Journey and the certificate open on it, with nothing to pay.";
 
 const faqs = [
   {

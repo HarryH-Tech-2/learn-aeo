@@ -34,10 +34,6 @@ const sections: { id: string; title: string; content: ContentBlock[] }[] = [
         text: "We automatically collect information about how you interact with the platform, including lessons viewed, quiz scores, progress milestones, and session duration. This data is associated with your account and used to personalise your learning experience.",
       },
       {
-        subtitle: "Classroom Mode (Pupils)",
-        text: "When a teacher runs a live quiz at /teachers/class, pupils join from /play/<room code> by typing a team name only. We store that team name, the room code, the answers chosen and their timing for the life of the room, which is deleted automatically three hours after it was opened. No account, email, name, age or device identifier is collected from pupils, and the join page sets no advertising cookies. Teachers are responsible for choosing team names appropriate for their class.",
-      },
-      {
         subtitle: "Device & Browser Information",
         text: "We collect standard log data such as your IP address, browser type, operating system, and referring URL. This helps us diagnose technical issues and improve site performance.",
       },

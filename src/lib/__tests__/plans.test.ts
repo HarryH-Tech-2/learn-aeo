@@ -15,9 +15,17 @@ describe("plans", () => {
     expect(formatPlanPrice(PLANS.monthly, "GBP")).toBe("£8");
     expect(formatPrice("USD")).toBe("$100");
     expect(formatPrice("USD", 66.99)).toBe("$66.99");
-    expect(discounted("USD", 33)).toBe(66.99); // Review Focus 3
-    expect(discounted("GBP", 33)).toBe(52.99);
+    expect(discounted("USD", 33)).toBe(67);
+    expect(discounted("GBP", 33)).toBe(53.6);
+    expect(formatPrice("USD", discounted("USD", 33))).toBe("$67");
+    expect(formatPrice("GBP", discounted("GBP", 33))).toBe("£53.60");
     expect(isPlanId("classroom")).toBe(false);
+  });
+
+  it("shown offer price equals what Stripe charges for the percent_off coupon", () => {
+    for (const c of ["USD", "GBP"] as const) {
+      expect(Math.round(discounted(c, 33) * 100)).toBe(Math.round(PRICES[c].minor * (1 - 0.33)));
+    }
   });
 
   it("lifetime is featured and matches the anchor price in pricing.ts", () => {

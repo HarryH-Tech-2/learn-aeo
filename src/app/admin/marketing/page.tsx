@@ -5,6 +5,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { summariseCheckoutLog, type CheckoutLogOutcome, type PurchaseRow } from "@/lib/checkout-recovery-log";
 import { ACCESS_TEST_GAME, accessTestPercent, armOf, summariseAccessTest, type AccessTestPerson } from "@/lib/access-test";
+import { SITE } from "@/lib/site";
 import { lessons } from "@/lib/lessons";
 
 /**
@@ -14,7 +15,7 @@ import { lessons } from "@/lib/lessons";
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Marketing posts", robots: { index: false, follow: false } };
 
-const ADMINS = (process.env.ADMIN_EMAILS ?? "h.harrison1993@gmail.com").split(",").map((e) => e.trim().toLowerCase());
+const ADMINS = (process.env.ADMIN_EMAILS ?? SITE.supportEmail).split(",").map((e) => e.trim().toLowerCase());
 
 type Row = { source: string; campaign: string; label: string; where: string; date: string; visitors: number; signups: number; paid: number };
 

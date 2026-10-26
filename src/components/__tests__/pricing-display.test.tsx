@@ -19,7 +19,7 @@ describe("pricing cards", () => {
 
   it("show $100 Lifetime and $10 Monthly, with no decimals", () => {
     expect(html).toContain("$100");
-    expect(html).toContain("$10");
+    expect(html).toMatch(/\$10(?!\d)/);
     expect(html).not.toMatch(DECIMAL_WHOLE);
   });
 

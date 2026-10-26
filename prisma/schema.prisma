@@ -33,10 +33,10 @@ model User {
   offerExpiresAt DateTime?
   offerSource    String?
   gameStates     GameState[]
-  // Which marketing post brought them (src/lib/campaign.ts), from the lh_utm cookie at sign-up
+  // Which marketing post brought them (src/lib/campaign.ts), from the aeo_utm cookie at sign-up
   signupSource   String?
   signupCampaign String?
-  // Where they first came from (src/lib/referrer.ts, lh_ref cookie at sign-up), and their own answer on the dashboard
+  // Where they first came from (src/lib/referrer.ts, aeo_ref cookie at sign-up), and their own answer on the dashboard
   signupReferrer String?
   signupLanding  String?
   heardAbout     String?
