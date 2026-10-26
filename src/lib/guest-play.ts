@@ -19,8 +19,10 @@
  * GA4 events, in order: guest_play_banner_view → guest_play_banner_click {location, question_type} → guest_play_start
  * → guest_level_complete → guest_signup_prompt → sign_up.
  */
+import { COOKIE_PREFIX } from "@/lib/site";
+
 export const GUEST_PLAY_PARAM = "play";
-const KEY = "lh_guest_play";
+const KEY = `${COOKIE_PREFIX}guest_play`;
 const LESSON = "/lessons/expedition-begins";
 
 /** Where the banner points. A name typed into the translator rides along and is offered in the game's name box. */

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { absoluteUrl } from "@/lib/site";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import GetStartedContent from "./GetStartedContent";
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
   description:
     "Create a free account and start your first hieroglyphics lesson. Unlock the full course anytime with a one-time $19.99 payment.",
   alternates: {
-    canonical: "https://www.learnhieroglyphics.com/get-started",
+    canonical: absoluteUrl("/get-started"),
   },
 };
 

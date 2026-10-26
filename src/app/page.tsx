@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { SITE } from "@/lib/site";
 import HomePage from "@/components/home/HomePage";
 
 export const metadata: Metadata = {
   alternates: {
-    canonical: "https://www.learnhieroglyphics.com",
+    canonical: SITE.url,
   },
 };
 

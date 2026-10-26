@@ -5,11 +5,15 @@
  * measured only after "Accept all" on the cookie scroll. Everywhere else they are measured from the start and
  * can still turn it off with "Essentials only". A visitor whose country is unknown is treated as opt-in.
  *
- * The country comes from the lh_cc cookie the middleware stamps from Vercel's geo header (src/middleware.ts).
+ * The country comes from the aeo_cc cookie the middleware stamps from Vercel's geo header (src/middleware.ts).
  */
 
 /** "all" or "essential", written by the cookie scroll (src/components/CookieScroll.tsx). */
-export const CONSENT_COOKIE = "lh_consent";
+import { COOKIE_PREFIX } from "@/lib/site";
+import { CAMPAIGN_COOKIE, VISITOR_COOKIE } from "@/lib/campaign";
+import { REFERRER_COOKIE } from "@/lib/referrer";
+
+export const CONSENT_COOKIE = `${COOKIE_PREFIX}consent`;
 
 /** EU member states, the rest of the EEA (Iceland, Liechtenstein, Norway) and the UK. */
 export const OPT_IN_COUNTRIES = [
@@ -40,12 +44,12 @@ export const CONSENT_EVENT = "lh-consent";
  * Our own measurement cookies (src/lib/campaign.ts, src/lib/referrer.ts). They follow the same rule as
  * Analytics, and "Essentials only" deletes them.
  */
-export const MEASUREMENT_COOKIES = ["lh_utm", "lh_vid", "lh_ref"];
+export const MEASUREMENT_COOKIES = [CAMPAIGN_COOKIE, VISITOR_COOKIE, REFERRER_COOKIE];
 
 /** analyticsAllowed from the browser's own cookies (client components only). */
 export function analyticsAllowedInBrowser(): boolean {
-  const consent = (document.cookie.match(/(?:^|; )lh_consent=(all|essential)/) || [])[1] ?? null;
-  const country = (document.cookie.match(/(?:^|; )lh_cc=([A-Za-z]{2})/) || [])[1] ?? null;
+  const consent = (document.cookie.match(/(?:^|; )aeo_consent=(all|essential)/) || [])[1] ?? null;
+  const country = (document.cookie.match(/(?:^|; )aeo_cc=([A-Za-z]{2})/) || [])[1] ?? null;
   return analyticsAllowed(consent, country);
 }
 
@@ -56,8 +60,8 @@ export function analyticsAllowedInBrowser(): boolean {
 export function analyticsAllowedScript(): string {
   return (
     "(function(){" +
-    "var k=(document.cookie.match(/(?:^|; )lh_consent=(all|essential)/)||[])[1]||null;" +
-    "var c=(document.cookie.match(/(?:^|; )lh_cc=([A-Za-z]{2})/)||[])[1]||null;" +
+    "var k=(document.cookie.match(/(?:^|; )aeo_consent=(all|essential)/)||[])[1]||null;" +
+    "var c=(document.cookie.match(/(?:^|; )aeo_cc=([A-Za-z]{2})/)||[])[1]||null;" +
     `window.__lhAnalyticsAllowed=(${analyticsAllowedFor.toString()})(k,c,${JSON.stringify(OPT_IN_COUNTRIES)});` +
     "})();"
   );

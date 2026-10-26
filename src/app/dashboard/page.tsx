@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import DashboardContent from "./DashboardContent";
 
 export const metadata: Metadata = {
-  title: "Dashboard - Learn Hieroglyphics",
+  title: "Dashboard - Learn AEO",
   description: "Track your progress learning ancient Egyptian hieroglyphics.",
 };
 

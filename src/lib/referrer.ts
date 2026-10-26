@@ -1,6 +1,6 @@
 /**
  * Where a visitor first came from (2026-10-16): the referring site's host and the page they landed on, kept in
- * the lh_ref cookie for 90 days (first visit wins). CampaignTracker writes it, only once Analytics is allowed
+ * the aeo_ref cookie for 90 days (first visit wins). CampaignTracker writes it, only once Analytics is allowed
  * (src/lib/consent.ts). auth.ts copies it onto User.signupReferrer / signupLanding when the account is
  * created, and checkout copies it into the Stripe metadata, so a sale has a source even when the buyer's
  * browser blocks Google Analytics.
@@ -8,7 +8,9 @@
  * Only the host is kept, never the full referring address (it can carry search terms or ids).
  */
 
-export const REFERRER_COOKIE = "lh_ref";
+import { COOKIE_PREFIX } from "@/lib/site";
+
+export const REFERRER_COOKIE = `${COOKIE_PREFIX}ref`;
 export const REFERRER_COOKIE_DAYS = 90;
 
 export type Referrer = { host: string; landing: string };
@@ -18,7 +20,7 @@ const PATH = /^\/[A-Za-z0-9/_.\-]{0,120}$/;
 
 /**
  * Hosts that appear mid-journey (paying, signing in, the magic-link email opened in webmail): not the first
- * source, so they never fill an empty lh_ref.
+ * source, so they never fill an empty aeo_ref.
  */
 const IN_JOURNEY = ["checkout.stripe.com", "billing.stripe.com", "accounts.google.com", "mail.google.com", "outlook.live.com", "outlook.office.com", "mail.yahoo.com"];
 

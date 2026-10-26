@@ -49,7 +49,7 @@ export default function Navbar() {
               𓂀
             </span>
             <span className="font-display text-xl md:text-3xl lg:text-lg xl:text-xl 2xl:text-3xl font-semibold tracking-wide text-gold-400 group-hover:text-gold-300 transition-colors truncate">
-              Learn Hieroglyphics
+              Learn AEO
             </span>
           </Link>
 

@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { SITE, absoluteUrl } from "@/lib/site";
 
 // Pages that are personal or transactional — no value in any index.
 const PRIVATE = ["/dashboard", "/account", "/certificate", "/checkout", "/login", "/api/"];
@@ -31,7 +32,7 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: "*", allow: "/", disallow: PRIVATE },
       ...AI_CRAWLERS.map((userAgent) => ({ userAgent, allow: "/", disallow: PRIVATE })),
     ],
-    sitemap: "https://www.learnhieroglyphics.com/sitemap.xml",
-    host: "https://www.learnhieroglyphics.com",
+    sitemap: absoluteUrl("/sitemap.xml"),
+    host: SITE.url,
   };
 }

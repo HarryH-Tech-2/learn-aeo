@@ -13,9 +13,9 @@ describe("ownerEmail", () => {
   beforeEach(() => {
     delete process.env.CONTACT_TO_EMAIL;
   });
-  it("defaults to contact@learnhieroglyphics.com", () => {
-    expect(ownerEmail()).toBe("contact@learnhieroglyphics.com");
-    expect(DEFAULT_OWNER_EMAIL).toBe("contact@learnhieroglyphics.com");
+  it("defaults to hello@learnaeo.com", () => {
+    expect(ownerEmail()).toBe("hello@learnaeo.com");
+    expect(DEFAULT_OWNER_EMAIL).toBe("hello@learnaeo.com");
   });
   it("honours CONTACT_TO_EMAIL when set", () => {
     process.env.CONTACT_TO_EMAIL = " other@example.com ";
@@ -23,7 +23,7 @@ describe("ownerEmail", () => {
   });
   it("ignores an empty CONTACT_TO_EMAIL", () => {
     process.env.CONTACT_TO_EMAIL = "";
-    expect(ownerEmail()).toBe("contact@learnhieroglyphics.com");
+    expect(ownerEmail()).toBe("hello@learnaeo.com");
   });
 });
 
@@ -31,13 +31,13 @@ describe("notifyOwner", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     delete process.env.CONTACT_TO_EMAIL;
-    process.env.RESEND_FROM_EMAIL = "hello@learnhieroglyphics.com";
+    process.env.RESEND_FROM_EMAIL = "hello@learnaeo.com";
   });
   it("sends to the owner address with reply-to", async () => {
     const ok = await notifyOwner({ subject: "New account", text: "x", replyTo: "a@b.co" });
     expect(ok).toBe(true);
     expect(mockSend).toHaveBeenCalledWith(
-      expect.objectContaining({ to: "contact@learnhieroglyphics.com", replyTo: "a@b.co", subject: "New account" })
+      expect.objectContaining({ to: "hello@learnaeo.com", replyTo: "a@b.co", subject: "New account" })
     );
   });
   it("never throws when Resend fails", async () => {

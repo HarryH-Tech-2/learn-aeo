@@ -305,7 +305,7 @@ export default function BlogPostContent({
                 Harry Harrison
               </p>
               <p className="font-body text-sm text-sand-400 font-light leading-relaxed mt-1">
-                Founder of Learn Hieroglyphics. Harry writes every lesson and
+                Founder of Learn AEO. Harry writes every lesson and
                 article on this site, builds the 3D practice games, checks each
                 sign against Gardiner&apos;s sign list and Allen&apos;s{" "}
                 <em>Middle Egyptian</em>, and has run a hieroglyphics workshop

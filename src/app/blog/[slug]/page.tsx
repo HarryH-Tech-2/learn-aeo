@@ -1,36 +1,21 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPostBySlug, blogPosts } from "@/lib/blog-posts";
+import { SITE as SITE_CONFIG } from "@/lib/site";
 import BlogPostContent from "./BlogPostContent";
 import { ArticleBody, QuickAnswer } from "./PostBody";
 import { extractH2s, withInBodyLinks } from "../blog-text";
 import { countWords, readingMinutes, stripMarkdown } from "../blog-text";
 
-const SITE = "https://www.learnhieroglyphics.com";
-const BRAND_SUFFIX = " | Learn Hieroglyphics";
+const SITE = SITE_CONFIG.url;
+const BRAND_SUFFIX = " | Learn AEO";
 /** Google shows roughly 60 characters of a title; only brand it when it still fits. */
 const MAX_TITLE_LENGTH = 60;
-
-const AUTHOR = {
-  "@type": "Person",
-  "@id": `${SITE}/about#harry-harrison`,
-  name: "Harry Harrison",
-  url: `${SITE}/about`,
-  jobTitle: "Founder and course author, Learn Hieroglyphics",
-  knowsAbout: [
-    "Egyptian hieroglyphs",
-    "Middle Egyptian",
-    "Gardiner's sign list",
-    "Ancient Egyptian history",
-    "Egyptology for beginners",
-  ],
-  sameAs: ["https://x.com/HarryHH1993", "https://www.linkedin.com/in/harry-harrison/"],
-} as const;
 
 const PUBLISHER = {
   "@type": "Organization",
   "@id": `${SITE}/#organization`,
-  name: "Learn Hieroglyphics",
+  name: "Learn AEO",
   url: SITE,
   logo: {
     "@type": "ImageObject",
@@ -54,7 +39,7 @@ export async function generateMetadata({
 
   if (!post) {
     return {
-      title: "Post Not Found | Learn Hieroglyphics",
+      title: "Post Not Found | Learn AEO",
       robots: { index: false, follow: true },
     };
   }
@@ -66,7 +51,6 @@ export async function generateMetadata({
   return {
     title: seoTitle(post.metaTitle ?? post.title),
     description: post.metaDescription ?? post.excerpt,
-    authors: [{ name: "Harry Harrison", url: `${SITE}/about` }],
     alternates: {
       canonical,
     },
@@ -89,11 +73,10 @@ export async function generateMetadata({
       description: post.metaDescription ?? post.excerpt,
       type: "article",
       url: canonical,
-      siteName: "Learn Hieroglyphics",
+      siteName: "Learn AEO",
       locale: "en_GB",
       publishedTime: post.publishedAt,
       modifiedTime: modified,
-      authors: [`${SITE}/about`],
       section: post.category,
       images: [
         {
@@ -156,7 +139,6 @@ export default async function BlogPostPage({
           "@type": "WebPage",
           "@id": canonical,
         },
-        author: AUTHOR,
         publisher: PUBLISHER,
         isPartOf: {
           "@type": "Blog",

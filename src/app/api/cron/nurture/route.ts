@@ -12,6 +12,7 @@
  * Auth: `Authorization: Bearer $CRON_SECRET` (Vercel adds it) or `?secret=`.
  */
 import { NextRequest, NextResponse } from "next/server";
+import { SITE } from "@/lib/site";
 import { runNurture, nurtureEnabled } from "@/lib/nurture-run";
 import { renderNurtureEmail, sampleContext } from "@/lib/nurture-emails";
 import { NURTURE_STEPS, type NurtureStepKey } from "@/lib/nurture";
@@ -48,7 +49,7 @@ export async function GET(req: NextRequest) {
     if (!keys.includes(preview as NurtureStepKey)) {
       return NextResponse.json({ error: `Unknown step. One of: ${keys.join(", ")}` }, { status: 400 });
     }
-    const base = (process.env.NEXTAUTH_URL ?? "https://www.learnhieroglyphics.com").replace(/\/$/, "");
+    const base = (process.env.NEXTAUTH_URL ?? SITE.url).replace(/\/$/, "");
     const ctx = sampleContext(base, { lesson1Completed: params.get("done") === "1", lesson1Started: params.get("started") === "1" });
     const email = renderNurtureEmail(preview as NurtureStepKey, ctx);
     const page = `<!doctype html><title>${email.subject}</title><body style="margin:0;background:#f4f1ea;padding:24px;">

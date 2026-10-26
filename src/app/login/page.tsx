@@ -4,8 +4,8 @@ import Footer from "@/components/Footer";
 import LoginContent from "./LoginContent";
 
 export const metadata: Metadata = {
-  title: "Sign In - Learn Hieroglyphics",
-  description: "Sign in to your Learn Hieroglyphics account to continue your lessons.",
+  title: "Sign In - Learn AEO",
+  description: "Sign in to your Learn AEO account to continue your lessons.",
 };
 
 export default function LoginPage() {

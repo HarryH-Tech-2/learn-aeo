@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { blogPosts } from "@/lib/blog-posts";
+import { SITE as SITE_CONFIG } from "@/lib/site";
 import BlogContent from "./BlogContent";
 import { countWords, stripMarkdown } from "./blog-text";
 
-const SITE = "https://www.learnhieroglyphics.com";
+const SITE = SITE_CONFIG.url;
 const BLOG_URL = `${SITE}/blog`;
 const BLOG_NAME = "The Scribe's Journal";
 const BLOG_DESCRIPTION =
@@ -25,7 +26,7 @@ const latestModified = blogPosts.reduce<string>((max, post) => {
 }, "");
 
 export const metadata: Metadata = {
-  title: "Hieroglyphics Articles & Guides | Learn Hieroglyphics",
+  title: "Hieroglyphics Articles & Guides | Learn AEO",
   description: BLOG_DESCRIPTION,
   alternates: {
     canonical: BLOG_URL,
@@ -47,14 +48,14 @@ export const metadata: Metadata = {
     description: BLOG_DESCRIPTION,
     type: "website",
     url: BLOG_URL,
-    siteName: "Learn Hieroglyphics",
+    siteName: "Learn AEO",
     locale: "en_GB",
     images: [
       {
         url: `${SITE}/og-homepage.jpg`,
         width: 1200,
         height: 630,
-        alt: "Learn Hieroglyphics - The Scribe's Journal",
+        alt: "Learn AEO - The Scribe's Journal",
       },
     ],
   },
@@ -67,17 +68,10 @@ export const metadata: Metadata = {
 };
 
 export default function BlogPage() {
-  const author = {
-    "@type": "Person",
-    "@id": `${SITE}/about#harry-harrison`,
-    name: "Harry Harrison",
-    url: `${SITE}/about`,
-  };
-
   const publisher = {
     "@type": "Organization",
     "@id": `${SITE}/#organization`,
-    name: "Learn Hieroglyphics",
+    name: "Learn AEO",
     url: SITE,
     logo: { "@type": "ImageObject", url: `${SITE}/favicon.png` },
   };
@@ -102,7 +96,7 @@ export default function BlogPage() {
     name: `${BLOG_NAME}: Hieroglyphics Articles & Guides`,
     description: BLOG_DESCRIPTION,
     inLanguage: "en",
-    isPartOf: { "@type": "WebSite", "@id": `${SITE}/#website`, url: SITE, name: "Learn Hieroglyphics" },
+    isPartOf: { "@type": "WebSite", "@id": `${SITE}/#website`, url: SITE, name: SITE_CONFIG.name },
     dateModified: latestModified,
     publisher,
     mainEntity: {
@@ -112,7 +106,6 @@ export default function BlogPage() {
       url: BLOG_URL,
       description: BLOG_DESCRIPTION,
       inLanguage: "en",
-      author,
       publisher,
       blogPost: sortedPosts.map((post) => ({
         "@type": "BlogPosting",
@@ -127,7 +120,6 @@ export default function BlogPage() {
         datePublished: post.publishedAt,
         dateModified: post.updatedAt ?? post.publishedAt,
         image: `${SITE}${post.image}`,
-        author,
         publisher,
         isAccessibleForFree: true,
       })),

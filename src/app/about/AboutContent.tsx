@@ -108,7 +108,7 @@ export default function AboutContent() {
             className="space-y-6 font-body text-sand-400 leading-relaxed"
           >
             <p>
-              Learn Hieroglyphics was founded by a small team of Egyptology
+              Learn AEO was founded by a small team of Egyptology
               enthusiasts, scholars, and software engineers who shared a common
               frustration: the world&rsquo;s oldest monumental writing system had no
               truly modern, interactive learning platform.
@@ -162,7 +162,7 @@ export default function AboutContent() {
             <figure className="float-none mx-auto mb-2 w-40 sm:float-right sm:mb-4 sm:ml-8 sm:w-48">
               <Image
                 src="/about/harry-640.webp"
-                alt="Harry Harrison, founder of Learn Hieroglyphics"
+                alt="Harry Harrison, founder of Learn AEO"
                 width={640}
                 height={720}
                 sizes="(min-width: 640px) 192px, 160px"

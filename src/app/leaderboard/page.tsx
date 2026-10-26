@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
+import { absoluteUrl } from "@/lib/site";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Leaderboard from "@/components/Leaderboard";
 
 export const metadata: Metadata = {
-  title: "Leaderboard | Learn Hieroglyphics",
+  title: "Leaderboard | Learn AEO",
   description:
     "See how your hieroglyphics study compares. The leaderboard ranks every scholar by XP earned across lessons, quick checks and the 3D games.",
   alternates: {
-    canonical: "https://www.learnhieroglyphics.com/leaderboard",
+    canonical: absoluteUrl("/leaderboard"),
   },
 };
 

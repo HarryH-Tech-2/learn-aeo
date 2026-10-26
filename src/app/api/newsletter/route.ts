@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { SITE } from "@/lib/site";
 import { Resend } from "resend";
 import { ownerEmail } from "@/lib/notify";
 import { recordLead, isValidEmail, normaliseEmail } from "@/lib/leads";
@@ -55,8 +56,8 @@ export async function POST(request: Request) {
     await resend.emails.send({
       from: brandFrom(),
       to: email,
-      subject: "Welcome to Learn Hieroglyphics!",
-      html: welcomeHtml((process.env.NEXTAUTH_URL || "https://learnhieroglyphics.com").replace(/\/$/, "")),
+      subject: "Welcome to Learn AEO!",
+      html: welcomeHtml((process.env.NEXTAUTH_URL || SITE.url).replace(/\/$/, "")),
     });
 
     return NextResponse.json({ ok: true });
@@ -74,12 +75,12 @@ function welcomeHtml(site: string): string {
     baseUrl: site,
     preheader: "Weekly updates on Ancient Egypt and platform news, straight to your inbox.",
     body: [
-      heading("Welcome to Learn Hieroglyphics!"),
+      heading("Welcome to Learn AEO!"),
       paragraph("Thank you for subscribing! You'll receive weekly updates on Ancient Egypt and platform news straight to your inbox."),
       paragraph("In the meantime, why not start exploring? We have lessons that take you from the Valley of the Kings to the Rosetta Stone."),
       button(`${site}/get-started`, "Get Lifetime Access"),
     ].join(""),
     signature: false,
-    reason: "Learn Hieroglyphics: Master the writing of Ancient Egypt",
+    reason: "Learn AEO: Master the writing of Ancient Egypt",
   });
 }

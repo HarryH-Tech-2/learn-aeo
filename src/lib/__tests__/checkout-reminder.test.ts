@@ -80,8 +80,8 @@ describe("formatSessionPrice", () => {
 
 describe("reminderCheckoutUrl", () => {
   it("returns to checkout for the same plan, tagged for attribution", () => {
-    expect(reminderCheckoutUrl("https://www.learnhieroglyphics.com/", PLANS.classroom)).toBe(
-      "https://www.learnhieroglyphics.com/checkout?plan=classroom&utm_source=email&utm_medium=email&utm_campaign=checkout_reminder"
+    expect(reminderCheckoutUrl("https://www.learnaeo.com/", PLANS.classroom)).toBe(
+      "https://www.learnaeo.com/checkout?plan=classroom&utm_source=email&utm_medium=email&utm_campaign=checkout_reminder"
     );
   });
 });
@@ -94,7 +94,7 @@ describe("sendCheckoutReminderIfDue", () => {
     mockSendReminder.mockResolvedValue(true);
     mockEmailSendCreate.mockResolvedValue({});
     process.env.NEXTAUTH_SECRET = "test-secret";
-    process.env.NEXTAUTH_URL = "https://www.learnhieroglyphics.com";
+    process.env.NEXTAUTH_URL = "https://www.learnaeo.com";
   });
 
   it("claims the session, then sends the reminder with their own price", async () => {

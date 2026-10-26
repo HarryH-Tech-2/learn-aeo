@@ -44,7 +44,7 @@ describe("guestPlayAllowed", () => {
   it("is on with ?play=1, and remembered for the next visit from this browser", () => {
     const store = stubStorage();
     expect(guestPlayAllowed(params("play=1&name=Nancy"))).toBe(true);
-    expect(store.get("lh_guest_play")).toBe("1");
+    expect(store.get("aeo_guest_play")).toBe("1");
     expect(guestPlayAllowed(params(""))).toBe(true);
   });
 

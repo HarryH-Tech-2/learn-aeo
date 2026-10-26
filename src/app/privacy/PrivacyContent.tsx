@@ -1,6 +1,7 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
+import { SITE } from "@/lib/site";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -68,7 +69,7 @@ const sections: { id: string; title: string; content: ContentBlock[] }[] = [
     title: "4. Cookies & Local Storage",
     content: [
       {
-        text: "We use essential cookies to maintain your authentication session and remember your preferences (such as theme selection). We also use local storage to cache lesson progress for a faster experience. We also use Google Analytics cookies to count visits and see which pages and lessons help people learn. If you are in the UK or the EU/EEA, Analytics stays off until you choose “Accept all” on the cookie notice. Elsewhere it is on unless you choose “Essentials only”; the choice is kept in a cookie named lh_consent for a year, and clearing your cookies brings the notice back. Under the same rule, we keep three measurement cookies of our own: lh_ref (the website that first sent you here, as a domain name only, and the page you landed on; 90 days), lh_utm (which of our own marketing links you followed; 30 days) and lh_vid (a random visitor number so a link visit is counted once; one year). If you create an account or buy, we store that source with your account and purchase record so we can see which places bring people who stay. Choosing “Essentials only” deletes them. After you sign up we may also ask how you found us; answering is optional. We do not use advertising cookies.",
+        text: "We use essential cookies to maintain your authentication session and remember your preferences (such as theme selection). We also use local storage to cache lesson progress for a faster experience. We also use Google Analytics cookies to count visits and see which pages and lessons help people learn. If you are in the UK or the EU/EEA, Analytics stays off until you choose “Accept all” on the cookie notice. Elsewhere it is on unless you choose “Essentials only”; the choice is kept in a cookie named aeo_consent for a year, and clearing your cookies brings the notice back. Under the same rule, we keep three measurement cookies of our own: aeo_ref (the website that first sent you here, as a domain name only, and the page you landed on; 90 days), aeo_utm (which of our own marketing links you followed; 30 days) and aeo_vid (a random visitor number so a link visit is counted once; one year). If you create an account or buy, we store that source with your account and purchase record so we can see which places bring people who stay. Choosing “Essentials only” deletes them. After you sign up we may also ask how you found us; answering is optional. We do not use advertising cookies.",
       },
     ],
   },
@@ -107,7 +108,7 @@ const sections: { id: string; title: string; content: ContentBlock[] }[] = [
     title: "8. Changes to This Policy",
     content: [
       {
-        text: "We may update this Privacy Policy from time to time. If we make material changes, we will notify you by email or through a prominent notice on the platform. Your continued use of Learn Hieroglyphics after changes are posted constitutes acceptance of the updated policy.",
+        text: "We may update this Privacy Policy from time to time. If we make material changes, we will notify you by email or through a prominent notice on the platform. Your continued use of Learn AEO after changes are posted constitutes acceptance of the updated policy.",
       },
     ],
   },
@@ -116,7 +117,7 @@ const sections: { id: string; title: string; content: ContentBlock[] }[] = [
     title: "9. Contact Us",
     content: [
       {
-        text: "If you have questions or concerns about this Privacy Policy or your personal data, please contact us at:\n\ncontact@learnhieroglyphics.com",
+        text: "If you have questions or concerns about this Privacy Policy or your personal data, please contact us at:\n\nhello@learnaeo.com",
       },
     ],
   },
@@ -136,7 +137,7 @@ export default function PrivacyContent() {
                 "@type": "ListItem",
                 position: 1,
                 name: "Home",
-                item: "https://www.learnhieroglyphics.com",
+                item: SITE.url,
               },
               {
                 "@type": "ListItem",
@@ -189,7 +190,7 @@ export default function PrivacyContent() {
             custom={3}
             className="font-body text-sand-300 mt-8 leading-relaxed"
           >
-            Learn Hieroglyphics (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or
+            Learn AEO (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or
             &ldquo;us&rdquo;) is committed to protecting your privacy. This
             Privacy Policy explains what information we collect, how we use it,
             and the choices you have regarding your data when you use our

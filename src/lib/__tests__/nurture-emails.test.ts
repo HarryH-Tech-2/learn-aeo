@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { renderNurtureEmail, sampleContext } from "@/lib/nurture-emails";
 import { NURTURE_STEPS } from "@/lib/nurture";
 
-const base = "https://www.learnhieroglyphics.com";
+const base = "https://www.learnaeo.com";
 
 describe("renderNurtureEmail", () => {
   it("renders every step with a subject, an unsubscribe link, and a plain-text part", () => {
@@ -79,7 +79,7 @@ describe("renderNurtureEmail", () => {
 });
 
 describe("renderNurtureEmail — free-unlock group", () => {
-  const base = "https://www.learnhieroglyphics.com";
+  const base = "https://www.learnaeo.com";
 
   it("coffee: links Buy Me a Coffee and sells nothing", () => {
     const e = renderNurtureEmail("coffee", sampleContext(base, { freeUnlock: true, offer: null }));

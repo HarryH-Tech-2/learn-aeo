@@ -33,10 +33,10 @@ describe("analyticsAllowedScript", () => {
   }
 
   it("reads the consent and country cookies in the browser", () => {
-    expect(run("lh_cc=US")).toBe(true);
-    expect(run("lh_cc=GB")).toBe(false);
-    expect(run("foo=1; lh_cc=GB; lh_consent=all")).toBe(true);
-    expect(run("lh_consent=essential; lh_cc=US")).toBe(false);
+    expect(run("aeo_cc=US")).toBe(true);
+    expect(run("aeo_cc=GB")).toBe(false);
+    expect(run("foo=1; aeo_cc=GB; aeo_consent=all")).toBe(true);
+    expect(run("aeo_consent=essential; aeo_cc=US")).toBe(false);
     expect(run("")).toBe(false);
   });
 });

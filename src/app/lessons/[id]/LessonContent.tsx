@@ -64,7 +64,7 @@ interface LessonData {
   /** Signs from earlier lessons for the Field Notes review */
   review?: HieroglyphData[];
   locked?: boolean;
-  /** Local preview only (LH_DEV_BYPASS_AUTH=1): never set in production */
+  /** Local preview only (AEO_DEV_BYPASS_AUTH=1): never set in production */
   preview?: boolean;
 }
 

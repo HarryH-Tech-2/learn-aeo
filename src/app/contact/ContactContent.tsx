@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { SITE } from "@/lib/site";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ContactForm from "@/components/ContactForm";
@@ -14,8 +15,8 @@ const ROUTES = [
     title: "Email us directly",
     body: (
       <>
-        <a href="mailto:contact@learnhieroglyphics.com" className="text-gold-400 hover:text-gold-300 underline underline-offset-4">
-          contact@learnhieroglyphics.com
+        <a href="mailto:hello@learnaeo.com" className="text-gold-400 hover:text-gold-300 underline underline-offset-4">
+          hello@learnaeo.com
         </a>{" "}
         reaches the same inbox as the form.
       </>
@@ -46,7 +47,7 @@ export default function ContactContent() {
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Home", item: "https://www.learnhieroglyphics.com" },
+              { "@type": "ListItem", position: 1, name: "Home", item: SITE.url },
               { "@type": "ListItem", position: 2, name: "Contact" },
             ],
           }),

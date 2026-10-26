@@ -34,7 +34,7 @@ export default function Footer() {
             <Link href="/" className="flex items-center gap-3 mb-4">
               <span className="text-4xl text-sand-100">𓂀</span>
               <span className="font-display text-2xl font-semibold text-gold-400">
-                Learn Hieroglyphics
+                Learn AEO
               </span>
             </Link>
             <p className="font-body text-base text-sand-400 leading-relaxed max-w-sm font-light">

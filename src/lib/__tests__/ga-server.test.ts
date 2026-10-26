@@ -1,4 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+// SITE.gaId reads NEXT_PUBLIC_GA_ID when the module loads, so set it before the import is evaluated
+vi.hoisted(() => {
+  process.env.NEXT_PUBLIC_GA_ID = "G-TESTAEO123";
+});
+
 import { gaClientIdFromCookie, gaSessionIdFromCookie, sendPurchaseToGA4, GA_MEASUREMENT_ID, GA_SESSION_COOKIE } from "@/lib/ga-server";
 
 describe("gaClientIdFromCookie", () => {
@@ -14,7 +19,7 @@ describe("gaClientIdFromCookie", () => {
 
 describe("gaSessionIdFromCookie", () => {
   it("reads the session id from both cookie formats", () => {
-    expect(GA_SESSION_COOKIE).toBe("_ga_GM64VZ87FQ");
+    expect(GA_SESSION_COOKIE).toBe("_ga_TESTAEO123");
     expect(gaSessionIdFromCookie("GS1.1.1700000000.3.1.1700000100.0.0.0")).toBe("1700000000");
     expect(gaSessionIdFromCookie("GS2.1.s1700000000$o3$g1$t1700000100$j60$l0$h0")).toBe("1700000000");
   });

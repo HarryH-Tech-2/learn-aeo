@@ -8,10 +8,12 @@
  * src/components/useAuthPrompt.ts wires it to the browser.
  */
 
+import { COOKIE_PREFIX } from "@/lib/site";
+
 export type PromptTrigger = "blog_scroll";
 
 /** localStorage key holding the last time the card was shown to this browser. */
-export const PROMPT_STORAGE_KEY = "lh_auth_prompt";
+export const PROMPT_STORAGE_KEY = `${COOKIE_PREFIX}auth_prompt`;
 /** Once shown (whatever the outcome) the card stays away for this long. */
 export const PROMPT_SUPPRESS_MS = 30 * 24 * 60 * 60 * 1000;
 /** Never interrupt someone who has only just arrived, whatever they do. */

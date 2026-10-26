@@ -23,10 +23,10 @@ function getResend(): Resend {
   return _resend;
 }
 
-/** "Harry from Learn Hieroglyphics <addr>" unless the env already carries a display name. */
+/** "Harry from Learn AEO <addr>" unless the env already carries a display name. */
 function fromAddress(): string {
   const raw = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
-  return raw.includes("<") ? raw : `Harry from Learn Hieroglyphics <${raw}>`;
+  return raw.includes("<") ? raw : `Harry from Learn AEO <${raw}>`;
 }
 
 export type FeedbackRunResult = {

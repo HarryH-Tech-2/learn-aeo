@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { cleanHeardAbout, decodeReferrer, describeSource, encodeReferrer, landingPath, referrerHost } from "../referrer";
 
-const OWN = "www.learnhieroglyphics.com";
+const OWN = "www.learnaeo.com";
 
 describe("referrerHost", () => {
   it("keeps only the referring host, without www", () => {
@@ -15,8 +15,8 @@ describe("referrerHost", () => {
   });
 
   it("ignores our own site, with or without www", () => {
-    expect(referrerHost("https://www.learnhieroglyphics.com/blog/x", OWN)).toBeNull();
-    expect(referrerHost("https://learnhieroglyphics.com/", OWN)).toBeNull();
+    expect(referrerHost("https://www.learnaeo.com/blog/x", OWN)).toBeNull();
+    expect(referrerHost("https://learnaeo.com/", OWN)).toBeNull();
   });
 
   it("ignores mid-journey hosts and junk", () => {

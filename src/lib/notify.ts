@@ -1,11 +1,12 @@
 import { Resend } from "resend";
+import { SITE } from "@/lib/site";
 
 /**
  * Where every "something happened on the site" email goes: newsletter
  * signups, contact-form messages, lesson feedback, new accounts and purchases.
  * Override with CONTACT_TO_EMAIL if it ever needs to move.
  */
-export const DEFAULT_OWNER_EMAIL = "contact@learnhieroglyphics.com";
+export const DEFAULT_OWNER_EMAIL = SITE.supportEmail;
 
 export function ownerEmail(): string {
   return process.env.CONTACT_TO_EMAIL?.trim() || DEFAULT_OWNER_EMAIL;

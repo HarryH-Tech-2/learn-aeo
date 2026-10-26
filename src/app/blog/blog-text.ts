@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { SITE } from "@/lib/site";
 import { isValidElement } from "react";
 
 /**
@@ -9,7 +10,7 @@ import { isValidElement } from "react";
  * from the markdown that file already exports.
  */
 
-const SITE_ORIGIN = "https://www.learnhieroglyphics.com";
+const SITE_ORIGIN = SITE.url;
 
 /** Strip inline markdown only (links, emphasis, code). Keeps list numbers, so it suits heading text. */
 export function stripInlineMarkdown(md: string): string {

@@ -1,4 +1,5 @@
 import type { NextAuthOptions } from "next-auth";
+import { SITE } from "@/lib/site";
 import GoogleProvider from "next-auth/providers/google";
 import EmailProvider from "next-auth/providers/email";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
@@ -11,7 +12,7 @@ import { CAMPAIGN_COOKIE, decodeCampaign } from "@/lib/campaign";
 import { REFERRER_COOKIE, decodeReferrer } from "@/lib/referrer";
 
 /**
- * Copies the lh_utm cookie (the marketing post that brought them, src/lib/campaign.ts) and the lh_ref cookie
+ * Copies the aeo_utm cookie (the marketing post that brought them, src/lib/campaign.ts) and the aeo_ref cookie
  * (the site they first came from, src/lib/referrer.ts) onto a new account.
  */
 /** The free-unlock test group this browser was shown (src/lib/access-test.ts), if any. */
@@ -65,15 +66,15 @@ export const authOptions: NextAuthOptions = {
         const result = await getResend().emails.send({
           from: brandFrom(),
           to: email,
-          subject: "Sign in to Learn Hieroglyphics",
+          subject: "Sign in to Learn AEO",
           html: emailLayout({
-            baseUrl: (process.env.NEXTAUTH_URL ?? "https://www.learnhieroglyphics.com").replace(/\/$/, ""),
-            preheader: "Your sign-in link for Learn Hieroglyphics. It expires in 24 hours.",
+            baseUrl: (process.env.NEXTAUTH_URL ?? SITE.url).replace(/\/$/, ""),
+            preheader: "Your sign-in link for Learn AEO. It expires in 24 hours.",
             body: `${paragraph("Click the button below to sign in to your account.", { align: "center" })}
               ${button(url, "Sign In", { center: true })}
               ${paragraph("This link expires in 24 hours.<br/>If you didn't request this, you can safely ignore it.", { size: 13, color: EMAIL_COLORS.muted, align: "center" })}`,
             signature: false,
-            reason: "You asked to sign in to learnhieroglyphics.com. If it wasn't you, ignore this email.",
+            reason: "You asked to sign in to learnaeo.com. If it wasn't you, ignore this email.",
           }),
         });
 

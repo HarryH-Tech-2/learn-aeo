@@ -91,7 +91,7 @@ export function heroImage(src: string, alt: string, href?: string): string {
 }
 
 /** Harry's sign-off. */
-export function signature(line = "Founder, Learn Hieroglyphics &middot; just reply, I read every email"): string {
+export function signature(line = "Founder, Learn AEO &middot; just reply, I read every email"): string {
   return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0 0;">
   <tr>
     <td valign="middle" style="padding-right:12px;"><div style="width:40px;height:2px;background:${C.gold};font-size:0;line-height:0;">&nbsp;</div></td>
@@ -137,7 +137,7 @@ export function emailLayout(o: EmailLayoutOptions): string {
     <tr><td align="center" style="padding:22px 24px 20px;">
       <a href="${o.baseUrl}" style="text-decoration:none;">
         <img src="${o.baseUrl}/email/mark.png" width="36" height="36" alt="" style="display:block;margin:0 auto 10px;border:0;">
-        <span style="font-family:${DISPLAY_FONT};font-size:15px;font-weight:600;letter-spacing:5px;text-transform:uppercase;color:${C.gold};">Learn Hieroglyphics</span>
+        <span style="font-family:${DISPLAY_FONT};font-size:15px;font-weight:600;letter-spacing:5px;text-transform:uppercase;color:${C.gold};">Learn AEO</span>
       </a>
     </td></tr>
     ${o.hero ?? ""}
@@ -153,7 +153,7 @@ export function emailLayout(o: EmailLayoutOptions): string {
     <tr><td style="padding:0;">${frieze}</td></tr>
     <tr><td align="center" style="padding:18px 32px 22px;font-family:${BODY_FONT};font-size:12px;line-height:1.7;color:${C.faint};">
       ${o.reason}${o.unsubscribeUrl ? `<br><a href="${o.unsubscribeUrl}" style="color:${C.faint};text-decoration:underline;">Unsubscribe</a>` : ""}
-      <br><a href="${o.baseUrl}" style="color:${C.muted};text-decoration:none;letter-spacing:1px;">learnhieroglyphics.com</a>
+      <br><a href="${o.baseUrl}" style="color:${C.muted};text-decoration:none;letter-spacing:1px;">learnaeo.com</a>
     </td></tr>
   </table>
 </td></tr></table>
@@ -161,10 +161,10 @@ export function emailLayout(o: EmailLayoutOptions): string {
 }
 
 /**
- * "Learn Hieroglyphics <addr>" for sign-in links, receipts and other site emails. The bare address showed up in
+ * "Learn AEO <addr>" for sign-in links, receipts and other site emails. The bare address showed up in
  * inboxes as just "hello". Left alone when the env already carries a display name.
  */
 export function brandFrom(): string {
   const raw = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
-  return raw.includes("<") ? raw : `Learn Hieroglyphics <${raw}>`;
+  return raw.includes("<") ? raw : `Learn AEO <${raw}>`;
 }

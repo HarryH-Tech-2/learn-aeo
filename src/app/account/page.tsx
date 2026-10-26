@@ -1,7 +1,7 @@
 import AccountContent from "./AccountContent";
 
 export const metadata = {
-  title: "Account | Learn Hieroglyphics",
+  title: "Account | Learn AEO",
 };
 
 export default function AccountPage() {

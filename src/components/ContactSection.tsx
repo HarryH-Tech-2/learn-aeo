@@ -21,7 +21,7 @@ export default function ContactSection() {
         <div className="reveal max-w-3xl mx-auto" style={reveal(0.3, { y: 30, dur: 0.6 })}>
           <ContactForm idPrefix="home-contact" />
           <p className="font-body text-sm text-sand-500 text-center mt-5">
-            Rather use email? <a href="mailto:contact@learnhieroglyphics.com" className="text-gold-400 hover:text-gold-300 underline underline-offset-4">contact@learnhieroglyphics.com</a>
+            Rather use email? <a href="mailto:hello@learnaeo.com" className="text-gold-400 hover:text-gold-300 underline underline-offset-4">hello@learnaeo.com</a>
             {" · "}
             <Link href="/contact" className="text-gold-400 hover:text-gold-300 underline underline-offset-4">
               More ways to reach us

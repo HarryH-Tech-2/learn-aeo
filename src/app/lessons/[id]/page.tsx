@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SITE, absoluteUrl } from "@/lib/site";
 import { Suspense } from "react";
 import { lessons } from "@/lib/lessons";
 import LessonContent from "./LessonContent";
@@ -16,11 +17,11 @@ export async function generateMetadata({
   const lesson = lessons.find((l) => l.id === id);
 
   if (!lesson) {
-    return { title: "Lesson Not Found - Learn Hieroglyphics" };
+    return { title: "Lesson Not Found - Learn AEO" };
   }
 
-  const canonical = `https://www.learnhieroglyphics.com/lessons/${id}`;
-  const title = `${lesson.title}: ${lesson.subtitle} | Learn Hieroglyphics`;
+  const canonical = absoluteUrl(`/lessons/${id}`);
+  const title = `${lesson.title}: ${lesson.subtitle} | Learn AEO`;
 
   return {
     title,
@@ -61,7 +62,7 @@ export default async function LessonPage({
               "@type": "LearningResource",
               name: lesson.title,
               description: lesson.description,
-              url: `https://www.learnhieroglyphics.com/lessons/${lesson.id}`,
+              url: absoluteUrl(`/lessons/${lesson.id}`),
               educationalLevel: lesson.difficulty,
               learningResourceType: "Lesson",
               timeRequired: `PT${lesson.duration.replace(/\D/g, "")}M`,
@@ -69,17 +70,17 @@ export default async function LessonPage({
               isAccessibleForFree: lesson.isFree,
               provider: {
                 "@type": "Organization",
-                name: "Learn Hieroglyphics",
-                url: "https://www.learnhieroglyphics.com",
+                name: "Learn AEO",
+                url: SITE.url,
               },
               isPartOf: {
                 "@type": "Course",
-                name: "Learn Hieroglyphics",
-                url: "https://www.learnhieroglyphics.com",
+                name: "Learn AEO",
+                url: SITE.url,
                 provider: {
                   "@type": "Organization",
-                  name: "Learn Hieroglyphics",
-                  url: "https://www.learnhieroglyphics.com",
+                  name: "Learn AEO",
+                  url: SITE.url,
                 },
               },
             }),

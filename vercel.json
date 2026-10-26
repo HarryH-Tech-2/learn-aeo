@@ -11,10 +11,10 @@
       "has": [
         {
           "type": "host",
-          "value": "learnhieroglyphics.com"
+          "value": "learnaeo.com"
         }
       ],
-      "destination": "https://www.learnhieroglyphics.com/$1",
+      "destination": "https://www.learnaeo.com/$1",
       "permanent": true
     }
   ],

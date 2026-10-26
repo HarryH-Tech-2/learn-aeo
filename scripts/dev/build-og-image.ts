@@ -41,7 +41,7 @@ async function main() {
     div(
       { position: "absolute", top: 0, left: 0, width: W, flexDirection: "column", alignItems: "center", paddingTop: 34 },
       div({ fontSize: 22, letterSpacing: 7, color: GOLD, textShadow: lift }, "READ & WRITE LIKE A SCRIBE"),
-      div({ fontSize: 76, color: IVORY, marginTop: 4, textShadow: `${lift}, 0 0 30px rgba(255,200,120,0.35)` }, "Learn Hieroglyphics"),
+      div({ fontSize: 76, color: IVORY, marginTop: 4, textShadow: `${lift}, 0 0 30px rgba(255,200,120,0.35)` }, "Learn AEO"),
       // The cartouche: the rope loop, its tie, and the name with its letters
       div(
         { marginTop: 14, alignItems: "center" },

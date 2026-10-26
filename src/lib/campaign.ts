@@ -1,15 +1,17 @@
 /**
  * Which post brought a visitor (2026-10-01). Every marketing link carries utm_source / utm_campaign
  * (docs/marketing-kit.md). CampaignTracker (in the root layout) records the landing as a CampaignVisit and keeps
- * the campaign in the `lh_utm` cookie for 30 days (last tagged link wins); when an account is created,
+ * the campaign in the `aeo_utm` cookie for 30 days (last tagged link wins); when an account is created,
  * auth.ts copies the cookie onto User.signupSource / signupCampaign. /admin/marketing adds it up.
  *
  * Our own record, because GA4 loses most of these: a magic-link sign-up finishes in a new session that
  * arrives from the mail client, not from the post.
  */
 
-export const CAMPAIGN_COOKIE = "lh_utm";
-export const VISITOR_COOKIE = "lh_vid";
+import { COOKIE_PREFIX } from "@/lib/site";
+
+export const CAMPAIGN_COOKIE = `${COOKIE_PREFIX}utm`;
+export const VISITOR_COOKIE = `${COOKIE_PREFIX}vid`;
 export const CAMPAIGN_COOKIE_DAYS = 30;
 
 export type Campaign = { source: string; medium: string; campaign: string };

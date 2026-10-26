@@ -67,7 +67,7 @@ const faqs = [
   {
     question: "How often is the site updated?",
     answer:
-      "We update Learn Hieroglyphics weekly, adding new lessons, improving existing content, publishing blog posts, and refining the learning experience based on student feedback. Lifetime access includes all current and future content at no additional cost.",
+      "We update Learn AEO weekly, adding new lessons, improving existing content, publishing blog posts, and refining the learning experience based on student feedback. Lifetime access includes all current and future content at no additional cost.",
   },
   {
     question: "Do I get a discount if I'm a student?",

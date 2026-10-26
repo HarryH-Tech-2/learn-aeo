@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SITE, absoluteUrl } from "@/lib/site";
 import Navbar from "@/components/Navbar";
 import PricingSection from "@/components/PricingSection";
 import PricingFAQ from "@/components/PricingFAQ";
@@ -6,11 +7,11 @@ import Footer from "@/components/Footer";
 import { PLANS, PLAN_IDS } from "@/lib/plans";
 
 export const metadata: Metadata = {
-  title: "Pricing: Lifetime, Monthly Pass and Classroom Licences | Learn Hieroglyphics",
+  title: "Pricing: Lifetime, Monthly Pass and Classroom Licences | Learn AEO",
   description:
     "Lifetime access for one payment of $19.99, an Expedition Pass at $4.99 a month, or Classroom and School licences for teachers. The first lesson is free.",
   alternates: {
-    canonical: "https://www.learnhieroglyphics.com/pricing",
+    canonical: absoluteUrl("/pricing"),
   },
 };
 
@@ -23,13 +24,13 @@ export default function PricingPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Course",
-            name: "Learn Hieroglyphics",
+            name: "Learn AEO",
             description:
               "Interactive online course covering the hieroglyphic alphabet, cartouches, temple inscriptions, and Book of the Dead.",
             provider: {
               "@type": "Organization",
-              name: "Learn Hieroglyphics",
-              url: "https://www.learnhieroglyphics.com",
+              name: "Learn AEO",
+              url: SITE.url,
             },
             offers: PLAN_IDS.map((id) => ({
               "@type": "Offer",
@@ -37,7 +38,7 @@ export default function PricingPage() {
               price: PLANS[id].usd.toFixed(2),
               priceCurrency: "USD",
               availability: "https://schema.org/InStock",
-              url: "https://www.learnhieroglyphics.com/pricing",
+              url: absoluteUrl("/pricing"),
             })),
             hasCourseInstance: {
               "@type": "CourseInstance",

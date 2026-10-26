@@ -1,6 +1,7 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
+import { SITE } from "@/lib/site";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -19,7 +20,7 @@ const sections = [
     id: "acceptance",
     title: "1. Acceptance of Terms",
     content:
-      "By accessing or using Learn Hieroglyphics, you agree to be bound by these Terms of Service and our Privacy Policy. If you do not agree to these terms, you may not use our services. We reserve the right to refuse service to anyone for any reason at any time.",
+      "By accessing or using Learn AEO, you agree to be bound by these Terms of Service and our Privacy Policy. If you do not agree to these terms, you may not use our services. We reserve the right to refuse service to anyone for any reason at any time.",
   },
   {
     id: "account-registration",
@@ -31,7 +32,7 @@ const sections = [
     id: "purchase-and-billing",
     title: "3. Purchase & Billing",
     content:
-      "Learn Hieroglyphics offers lifetime access to the full course for a single one-time payment of $19.99 (£15.99). After payment, your account is granted permanent access to all current and future course content at no additional cost.\n\nWe also offer an Expedition Pass ($4.99 / £3.99 per month) and Classroom ($29.50 / £24.50 per year, one teacher and up to 30 pupils) and School ($124.50 / £99.50 per year, unlimited pupils) licences. These renew automatically until cancelled from your account page or the billing portal; access continues to the end of the paid period. Pupils joined to a licence lose access when it lapses.\n\nPurchasing-power parity: visitors from countries with lower purchasing power are offered a percentage discount, applied automatically at checkout based on the country they browse from. We do not verify residence and we do not revoke access when a discount was claimed from elsewhere; we ask that you pay the full price if you can.\n\nWe offer a 14-day money-back guarantee. If you are unhappy with the course within 14 days of purchase, contact contact@learnhieroglyphics.com and we will issue a full refund.\n\nAll payments are processed securely by Stripe. By purchasing, you also agree to Stripe\u2019s terms of service.",
+      "Learn AEO offers lifetime access to the full course for a single one-time payment of $19.99 (£15.99). After payment, your account is granted permanent access to all current and future course content at no additional cost.\n\nWe also offer an Expedition Pass ($4.99 / £3.99 per month) and Classroom ($29.50 / £24.50 per year, one teacher and up to 30 pupils) and School ($124.50 / £99.50 per year, unlimited pupils) licences. These renew automatically until cancelled from your account page or the billing portal; access continues to the end of the paid period. Pupils joined to a licence lose access when it lapses.\n\nPurchasing-power parity: visitors from countries with lower purchasing power are offered a percentage discount, applied automatically at checkout based on the country they browse from. We do not verify residence and we do not revoke access when a discount was claimed from elsewhere; we ask that you pay the full price if you can.\n\nWe offer a 14-day money-back guarantee. If you are unhappy with the course within 14 days of purchase, contact hello@learnaeo.com and we will issue a full refund.\n\nAll payments are processed securely by Stripe. By purchasing, you also agree to Stripe\u2019s terms of service.",
   },
   {
     id: "free-content",
@@ -43,7 +44,7 @@ const sections = [
     id: "intellectual-property",
     title: "5. Intellectual Property",
     content:
-      "All lesson content, illustrations, interactive exercises, sign databases, translations, commentary, software code, and design elements on Learn Hieroglyphics are the intellectual property of Learn Hieroglyphics or its licensors and are protected by copyright and other intellectual property laws.\n\nYour purchase grants you a personal, non-transferable, non-exclusive licence to access and use the content for your own private, non-commercial learning purposes. You may not reproduce, distribute, modify, create derivative works from, publicly display, or commercially exploit any content without our prior written consent.",
+      "All lesson content, illustrations, interactive exercises, sign databases, translations, commentary, software code, and design elements on Learn AEO are the intellectual property of Learn AEO or its licensors and are protected by copyright and other intellectual property laws.\n\nYour purchase grants you a personal, non-transferable, non-exclusive licence to access and use the content for your own private, non-commercial learning purposes. You may not reproduce, distribute, modify, create derivative works from, publicly display, or commercially exploit any content without our prior written consent.",
   },
   {
     id: "acceptable-use",
@@ -55,19 +56,19 @@ const sections = [
     id: "disclaimers",
     title: "7. Disclaimers",
     content:
-      'Learn Hieroglyphics is provided on an "as is" and "as available" basis. While we strive for accuracy in our educational content, we make no warranties, express or implied, regarding the completeness, reliability, or suitability of the content for any particular purpose. Our lessons are intended for educational enrichment and do not constitute formal academic accreditation.',
+      'Learn AEO is provided on an "as is" and "as available" basis. While we strive for accuracy in our educational content, we make no warranties, express or implied, regarding the completeness, reliability, or suitability of the content for any particular purpose. Our lessons are intended for educational enrichment and do not constitute formal academic accreditation.',
   },
   {
     id: "limitation-of-liability",
     title: "8. Limitation of Liability",
     content:
-      "To the maximum extent permitted by applicable law, Learn Hieroglyphics and its founders, employees, and affiliates shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or data, arising out of or in connection with your use of the service. Our total liability for any claim arising from these terms or your use of the service shall not exceed the amount you paid us in the twelve (12) months preceding the claim.",
+      "To the maximum extent permitted by applicable law, Learn AEO and its founders, employees, and affiliates shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or data, arising out of or in connection with your use of the service. Our total liability for any claim arising from these terms or your use of the service shall not exceed the amount you paid us in the twelve (12) months preceding the claim.",
   },
   {
     id: "changes-to-terms",
     title: "9. Changes to These Terms",
     content:
-      "We may update these Terms of Service from time to time. When we make material changes, we will notify you by email or by posting a notice on the platform at least 14 days before the changes take effect. Your continued use of Learn Hieroglyphics after the updated terms become effective constitutes your acceptance of the changes.",
+      "We may update these Terms of Service from time to time. When we make material changes, we will notify you by email or by posting a notice on the platform at least 14 days before the changes take effect. Your continued use of Learn AEO after the updated terms become effective constitutes your acceptance of the changes.",
   },
   {
     id: "governing-law",
@@ -79,7 +80,7 @@ const sections = [
     id: "contact",
     title: "11. Contact Us",
     content:
-      "If you have any questions about these Terms of Service, please contact us at:\n\ncontact@learnhieroglyphics.com",
+      "If you have any questions about these Terms of Service, please contact us at:\n\nhello@learnaeo.com",
   },
 ];
 
@@ -97,7 +98,7 @@ export default function TermsContent() {
                 "@type": "ListItem",
                 position: 1,
                 name: "Home",
-                item: "https://www.learnhieroglyphics.com",
+                item: SITE.url,
               },
               {
                 "@type": "ListItem",
@@ -150,7 +151,7 @@ export default function TermsContent() {
             custom={3}
             className="font-body text-sand-300 mt-8 leading-relaxed"
           >
-            Welcome to Learn Hieroglyphics. These Terms of Service
+            Welcome to Learn AEO. These Terms of Service
             (&ldquo;Terms&rdquo;) govern your access to and use of the Learn
             Hieroglyphics website, applications, and services. Please read them
             carefully before using our platform.

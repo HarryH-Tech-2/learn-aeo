@@ -1,4 +1,5 @@
 import { blogPosts } from "@/lib/blog-posts";
+import { SITE } from "@/lib/site";
 import { lessons } from "@/lib/lessons";
 import { stripMarkdown } from "@/app/blog/blog-text";
 
@@ -8,7 +9,7 @@ import { stripMarkdown } from "@/app/blog/blog-text";
  * blog so it can never drift from what the site actually contains.
  */
 
-const BASE = "https://www.learnhieroglyphics.com";
+const BASE = SITE.url;
 
 export const dynamic = "force-static";
 export const revalidate = 86400; // refresh daily
@@ -18,7 +19,7 @@ export function GET() {
   const freeLesson = orderedLessons.find((l) => l.isFree);
 
   const lines: string[] = [
-    "# Learn Hieroglyphics",
+    `# ${SITE.name}`,
     "",
     "> An online course that teaches you to read and write ancient Egyptian hieroglyphics from scratch: the 25-sign alphabet, determinatives, numerals, royal cartouches, the offering formula and real monumental inscriptions. The first lesson is free; everything else is a one-time $19.99 lifetime purchase, or a $4.99/month Expedition Pass.",
     "",
@@ -31,7 +32,6 @@ export function GET() {
     "- Price: one-time $19.99 (£15.99) for lifetime access to all lessons and future content; or $4.99 (£3.99) a month.",
     "- Progress: XP, levels, streaks, badges, a public leaderboard (first name + last initial only) and a personalised certificate on completing all lessons.",
     "- Audience: complete beginners, including history enthusiasts, museum-goers, students and aspiring Egyptologists. No prior language study needed.",
-    "- Author: Harry Harrison (https://x.com/HarryHH1993, https://www.linkedin.com/in/harry-harrison/).",
     "",
     "## Key pages",
     "",

@@ -87,9 +87,9 @@ export function pppBeatsOffer(country: string | null | undefined, percentOff: nu
   return !!p && p.percentOff >= percentOff;
 }
 
-/** The visitor's country on a server request: the middleware cookie (lh_cc), else Vercel's geo header. */
+/** The visitor's country on a server request: the middleware cookie (aeo_cc), else Vercel's geo header. */
 export function requestCountry(request: Request): string | null {
   const cookie = request.headers.get("cookie") ?? "";
-  const m = cookie.match(/(?:^|;\s*)lh_cc=([^;]*)/);
+  const m = cookie.match(/(?:^|;\s*)aeo_cc=([^;]*)/);
   return (m ? decodeURIComponent(m[1]) : null) || request.headers.get("x-vercel-ip-country");
 }

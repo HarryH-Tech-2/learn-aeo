@@ -22,10 +22,10 @@ const mode = /^(sk|rk)_live/.test(key) ? "LIVE" : "test";
 
 // Keep in sync with src/lib/plans.ts and src/lib/cartouche-print.ts
 const PLANS = [
-  { id: "lifetime", name: "Learn Hieroglyphics · Lifetime", description: "All eight chambers, every game, every future lesson. One payment.", usd: 1999, gbp: 1599, recurring: null, envKey: "STRIPE_PRICE_ID" },
-  { id: "monthly", name: "Learn Hieroglyphics · Expedition Pass", description: "The full course, month by month. Cancel any time.", usd: 499, gbp: 399, recurring: { interval: "month" }, envKey: "STRIPE_PRICE_MONTHLY" },
-  { id: "classroom", name: "Learn Hieroglyphics · Classroom licence", description: "One teacher and up to 30 pupils for a year, with pupil progress and Classroom mode.", usd: 2950, gbp: 2450, recurring: { interval: "year" }, envKey: "STRIPE_PRICE_CLASSROOM" },
-  { id: "school", name: "Learn Hieroglyphics · School licence", description: "Unlimited pupils and teachers at one school for a year.", usd: 12450, gbp: 9950, recurring: { interval: "year" }, envKey: "STRIPE_PRICE_SCHOOL" },
+  { id: "lifetime", name: "Learn AEO · Lifetime", description: "All eight chambers, every game, every future lesson. One payment.", usd: 1999, gbp: 1599, recurring: null, envKey: "STRIPE_PRICE_ID" },
+  { id: "monthly", name: "Learn AEO · Expedition Pass", description: "The full course, month by month. Cancel any time.", usd: 499, gbp: 399, recurring: { interval: "month" }, envKey: "STRIPE_PRICE_MONTHLY" },
+  { id: "classroom", name: "Learn AEO · Classroom licence", description: "One teacher and up to 30 pupils for a year, with pupil progress and Classroom mode.", usd: 2950, gbp: 2450, recurring: { interval: "year" }, envKey: "STRIPE_PRICE_CLASSROOM" },
+  { id: "school", name: "Learn AEO · School licence", description: "Unlimited pupils and teachers at one school for a year.", usd: 12450, gbp: 9950, recurring: { interval: "year" }, envKey: "STRIPE_PRICE_SCHOOL" },
   // Not a plan: a one-off digital good sold from the translator (src/lib/cartouche-print.ts).
   { id: "cartouche-print", name: "Cartouche Print · Digital PDF", description: "A print-ready A4 PDF of one name in a cartouche, with a sign-by-sign key and the story of the cartouche.", usd: 1999, gbp: 1599, recurring: null, envKey: "STRIPE_PRICE_CARTOUCHE" },
   { id: "cartouche-print-a4", name: "Cartouche Print · A4 print, posted", description: "One name in a cartouche, giclée on 200 gsm fine-art paper, printed and posted. The PDF included.", usd: 3499, gbp: 2799, recurring: null, envKey: "STRIPE_PRICE_CARTOUCHE_PRINT" },

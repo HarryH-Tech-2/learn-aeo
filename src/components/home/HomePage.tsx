@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import { SITE } from "@/lib/site";
 import HeroSection from "@/components/HeroSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import LessonsPreview from "@/components/LessonsPreview";
@@ -20,13 +21,13 @@ export default function HomePage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Course",
-            name: "Learn Hieroglyphics",
+            name: "Learn AEO",
             description:
               "Master ancient Egyptian hieroglyphic writing with structured lessons covering phonograms, logograms, determinatives, and real inscription reading.",
             provider: {
               "@type": "Organization",
-              name: "Learn Hieroglyphics",
-              url: "https://www.learnhieroglyphics.com",
+              name: "Learn AEO",
+              url: SITE.url,
             },
             educationalLevel: "Beginner",
             inLanguage: "en",

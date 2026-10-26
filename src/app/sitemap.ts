@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { SITE } from "@/lib/site";
 import { blogPosts } from "@/lib/blog-posts";
 import { lessons } from "@/lib/lessons";
 
@@ -22,7 +23,7 @@ const BLOG_INDEX_LASTMOD = new Date(
 );
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://www.learnhieroglyphics.com";
+  const baseUrl = SITE.url;
 
   const staticPages: MetadataRoute.Sitemap = [
     {

@@ -11,13 +11,15 @@
  * value) drops it. The filter can sit in Testing first, where the marked
  * visits show up under the "Test data filter name" dimension instead.
  *
- * Our own visits: open any page once with ?lh_internal=1 on each browser you
- * use (?lh_internal=0 undoes it).
+ * Our own visits: open any page once with ?aeo_internal=1 on each browser you
+ * use (?aeo_internal=0 undoes it).
  *
  * classifyTraffic runs inside an inline script before gtag's config call
  * (see trafficTypeScript), so it must stay self-contained: no imports, no
  * helpers, nothing newer than ES5 syntax.
  */
+import { COOKIE_PREFIX } from "@/lib/site";
+
 export type TrafficType = "bot" | "internal" | null;
 
 export type TrafficSignals = {
@@ -65,18 +67,18 @@ export const GA_BLOCKED_COUNTRIES = ["SG", "CN", "CO"];
 
 /**
  * Inline script, run before gtag's config call: switches GA4 off for this page (gtag's own
- * `ga-disable-<id>` flag) when the middleware's country cookie (lh_cc, src/middleware.ts) names a blocked country.
+ * `ga-disable-<id>` flag) when the middleware's country cookie (aeo_cc, src/middleware.ts) names a blocked country.
  */
 export function gaCountryBlockScript(measurementId: string): string {
   return (
     "(function(){try{" +
-    "var c=(document.cookie.match(/(?:^|; )lh_cc=([A-Za-z]{2})/)||[])[1];" +
+    "var c=(document.cookie.match(/(?:^|; )aeo_cc=([A-Za-z]{2})/)||[])[1];" +
     `if(c&&${JSON.stringify(GA_BLOCKED_COUNTRIES)}.indexOf(c.toUpperCase())>-1){window['ga-disable-${measurementId}']=true}` +
     "}catch(e){}})();"
   );
 }
 
-export const INTERNAL_KEY = "lh_internal";
+export const INTERNAL_KEY = `${COOKIE_PREFIX}internal`;
 
 /**
  * Inline script: works out the traffic type and leaves it on window.__lhTraffic for the gtag config call.
@@ -85,7 +87,7 @@ export const INTERNAL_KEY = "lh_internal";
 export function trafficTypeScript(): string {
   return (
     "(function(){try{" +
-    "var m=/[?&]lh_internal=([01])/.exec(location.search);" +
+    "var m=/[?&]aeo_internal=([01])/.exec(location.search);" +
     `if(m){if(m[1]==='1'){localStorage.setItem('${INTERNAL_KEY}','1')}else{localStorage.removeItem('${INTERNAL_KEY}')}}` +
     `var i=false;try{i=localStorage.getItem('${INTERNAL_KEY}')==='1'}catch(e){}` +
     `window.__lhTraffic=(${classifyTraffic.toString()})({` +

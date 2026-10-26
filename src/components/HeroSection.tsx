@@ -266,7 +266,7 @@ export default function HeroSection() {
             Chrome ignores opacity-0 text for LCP, so the old 0.8 s delay
             pushed the metric out by nearly two seconds. */}
         {/* The phrase people search for, "learn hieroglyphics", is the heading itself; the space keeps the
-            accessible name readable ("Learn Hieroglyphics") */}
+            accessible name readable ("Learn AEO") */}
         <h1 className="hero-title font-display text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-light leading-[0.95] mb-6 sm:mb-8 tracking-tight">
           <span className="text-sand-100">Learn</span>{" "}
           <br />

@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { newUserLanding, LESSON_ONE_PATH } from "@/lib/new-user-landing";
 
-const site = "https://www.learnhieroglyphics.com";
-const origins = [site, "https://www.learnhieroglyphics.com/"];
+const site = "https://www.learnaeo.com";
+const origins = [site, "https://www.learnaeo.com/"];
 
 describe("newUserLanding", () => {
   it("sends a new account with no particular destination to Lesson 1", () => {

@@ -14,7 +14,7 @@ describe("unsubscribe tokens", () => {
     expect(verifyUnsubscribeToken("user_1", "", "s3cret")).toBe(false);
   });
   it("builds a link on the site with both parts", () => {
-    const url = unsubscribeUrl("user_1", "https://www.learnhieroglyphics.com", "s3cret");
-    expect(url.startsWith("https://www.learnhieroglyphics.com/api/email/unsubscribe?u=user_1&t=")).toBe(true);
+    const url = unsubscribeUrl("user_1", "https://www.learnaeo.com", "s3cret");
+    expect(url.startsWith("https://www.learnaeo.com/api/email/unsubscribe?u=user_1&t=")).toBe(true);
   });
 });

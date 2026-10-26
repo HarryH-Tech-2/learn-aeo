@@ -4,6 +4,8 @@
  * `currency_options.gbp` entry on the same Price (scripts/stripe-create-plans.mjs).
  * Keep these in sync with Stripe.
  */
+import { COOKIE_PREFIX } from "@/lib/site";
+
 export type Currency = "USD" | "GBP";
 
 export const PRICES: Record<Currency, { amount: number; symbol: string; minor: number }> = {
@@ -12,7 +14,7 @@ export const PRICES: Record<Currency, { amount: number; symbol: string; minor: n
 };
 
 /** Cookie set by middleware from Vercel's geo header (ISO-3166 alpha-2). */
-export const COUNTRY_COOKIE = "lh_cc";
+export const COUNTRY_COOKIE = `${COOKIE_PREFIX}cc`;
 
 export function currencyForCountry(country: string | null | undefined): Currency {
   return country?.toUpperCase() === "GB" ? "GBP" : "USD";

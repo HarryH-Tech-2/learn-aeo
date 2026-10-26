@@ -35,7 +35,7 @@ export default function ContactForm({ idPrefix = "contact" }: { idPrefix?: strin
       setSubmitted(true);
       trackEvent("contact_submit", { location: idPrefix });
     } catch {
-      setError("Your message didn't send. Check your connection and press Send again, or email contact@learnhieroglyphics.com.");
+      setError("Your message didn't send. Check your connection and press Send again, or email hello@learnaeo.com.");
     } finally {
       setSending(false);
     }

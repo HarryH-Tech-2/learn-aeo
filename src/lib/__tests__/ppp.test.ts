@@ -74,8 +74,8 @@ describe("ppp against a time-limited offer", () => {
   });
 
   it("reads the country from the cookie, then Vercel's header", () => {
-    expect(requestCountry(new Request("https://x", { headers: { cookie: "a=1; lh_cc=IN; b=2" } }))).toBe("IN");
-    expect(requestCountry(new Request("https://x", { headers: { cookie: "lh_cc=EG", "x-vercel-ip-country": "US" } }))).toBe("EG");
+    expect(requestCountry(new Request("https://x", { headers: { cookie: "a=1; aeo_cc=IN; b=2" } }))).toBe("IN");
+    expect(requestCountry(new Request("https://x", { headers: { cookie: "aeo_cc=EG", "x-vercel-ip-country": "US" } }))).toBe("EG");
     expect(requestCountry(new Request("https://x", { headers: { "x-vercel-ip-country": "BR" } }))).toBe("BR");
     expect(requestCountry(new Request("https://x"))).toBeNull();
   });

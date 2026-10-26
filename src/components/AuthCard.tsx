@@ -206,7 +206,7 @@ export default function AuthCard({
         <Link href="/" className="inline-flex items-center gap-3 mb-6">
           <span className="text-4xl">&#x13080;</span>
           <span className="font-display text-2xl font-semibold text-gold-400">
-            Learn Hieroglyphics
+            Learn AEO
           </span>
         </Link>
 

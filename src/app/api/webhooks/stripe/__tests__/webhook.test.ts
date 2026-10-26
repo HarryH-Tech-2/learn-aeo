@@ -25,7 +25,7 @@ vi.mock("@/lib/subscription", () => ({
 
 vi.mock("@/lib/db", () => ({ prisma: { user: { findUnique: mockUserFindUnique } } }));
 
-vi.mock("@/lib/notify", () => ({ notifyOwner: vi.fn().mockResolvedValue(true), ownerEmail: () => "contact@learnhieroglyphics.com" }));
+vi.mock("@/lib/notify", () => ({ notifyOwner: vi.fn().mockResolvedValue(true), ownerEmail: () => "hello@learnaeo.com" }));
 
 const mockRecordLead = vi.hoisted(() => vi.fn().mockResolvedValue(undefined));
 const mockGrantOffer = vi.hoisted(() => vi.fn().mockResolvedValue(null));

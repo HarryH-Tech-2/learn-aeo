@@ -7,6 +7,7 @@
  * previewed and backfilled before it goes live.
  */
 import { Resend } from "resend";
+import { SITE } from "@/lib/site";
 import { prisma } from "@/lib/db";
 import { checkSubscription, hasPaidAccess } from "@/lib/subscription";
 import { grantOffer, OFFER_PERCENT_OFF } from "@/lib/offers";
@@ -37,13 +38,13 @@ function getResend(): Resend {
 }
 
 function baseUrl(): string {
-  return (process.env.NEXTAUTH_URL ?? "https://www.learnhieroglyphics.com").replace(/\/$/, "");
+  return (process.env.NEXTAUTH_URL ?? SITE.url).replace(/\/$/, "");
 }
 
-/** "Harry from Learn Hieroglyphics <addr>" unless the env already carries a display name. */
+/** "Harry from Learn AEO <addr>" unless the env already carries a display name. */
 function fromAddress(): string {
   const raw = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
-  return raw.includes("<") ? raw : `Harry from Learn Hieroglyphics <${raw}>`;
+  return raw.includes("<") ? raw : `Harry from Learn AEO <${raw}>`;
 }
 
 const userSelect = {

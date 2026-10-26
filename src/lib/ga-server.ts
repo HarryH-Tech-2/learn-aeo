@@ -12,7 +12,10 @@
  * API secrets). Without it this is a no-op.
  */
 
-export const GA_MEASUREMENT_ID = "G-GM64VZ87FQ";
+import { SITE } from "@/lib/site";
+
+/** The GA4 measurement id from NEXT_PUBLIC_GA_ID; empty when unset (GA is then off everywhere). */
+export const GA_MEASUREMENT_ID = SITE.gaId ?? "";
 
 /** "GA1.1.123456789.1700000000" → "123456789.1700000000" */
 export function gaClientIdFromCookie(cookie: string | undefined | null): string {
@@ -22,7 +25,7 @@ export function gaClientIdFromCookie(cookie: string | undefined | null): string 
 }
 
 /**
- * The GA session id from the stream's own cookie (`_ga_GM64VZ87FQ`), in either of the formats gtag has written:
+ * The GA session id from the stream's own cookie (`_ga_<id without the G- prefix>`), in either of the formats gtag has written:
  * "GS1.1.1700000000.3.1.…" or "GS2.1.s1700000000$o3$g1…". With it the sale joins the visit that led to it
  * (source, landing page); without it GA4 files the purchase under a session of its own.
  */
@@ -47,7 +50,7 @@ export type ServerPurchase = {
 
 export async function sendPurchaseToGA4(p: ServerPurchase, fetchImpl: typeof fetch = fetch): Promise<boolean> {
   const secret = process.env.GA4_MP_API_SECRET;
-  if (!secret) return false;
+  if (!secret || !GA_MEASUREMENT_ID) return false;
   // A random client id still counts the sale, it just cannot be joined to a session.
   const clientId = p.clientId || `${Math.floor(Math.random() * 1e9)}.${Math.floor(Date.now() / 1000)}`;
   const url = `https://www.google-analytics.com/mp/collect?measurement_id=${GA_MEASUREMENT_ID}&api_secret=${encodeURIComponent(secret)}`;

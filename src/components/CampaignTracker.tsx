@@ -3,10 +3,10 @@
 /**
  * Where a visitor came from, kept in our own cookies so a sign-up or sale has a source even when Google
  * Analytics is blocked:
- * - On a landing from a tagged marketing link (?utm_source=…): remember the campaign for 30 days in the lh_utm
+ * - On a landing from a tagged marketing link (?utm_source=…): remember the campaign for 30 days in the aeo_utm
  *   cookie (read by auth.ts when the account is created) and record the visit once per browser per campaign.
  *   See src/lib/campaign.ts.
- * - On a first visit: the referring site's host and the landing page in lh_ref for 90 days (src/lib/referrer.ts).
+ * - On a first visit: the referring site's host and the landing page in aeo_ref for 90 days (src/lib/referrer.ts).
  *
  * Only once measurement is allowed (src/lib/consent.ts): straight away outside the UK/EU, after "Accept all"
  * there. The landing is read on the first render, so a visitor who accepts on a later page still counts.

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import { absoluteUrl } from "@/lib/site";
 import TermsContent from "./TermsContent";
 
 export const metadata: Metadata = {
-  title: "Terms of Service - Learn Hieroglyphics",
-  description: "Terms of service for Learn Hieroglyphics. Rules and conditions for using our platform.",
+  title: "Terms of Service - Learn AEO",
+  description: "Terms of service for Learn AEO. Rules and conditions for using our platform.",
   alternates: {
-    canonical: "https://www.learnhieroglyphics.com/terms",
+    canonical: absoluteUrl("/terms"),
   },
 };
 

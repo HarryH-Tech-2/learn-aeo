@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import { absoluteUrl } from "@/lib/site";
 import PrivacyContent from "./PrivacyContent";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy - Learn Hieroglyphics",
-  description: "Privacy policy for Learn Hieroglyphics. How we collect, use, and protect your data.",
+  title: "Privacy Policy - Learn AEO",
+  description: "Privacy policy for Learn AEO. How we collect, use, and protect your data.",
   alternates: {
-    canonical: "https://www.learnhieroglyphics.com/privacy",
+    canonical: absoluteUrl("/privacy"),
   },
 };
 

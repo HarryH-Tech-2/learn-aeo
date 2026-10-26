@@ -11,15 +11,16 @@ import LastPathTracker from "@/components/LastPathTracker";
 import { analyticsAllowedScript } from "@/lib/consent";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import AuthModalProvider from "@/components/AuthModal";
+import { SITE, absoluteUrl } from "@/lib/site";
 import "@/styles/globals.css";
 
-const GA_MEASUREMENT_ID = "G-GM64VZ87FQ";
+const GA_MEASUREMENT_ID = SITE.gaId ?? "";
 // Only the live site reports to GA4. Local dev and Vercel previews used to
 // send page views, sign-ups and checkouts to the production property (28
 // localhost sessions in the 90 days to 2026-09-11), inflating every funnel
 // number. trackEvent() guards on window.gtag, so nothing else changes.
 const GA_ENABLED =
-  process.env.NODE_ENV === "production" && process.env.VERCEL_ENV !== "preview";
+  Boolean(GA_MEASUREMENT_ID) && process.env.NODE_ENV === "production" && process.env.VERCEL_ENV !== "preview";
 
 const openSans = Open_Sans({
   subsets: ["latin"],
@@ -41,17 +42,17 @@ const cuneiform = Noto_Sans_Cuneiform({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.learnhieroglyphics.com"),
-  title: "Learn Hieroglyphics | Master Ancient Egyptian Writing & Symbols",
+  metadataBase: new URL(SITE.url),
+  title: `${SITE.name} | ${SITE.tagline}`,
   description:
     "Learn to read and write Egyptian hieroglyphics online. Interactive lessons covering the hieroglyphic alphabet, royal cartouches, temple inscriptions, and the Book of the Dead.",
   openGraph: {
-    title: "Learn Hieroglyphics | Master Ancient Egyptian Writing",
+    title: `${SITE.name} | ${SITE.tagline}`,
     description:
       "Interactive online course to read and write Egyptian hieroglyphics. From the alphabet of the gods to temple inscriptions: decode 3,000 years of civilization.",
     type: "website",
     locale: "en_US",
-    siteName: "Learn Hieroglyphics",
+    siteName: SITE.name,
     images: [
       {
         // JPEG: Messenger shows no picture for a WebP preview (scripts/dev/build-og-image.ts)
@@ -59,15 +60,13 @@ export const metadata: Metadata = {
         type: "image/jpeg",
         width: 1200,
         height: 630,
-        alt: "Learn Hieroglyphics: the name Cleopatra in a cartouche over the pyramids of Giza at sunset",
+        alt: `${SITE.name}: the name Cleopatra in a cartouche over the pyramids of Giza at sunset`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    site: "@HarryHH1993",
-    creator: "@HarryHH1993",
-    title: "Learn Hieroglyphics | Master Ancient Egyptian Writing",
+    title: `${SITE.name} | ${SITE.tagline}`,
     description:
       "Interactive lessons to read and write Egyptian hieroglyphics. Start free today.",
     images: ["/og-homepage.jpg"],
@@ -111,18 +110,11 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              name: "Learn Hieroglyphics",
-              url: "https://www.learnhieroglyphics.com",
-              logo: "https://www.learnhieroglyphics.com/icon-512.png",
-              description:
-                "Online course for learning to read and write ancient Egyptian hieroglyphics.",
-              sameAs: ["https://x.com/HarryHH1993", "https://github.com/HarryH-Tech-2/learn-hieroglyphics"],
-              founder: {
-                "@type": "Person",
-                name: "Harry Harrison",
-                url: "https://www.learnhieroglyphics.com/about",
-                sameAs: ["https://x.com/HarryHH1993", "https://www.linkedin.com/in/harry-harrison/"],
-              },
+              name: SITE.name,
+              url: SITE.url,
+              logo: absoluteUrl("/icon-512.png"),
+              description: SITE.description,
+              sameAs: SITE.sameAs,
             }),
           }}
         />
@@ -167,7 +159,7 @@ export default function RootLayout({
                   if (window.__lhUserId) lhConfig.user_id = window.__lhUserId;
                   // the free-unlock test group, from the visitor's first page (src/lib/access-test.ts), and any user
                   // properties set by setAnalyticsUserProperty before gtag loaded
-                  var lhAccess = (document.cookie.match(/(?:^|; )lh_access=(free|paid)/) || [])[1];
+                  var lhAccess = (document.cookie.match(/(?:^|; )aeo_access=(free|paid)/) || [])[1];
                   if (lhAccess) gtag('set', 'user_properties', { access_test: lhAccess });
                   if (window.__lhUserProps) gtag('set', 'user_properties', window.__lhUserProps);
                   // back from Google sign-in or Stripe Checkout: not a new referral, so the visit keeps its real

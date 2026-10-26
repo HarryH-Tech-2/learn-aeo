@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
+import { COOKIE_PREFIX } from "@/lib/site";
 import { usePathname } from "next/navigation";
 
 /** sessionStorage key for the last page visited before /checkout (read by src/app/checkout/CheckoutContent.tsx). */
-export const LAST_PATH_KEY = "lh_last_path";
+export const LAST_PATH_KEY = `${COOKIE_PREFIX}last_path`;
 
 /**
  * Remembers the page the visitor is on, so Stripe's own Back link can return them there. The upgrade buttons open

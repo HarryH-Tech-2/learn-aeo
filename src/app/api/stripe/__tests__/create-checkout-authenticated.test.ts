@@ -180,7 +180,7 @@ describe("POST /api/stripe/create-checkout (authenticated)", () => {
   });
   it("applies the parity coupon for a tier-D country and skips promo-code entry", async () => {
     mockedGetServerSession.mockResolvedValue({ user: { email: "in@example.com" } });
-    const req = new NextRequest("http://localhost/api/stripe/create-checkout", { method: "POST", headers: { cookie: "lh_cc=IN" } });
+    const req = new NextRequest("http://localhost/api/stripe/create-checkout", { method: "POST", headers: { cookie: "aeo_cc=IN" } });
     const response = await POST(req);
     expect(response.status).toBe(200);
     const args = mockCreate.mock.calls[0][0];
@@ -192,7 +192,7 @@ describe("POST /api/stripe/create-checkout (authenticated)", () => {
 
   it("a full-price country gets no parity coupon", async () => {
     mockedGetServerSession.mockResolvedValue({ user: { email: "us@example.com" } });
-    const req = new NextRequest("http://localhost/api/stripe/create-checkout", { method: "POST", headers: { cookie: "lh_cc=US" } });
+    const req = new NextRequest("http://localhost/api/stripe/create-checkout", { method: "POST", headers: { cookie: "aeo_cc=US" } });
     await POST(req);
     const args = mockCreate.mock.calls[0][0];
     expect(args.discounts).toBeUndefined();
@@ -203,9 +203,9 @@ describe("POST /api/stripe/create-checkout (authenticated)", () => {
 
   it("shows the promotion-code box only when asked for, and never alongside a discount", async () => {
     mockedGetServerSession.mockResolvedValue({ user: { email: "us@example.com" } });
-    await POST(new NextRequest("http://localhost/api/stripe/create-checkout", { method: "POST", headers: { cookie: "lh_cc=US" }, body: JSON.stringify({ promo: true }) }));
+    await POST(new NextRequest("http://localhost/api/stripe/create-checkout", { method: "POST", headers: { cookie: "aeo_cc=US" }, body: JSON.stringify({ promo: true }) }));
     expect(mockCreate.mock.calls[0][0].allow_promotion_codes).toBe(true);
-    await POST(new NextRequest("http://localhost/api/stripe/create-checkout", { method: "POST", headers: { cookie: "lh_cc=IN" }, body: JSON.stringify({ promo: true }) }));
+    await POST(new NextRequest("http://localhost/api/stripe/create-checkout", { method: "POST", headers: { cookie: "aeo_cc=IN" }, body: JSON.stringify({ promo: true }) }));
     const args = mockCreate.mock.calls[1][0];
     expect(args.discounts).toEqual([{ coupon: "PPP_TIER_D" }]);
     expect(args.allow_promotion_codes).toBeUndefined();

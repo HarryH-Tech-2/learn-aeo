@@ -7,7 +7,9 @@
  * signed-in view at once. It is only ever a guess: what the session check
  * says replaces it, and nothing private is shown on the strength of it.
  */
-const KEY = "lh_signed_in";
+import { COOKIE_PREFIX } from "@/lib/site";
+
+const KEY = `${COOKIE_PREFIX}signed_in`;
 
 export function signedInHint(): boolean {
   try {

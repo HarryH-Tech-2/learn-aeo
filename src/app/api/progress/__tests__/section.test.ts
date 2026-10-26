@@ -51,7 +51,7 @@ describe("POST /api/progress/section", () => {
 
   it("opens no discount where the visitor's purchasing-power price is already lower", async () => {
     sub.mockResolvedValue({ active: false } as never);
-    const req = new Request("http://localhost:3000/api/progress/section", { method: "POST", headers: { cookie: "lh_cc=IN" }, body: JSON.stringify({ lessonId: "expedition-begins", section: 1 }) });
+    const req = new Request("http://localhost:3000/api/progress/section", { method: "POST", headers: { cookie: "aeo_cc=IN" }, body: JSON.stringify({ lessonId: "expedition-begins", section: 1 }) });
     const res = await POST(req);
     expect(grant).not.toHaveBeenCalled();
     expect(await res.json()).toEqual({ ok: true, paid: false, freeUnlock: false, offer: null });

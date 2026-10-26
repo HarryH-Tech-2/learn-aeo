@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { SITE } from "@/lib/site";
 import { isLicencePlan, type Plan } from "@/lib/plans";
 import { lessons } from "@/lib/lessons";
 import { ownerEmail } from "@/lib/notify";
@@ -23,15 +24,15 @@ function getResend(): Resend {
   return _resend;
 }
 
-/** "Harry from Learn Hieroglyphics <addr>" unless the env already carries a display name. */
+/** "Harry from Learn AEO <addr>" unless the env already carries a display name. */
 function personalFrom(): string {
   const raw = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
-  return raw.includes("<") ? raw : `Harry from Learn Hieroglyphics <${raw}>`;
+  return raw.includes("<") ? raw : `Harry from Learn AEO <${raw}>`;
 }
 
 /** The origin the shared layout draws its frieze, mark and header link from. */
 function layoutBase(): string {
-  return (process.env.NEXTAUTH_URL ?? "https://www.learnhieroglyphics.com").replace(/\/$/, "");
+  return (process.env.NEXTAUTH_URL ?? SITE.url).replace(/\/$/, "");
 }
 
 /** Gold emphasis inside a paragraph. */
@@ -44,9 +45,9 @@ function footLink(href: string, label: string): string {
   return `<a href="${href}" style="color:${C.faint};text-decoration:underline;">${label}</a>`;
 }
 
-/** "Learn Hieroglyphics · <contact link>", the line the old emails closed with. */
+/** "Learn AEO · <contact link>", the line the old emails closed with. */
 function contactLine(label = "Reply to this email with any question"): string {
-  return `Learn Hieroglyphics &middot; ${footLink(`${process.env.NEXTAUTH_URL}/contact`, label)}`;
+  return `Learn AEO &middot; ${footLink(`${process.env.NEXTAUTH_URL}/contact`, label)}`;
 }
 
 /** A dashed, centred box holding a code: small label, the code, a muted line under it. */
@@ -79,8 +80,8 @@ export async function sendWelcomeEmail(
   const monthly = plan === "monthly";
 
   const thanks = monthly
-    ? `Thank you for picking up the Expedition Pass. It genuinely means a lot: Learn Hieroglyphics is just me, and every pass helps keep it going.`
-    : `Thank you for buying the course. It genuinely means a lot: Learn Hieroglyphics is just me, and every purchase helps keep it going.`;
+    ? `Thank you for picking up the Expedition Pass. It genuinely means a lot: Learn AEO is just me, and every pass helps keep it going.`
+    : `Thank you for buying the course. It genuinely means a lot: Learn AEO is just me, and every purchase helps keep it going.`;
   const access = monthly
     ? `Your Expedition Pass is active, so every lesson, exercise and reading practice is open to you for as long as the pass runs.`
     : `Your lifetime access is active, so every lesson, exercise and reading practice is yours to keep, forever.`;
@@ -111,7 +112,7 @@ export async function sendWelcomeEmail(
           </p>`
         )}
         ${button(dashboardUrl, "Begin Your Studies")}`,
-      reason: `You are getting this because you ${monthly ? "picked up the Expedition Pass" : "bought the course"} at learnhieroglyphics.com.<br/>${footer}<br/>${footLink(accountUrl, "Manage your account")}`,
+      reason: `You are getting this because you ${monthly ? "picked up the Expedition Pass" : "bought the course"} at learnaeo.com.<br/>${footer}<br/>${footLink(accountUrl, "Manage your account")}`,
     }),
     text: [
       `Hi ${greetingName},`,
@@ -173,7 +174,7 @@ export async function sendNextChamberEmail(input: OfferEmailInput): Promise<void
         ${codePanel(`Your ${input.percentOff}% off code`, input.code, `Applied automatically at checkout &middot; expires ${fmtExpiry(input.expiresAt)}`)}
         ${p("Lifetime access unlocks all 8 lessons, the Tomb Wall and Sign Hunt 3D games, your certificate, and everything added later.")}
         ${button(checkoutUrl, "Unlock the next chamber")}`,
-      reason: `You are getting this because you finished the free lesson at learnhieroglyphics.com.<br/>${OFFER_FOOT}<br/>${contactLine()}`,
+      reason: `You are getting this because you finished the free lesson at learnaeo.com.<br/>${OFFER_FOOT}<br/>${contactLine()}`,
     }),
   });
   if (result.error) console.error("[email:next-chamber] Resend error:", result.error);
@@ -197,7 +198,7 @@ export async function sendCheckoutRecoveryEmail(input: OfferEmailInput): Promise
         ${codePanel(null, input.code, `Applied automatically at checkout &middot; expires ${fmtExpiry(input.expiresAt)}`)}
         ${p("One payment, all 8 lessons, the 3D games and your certificate, forever. Apple Pay and Google Pay now work at checkout.")}
         ${button(checkoutUrl, "Finish unlocking the Academy")}`,
-      reason: `You are getting this because you started a checkout at learnhieroglyphics.com.<br/>${OFFER_FOOT}<br/>${contactLine()}`,
+      reason: `You are getting this because you started a checkout at learnaeo.com.<br/>${OFFER_FOOT}<br/>${contactLine()}`,
     }),
   });
   if (result.error) {
@@ -245,7 +246,7 @@ export async function sendCheckoutReminderEmail(input: {
         ${p(`${strong("14-day money-back guarantee.")} If it isn't for you, email us within 14 days for a full refund, no questions asked.
           Card, Apple Pay and Google Pay all work at checkout.`)}
         ${button(input.checkoutUrl, "Return to checkout")}`,
-      reason: `You are getting this because you started a checkout at learnhieroglyphics.com.<br/>${contactLine()}`,
+      reason: `You are getting this because you started a checkout at learnaeo.com.<br/>${contactLine()}`,
       unsubscribeUrl: input.unsubscribeUrl,
     }),
   });

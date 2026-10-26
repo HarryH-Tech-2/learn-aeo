@@ -123,14 +123,14 @@ function layout(opts: { preheader: string; hero?: string; body: string; ctx: Nur
     preheader: opts.preheader,
     hero: opts.hero,
     body: opts.body,
-    reason: "You are getting this because you made a free account at learnhieroglyphics.com.",
+    reason: "You are getting this because you made a free account at learnaeo.com.",
     unsubscribeUrl: opts.ctx.unsubscribeUrl,
   });
 }
 
 /** Plain-text part: the same words, links written out. */
 function textOf(lines: string[], ctx: NurtureEmailContext): string {
-  return [...lines, "Harry\nFounder, Learn Hieroglyphics (just reply, I read every email)", `Unsubscribe: ${ctx.unsubscribeUrl}`].join(
+  return [...lines, "Harry\nFounder, Learn AEO (just reply, I read every email)", `Unsubscribe: ${ctx.unsubscribeUrl}`].join(
     "\n\n"
   );
 }
@@ -389,7 +389,7 @@ ${chamberText()}`,
         eyebrow("From Harry"),
         heading(`A small favour, ${name}`),
         p("Your account has the whole course open: all eight lessons, the 3D levels, the Journey and the community board. There is nothing to pay, and that will not change."),
-        p("I build and look after Learn Hieroglyphics on my own. If it has been useful to you, a coffee helps me keep building it."),
+        p("I build and look after Learn AEO on my own. If it has been useful to you, a coffee helps me keep building it."),
         button(coffeeUrl, "Buy me a coffee"),
         p(`Or just carry on: ${link(dashboardUrl, "your next chamber is waiting")}. And if something could be better, reply and tell me.`),
       ].join("");
@@ -400,7 +400,7 @@ ${chamberText()}`,
           [
             `Hi ${ctx.firstName},`,
             "Your account has the whole course open: all eight lessons, the 3D levels, the Journey and the community board. There is nothing to pay.",
-            `I build and look after Learn Hieroglyphics on my own. If it has been useful to you, a coffee helps me keep building it: ${coffeeUrl}`,
+            `I build and look after Learn AEO on my own. If it has been useful to you, a coffee helps me keep building it: ${coffeeUrl}`,
             `Or carry on with your next chamber: ${dashboardUrl}`,
           ],
           ctx

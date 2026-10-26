@@ -54,19 +54,19 @@ describe("gaCountryBlockScript", () => {
   }
 
   it("switches GA4 off for Singapore and China, and for nobody else", () => {
-    expect(run("lh_cc=SG")).toBe(true);
-    expect(run("lh_home=3d; lh_cc=CN; lh_vid=abc")).toBe(true);
-    expect(run("lh_cc=GB")).toBe(false);
-    expect(run("lh_cc=HK")).toBe(false);
+    expect(run("aeo_cc=SG")).toBe(true);
+    expect(run("aeo_home=3d; aeo_cc=CN; aeo_vid=abc")).toBe(true);
+    expect(run("aeo_cc=GB")).toBe(false);
+    expect(run("aeo_cc=HK")).toBe(false);
     expect(run("")).toBe(false);
-    expect(run("x_lh_cc=SG")).toBe(false);
+    expect(run("x_aeo_cc=SG")).toBe(false);
   });
 });
 
 describe("trafficTypeScript", () => {
   function run(env: { search?: string; stored?: string | null; webdriver?: boolean; screen?: [number, number] }) {
     const store = new Map<string, string>();
-    if (env.stored) store.set("lh_internal", env.stored);
+    if (env.stored) store.set("aeo_internal", env.stored);
     const window: Record<string, unknown> = { outerWidth: 1600, outerHeight: 900 };
     const localStorage = {
       getItem: (k: string) => store.get(k) ?? null,
@@ -76,7 +76,7 @@ describe("trafficTypeScript", () => {
     const navigator = { webdriver: env.webdriver ?? false, userAgent: CHROME_WIN, languages: ["en-GB"] };
     const screen = { width: env.screen?.[0] ?? 1920, height: env.screen?.[1] ?? 1080 };
     new Function("window", "localStorage", "navigator", "screen", "location", trafficTypeScript())(window, localStorage, navigator, screen, { search: env.search ?? "" });
-    return { type: window.__lhTraffic, stored: store.get("lh_internal") ?? null };
+    return { type: window.__lhTraffic, stored: store.get("aeo_internal") ?? null };
   }
 
   it("stands on its own and classifies", () => {
@@ -85,9 +85,9 @@ describe("trafficTypeScript", () => {
     expect(run({ screen: [1280, 1200] }).type).toBe("bot");
   });
 
-  it("?lh_internal=1 marks the browser as ours, =0 undoes it", () => {
-    expect(run({ search: "?lh_internal=1" })).toEqual({ type: "internal", stored: "1" });
+  it("?aeo_internal=1 marks the browser as ours, =0 undoes it", () => {
+    expect(run({ search: "?aeo_internal=1" })).toEqual({ type: "internal", stored: "1" });
     expect(run({ stored: "1" }).type).toBe("internal");
-    expect(run({ search: "?x=1&lh_internal=0", stored: "1" })).toEqual({ type: null, stored: null });
+    expect(run({ search: "?x=1&aeo_internal=0", stored: "1" })).toEqual({ type: null, stored: null });
   });
 });

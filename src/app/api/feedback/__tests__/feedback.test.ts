@@ -79,7 +79,7 @@ describe("POST /api/feedback", () => {
 
     const args = mockSend.mock.calls[0][0];
     // Owner notifications always go to the site mailbox, not the sender.
-    expect(args.to).toBe("contact@learnhieroglyphics.com");
+    expect(args.to).toBe("hello@learnaeo.com");
     expect(args.replyTo).toBe("user@example.com");
     expect(args.subject).toContain("4/5");
     expect(args.text).toContain("Harry");

@@ -6,7 +6,7 @@
  *                             is assigned. While it is on, every new account gets a group ("free" or "paid"), so the
  *                             two can be compared on /admin/marketing.
  *
- * Visitors, not accounts, are split (2026-10-23): the middleware gives each new visitor a group in the lh_access cookie
+ * Visitors, not accounts, are split (2026-10-23): the middleware gives each new visitor a group in the aeo_access cookie
  * (90 days; crawlers get none), so the free group sees the course as free BEFORE signing up: pricing, lesson and game
  * paywalls, the translator and the sign-up card say "free with an account" (useFreeCourseGuest), and anyone in it who
  * reaches checkout is sent to the dashboard. Signing up copies the cookie's group onto the account (no cookie: a fresh
@@ -24,12 +24,13 @@
  * GA4: user property access_test (free | paid) from the dashboard, coffee_click with location.
  */
 import { prisma } from "@/lib/db";
+import { COOKIE_PREFIX } from "@/lib/site";
 
 export const ACCESS_TEST_GAME = "access-test";
 
 export type AccessArm = "free" | "paid";
 
-export const ACCESS_COOKIE = "lh_access";
+export const ACCESS_COOKIE = `${COOKIE_PREFIX}access`;
 export const ACCESS_COOKIE_MAX_AGE = 60 * 60 * 24 * 90;
 
 const BOT_UA = /bot|crawl|spider|slurp|lighthouse|pagespeed|headless|preview|facebookexternalhit|embedly|quora|whatsapp|vercel/i;
@@ -51,7 +52,7 @@ export function pickVisitorArm(
 /** Browser: the visitor's group from the cookie, or null. */
 export function readAccessCookie(): AccessArm | null {
   if (typeof document === "undefined") return null;
-  const v = document.cookie.match(/(?:^|; )lh_access=(free|paid)/)?.[1];
+  const v = document.cookie.match(/(?:^|; )aeo_access=(free|paid)/)?.[1];
   return isAccessArm(v) ? v : null;
 }
 
@@ -74,7 +75,7 @@ export function armOf(state: unknown): AccessArm | null {
 }
 
 /**
- * Sign-up hook: the account takes the visitor's group from the lh_access cookie (what they were shown), else a fresh
+ * Sign-up hook: the account takes the visitor's group from the aeo_access cookie (what they were shown), else a fresh
  * draw while the test is on. Never throws.
  */
 export async function assignAccessTest(userId: string, cookieArm: string | null | undefined, rand: number = Math.random()): Promise<AccessArm | null> {

@@ -3,8 +3,8 @@ import { Suspense } from "react";
 import CheckoutContent from "./CheckoutContent";
 
 export const metadata: Metadata = {
-  title: "Checkout - Learn Hieroglyphics",
-  description: "Complete your purchase to unlock the full Learn Hieroglyphics course.",
+  title: "Checkout - Learn AEO",
+  description: "Complete your purchase to unlock the full Learn AEO course.",
 };
 
 export default function CheckoutPage() {
