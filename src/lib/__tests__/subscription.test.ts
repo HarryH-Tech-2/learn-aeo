@@ -1,0 +1,117 @@
+import { describe, it, expect, vi, beforeEach } from "vitest";
+
+vi.mock("@/lib/db", () => ({
+  prisma: {
+    user: { findUnique: vi.fn() },
+  },
+}));
+
+import { prisma } from "@/lib/db";
+import { checkSubscription, hasPaidAccess } from "@/lib/subscription";
+
+const findUnique = vi.mocked(prisma.user.findUnique);
+const now = new Date("2026-09-08T12:00:00Z");
+const day = 86_400_000;
+
+describe("checkSubscription — who counts as paid", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("unknown email → not active", async () => {
+    findUnique.mockResolvedValue(null as never);
+    expect((await checkSubscription("nobody@example.com", now)).active).toBe(false);
+  });
+
+  it("PENDING user with no subscription row → not active", async () => {
+    findUnique.mockResolvedValue({ status: "PENDING", subscription: null, licence: null, ownedLicences: [] } as never);
+    const r = await checkSubscription("a@example.com", now);
+    expect(r.active).toBe(false);
+    expect(r.via).toBeNull();
+  });
+
+  it("subscription.active=true lifetime → active via lifetime", async () => {
+    findUnique.mockResolvedValue({ status: "ACTIVE", subscription: { active: true, trial: false, plan: "lifetime" }, licence: null, ownedLicences: [] } as never);
+    const r = await checkSubscription("a@example.com", now);
+    expect(r.active).toBe(true);
+    expect(r.via).toBe("lifetime");
+  });
+
+  it("status=ACTIVE but subscription flag flipped off by a legacy webhook → still active", async () => {
+    findUnique.mockResolvedValue({ status: "ACTIVE", subscription: { active: false, trial: false, plan: "lifetime" }, licence: null, ownedLicences: [] } as never);
+    expect((await checkSubscription("a@example.com", now)).active).toBe(true);
+  });
+
+  it("status=ACTIVE with no subscription row at all → still active", async () => {
+    findUnique.mockResolvedValue({ status: "ACTIVE", subscription: null, licence: null, ownedLicences: [] } as never);
+    expect((await checkSubscription("a@example.com", now)).active).toBe(true);
+  });
+
+  it("legacy row without a plan column value counts as lifetime", async () => {
+    findUnique.mockResolvedValue({ status: "PENDING", subscription: { active: true, trial: false, plan: undefined }, licence: null, ownedLicences: [] } as never);
+    expect((await checkSubscription("a@example.com", now)).via).toBe("lifetime");
+  });
+
+  it("PENDING user whose subscription row is inactive (abandoned checkout) → not active", async () => {
+    findUnique.mockResolvedValue({ status: "PENDING", subscription: { active: false, trial: false, plan: "lifetime" }, licence: null, ownedLicences: [] } as never);
+    expect((await checkSubscription("a@example.com", now)).active).toBe(false);
+  });
+
+  it("monthly: active inside the period, lapsed after grace", async () => {
+    findUnique.mockResolvedValue({ status: "PENDING", subscription: { active: true, trial: false, plan: "monthly", currentPeriodEnd: new Date(now.getTime() + 10 * day) }, licence: null, ownedLicences: [] } as never);
+    const r = await checkSubscription("a@example.com", now);
+    expect(r.active).toBe(true);
+    expect(r.via).toBe("monthly");
+    expect(r.periodEnd).toBeTruthy();
+
+    findUnique.mockResolvedValue({ status: "PENDING", subscription: { active: true, trial: false, plan: "monthly", currentPeriodEnd: new Date(now.getTime() - 30 * day) }, licence: null, ownedLicences: [] } as never);
+    expect((await checkSubscription("a@example.com", now)).active).toBe(false);
+  });
+
+  it("licence owner and member", async () => {
+    const lic = { id: "L1", kind: "classroom", code: "ABCD-EFGH", schoolName: "St Mary's", status: "active", currentPeriodEnd: new Date(now.getTime() + 100 * day) };
+    findUnique.mockResolvedValue({ status: "PENDING", subscription: null, licence: null, ownedLicences: [lic] } as never);
+    let r = await checkSubscription("t@example.com", now);
+    expect(r.active).toBe(true);
+    expect(r.via).toBe("licence-owner");
+    expect(r.licence?.owner).toBe(true);
+
+    findUnique.mockResolvedValue({ status: "PENDING", subscription: null, licence: lic, ownedLicences: [] } as never);
+    r = await checkSubscription("p@example.com", now);
+    expect(r.active).toBe(true);
+    expect(r.via).toBe("licence-member");
+    expect(r.licence?.code).toBe("ABCD-EFGH");
+
+    findUnique.mockResolvedValue({ status: "PENDING", subscription: null, licence: { ...lic, status: "canceled" }, ownedLicences: [] } as never);
+    expect((await checkSubscription("p@example.com", now)).active).toBe(false);
+  });
+
+  it("passes the trial flag through", async () => {
+    findUnique.mockResolvedValue({ status: "PENDING", subscription: { active: false, trial: true, plan: "lifetime" }, licence: null, ownedLicences: [] } as never);
+    const r = await checkSubscription("a@example.com", now);
+    expect(r.active).toBe(false);
+    expect(r.trial).toBe(true);
+  });
+});
+
+describe("checkSubscription — free-unlock test group", () => {
+  beforeEach(() => vi.clearAllMocks());
+  const base = { status: "PENDING", subscription: null, licence: null, ownedLicences: [] };
+
+  it("free group → course access via free-unlock, but not paid access", async () => {
+    findUnique.mockResolvedValue({ ...base, gameStates: [{ state: { arm: "free", at: "2026-10-23" } }] } as never);
+    const r = await checkSubscription("a@example.com", now);
+    expect(r).toMatchObject({ active: true, via: "free-unlock" });
+    expect(hasPaidAccess(r)).toBe(false);
+  });
+
+  it("paid group (control) → no access", async () => {
+    findUnique.mockResolvedValue({ ...base, gameStates: [{ state: { arm: "paid" } }] } as never);
+    expect((await checkSubscription("a@example.com", now)).active).toBe(false);
+  });
+
+  it("a free-group learner who bought shows as lifetime", async () => {
+    findUnique.mockResolvedValue({ ...base, status: "ACTIVE", gameStates: [{ state: { arm: "free" } }] } as never);
+    const r = await checkSubscription("a@example.com", now);
+    expect(r.via).toBe("lifetime");
+    expect(hasPaidAccess(r)).toBe(true);
+  });
+});

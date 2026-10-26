@@ -1,0 +1,62 @@
+{
+  "scarab": {
+    "glyph": "𓆣",
+    "translit": "ḫpr",
+    "meaning": "scarab beetle",
+    "preview_task": "01a029dd-7335-7c3d-a408-acfac31738d9",
+    "refine_task": "01a029de-3851-7f45-9eea-68d2fa8e1ed6",
+    "glb": "/models/objects/scarab.glb",
+    "bytes": 4418096,
+    "thumbnail": null
+  },
+  "lotus": {
+    "glyph": "𓆸",
+    "translit": "sšn",
+    "meaning": "blue lotus flower",
+    "preview_task": "01a029dd-780d-7f0e-9c51-68e517f896f3",
+    "refine_task": "01a029de-788c-7c91-92a9-ffab48c1f0d9",
+    "glb": "/models/objects/lotus.glb",
+    "bytes": 3576592,
+    "thumbnail": null
+  },
+  "vulture": {
+    "glyph": "𓄿",
+    "translit": "ꜣ",
+    "meaning": "Egyptian vulture",
+    "preview_task": "01a029dd-7be0-7597-b617-f4e435194b74",
+    "refine_task": "01a029de-7ab0-7c92-b7f0-c81241667d95",
+    "glb": "/models/objects/vulture.glb",
+    "bytes": 4104308,
+    "thumbnail": null
+  },
+  "cobra": {
+    "glyph": "𓆗",
+    "translit": "ꞽꜥrt",
+    "meaning": "rearing cobra (uraeus)",
+    "preview_task": "01a029dd-8000-7048-bf7b-0ed4d6d10939",
+    "refine_task": "01a029de-7c0c-7c94-a2f3-caaa67dbef5e",
+    "glb": "/models/objects/cobra.glb",
+    "bytes": 4494220,
+    "thumbnail": null
+  },
+  "jar": {
+    "glyph": "𓏊",
+    "translit": "ḥnqt",
+    "meaning": "beer jar",
+    "preview_task": "01a029dd-83b3-704e-998c-3e0145168ef1",
+    "refine_task": "01a029de-7e9b-7f56-b2d6-2e643aab88a5",
+    "glb": "/models/objects/jar.glb",
+    "bytes": 3100524,
+    "thumbnail": null
+  },
+  "bull": {
+    "glyph": "𓃒",
+    "translit": "kꜣ",
+    "meaning": "bull / ox",
+    "preview_task": "01a029dd-87a3-7598-8a83-3b600cc51451",
+    "refine_task": "01a029de-80d8-75fb-b5d8-d99a964fc553",
+    "glb": "/models/objects/bull.glb",
+    "bytes": 3822264,
+    "thumbnail": null
+  }
+}

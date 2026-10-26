@@ -1,0 +1,37 @@
+/**
+ * Lifetime-access price by currency (the anchor plan; the full catalogue is
+ * in src/lib/plans.ts). USD is the Stripe Price's default currency; GBP is a
+ * `currency_options.gbp` entry on the same Price (scripts/stripe-create-plans.mjs).
+ * Keep these in sync with Stripe.
+ */
+export type Currency = "USD" | "GBP";
+
+export const PRICES: Record<Currency, { amount: number; symbol: string; minor: number }> = {
+  USD: { amount: 19.99, symbol: "$", minor: 1999 },
+  GBP: { amount: 15.99, symbol: "£", minor: 1599 },
+};
+
+/** Cookie set by middleware from Vercel's geo header (ISO-3166 alpha-2). */
+export const COUNTRY_COOKIE = "lh_cc";
+
+export function currencyForCountry(country: string | null | undefined): Currency {
+  return country?.toUpperCase() === "GB" ? "GBP" : "USD";
+}
+
+export function formatPrice(currency: Currency, amount = PRICES[currency].amount): string {
+  const { symbol } = PRICES[currency];
+  return `${symbol}${amount.toFixed(2)}`;
+}
+
+/** e.g. 33 % off 19.99 → 12.99 (always ends in .99 so it reads like a price). */
+export function discounted(currency: Currency, percentOff: number): number {
+  const raw = PRICES[currency].amount * (1 - percentOff / 100);
+  // Nearest ".99" at or below the exact figure: 19.99 → 13.39 → 12.99.
+  return Math.max(0.99, Math.round((Math.floor(raw) - 0.01) * 100) / 100);
+}
+
+export function readCountryCookie(): string | null {
+  if (typeof document === "undefined") return null;
+  const m = document.cookie.match(new RegExp(`(?:^|; )${COUNTRY_COOKIE}=([^;]*)`));
+  return m ? decodeURIComponent(m[1]) : null;
+}

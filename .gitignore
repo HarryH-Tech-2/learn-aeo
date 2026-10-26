@@ -1,0 +1,55 @@
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+
+# env files
+.env
+.env*.local
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# screenshots (dev only)
+/screenshots/
+
+# claude
+.claude/
+
+.vercel
+.env*.local
+
+# stripe setup guide
+stripe-setup-guide.txt
+.worktrees/
+
+# local agent config
+/.agents/
+/skills/
+/skills-lock.json
+
+# large media — host on CDN/Blob instead of committing
+/public/videos/
+
+# Uncompressed Meshy source models (compressed copies live in public/models)
+meshy-raw/
+
+# python
+__pycache__/
+
+# local scratch notes
+funnel-issues.txt
+prompt-to-make-app.txt

@@ -1,0 +1,119 @@
+{
+  "forearm": {
+    "glyph": "𓂝",
+    "translit": "ꜥ",
+    "meaning": "forearm",
+    "preview_task": "01a02a1d-c302-7e81-8a71-8d353f223d88",
+    "refine_task": "01a02a1e-a007-7ebd-b78a-efccd6371740",
+    "glb": "/models/signs/forearm.glb",
+    "bytes": 4510372
+  },
+  "mat": {
+    "glyph": "𓊪",
+    "translit": "p",
+    "meaning": "reed mat",
+    "preview_task": "01a02a1d-c6c4-7207-8de9-369b98a4ffc7",
+    "refine_task": "01a02a1e-a383-73b6-a552-64e1da2b772f",
+    "glb": "/models/signs/mat.glb",
+    "bytes": 4628316
+  },
+  "shelter": {
+    "glyph": "𓉔",
+    "translit": "h",
+    "meaning": "reed shelter",
+    "preview_task": "01a02a1d-ca89-7e84-a6ab-4f166eff86b8",
+    "refine_task": "01a02a1e-e702-7262-a737-e8ef511e9a6e",
+    "glb": "/models/signs/shelter.glb",
+    "bytes": 4482040
+  },
+  "lamp": {
+    "glyph": "𓎛",
+    "translit": "ḥ",
+    "meaning": "oil lamp with wick",
+    "preview_task": "01a02a1d-ce47-7208-a873-c9cb3e9b1220",
+    "refine_task": "01a02a1e-e89e-7264-bff4-8b5426894296",
+    "glb": "/models/signs/lamp.glb",
+    "bytes": 3806464
+  },
+  "linen": {
+    "glyph": "𓋴",
+    "translit": "s",
+    "meaning": "folded cloth",
+    "preview_task": "01a02a1d-d228-7354-8932-e06c88b6107a",
+    "refine_task": "01a02a1e-f1ab-7267-bc19-d291a478a4d3",
+    "glb": "/models/signs/linen.glb",
+    "bytes": 3245788
+  },
+  "bolt": {
+    "glyph": "𓊃",
+    "translit": "z",
+    "meaning": "door bolt",
+    "preview_task": "01a02a1d-d8ed-7e86-87a6-65101abf615c",
+    "refine_task": "01a02a1e-f348-73c6-a150-3d9f01a3c89a",
+    "glb": "/models/signs/bolt.glb",
+    "bytes": 3824268
+  },
+  "pool": {
+    "glyph": "𓈙",
+    "translit": "š",
+    "meaning": "garden pool",
+    "preview_task": "01a02a1d-de00-7261-b61a-e5492ca6b393",
+    "refine_task": "01a02a1e-f4db-729c-8bd2-b042096e3645",
+    "glb": "/models/signs/pool.glb",
+    "bytes": 4434192
+  },
+  "stand": {
+    "glyph": "𓎼",
+    "translit": "g",
+    "meaning": "jar-stand",
+    "preview_task": "01a02a1d-e1b7-7356-bde7-1b64b4abce36",
+    "refine_task": "01a02a1e-f683-729d-9ac8-fc6b4b34bae4",
+    "glb": "/models/signs/stand.glb",
+    "bytes": 3922988
+  },
+  "tether": {
+    "glyph": "𓍿",
+    "translit": "ṯ",
+    "meaning": "tethering rope",
+    "preview_task": "01a02a1d-e528-720b-8201-4b6227a7c5f7",
+    "refine_task": "01a02a1e-f9ea-7269-9651-c1a8f317df05",
+    "glb": "/models/signs/tether.glb",
+    "bytes": 3976920
+  },
+  "cobra": {
+    "glyph": "𓆓",
+    "translit": "ḏ",
+    "meaning": "resting cobra",
+    "preview_task": "01a02a1d-e9af-7e8a-8ef5-8360cc3820e5",
+    "refine_task": "01a02a1e-fca9-729f-b944-682b7871219c",
+    "glb": "/models/signs/cobra.glb",
+    "bytes": 4513384
+  },
+  "goose": {
+    "glyph": "𓅬",
+    "translit": "ꜣpd",
+    "meaning": "goose",
+    "preview_task": "01a02a1d-ed71-7264-b0f9-941f00c777b8",
+    "refine_task": "01a02a1e-ff14-72a0-b3c4-efeb1ab20edf",
+    "glb": "/models/objects/goose.glb",
+    "bytes": 3869436
+  },
+  "boat": {
+    "glyph": "𓊛",
+    "translit": "dpt",
+    "meaning": "boat",
+    "preview_task": "01a02a1d-f0b1-7357-be1c-93fc2c0fea15",
+    "refine_task": "01a02a1f-0257-726a-8415-78ae3352c562",
+    "glb": "/models/objects/boat.glb",
+    "bytes": 4344556
+  },
+  "scribe": {
+    "glyph": "𓀀",
+    "translit": "sš",
+    "meaning": "seated scribe",
+    "preview_task": "01a02a1d-f422-7359-acfc-99bd690b6281",
+    "refine_task": "01a02a1f-0410-72a1-8700-f3c5e4ef626e",
+    "glb": "/models/objects/scribe.glb",
+    "bytes": 4520448
+  }
+}

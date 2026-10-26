@@ -1,0 +1,58 @@
+import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/db";
+import { getUserProgress } from "@/lib/progress";
+import { checkSubscription } from "@/lib/subscription";
+import { getActiveOffer } from "@/lib/offers";
+import { pppBeatsOffer, requestCountry } from "@/lib/ppp";
+import { loadWall } from "@/lib/srs-server";
+import { wallSummary } from "@/lib/srs";
+import { ACCESS_TEST_GAME, armOf } from "@/lib/access-test";
+
+/**
+ * GET /api/me — everything the dashboard needs in one round trip: one
+ * session lookup, then the queries in parallel. Replaces eight separate
+ * calls (progress, badges, subscription, offer, wall count, wall signs,
+ * expedition state, expedition log), each of which paid for its own
+ * session lookup against the database.
+ */
+export const dynamic = "force-dynamic";
+
+export async function GET(request: Request) {
+  const session = await getServerSession(authOptions);
+  const user = session?.user as { id?: string; email?: string | null } | undefined;
+  if (!user?.id || !user.email) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const userId = user.id;
+  const email = user.email;
+  const now = Date.now();
+
+  const [progress, badges, access, states, account] = await Promise.all([
+    getUserProgress(userId),
+    prisma.userBadge.findMany({ where: { userId }, include: { badge: true }, orderBy: { earnedAt: "desc" } }),
+    checkSubscription(email),
+    prisma.gameState.findMany({ where: { userId, game: { in: ["expedition", "expedition-log", ACCESS_TEST_GAME] } }, select: { game: true, state: true } }),
+    prisma.user.findUnique({ where: { id: userId }, select: { heardAbout: true } }),
+  ]);
+
+  // The wall is seeded from completed lessons and paid status, so it runs after access is known.
+  const [signs, offer] = await Promise.all([
+    loadWall(userId, access.active, now),
+    access.active ? Promise.resolve(null) : getActiveOffer(email),
+  ]);
+
+  return NextResponse.json({
+    progress,
+    badges: badges.map((ub) => ({ id: ub.badge.id, name: ub.badge.name, description: ub.badge.description, icon: ub.badge.icon, earnedAt: ub.earnedAt.toISOString() })),
+    access,
+    // (not where the visitor's purchasing-power price is already lower: checkout would never use it)
+    offer: offer && !pppBeatsOffer(requestCountry(request), offer.percentOff) ? { code: offer.code, expiresAt: offer.expiresAt.toISOString(), percentOff: offer.percentOff, source: offer.source } : null,
+    wall: { signs, summary: wallSummary(signs, now) },
+    expedition: states.find((s) => s.game === "expedition")?.state ?? null,
+    expeditionLog: states.find((s) => s.game === "expedition-log")?.state ?? null,
+    // The free-unlock test group, for the GA4 user property access_test (src/lib/access-test.ts); null when not in it
+    accessTest: armOf(states.find((s) => s.game === ACCESS_TEST_GAME)?.state),
+    // false once they've answered (or skipped) "How did you find us?" (src/components/HeardAboutCard.tsx)
+    askHeardAbout: !account?.heardAbout,
+  });
+}
