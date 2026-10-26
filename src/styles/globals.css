@@ -1,29 +1,50 @@
 @import "tailwindcss";
 
-/* ── Runtime CSS Variables (switchable by theme) ── */
+/* ── Learn AEO palette ──
+   WCAG 2.x contrast ratios (relative-luminance formula, computed with a node snippet):
+   DARK  (page #04060d)
+     body text   sand-100 #e6ebf5 ........ 16.94:1   secondary sand-300 #a3afc6 .. 9.17:1
+     muted       sand-400 #8794ad ........  6.62:1   faint     sand-500 #6c7a95 ..  4.68:1
+     accents     gold #ffc76b ............ 13.15:1   cyan #6fe3ff ............... 13.60:1
+     CTA text    #04060d on gold ......... 13.15:1   #04060d on cyan ............ 13.60:1
+   LIGHT (page #f6f8fc)
+     body text   sand-100 #0b1220 ........ 17.61:1   secondary sand-300 #36445f ..  9.19:1
+     muted       sand-400 #4a5873 ........  6.73:1   faint     sand-500 #66728a ..  4.55:1
+     accents     gold-400 #9a6516 ........  4.65:1   cyan-500 #0e7490 ...........  5.04:1
+     CTA text    white on #0e7490 ........  5.36:1   white on #9a6516 ...........  4.94:1
+     on obsidian-lighter #e1e8f3: body 15.19:1, muted 5.81:1
+   The brief's light gold #b7791f is only 3.42:1 on #f6f8fc (fails AA for text), so it is kept as
+   gold-300 for decorative use and text-weight gold is darkened to #9a6516 (gold-400/500).
+   Token names (obsidian, sand-*, gold-*) are the sibling's; Plan 4 migrates components to ink/cyan/gold. */
 :root {
-  --rt-obsidian: #0a0a0f;
-  --rt-obsidian-light: #12121a;
-  --rt-obsidian-lighter: #1a1a26;
-  --rt-sand-50: #faf6f0;
-  --rt-sand-100: #f0e8d8;
-  --rt-sand-200: #e0d0b8;
-  --rt-sand-300: #c8b090;
-  --rt-sand-400: #b09070;
-  --rt-sand-500: #907050;
-  --rt-gold-300: #f5d890;
-  --rt-gold-400: #e8c460;
-  --rt-gold-500: #d4a832;
-  --rt-gold-600: #b8922a;
-  --rt-gold-700: #8a6e20;
+  --rt-ink: #04060d;
+  --rt-obsidian: #04060d;
+  --rt-obsidian-light: #0a0f1c;
+  --rt-obsidian-lighter: #121a2b;
+  --rt-sand-50: #f6f8fc;
+  --rt-sand-100: #e6ebf5;
+  --rt-sand-200: #c9d2e3;
+  --rt-sand-300: #a3afc6;
+  --rt-sand-400: #8794ad;
+  --rt-sand-500: #6c7a95;
+  --rt-gold-300: #ffdca0;
+  --rt-gold-400: #ffd084;
+  --rt-gold-500: #ffc76b;
+  --rt-gold-600: #e0a53f;
+  --rt-gold-700: #8a6a2c;
+  --rt-cyan-300: #b3f0ff;
+  --rt-cyan-400: #92e9ff;
+  --rt-cyan-500: #6fe3ff;
+  --rt-cyan-600: #2cc4e8;
+  --rt-cyan-700: #0e7490;
 }
 
 /* Colour the media hero fades into at its bottom edge (the page background). */
 :root {
-  --hero-fade: #0a0a0f;
+  --hero-fade: #04060d;
 }
 html.light {
-  --hero-fade: #f8f3eb;
+  --hero-fade: #f6f8fc;
 }
 
 /* The homepage hero is a dark media hero in BOTH themes: video + light text.
@@ -35,52 +56,63 @@ html.light {
 @utility hero-media {
   /* Tailwind's --color-* vars are resolved once at :root, so they must be
      re-declared here as literals (overriding --rt-* alone has no effect). */
-  --color-obsidian: #0a0a0f;
-  --color-obsidian-light: #12121a;
-  --color-obsidian-lighter: #1a1a26;
-  --color-sand-50: #faf6f0;
-  --color-sand-100: #f0e8d8;
-  --color-sand-200: #e0d0b8;
-  --color-sand-300: #c8b090;
-  --color-sand-400: #b09070;
-  --color-sand-500: #907050;
-  --color-gold-300: #f5d890;
-  --color-gold-400: #e8c460;
-  --color-gold-500: #d4a832;
-  --color-gold-600: #b8922a;
-  --color-gold-700: #8a6e20;
+  --color-obsidian: #04060d;
+  --color-obsidian-light: #0a0f1c;
+  --color-obsidian-lighter: #121a2b;
+  --color-sand-50: #f6f8fc;
+  --color-sand-100: #e6ebf5;
+  --color-sand-200: #c9d2e3;
+  --color-sand-300: #a3afc6;
+  --color-sand-400: #8794ad;
+  --color-sand-500: #6c7a95;
+  --color-gold-300: #ffdca0;
+  --color-gold-400: #ffd084;
+  --color-gold-500: #ffc76b;
+  --color-gold-600: #e0a53f;
+  --color-gold-700: #8a6a2c;
+  --color-cyan-300: #b3f0ff;
+  --color-cyan-400: #92e9ff;
+  --color-cyan-500: #6fe3ff;
+  --color-cyan-600: #2cc4e8;
+  --color-cyan-700: #0e7490;
   /* …and the raw tokens for the few places that read them directly. */
-  --rt-obsidian: #0a0a0f;
-  --rt-obsidian-light: #12121a;
-  --rt-obsidian-lighter: #1a1a26;
-  --rt-sand-100: #f0e8d8;
-  --rt-sand-300: #c8b090;
-  --rt-gold-300: #f5d890;
-  --rt-gold-400: #e8c460;
-  --rt-gold-500: #d4a832;
-  --rt-gold-600: #b8922a;
-  --rt-gold-700: #8a6e20;
+  --rt-obsidian: #04060d;
+  --rt-obsidian-light: #0a0f1c;
+  --rt-obsidian-lighter: #121a2b;
+  --rt-sand-100: #e6ebf5;
+  --rt-sand-300: #a3afc6;
+  --rt-gold-300: #ffdca0;
+  --rt-gold-400: #ffd084;
+  --rt-gold-500: #ffc76b;
+  --rt-gold-600: #e0a53f;
+  --rt-gold-700: #8a6a2c;
 }
 
 html.light {
-  --rt-obsidian: #f8f3eb;
-  --rt-obsidian-light: #f0e8d8;
-  --rt-obsidian-lighter: #e8dcc8;
-  --rt-sand-50: #1a1510;
-  --rt-sand-100: #2a2318;
-  --rt-sand-200: #3d3225;
-  --rt-sand-300: #5a4a38;
-  --rt-sand-400: #70604a;
-  --rt-sand-500: #8a7a60;
-  --rt-gold-300: #c49520;
-  --rt-gold-400: #a87d18;
-  --rt-gold-500: #8a6610;
-  --rt-gold-600: #7a5a0e;
-  --rt-gold-700: #c8a850;
+  --rt-obsidian: #f6f8fc;
+  --rt-obsidian-light: #edf1f8;
+  --rt-obsidian-lighter: #e1e8f3;
+  --rt-sand-50: #060a14;
+  --rt-sand-100: #0b1220;
+  --rt-sand-200: #1c2740;
+  --rt-sand-300: #36445f;
+  --rt-sand-400: #4a5873;
+  --rt-sand-500: #66728a;
+  --rt-gold-300: #b7791f;
+  --rt-gold-400: #9a6516;
+  --rt-gold-500: #8f5f12;
+  --rt-gold-600: #7a500f;
+  --rt-gold-700: #d9b36b;
+  --rt-cyan-300: #0e7490;
+  --rt-cyan-400: #0e7490;
+  --rt-cyan-500: #0e7490;
+  --rt-cyan-600: #0c637b;
+  --rt-cyan-700: #7fcfe3;
 }
 
 @theme {
   /* ── Colors: wired to runtime vars for theme switching ── */
+  --color-ink: var(--rt-ink);
   --color-obsidian: var(--rt-obsidian);
   --color-obsidian-light: var(--rt-obsidian-light);
   --color-obsidian-lighter: var(--rt-obsidian-lighter);
@@ -92,28 +124,35 @@ html.light {
   --color-sand-400: var(--rt-sand-400);
   --color-sand-500: var(--rt-sand-500);
 
+  --color-gold: var(--rt-gold-500);
   --color-gold-300: var(--rt-gold-300);
   --color-gold-400: var(--rt-gold-400);
   --color-gold-500: var(--rt-gold-500);
   --color-gold-600: var(--rt-gold-600);
   --color-gold-700: var(--rt-gold-700);
 
-  /* Static colors (don't change with theme) */
-  --color-lapis: #1e3a5f;
-  --color-lapis-light: #2a4f7f;
-  --color-turquoise: #2a8a7a;
-  --color-terracotta: #c25a3a;
-  --color-papyrus: #f5e6c8;
+  --color-cyan: var(--rt-cyan-500);
+  --color-cyan-300: var(--rt-cyan-300);
+  --color-cyan-400: var(--rt-cyan-400);
+  --color-cyan-500: var(--rt-cyan-500);
+  --color-cyan-600: var(--rt-cyan-600);
+  --color-cyan-700: var(--rt-cyan-700);
+
+  /* Static colors (don't change with theme). Sibling names kept; values moved to the navy palette. */
+  --color-lapis: #16294a;
+  --color-lapis-light: #24426e;
+  --color-turquoise: #1fa3b8;
+  --color-terracotta: #e0674a;
+  --color-papyrus: #e6ebf5;
 
   /* ── Typography ── */
-  /* Noto Sans Egyptian Hieroglyphs sits in every stack (its @font-face rules
-     are unicode-range-limited to U+13000-1345F, so Latin text never touches
-     it). Without it, glyphs inside ordinary prose depend on the OS having a
-     hieroglyph font: Windows Chrome finds Segoe UI Historic, Firefox and most
-     phones render tofu boxes. The cuneiform face (layout.tsx) follows on the
-     same terms for the cuneiform block. */
-  --font-display: var(--font-open-sans), "Noto Sans Egyptian Hieroglyphs", var(--font-cuneiform), system-ui, sans-serif;
-  --font-body: var(--font-open-sans), "Noto Sans Egyptian Hieroglyphs", var(--font-cuneiform), system-ui, sans-serif;
+  /* Inter for UI/body, Instrument Serif for display. The Noto Sans Egyptian
+     Hieroglyphs face stays in the stacks (its @font-face rules are
+     unicode-range-limited to U+13000-1345F, so Latin text never touches it)
+     because the lesson player still renders glyphs. Plan 2: remove. */
+  --font-sans: var(--font-inter), "Noto Sans Egyptian Hieroglyphs", system-ui, sans-serif;
+  --font-display: var(--font-instrument-serif), "Noto Sans Egyptian Hieroglyphs", Georgia, serif;
+  --font-body: var(--font-sans);
 
   /* ── Spacing Scale ── */
   --spacing-18: 4.5rem;
@@ -152,7 +191,7 @@ html.light ::selection {
 
 /* ── Hero subtitle: lift it off the busy video with a soft shadow ── */
 .hero-subtitle {
-  color: #faf6f0;
+  color: #f6f8fc;
   text-shadow:
     0 1px 2px rgba(0, 0, 0, 0.9),
     0 2px 14px rgba(0, 0, 0, 0.75),
@@ -520,7 +559,7 @@ html.light .translator-wall {
   color: #1f1404;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0) 46%),
-    linear-gradient(100deg, #f3cf72 0%, #fce7a6 28%, #e7b94a 55%, #c8952a 100%);
+    linear-gradient(100deg, #ffc76b 0%, #ffe0a8 28%, #ffc76b 55%, #e0a53f 100%);
   box-shadow:
     inset 0 1px 0 rgba(255, 248, 220, 0.9),
     inset 0 -3px 0 rgba(122, 78, 8, 0.45),
@@ -661,7 +700,7 @@ html.light .translator-wall {
   color: #1f1404;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0) 50%),
-    linear-gradient(100deg, #f3cf72 0%, #fce7a6 28%, #e7b94a 55%, #c8952a 100%);
+    linear-gradient(100deg, #ffc76b 0%, #ffe0a8 28%, #ffc76b 55%, #e0a53f 100%);
   box-shadow:
     inset 0 1px 0 rgba(255, 248, 220, 0.9),
     inset 0 -2px 0 rgba(122, 78, 8, 0.4),
@@ -2062,7 +2101,7 @@ button.cq-answer:active {
    the last five seconds. cq-panel: the glass cards on top. cq-rays: light turning behind the sign.
    cq-count: the 3-2-1. cq-share: how much of the class chose an answer. cq-bob: things that stay alive. */
 .cq-backdrop {
-  background: radial-gradient(ellipse 120% 80% at 50% 110%, #2a1c08 0%, #0a0a0f 60%);
+  background: radial-gradient(ellipse 120% 80% at 50% 110%, #2a1c08 0%, #04060d 60%);
 }
 .cq-glow {
   position: absolute;
@@ -2240,7 +2279,7 @@ button.cq-answer:active {
    crop it rather than shrink it, keeping the felucca and the pyramids in view. */
 .footer-egypt,
 html.light footer.footer-egypt {
-  background: #121321;
+  background: #060a14;
 }
 .footer-egypt-scene {
   position: relative;
@@ -3941,4 +3980,9 @@ html.light .chamber-card[data-state="locked"] .chamber-medallion {
   color: rgba(90, 64, 20, 0.7);
   background: radial-gradient(circle at 50% 32%, #efe2c4 0%, #d9c49b 65%, #c7ae80 100%);
   box-shadow: inset 0 0 0 1.5px rgba(138, 102, 16, 0.35), inset 0 2px 4px rgba(90, 60, 10, 0.25), 0 6px 14px -8px rgba(90, 60, 10, 0.4);
+}
+
+/* Instrument Serif ships a single 400 weight: never fake a bold. */
+.font-display {
+  font-synthesis-weight: none;
 }

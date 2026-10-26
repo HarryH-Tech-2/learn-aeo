@@ -1,5 +1,8 @@
 export type Theme = "dark" | "light";
 
+/** Browser-chrome colour (the <meta name="theme-color">): the brand navy, matching site.webmanifest. */
+export const THEME_COLOR = "#04060d";
+
 /** Viewports narrower than this (Tailwind `md`) default to light mode. */
 export const MOBILE_MAX_WIDTH = 767;
 

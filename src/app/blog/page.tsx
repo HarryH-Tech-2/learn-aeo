@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     locale: "en_GB",
     images: [
       {
-        url: `${SITE}/og-homepage.jpg`,
+        url: `${SITE}/og-default.png`,
         width: 1200,
         height: 630,
         alt: "Learn AEO - The Scribe's Journal",
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${BLOG_NAME}: Hieroglyphics Articles & Guides`,
     description: BLOG_DESCRIPTION,
-    images: [`${SITE}/og-homepage.jpg`],
+    images: [`${SITE}/og-default.png`],
   },
 };
 

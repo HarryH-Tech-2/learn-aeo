@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
-import { THEME_INIT_SCRIPT } from "@/lib/theme";
+import type { Metadata, Viewport } from "next";
+import { THEME_INIT_SCRIPT, THEME_COLOR } from "@/lib/theme";
 import { gaCountryBlockScript, trafficTypeScript } from "@/lib/traffic-type";
-import { Noto_Sans_Cuneiform, Open_Sans } from "next/font/google";
+import { Inter, Instrument_Serif } from "next/font/google";
 import Script from "next/script";
 import Providers from "@/components/Providers";
 import CampaignTracker from "@/components/CampaignTracker";
@@ -21,24 +21,23 @@ const GA_MEASUREMENT_ID = SITE.gaId ?? "";
 const GA_ENABLED =
   Boolean(GA_MEASUREMENT_ID) && process.env.NODE_ENV === "production" && process.env.VERCEL_ENV !== "preview";
 
-const openSans = Open_Sans({
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-open-sans",
+  variable: "--font-inter",
   display: "swap",
 });
 
-// Cuneiform signs in any page's text (the cuneiform name page and blog post, 2026-10-24). Google's CSS limits the
-// face to the cuneiform block by unicode-range, and it is not preloaded, so only pages with cuneiform fetch it.
-const cuneiform = Noto_Sans_Cuneiform({
-  subsets: ["cuneiform"],
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
   weight: "400",
-  variable: "--font-cuneiform",
+  style: ["normal", "italic"],
+  variable: "--font-instrument-serif",
   display: "swap",
-  preload: false,
-  // (no metric-matched Arial face: it would sit in the stack ahead of system-ui for every non-Latin letter)
-  adjustFontFallback: false,
 });
+
+export const viewport: Viewport = {
+  themeColor: THEME_COLOR,
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -54,12 +53,12 @@ export const metadata: Metadata = {
     siteName: SITE.name,
     images: [
       {
-        // JPEG: Messenger shows no picture for a WebP preview (scripts/dev/build-og-image.ts)
-        url: "/og-homepage.jpg",
-        type: "image/jpeg",
+        // PNG (not WebP: Messenger shows no picture for a WebP preview); built by scripts/dev/build-icons.mjs
+        url: absoluteUrl("/og-default.png"),
+        type: "image/png",
         width: 1200,
         height: 630,
-        alt: `${SITE.name}: the name Cleopatra in a cartouche over the pyramids of Giza at sunset`,
+        alt: `${SITE.name}: ${SITE.tagline}`,
       },
     ],
   },
@@ -68,7 +67,7 @@ export const metadata: Metadata = {
     title: `${SITE.name} | ${SITE.tagline}`,
     description:
       "Interactive lessons to read and write Egyptian hieroglyphics. Start free today.",
-    images: ["/og-homepage.jpg"],
+    images: [absoluteUrl("/og-default.png")],
   },
   robots: {
     index: true,
@@ -86,14 +85,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${openSans.variable} ${cuneiform.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${instrumentSerif.variable}`}>
       <head>
         <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32" />
         <link rel="icon" href="/favicon-64.png" type="image/png" sizes="64x64" />
         <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
-        {/* The 10 KB hieroglyph subset used above the fold — fetched alongside
+        {/* Plan 2: remove (the lesson player still renders hieroglyphs). The 10 KB hieroglyph subset used above the fold — fetched alongside
             the CSS so the first layout shapes glyphs with it instead of doing
             slow OS font fallback and re-laying out when it lands. */}
         <link

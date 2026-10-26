@@ -10,7 +10,7 @@
  */
 
 export const EMAIL_COLORS = {
-  page: "#0a0a0f",
+  page: "#04060d",
   panel: "#12121a",
   card: "#1a1a26",
   line: "#2e2a1c",

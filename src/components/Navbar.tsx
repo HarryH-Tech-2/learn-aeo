@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
-import { trackEvent } from "@/lib/analytics";
+import { SITE } from "@/lib/site";
 import { useAuthModal } from "@/components/AuthModal";
 
 export default function Navbar() {
@@ -45,11 +45,14 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-20 md:h-18 relative">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 md:gap-3 group min-w-0 shrink-0">
-            <span className="text-3xl md:text-4xl flex items-center text-sand-100 transition-transform duration-300 group-hover:scale-110 -mt-1">
-              𓂀
-            </span>
-            <span className="font-display text-xl md:text-3xl lg:text-lg xl:text-xl 2xl:text-3xl font-semibold tracking-wide text-gold-400 group-hover:text-gold-300 transition-colors truncate">
-              Learn AEO
+            {/* The favicon motif: a search bar split by a gold seam */}
+            <svg aria-hidden="true" viewBox="0 0 64 64" className="w-8 h-8 md:w-9 md:h-9 transition-transform duration-300 group-hover:scale-110">
+              <rect width="64" height="64" rx="14" fill="#04060d" />
+              <rect x="7" y="21" width="50" height="22" rx="11" fill="none" stroke="#6fe3ff" strokeWidth="3.5" />
+              <rect x="30.25" y="14" width="3.5" height="36" rx="1.75" fill="#ffc76b" />
+            </svg>
+            <span className="font-display text-2xl md:text-3xl lg:text-2xl xl:text-3xl tracking-wide text-sand-100 group-hover:text-cyan-400 transition-colors truncate">
+              {SITE.name}
             </span>
           </Link>
 
@@ -57,11 +60,9 @@ export default function Navbar() {
           {/* Centred between the logo and the right-hand controls (flex, not
               absolute, so it can never collide with either at narrow widths). */}
           <div className="hidden lg:flex flex-1 min-w-0 items-center justify-center gap-4 2xl:gap-6 px-3 whitespace-nowrap">
-            {!session && <NavLink href={isHome ? "#pricing" : "/#pricing"}>Pricing</NavLink>}
-            <NavLink href="/about">About Us</NavLink>
+            <NavLink href={isHome ? "#curriculum" : "/#curriculum"}>Course</NavLink>
+            <NavLink href="/pricing">Pricing</NavLink>
             <NavLink href="/blog">Blog</NavLink>
-            {/* six links do not fit beside the logo and the buttons under 1280px; Contact is also in the footer */}
-            <NavLink href="/contact" className="hidden xl:inline">Contact</NavLink>
           </div>
 
           {/* Desktop Nav - Right */}
@@ -69,8 +70,6 @@ export default function Navbar() {
             {session ? (
               <>
                 <Link href="/dashboard" className="nav-cta">
-                  {/* pr, the house: the learner's own place on the site */}
-                  <span className="nav-cta-free nav-cta-glyph" aria-hidden="true">&#x13250;</span>
                   Dashboard
                 </Link>
                 <Link href="/account" className="nav-signin">
@@ -90,24 +89,9 @@ export default function Navbar() {
                 <button
                   type="button"
                   onClick={() => openAuthModal({ mode: "signin" })}
-                  className="nav-signin"
-                >
-                  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="8" r="3.6" />
-                    <path d="M4.5 20c1.2-3.6 4.1-5.4 7.5-5.4s6.3 1.8 7.5 5.4" />
-                  </svg>
-                  Sign In
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    trackEvent("free_lesson_cta", { location: "nav" });
-                    openAuthModal({ next: "/lessons/expedition-begins" });
-                  }}
                   className="nav-cta"
                 >
-                  <span className="nav-cta-free">Free</span>
-                  First Lesson
+                  Log in
                 </button>
                 <ThemeToggle />
               </>
@@ -180,14 +164,14 @@ export default function Navbar() {
                     >
                       Account
                     </MobileLink>
-                    <MobileLink href="/about" onClick={() => setMenuOpen(false)}>
-                      About Us
+                    <MobileLink href="/#curriculum" onClick={() => setMenuOpen(false)}>
+                      Course
+                    </MobileLink>
+                    <MobileLink href="/pricing" onClick={() => setMenuOpen(false)}>
+                      Pricing
                     </MobileLink>
                     <MobileLink href="/blog" onClick={() => setMenuOpen(false)}>
                       Blog
-                    </MobileLink>
-                    <MobileLink href="/contact" onClick={() => setMenuOpen(false)}>
-                      Contact
                     </MobileLink>
                   </div>
 
@@ -208,32 +192,14 @@ export default function Navbar() {
                 <>
                   {/* Primary CTA first, then nav */}
                   <div className="flex flex-col">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        trackEvent("free_lesson_cta", { location: "nav_mobile" });
-                        setMenuOpen(false);
-                        openAuthModal({ next: "/lessons/expedition-begins" });
-                      }}
-                      className="nav-cta w-full justify-center mb-4"
-                    >
-                      <span className="nav-cta-free">Free</span>
-                      Start My First Lesson
-                    </button>
-                    <MobileLink
-                      href={isHome ? "#pricing" : "/#pricing"}
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      Pricing
+                    <MobileLink href={isHome ? "#curriculum" : "/#curriculum"} onClick={() => setMenuOpen(false)}>
+                      Course
                     </MobileLink>
-                    <MobileLink href="/about" onClick={() => setMenuOpen(false)}>
-                      About Us
+                    <MobileLink href="/pricing" onClick={() => setMenuOpen(false)}>
+                      Pricing
                     </MobileLink>
                     <MobileLink href="/blog" onClick={() => setMenuOpen(false)}>
                       Blog
-                    </MobileLink>
-                    <MobileLink href="/contact" onClick={() => setMenuOpen(false)}>
-                      Contact
                     </MobileLink>
                   </div>
 
@@ -247,7 +213,7 @@ export default function Navbar() {
                       }}
                       className="flex w-full items-center justify-between font-body text-sand-200 hover:text-gold-400 text-base py-3 transition-colors"
                     >
-                      <span>Sign In</span>
+                      <span>Log in</span>
                     </button>
                   </div>
                 </>
@@ -289,7 +255,7 @@ function MobileLink({
     >
       <span>{children}</span>
       <svg
-        className="w-4 h-4 text-sand-600 group-hover:text-gold-500 group-hover:translate-x-0.5 transition-all"
+        className="w-4 h-4 text-sand-500 group-hover:text-gold-500 group-hover:translate-x-0.5 transition-all"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"

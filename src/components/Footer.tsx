@@ -1,162 +1,48 @@
 import Link from "next/link";
+import { SITE } from "@/lib/site";
+
+// Footer links: only pages that exist on the Learn AEO site.
+const LINKS = [
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+  { href: "/privacy", label: "Privacy" },
+  { href: "/terms", label: "Terms" },
+  { href: "/blog", label: "Blog" },
+  { href: "/pricing", label: "Pricing" },
+];
 
 export default function Footer() {
   return (
     // Always dark, in both themes (hero-media pins the dark tokens).
     <footer className="footer-egypt hero-media relative">
-      {/* Decorative hieroglyph ticker tape */}
-      <div className="w-full overflow-hidden py-6 bg-obsidian-lighter/50">
-        <div
-          className="flex gap-8 text-3xl text-gold-500/60 animate-ticker whitespace-nowrap"
-          style={{ width: "max-content" }}
-        >
-          {[0, 1].map((set) => (
-            <div key={set} className="flex gap-8">
-              {[..."𓀀𓁀𓂀𓃀𓄿𓅓𓆣𓇳𓉐𓋴𓌳𓎛𓏏𓐍𓀀𓁀𓂀𓃀𓄿𓅓𓆣𓇳𓉐𓋴𓌳𓎛𓏏𓐍𓀀𓁀𓂀𓃀𓄿𓅓𓆣𓇳𓉐𓋴𓌳𓎛𓏏𓐍"].map((g, i) => (
-                <span
-                  key={i}
-                  style={{
-                    fontFamily: "'Noto Sans Egyptian Hieroglyphs', serif",
-                  }}
-                >
-                  {g}
-                </span>
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-12">
+        <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+          <Link href="/" className="flex items-center gap-3">
+            <svg aria-hidden="true" viewBox="0 0 64 64" className="w-9 h-9">
+              <rect width="64" height="64" rx="14" fill="#04060d" />
+              <rect x="7" y="21" width="50" height="22" rx="11" fill="none" stroke="#6fe3ff" strokeWidth="3.5" />
+              <rect x="30.25" y="14" width="3.5" height="36" rx="1.75" fill="#ffc76b" />
+            </svg>
+            <span className="font-display text-2xl text-sand-100">{SITE.name}</span>
+          </Link>
+          <nav aria-label="Footer">
+            <ul className="flex flex-wrap gap-x-7 gap-y-3">
+              {LINKS.map((l) => (
+                <li key={l.href}>
+                  <Link
+                    href={l.href}
+                    className="font-body text-base text-sand-300 hover:text-gold-400 transition-colors"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
               ))}
-            </div>
-          ))}
+            </ul>
+          </nav>
         </div>
-      </div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-12">
-          {/* Brand */}
-          <div className="md:col-span-2">
-            <Link href="/" className="flex items-center gap-3 mb-4">
-              <span className="text-4xl text-sand-100">𓂀</span>
-              <span className="font-display text-2xl font-semibold text-gold-400">
-                Learn AEO
-              </span>
-            </Link>
-            <p className="font-body text-base text-sand-400 leading-relaxed max-w-sm font-light">
-              Dedicated to preserving and teaching the ancient art of
-              hieroglyphic writing. Our mission is to make the language of the
-              pharaohs accessible to modern scholars and enthusiasts alike.
-            </p>
-          </div>
-
-          {/* Links */}
-          <div>
-            <h4 className="font-body text-sm tracking-[0.2em] uppercase text-gold-400 mb-5">
-              Learn
-            </h4>
-            <ul className="space-y-3.5">
-              <li>
-                <Link
-                  href="/#lessons"
-                  className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
-                >
-                  Curriculum
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/lessons/expedition-begins"
-                  className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
-                >
-                  Free Lesson
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/pricing"
-                  className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
-                >
-                  Pricing
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-body text-sm tracking-[0.2em] uppercase text-gold-400 mb-5">
-              Blog
-            </h4>
-            <ul className="space-y-3.5">
-              <li>
-                <Link
-                  href="/blog/should-i-learn-hieroglyphics"
-                  className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
-                >
-                  Should I Learn Hieroglyphics?
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/blog/5-hieroglyphs-you-already-know"
-                  className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
-                >
-                  5 Hieroglyphs You Already Know
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/blog/reading-your-first-cartouche"
-                  className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
-                >
-                  Reading Your First Cartouche
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/blog"
-                  className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
-                >
-                  All Articles
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-body text-sm tracking-[0.2em] uppercase text-gold-400 mb-5">
-              Company
-            </h4>
-            <ul className="space-y-3.5">
-              <li>
-                <Link
-                  href="/about"
-                  className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
-                >
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/privacy"
-                  className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
-                >
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/terms"
-                  className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
-                >
-                  Terms of Service
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/contact"
-                  className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
-                >
-                  Contact Us
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
+        <p className="font-body text-sm text-sand-400 mt-10">
+          &copy; {new Date().getFullYear()} {SITE.name}
+        </p>
       </div>
     </footer>
   );
