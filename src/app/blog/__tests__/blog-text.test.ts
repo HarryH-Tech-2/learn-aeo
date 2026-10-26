@@ -26,10 +26,10 @@ describe("withInBodyLinks", () => {
     }
   });
 
-  it("every published post ends up linking to the translator and the free lesson in its body", () => {
+  it("every published post ends up linking to the free lesson in its body, and the added link names no removed tool", () => {
+    expect(IN_BODY_LINKS_MD).not.toContain("/translate-name-to-hieroglyphics");
     for (const p of blogPosts) {
       const out = withInBodyLinks(p.content);
-      expect(out, p.slug).toContain("](/translate-name-to-hieroglyphics)");
       expect(out, p.slug).toContain("](/lessons/expedition-begins)");
     }
   });

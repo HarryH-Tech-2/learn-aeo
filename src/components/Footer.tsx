@@ -2,9 +2,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    // Always dark, in both themes (hero-media pins the dark tokens). Its background is the engraving's sky colour, so
-    // the Nile scene along the bottom (public/footer-egypt-*.webp, Nano Banana Pro via scripts/dev/nanobanana.mjs)
-    // has no seam; the links sit over the picture's empty sky.
+    // Always dark, in both themes (hero-media pins the dark tokens).
     <footer className="footer-egypt hero-media relative">
       {/* Decorative hieroglyph ticker tape */}
       <div className="w-full overflow-hidden py-6 bg-obsidian-lighter/50">
@@ -66,86 +64,6 @@ export default function Footer() {
                   className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
                 >
                   Free Lesson
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/dig"
-                  className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
-                >
-                  The Dig
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/hieroglyphics-keyboard"
-                  className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
-                >
-                  Hieroglyphics Keyboard
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/egyptian-numerals-converter"
-                  className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
-                >
-                  Egyptian Numerals Converter
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/write-your-name-in-cuneiform"
-                  className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
-                >
-                  Your Name in Cuneiform
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/pet-name-in-hieroglyphics"
-                  className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
-                >
-                  Pet Names
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/couple-names-in-hieroglyphics"
-                  className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
-                >
-                  Couple Names
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/hieroglyphics-tattoo"
-                  className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
-                >
-                  Tattoo Stencil
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/gift"
-                  className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
-                >
-                  Gift the Course
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/daily"
-                  className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
-                >
-                  Cartouche of the Day
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/teachers"
-                  className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
-                >
-                  For Teachers
                 </Link>
               </li>
               <li>
@@ -222,14 +140,6 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/teachers/privacy"
-                  className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
-                >
-                  Privacy for Schools
-                </Link>
-              </li>
-              <li>
-                <Link
                   href="/terms"
                   className="font-body text-base text-sand-400 hover:text-gold-400 transition-colors"
                 >
@@ -248,20 +158,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-
-      {/* eslint-disable-next-line @next/next/no-img-element -- pre-sized WebPs, nothing for next/image to add */}
-      <img
-        src="/footer-egypt-1600.webp"
-        srcSet="/footer-egypt-900.webp 900w, /footer-egypt-1600.webp 1600w, /footer-egypt-2400.webp 2400w"
-        sizes="100vw"
-        width={2400}
-        height={1018}
-        alt=""
-        aria-hidden="true"
-        loading="lazy"
-        decoding="async"
-        className="footer-egypt-scene"
-      />
     </footer>
   );
 }

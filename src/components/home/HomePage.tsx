@@ -1,10 +1,7 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
-import AboutHieroglyphics from "@/components/AboutHieroglyphics";
 import FeaturesSection from "@/components/FeaturesSection";
 import LessonsPreview from "@/components/LessonsPreview";
-import TeachersSection from "@/components/TeachersSection";
-import TestimonialsSection from "@/components/TestimonialsSection";
 import PricingSection from "@/components/PricingSection";
 import FAQSection from "@/components/FAQSection";
 import ContactSection from "@/components/ContactSection";
@@ -44,11 +41,8 @@ export default function HomePage() {
       />
       <Navbar />
       <HeroSection />
-      <AboutHieroglyphics />
       <FeaturesSection />
       <LessonsPreview />
-      <TeachersSection />
-      <TestimonialsSection />
       <PricingSection />
       <FAQSection />
       <ContactSection />

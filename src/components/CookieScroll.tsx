@@ -14,7 +14,7 @@ const COOKIES_GLYPHS = transliterateName("cookies").map((r) => r.mapping.glyph);
 
 // full-screen play and teaching screens, pages framed on other sites, and the buying pages (on /pricing it covered
 // the Lifetime price), where the scroll would sit over the action
-const HIDDEN_ON = ["/embed", "/play", "/lessons/", "/teachers/class", "/dev", "/admin", "/pricing", "/checkout", "/get-started", "/cartouche-print", "/teachers/licence"];
+const HIDDEN_ON = ["/lessons/", "/admin", "/pricing", "/checkout", "/get-started"];
 
 type GtagConsent = (cmd: "consent", action: "update", params: Record<string, "granted" | "denied">) => void;
 type LhWindow = { gtag?: GtagConsent; __lhGaStart?: () => void };

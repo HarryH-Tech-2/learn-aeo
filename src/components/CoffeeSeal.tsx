@@ -14,7 +14,7 @@ import { usePathname } from "next/navigation";
 import { trackEvent, trackEventWhenReady } from "@/lib/analytics";
 
 export const COFFEE_URL = "https://buymeacoffee.com/harryhh";
-const HIDDEN_ON = ["/embed", "/play", "/lessons/", "/teachers/class", "/dev", "/admin", "/checkout", "/cartouche-print", "/pricing", "/get-started"];
+const HIDDEN_ON = ["/lessons/", "/admin", "/checkout", "/pricing", "/get-started"];
 
 export default function CoffeeSeal() {
   const pathname = usePathname();

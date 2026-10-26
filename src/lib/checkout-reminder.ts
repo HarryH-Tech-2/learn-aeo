@@ -1,15 +1,14 @@
 import type Stripe from "stripe";
 import { prisma } from "@/lib/db";
 import { checkSubscription } from "@/lib/subscription";
-import { isLicenceActive, isTrialLicence } from "@/lib/licence";
-import { planById, isLicencePlan, type Plan } from "@/lib/plans";
+import { planById, type Plan } from "@/lib/plans";
 import { unsubscribeUrl } from "@/lib/unsubscribe";
 import { sendCheckoutReminderEmail } from "@/lib/email";
 
 /**
  * The plain reminder after an unpaid checkout expires: what the plan includes, the 14-day guarantee, their price and a
  * way back. No discount. It goes to everyone the discount email (sendCheckoutRecoveryEmail, Lifetime only, no parity
- * discount) does not reach: the monthly pass, licences, parity-priced buyers, and anyone whose offer could not be made.
+ * discount) does not reach: the monthly pass, parity-priced buyers, and anyone whose offer could not be made.
  *
  * Nobody who left checkout between May and Oct 2026 was emailed (22 of 26 people with accounts): see the diagnosis in
  * project_conversion_build_2026-10-15 (memory).
@@ -65,7 +64,7 @@ export function reminderCheckoutUrl(baseUrl: string, plan: Plan): string {
 
 /**
  * Sends the reminder for an expired session if the rules allow it. Returns what happened, for the webhook log.
- * Callers skip cartouche-print sessions and sessions the discount email already covered.
+ * Callers skip sessions the discount email already covered.
  */
 export async function sendCheckoutReminderIfDue(session: Stripe.Checkout.Session, now = new Date()): Promise<"sent" | ReminderSkip | "send-failed"> {
   const email = session.customer_email ?? session.customer_details?.email ?? null;
@@ -88,7 +87,7 @@ export async function sendCheckoutReminderIfDue(session: Stripe.Checkout.Session
     email,
     plan,
     user: user ? { unsubscribed: !!user.emailUnsubscribedAt } : null,
-    ownsPlan: user && email && plan ? await ownsPlan(email, user.id, plan, now) : false,
+    ownsPlan: user && email && plan ? await ownsPlan(email, now) : false,
     sentForSession: !!user?.emailSends.some((s) => s.key === key),
     recentReminder: !!user?.emailSends.some((s) => s.sentAt.getTime() >= cutoff),
   };
@@ -121,9 +120,7 @@ export async function sendCheckoutReminderIfDue(session: Stripe.Checkout.Session
   return "sent";
 }
 
-/** Course plans: any course access counts (a Lifetime owner needs no pass). Licences: a paid licence they own, not a trial. */
-async function ownsPlan(email: string, userId: string, plan: Plan, now: Date): Promise<boolean> {
-  if (!isLicencePlan(plan)) return (await checkSubscription(email, now)).active;
-  const rows = await prisma.licence.findMany({ where: { ownerUserId: userId }, select: { status: true, currentPeriodEnd: true } });
-  return rows.some((l) => !isTrialLicence(l) && isLicenceActive(l, now));
+/** Any course access counts (a Lifetime owner needs no pass). */
+async function ownsPlan(email: string, now: Date): Promise<boolean> {
+  return (await checkSubscription(email, now)).active;
 }

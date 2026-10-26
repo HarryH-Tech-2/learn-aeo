@@ -11,7 +11,6 @@ vi.mock("@/lib/stripe", () => ({
 }));
 vi.mock("@/lib/subscription", () => ({ revokeLifetime: mockRevoke }));
 vi.mock("@/lib/notify", () => ({ notifyOwner: mockNotify }));
-vi.mock("@/lib/licence", () => ({ isLicenceKind: (x: unknown) => x === "classroom" || x === "school" }));
 
 import { formatMoney, handleDispute, handleRefund, heldFor, purchaseKind } from "../refunds";
 
@@ -41,7 +40,7 @@ describe("purchaseKind", () => {
     expect(purchaseKind({ plan: "lifetime" }, true).kind).toBe("lifetime");
     expect(purchaseKind({}, true).kind).toBe("lifetime");
     expect(purchaseKind({ plan: "monthly" }, true).kind).toBe("monthly");
-    expect(purchaseKind({ plan: "classroom" }, true).kind).toBe("licence");
+    expect(purchaseKind({ plan: "classroom" }, true).kind).toBe("unknown");
     expect(purchaseKind({ product: "unit-pack", plan: "lifetime" }, true).kind).toBe("product");
     expect(purchaseKind(null, false).kind).toBe("unknown");
   });

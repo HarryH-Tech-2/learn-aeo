@@ -20,7 +20,7 @@
   ],
   "headers": [
     {
-      "source": "/((?!embed/).*)",
+      "source": "/(.*)",
       "headers": [
         {
           "key": "X-Content-Type-Options",
@@ -37,23 +37,6 @@
         {
           "key": "Permissions-Policy",
           "value": "camera=(), microphone=(), geolocation=()"
-        }
-      ]
-    },
-    {
-      "source": "/embed/(.*)",
-      "headers": [
-        {
-          "key": "Content-Security-Policy",
-          "value": "frame-ancestors *"
-        },
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
         }
       ]
     },
@@ -103,15 +86,6 @@
       ]
     },
     {
-      "source": "/(hero-poster\\.webp|hero-door-poster(?:-m)?\\.webp|hero-(?:door|fly|loop)-[a-z0-9-]+\\.mp4)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=2592000, stale-while-revalidate=86400"
-        }
-      ]
-    },
-    {
       "source": "/",
       "headers": [
         {
@@ -140,24 +114,6 @@
     },
     {
       "source": "/blog/:slug",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=300, stale-while-revalidate=86400"
-        }
-      ]
-    },
-    {
-      "source": "/translate-name-to-hieroglyphics",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=300, stale-while-revalidate=86400"
-        }
-      ]
-    },
-    {
-      "source": "/teachers",
       "headers": [
         {
           "key": "Cache-Control",

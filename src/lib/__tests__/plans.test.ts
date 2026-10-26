@@ -1,7 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { PLANS, PLAN_IDS, isPlanId, planById, planAmount, planMinor, formatPlanPrice, planPeriodLabel, isLicencePlan } from "@/lib/plans";
 import { PRICES, discounted } from "@/lib/pricing";
-import { generateLicenceCode, normaliseLicenceCode, isLicenceActive, hasSeat, seatsForKind, LICENCE_GRACE_DAYS } from "@/lib/licence";
 import { monthlyActive, MONTHLY_GRACE_DAYS } from "@/lib/subscription";
 
 describe("plans", () => {
@@ -44,35 +43,6 @@ describe("plans", () => {
   it("offer discount still lands on a .99", () => {
     expect(discounted("USD", 33)).toBe(12.99);
     expect(discounted("GBP", 33)).toBe(9.99);
-  });
-});
-
-describe("licence rules", () => {
-  it("codes are 8 safe characters in two groups", () => {
-    const code = generateLicenceCode(() => 0.5);
-    expect(code).toMatch(/^[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/);
-    expect(normaliseLicenceCode(" abcd efgh ")).toBe("ABCD-EFGH");
-    expect(normaliseLicenceCode("ABCD-EFG")).toBeNull();
-    expect(normaliseLicenceCode("ABCD-EFG0")).toBeNull(); // 0 is not in the alphabet
-  });
-
-  it("seats", () => {
-    expect(seatsForKind("classroom")).toBe(30);
-    expect(seatsForKind("school")).toBe(0);
-    expect(hasSeat(30, 29)).toBe(true);
-    expect(hasSeat(30, 30)).toBe(false);
-    expect(hasSeat(0, 5000)).toBe(true);
-  });
-
-  it("active with grace, then not", () => {
-    const now = new Date("2026-09-08T12:00:00Z");
-    const day = 86_400_000;
-    expect(isLicenceActive({ status: "active", currentPeriodEnd: null }, now)).toBe(true);
-    expect(isLicenceActive({ status: "active", currentPeriodEnd: new Date(now.getTime() + day) }, now)).toBe(true);
-    expect(isLicenceActive({ status: "active", currentPeriodEnd: new Date(now.getTime() - (LICENCE_GRACE_DAYS - 1) * day) }, now)).toBe(true);
-    expect(isLicenceActive({ status: "past_due", currentPeriodEnd: new Date(now.getTime() - (LICENCE_GRACE_DAYS - 1) * day) }, now)).toBe(true);
-    expect(isLicenceActive({ status: "active", currentPeriodEnd: new Date(now.getTime() - (LICENCE_GRACE_DAYS + 1) * day) }, now)).toBe(false);
-    expect(isLicenceActive({ status: "canceled", currentPeriodEnd: new Date(now.getTime() + 30 * day) }, now)).toBe(false);
   });
 });
 

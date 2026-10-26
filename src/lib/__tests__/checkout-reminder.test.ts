@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import type Stripe from "stripe";
 
 const mockUserFindUnique = vi.hoisted(() => vi.fn());
-const mockLicenceFindMany = vi.hoisted(() => vi.fn().mockResolvedValue([]));
 const mockEmailSendCreate = vi.hoisted(() => vi.fn().mockResolvedValue({}));
 const mockEmailSendDelete = vi.hoisted(() => vi.fn().mockResolvedValue({}));
 const mockCheckSubscription = vi.hoisted(() => vi.fn().mockResolvedValue({ active: false }));
@@ -11,7 +10,6 @@ const mockSendReminder = vi.hoisted(() => vi.fn().mockResolvedValue(true));
 vi.mock("@/lib/db", () => ({
   prisma: {
     user: { findUnique: mockUserFindUnique },
-    licence: { findMany: mockLicenceFindMany },
     emailSend: { create: mockEmailSendCreate, delete: mockEmailSendDelete },
   },
 }));
@@ -92,7 +90,6 @@ describe("sendCheckoutReminderIfDue", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockUserFindUnique.mockResolvedValue(user());
-    mockLicenceFindMany.mockResolvedValue([]);
     mockCheckSubscription.mockResolvedValue({ active: false });
     mockSendReminder.mockResolvedValue(true);
     mockEmailSendCreate.mockResolvedValue({});
@@ -136,14 +133,6 @@ describe("sendCheckoutReminderIfDue", () => {
   it("skips a learner who has since got course access", async () => {
     mockCheckSubscription.mockResolvedValue({ active: true });
     expect(await sendCheckoutReminderIfDue(session(), NOW)).toBe("owns-plan");
-  });
-
-  it("skips a teacher who now owns a paid licence, but not one on a free trial", async () => {
-    const later = new Date(NOW.getTime() + 5 * DAY);
-    mockLicenceFindMany.mockResolvedValue([{ status: "active", currentPeriodEnd: later }]);
-    expect(await sendCheckoutReminderIfDue(session({ metadata: { plan: "classroom" } }), NOW)).toBe("owns-plan");
-    mockLicenceFindMany.mockResolvedValue([{ status: "trial", currentPeriodEnd: later }]);
-    expect(await sendCheckoutReminderIfDue(session({ metadata: { plan: "classroom" } }), NOW)).toBe("sent");
   });
 
   it("skips a session with no email or no account", async () => {

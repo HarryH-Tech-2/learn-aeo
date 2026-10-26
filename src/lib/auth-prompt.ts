@@ -3,13 +3,12 @@
  *
  * The card is only ever triggered by an intent signal, never a timer:
  *   - blog_scroll:          the reader is ~two-thirds through an article
- *   - translator_complete:  they downloaded, shared or emailed their cartouche
  *
  * Everything here is pure so the guard rules can be unit-tested; the hook in
  * src/components/useAuthPrompt.ts wires it to the browser.
  */
 
-export type PromptTrigger = "blog_scroll" | "translator_complete";
+export type PromptTrigger = "blog_scroll";
 
 /** localStorage key holding the last time the card was shown to this browser. */
 export const PROMPT_STORAGE_KEY = "lh_auth_prompt";
@@ -19,8 +18,6 @@ export const PROMPT_SUPPRESS_MS = 30 * 24 * 60 * 60 * 1000;
 export const PROMPT_MIN_TIME_ON_PAGE_MS = 10_000;
 /** Fraction of the article body scrolled past before the blog card may appear. */
 export const BLOG_SCROLL_THRESHOLD = 0.65;
-/** Breathing room after a download/share before the translator card slides in. */
-export const TRANSLATOR_PROMPT_DELAY_MS = 1_500;
 
 export type PromptRecord = { shownAt: number };
 

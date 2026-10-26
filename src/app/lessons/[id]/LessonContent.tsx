@@ -7,7 +7,6 @@ import { useParams, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { preload } from "react-dom";
 import Navbar from "@/components/Navbar";
 import { fetchJson } from "@/lib/fetch-json";
 import Footer from "@/components/Footer";
@@ -17,51 +16,10 @@ import type { OfferData } from "@/components/OfferBanner";
 import Price from "@/components/Price";
 import GuaranteeNote from "@/components/GuaranteeNote";
 import { useExpedition } from "@/lib/expedition-client";
-import { signedInHint } from "@/lib/signed-in-hint";
 import { guestPlayAllowed } from "@/lib/guest-play";
-import { rememberGameLessonDone, takeGameLessonDone } from "@/lib/game-lesson-done";
-import dynamic from "next/dynamic";
 
-/**
- * Lesson 1 comes in two versions: the written lesson (all 25 signs, in three
- * sections) and level 1 of The Causeway of Thoth (the learner's own name on
- * the temple gate). Everyone gets the written lesson unless they ask for the
- * game: new accounts left the game for the text before moving (GA4, 30 Sep
- * 2026), so since 1 Oct 2026 the blog and translator banners open the text
- * too. The game is one click away (the switch above the lesson, remembered on
- * this device) and on the dashboard's Games tab (?mode=game).
- */
-const GAME_LESSON = "expedition-begins";
-const MODE_KEY = "lh_lesson1_mode";
-type LessonMode = "game" | "classic";
-
-const loadCausewayGame = () => import("@/app/dev/platformer/game/Game");
-/** What the causeway shows first: asked for early, so they are in the browser's cache by the time the scene wants them. */
-const CAUSEWAY_MODELS = ["boat", "scarab", "jar", "lotus", "bull", "goose"].map((m) => `/models/objects/${m}.glb`).concat("/models/signs/lion.glb");
-
-const CausewayGame = dynamic(loadCausewayGame, {
-  ssr: false,
-  loading: () => (
-    <div className="fixed inset-0 bg-[#140d07] flex items-center justify-center">
-      <p className="font-body text-xs tracking-[0.3em] uppercase text-gold-500 animate-pulse">Raising the causeway…</p>
-    </div>
-  ),
-});
-
-function savedMode(): LessonMode | null {
-  try {
-    const m = localStorage.getItem(MODE_KEY);
-    return m === "game" || m === "classic" ? m : null;
-  } catch {
-    return null;
-  }
-}
-
-function rememberMode(mode: LessonMode) {
-  try {
-    localStorage.setItem(MODE_KEY, mode);
-  } catch {}
-}
+/** Lesson 1 opens to guests who came by a banner (src/lib/guest-play.ts). */
+const GUEST_LESSON = "expedition-begins";
 
 interface HieroglyphData {
   symbol: string;
@@ -156,52 +114,13 @@ export default function LessonContent() {
   }, [authed, id]);
   const pass: 1 | 2 = searchParams.get("pass") === "2" && cleared ? 2 : 1;
 
-  // Lesson 1 as a game or as text: ?mode wins, then the choice remembered from the switch, else the text.
-  const modeParam = searchParams.get("mode");
-  const [mode, setMode] = useState<LessonMode | null>(null);
-  // Signed in last time we knew (see signed-in-hint.ts): the game is mounted while the session check is still out.
-  const [hinted, setHinted] = useState(false);
   // Guest play (src/lib/guest-play.ts): came by a blog or translator banner, so the lesson opens before any account
   // is asked for. null until the browser has been asked, so the sign-up wall is not opened in the meantime.
   const [guestPlay, setGuestPlay] = useState<boolean | null>(null);
-  function explicitMode(): LessonMode | null {
-    return modeParam === "classic" || modeParam === "game" ? modeParam : savedMode();
-  }
-  // The game is a large download (three, the physics engine, the models): when it is the one asked for, start
-  // it the moment the page opens, alongside the session and progress checks, instead of after them. Its
-  // textures take about a second to draw, so they are started as soon as the code is here.
   useEffect(() => {
-    setHinted(signedInHint());
-    setGuestPlay(id === GAME_LESSON && guestPlayAllowed(searchParams));
-    if (id !== GAME_LESSON || explicitMode() !== "game") return;
-    // (the still that stands in for the scene until it is drawn: asked for before the game's code, which names it)
-    preload("/causeway-title.webp", { as: "image" });
-    // (the code first, since the title needs nothing else; then the rest side by side)
-    loadCausewayGame()
-      .then(() => {
-        import("@/app/dev/platformer/game/CausewayPhysics").catch(() => null);
-        CAUSEWAY_MODELS.forEach((url) => fetch(url).catch(() => null));
-        return import("@/app/dev/platformer/game/textures");
-      })
-      .then((t) => t.buildTextures())
-      .catch(() => null);
+    setGuestPlay(id === GUEST_LESSON && guestPlayAllowed(searchParams));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
-  useEffect(() => {
-    if (id !== GAME_LESSON || mode !== null) return;
-    const explicit = explicitMode();
-    const chosen: LessonMode = explicit ?? "classic";
-    setMode(chosen);
-    trackEvent("lesson1_mode", { mode: chosen, default: explicit ? 0 : 1 });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, modeParam]);
-  const switchMode = (next: LessonMode) => {
-    rememberMode(next);
-    setMode(next);
-    trackEvent("lesson1_mode_switch", { mode: next });
-    window.history.replaceState({}, "", `?mode=${next}`);
-  };
-  const gameLesson = id === GAME_LESSON && pass === 1 && mode === "game";
 
   // Arrivals from the name translator carry ?name=; the sealed door in
   // lesson 1 is carved with it, so the gate promises exactly that.
@@ -213,10 +132,9 @@ export default function LessonContent() {
   // Lessons require an account: guests get the sign-up modal as a hard gate
   // (no close button; the playable lesson is never mounted for them). After
   // signing up they come back to this lesson via ?next.
-  // A guest who came by a banner may take Lesson 1 either way: the game, or the written lesson, whose own first
-  // part is open to guests up to the door (LessonStage then asks for the account, before the words).
+  // A guest who came by a banner may take Lesson 1, whose own first part is open to guests up to the door
+  // (LessonStage then asks for the account, before the words).
   const guestAllowed = guest && guestPlay === true;
-  const guestPlaying = guestAllowed && gameLesson;
   const promptedGuest = useRef(false);
   useEffect(() => {
     if (guestPlay === null || guestAllowed) return;
@@ -230,14 +148,13 @@ export default function LessonContent() {
     }
   }, [guest, lesson, openAuthModal, gateIntro, guestPlay, guestAllowed]);
 
-  // (either version: mode says which, so the banner funnel reads the same before and after the text became the default)
   const guestStarted = useRef(false);
   useEffect(() => {
-    if (!guestAllowed || !mode || guestStarted.current) return;
+    if (!guestAllowed || guestStarted.current) return;
     guestStarted.current = true;
-    trackEvent("guest_play_start", { named: doorName ? 1 : 0, mode });
+    trackEvent("guest_play_start", { named: doorName ? 1 : 0 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [guestAllowed, mode]);
+  }, [guestAllowed]);
 
   useEffect(() => {
     fetchJson<LessonData>(`/api/lessons/${id}`)
@@ -254,49 +171,6 @@ export default function LessonContent() {
       }).catch(() => null);
     }
   }, [lesson, id, session]);
-
-  function causeway() {
-    return (
-      <CausewayGame
-        mode="lesson"
-        // (a name typed into the translator comes first: it is the one they asked to see carved)
-        suggestedName={doorName || (session?.user?.name?.split(" ")[0] ?? "")}
-        onClassic={() => switchMode("classic")}
-        paid={guestPlaying ? false : paid}
-        guest={guestPlaying}
-        onSignUp={() =>
-          openAuthModal({
-            // (back to the game they signed up from: an account otherwise opens on the written lesson)
-            next: `${window.location.pathname}?mode=game`,
-            intro: "Create a free account and your name and signs come with you. Ten seconds with Google or a magic link.",
-          })
-        }
-        onUpgrade={() => {
-          window.location.href = session ? "/checkout" : "/get-started?next=checkout";
-        }}
-        onLevelComplete={(level, _clean, total) => {
-          if (level !== 0) return;
-          rememberGameLessonDone(total);
-          reportGameLessonDone();
-        }}
-      />
-    );
-  }
-
-  /** Level 1 of the game is Lesson 1: once won, it counts as finished for the account (now, or once a guest signs in). */
-  function reportGameLessonDone() {
-    const userId = (session?.user as { id?: string } | undefined)?.id;
-    // (every sign is placed by the time the gate opens: the lesson is passed, whatever the first tries were)
-    const signs = userId ? takeGameLessonDone(userId) : null;
-    if (signs) handleReportComplete(signs, signs);
-  }
-
-  // a guest who won the game and has since signed in
-  const sessionUserId = (session?.user as { id?: string } | undefined)?.id;
-  useEffect(() => {
-    if (sessionUserId && id === GAME_LESSON) reportGameLessonDone();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessionUserId, id]);
 
   function handleXPEarned(xp: number) {
     setTotalXP((prev) => prev + xp);
@@ -349,11 +223,6 @@ export default function LessonContent() {
       body: JSON.stringify({ lessonId: id, score, total }),
     }).catch(() => null);
   }
-
-  // The game needs nothing from the lesson record, so a signed-in learner does not wait for it, nor for
-  // the session check when this device says they were signed in (a guest after all gets the gate below).
-  // A guest who came by a banner plays too (and whoever they turn out to be, the game is what they get).
-  if (gameLesson && (status === "authenticated" || (status === "loading" && (hinted || guestPlay === true)) || guestPlaying)) return causeway();
 
   if (!lesson || status === "loading") {
     return (
@@ -513,14 +382,6 @@ export default function LessonContent() {
     );
   }
 
-  // Lesson 1 as a game: the causeway fills the screen; its HUD carries the way back and the written lesson.
-  if (id === GAME_LESSON && pass === 1 && mode === null) {
-    return <div className="min-h-screen bg-obsidian" aria-busy="true" />;
-  }
-  if (gameLesson) {
-    return causeway();
-  }
-
   return (
     <div className="min-h-screen lesson-backdrop grain-overlay flex flex-col">
       <Navbar />
@@ -537,17 +398,8 @@ export default function LessonContent() {
               <span className="text-gold-500">{lesson.category}</span>
             </nav>
             <h1 className="font-display text-3xl md:text-4xl font-light text-sand-100">{lesson.title}</h1>
-            <p className="font-body text-sm text-sand-500 mt-1">{id === GAME_LESSON ? "In 3 parts, about 10 minutes each" : lesson.duration}</p>
+            <p className="font-body text-sm text-sand-500 mt-1">{id === GUEST_LESSON ? "In 3 parts, about 10 minutes each" : lesson.duration}</p>
           </div>
-          {id === GAME_LESSON && pass === 1 && (
-            <button
-              type="button"
-              onClick={() => switchMode("game")}
-              className="font-body text-sm text-sand-200 rounded-full ring-1 ring-gold-500/40 hover:ring-gold-400 hover:bg-gold-500/10 px-4 py-2 transition-colors"
-            >
-              Prefer to play? Take Lesson 1 as a game
-            </button>
-          )}
         </motion.header>
 
         <LessonStage

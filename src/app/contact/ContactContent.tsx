@@ -22,19 +22,6 @@ const ROUTES = [
     ),
   },
   {
-    glyph: "𓊹",
-    title: "Teachers and schools",
-    body: (
-      <>
-        Purchase orders, invoices and class licences. The{" "}
-        <Link href="/teachers" className="text-gold-400 hover:text-gold-300 underline underline-offset-4">
-          teachers&rsquo; page
-        </Link>{" "}
-        has the free worksheet and licence details.
-      </>
-    ),
-  },
-  {
     glyph: "𓋹",
     title: "Billing and refunds",
     body: (

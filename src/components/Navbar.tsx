@@ -58,8 +58,6 @@ export default function Navbar() {
               absolute, so it can never collide with either at narrow widths). */}
           <div className="hidden lg:flex flex-1 min-w-0 items-center justify-center gap-4 2xl:gap-6 px-3 whitespace-nowrap">
             {!session && <NavLink href={isHome ? "#pricing" : "/#pricing"}>Pricing</NavLink>}
-            <NavLink href="/translate-name-to-hieroglyphics">Translate Name</NavLink>
-            <NavLink href="/hieroglyphics-keyboard">Keyboard</NavLink>
             <NavLink href="/about">About Us</NavLink>
             <NavLink href="/blog">Blog</NavLink>
             {/* six links do not fit beside the logo and the buttons under 1280px; Contact is also in the footer */}
@@ -182,15 +180,6 @@ export default function Navbar() {
                     >
                       Account
                     </MobileLink>
-                    <MobileLink
-                      href="/translate-name-to-hieroglyphics"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      Translate Name
-                    </MobileLink>
-                    <MobileLink href="/hieroglyphics-keyboard" onClick={() => setMenuOpen(false)}>
-                      Hieroglyphics Keyboard
-                    </MobileLink>
                     <MobileLink href="/about" onClick={() => setMenuOpen(false)}>
                       About Us
                     </MobileLink>
@@ -236,15 +225,6 @@ export default function Navbar() {
                       onClick={() => setMenuOpen(false)}
                     >
                       Pricing
-                    </MobileLink>
-                    <MobileLink
-                      href="/translate-name-to-hieroglyphics"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      Translate Name
-                    </MobileLink>
-                    <MobileLink href="/hieroglyphics-keyboard" onClick={() => setMenuOpen(false)}>
-                      Hieroglyphics Keyboard
                     </MobileLink>
                     <MobileLink href="/about" onClick={() => setMenuOpen(false)}>
                       About Us

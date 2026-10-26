@@ -18,17 +18,13 @@ import ProgressMap from "@/components/ProgressMap";
 import XPBar from "@/components/XPBar";
 import BadgeShelf from "@/components/BadgeShelf";
 import Leaderboard from "@/components/Leaderboard";
-import GlyphGlossary from "@/components/GlyphGlossary";
-import CommunityPanel from "@/components/community/CommunityPanel";
 import ExpeditionHeader from "@/components/journey/ExpeditionHeader";
 import SealedDoor from "@/components/journey/SealedDoor";
 import FindsTray from "@/components/journey/FindsTray";
-import MasteryMeter from "@/components/journey/MasteryMeter";
 import ExpeditionLog from "@/components/journey/ExpeditionLog";
 import { useExpedition, useExpeditionLog } from "@/lib/expedition-client";
 import { planById, PLANS } from "@/lib/plans";
 import HeardAboutCard from "@/components/HeardAboutCard";
-import { GAMES } from "@/lib/games";
 import { fetchJson } from "@/lib/fetch-json";
 
 type Progress = {
@@ -44,7 +40,6 @@ type Me = {
   badges: any[];
   access: { active: boolean; via?: string | null };
   offer: OfferData | null;
-  wall: { signs: unknown[]; summary: { due: number } };
   expedition: unknown;
   expeditionLog: unknown;
   askHeardAbout?: boolean;
@@ -71,12 +66,9 @@ const diffColors: Record<string, string> = {
 
 const TABS = [
   { id: "journey", label: "Journey", short: "Journey", glyph: "\u{13250}" },
-  { id: "games", label: "Games", short: "Games", glyph: "\u{13000}" },
   { id: "badges", label: "Badges", short: "Badges", glyph: "\u{13080}" },
   { id: "scribes", label: "Leaderboard", short: "Ranks", glyph: "\u{133DE}" },
   { id: "certificate", label: "Certificate", short: "Certificate", glyph: "\u{131CB}" },
-  { id: "glossary", label: "Glossary", short: "Glossary", glyph: "\u{1300E}" },
-  { id: "community", label: "Community", short: "Ask", glyph: "\u{13004}" },
 ] as const;
 type TabId = (typeof TABS)[number]["id"];
 const isTabId = (v: string | null): v is TabId => TABS.some((t) => t.id === v);
@@ -98,7 +90,6 @@ function DashboardInner() {
   const [badges, setBadges] = useState<any[]>([]);
   const [progress, setProgress] = useState<Progress | null>(null);
   const [offer, setOffer] = useState<OfferData | null>(null);
-  const [wallDue, setWallDue] = useState<number | null>(null);
   const [me, setMe] = useState<Me | null>(null);
   const { state: expedition } = useExpedition({ fetch: false, remote: me ? me.expedition : undefined });
   const expeditionLog = useExpeditionLog(me ? me.expeditionLog : undefined);
@@ -125,7 +116,6 @@ function DashboardInner() {
         setBadges(Array.isArray(d.badges) ? d.badges : []);
         setHasSubscription(!!d.access?.active);
         if (d.accessTest) setAnalyticsUserProperty("access_test", d.accessTest);
-        setWallDue(d.wall?.summary?.due ?? null);
         setOffer(d.offer);
         if (d.offer) trackEvent("offer_shown", { offer_source: d.offer.source, location: "dashboard" });
       })
@@ -349,25 +339,6 @@ function DashboardInner() {
           state={expedition}
           log={expeditionLog}
         />
-        {/* The Dig: the isometric hub */}
-        <Link
-          href="/dig"
-          className="group flex items-center justify-between gap-4 mb-8 p-4 sm:p-5 border border-gold-500/30 bg-gold-500/5 hover:bg-gold-500/10 transition-colors"
-        >
-          <div>
-            <p className="font-body text-[10px] tracking-[0.25em] uppercase text-gold-500 mb-1">The Dig</p>
-            <p className="font-display text-lg sm:text-xl text-sand-100 group-hover:text-gold-300 transition-colors">See how deep you are in the tomb</p>
-            <p className="font-body text-xs text-sand-400 mt-0.5">Lit chambers, the next doorway, and the side rooms that practise each lesson’s signs.</p>
-            {wallDue !== null && wallDue > 0 && (
-              <p className="font-body text-xs text-gold-300 mt-1">
-                <span aria-hidden="true">𓏞</span> {wallDue} sign{wallDue === 1 ? "" : "s"} need repainting today on your wall
-              </p>
-            )}
-          </div>
-          <span className="text-3xl text-gold-400 shrink-0" style={{ fontFamily: "'Noto Sans Egyptian Hieroglyphs', serif" }} aria-hidden="true">
-            𓉐
-          </span>
-        </Link>
 
         {/* Progress Map */}
         <ProgressMap
@@ -395,56 +366,8 @@ function DashboardInner() {
         <div className="mt-8 space-y-8">
           <SealedDoor progress={progress?.lessons ?? null} masteryClean={!!expedition.bosses.Mastery?.clean} />
           <FindsTray progress={progress?.lessons ?? null} state={expedition} />
-          <div className="grid lg:grid-cols-2 gap-8">
-            <MasteryMeter preloaded={me ? me.wall.signs : undefined} />
-            <ExpeditionLog log={expeditionLog} streak={progress?.streak ?? 0} />
-          </div>
+          <ExpeditionLog log={expeditionLog} streak={progress?.streak ?? 0} />
         </div>
-          </>
-        )}
-
-        {tab === "games" && (
-          <>
-        {/* Scribe's Games */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="card-ancient p-6 md:p-8"
-        >
-          <div className="flex items-baseline justify-between gap-4 mb-5">
-            <div>
-              <p className="font-body text-xs tracking-[0.2em] uppercase text-sand-500 mb-1">Scribe&apos;s Games</p>
-              <h2 className="font-display text-2xl text-sand-100">
-                Practice games <span className="text-gold-400 text-base align-middle ml-1">· XP for every game</span>
-              </h2>
-            </div>
-          </div>
-          <div className="grid md:grid-cols-3 gap-3">
-            {GAMES.map((g) => (
-              <Link
-                key={g.id}
-                href={g.href}
-                className="group flex flex-col p-5 border border-gold-700/20 bg-obsidian-lighter hover:border-gold-500/40 hover:bg-gold-500/5 transition-colors"
-              >
-                <p className="font-body text-[10px] tracking-[0.25em] uppercase text-gold-500 mb-2">
-                  Game {g.numeral}
-                  {g.free ? (
-                    <span className="ml-2 text-sand-500">· Free</span>
-                  ) : hasSubscription === false ? (
-                    <span className="ml-2 text-sand-500 border border-gold-700/30 px-1.5 py-0.5">Members</span>
-                  ) : null}
-                </p>
-                <p className="font-display text-xl text-sand-100 group-hover:text-gold-300 transition-colors mb-2">{g.title}</p>
-                <p className="font-body text-sm text-sand-400 flex-1">{g.blurb}</p>
-                <p className="font-body text-xs text-gold-500 mt-4 group-hover:text-gold-400 transition-colors">
-                  {g.id === "cartouche-forge" ? "Forge your cartouche" : g.id === "daily" ? "Today’s cartouche" : `Play ${g.title}`}
-                </p>
-              </Link>
-            ))}
-          </div>
-        </motion.div>
-
           </>
         )}
 
@@ -566,13 +489,6 @@ function DashboardInner() {
           </>
         )}
 
-        {tab === "glossary" && (
-          <GlyphGlossary
-            completedLessonIds={dashboardLessons.filter((l) => progress?.lessons[l.id]?.completed).map((l) => l.id)}
-            hasSubscription={hasSubscription}
-          />
-        )}
-        {tab === "community" && <CommunityPanel hasSubscription={hasSubscription} />}
         </motion.div>
       </div>
 

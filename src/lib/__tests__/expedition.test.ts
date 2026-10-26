@@ -12,8 +12,6 @@ import {
   relicGrade,
   computeRelics,
   siteReportLength,
-  masteryTier,
-  masterySummary,
   toolForLevel,
   nextTool,
   depthMetres,
@@ -43,7 +41,6 @@ import {
   clearedCount,
 } from "@/lib/expedition";
 import { lessons, getLessonGlyphs } from "@/lib/lessons";
-import { seedSign, review } from "@/lib/srs";
 
 const done = { started: true, bestScore: 5, completed: true };
 const ids = [...lessons].sort((a, b) => a.order - b.order).map((l) => l.id);
@@ -129,32 +126,6 @@ describe("relics", () => {
     const s = withSeal(EMPTY_EXPEDITION, ids[0], 4, 4);
     expect(computeRelics({ [ids[0]]: done }, s)[0].sealed).toBe(true);
     expect(computeRelics({ [ids[0]]: done }, withSeal(EMPTY_EXPEDITION, ids[0], 3, 4))[0].sealed).toBe(false);
-  });
-});
-
-describe("mastery", () => {
-  it("tiers climb with SM-2 state", () => {
-    const now = 0;
-    let s = seedSign("𓅓", now);
-    expect(masteryTier(s)).toBe("fresh");
-    s = review(s, 4, now);
-    expect(masteryTier(s)).toBe("bronze");
-    s = review(s, 4, now);
-    expect(masteryTier(s)).toBe("silver");
-    s = review(s, 5, now);
-    s = review(s, 5, now);
-    expect(s.interval).toBeGreaterThanOrEqual(21);
-    expect(masteryTier(s)).toBe("gold");
-  });
-
-  it("summarises and ignores junk", () => {
-    const now = 0;
-    const a = review(seedSign("𓅓", now), 4, now);
-    const sum = masterySummary([seedSign("𓄿", now), a, { nope: true }]);
-    expect(sum.total).toBe(2);
-    expect(sum.byTier.fresh).toBe(1);
-    expect(sum.byTier.bronze).toBe(1);
-    expect(sum.byGlyph["𓅓"]).toBe("bronze");
   });
 });
 

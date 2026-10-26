@@ -28,7 +28,7 @@
  *
  * Unprompted sign-up card added 2026-09-07 (src/components/AuthPromptCard.tsx):
  *   signup_prompt_shown / signup_prompt_click / signup_prompt_dismissed
- *     (trigger: blog_scroll | translator_complete). Shown at most once per
+ *     (trigger: blog_scroll). Shown at most once per
  *     browser per 30 days, never to signed-in users, never in the first 10 s.
  *
  * Lesson sections (2026-09-17, lesson 1 in three sections, src/lib/content/lesson-sections.ts):
@@ -45,12 +45,10 @@
  *   decipher_chapter_complete — a Decipher chapter finished (chapter, signs)
  *   decipher_share      — result card shared (signs)
  *   hint_used           — a hint taken (game, question)
- *   dig_select          — a chamber or side room tapped on The Dig (/dig) (chamber, state | room, open)
  *   stela_museum_mode   — Stela Reader museum mode toggled (on); stela_share — phrase shared (object, phrase)
  *   scribe_share        — Scribe's Hand session shared (avg)
  *   descent_share       — Scribe's Descent run shared (floors, won)
  *   class_room_created / class_host_action (action, question) / class_join / class_answer (question) /
- *   class_guide_print   — Classroom mode (/teachers/class, /play/<code>)
  *   exercise_answer / exercise_complete use ExerciseKind "daily" and "decipher".
  *
  * The Causeway (Lesson 1 as a game, 2026-09-21; src/app/dev/platformer/game/telemetry.ts):

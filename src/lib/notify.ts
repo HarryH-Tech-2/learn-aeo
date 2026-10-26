@@ -2,8 +2,8 @@ import { Resend } from "resend";
 
 /**
  * Where every "something happened on the site" email goes: newsletter
- * signups, contact-form messages, lesson feedback, new accounts, purchases,
- * cartouche leads. Override with CONTACT_TO_EMAIL if it ever needs to move.
+ * signups, contact-form messages, lesson feedback, new accounts and purchases.
+ * Override with CONTACT_TO_EMAIL if it ever needs to move.
  */
 export const DEFAULT_OWNER_EMAIL = "contact@learnhieroglyphics.com";
 

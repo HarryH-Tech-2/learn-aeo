@@ -4,7 +4,7 @@
  * The invitation on blog posts, the name translator, the alphabet chart and the keyboard that sends a
  * visitor into Lesson 1 without an account (see src/lib/guest-play.ts for why, and for the events
  * that follow the click). Since 1 Oct 2026 it opens the written lesson (name on a sealed door, then
- * the alphabet through real words), not the Causeway game: that is where new learners stayed.
+ * the alphabet through real words).
  *
  * Translator and alphabet: one slim strip, so the page under it keeps its place.
  * Blog posts (under the quick answer) and the translator: a split card, the lesson's own dig-site picture (the sealed door
@@ -16,43 +16,22 @@
  * guest_play_banner_click. Both carry location and question_type ("card" | "strip", a registered
  * dimension, so the two designs can be compared), and the page path says which post.
  *
- * `game` (translator, above "How does name translation work?", 2026-10-12): the same card with the
- * Causeway gameplay clip in place of the picture, opening level 1 of the game (?mode=game). Its
- * question_type is "game_card", so it reads apart from the lesson card higher up the same page.
- *
  * Signed-in learners do not see it: they have the dashboard.
  */
 import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { trackEvent } from "@/lib/analytics";
 import { guestPlayHref } from "@/lib/guest-play";
 
 type Props = {
   location: "blog" | "translator" | "alphabet" | "keyboard" | "sign_meaning" | "numerals";
-  /** translator: the name in the box, carried into the game's name box */
+  /** the name typed, carried into the lesson's sealed door */
   name?: string;
-  /** the Causeway game, with its gameplay clip, in place of the written lesson */
-  game?: boolean;
   /** below the first screen (blog posts, under the quick answer): the picture loads lazily so it never competes with the page's own hero image */
   lazy?: boolean;
 };
-
-// Versioned names: both files carry a one-week cache header (next.config.ts), so a re-recording
-// must be a new file name, never an overwrite.
-const CLIP_SRC = "/causeway-loop.v4.mp4";
-const CLIP_POSTER = "/causeway-loop-poster.v4.webp";
-const CLIP_ALT =
-  "The Causeway of Thoth game: an explorer runs between two sphinxes, hops along stone pillars over the Nile and steps into a beam of light that shows a hieroglyph";
-
-/** Keep the poster for visitors who asked for less motion or less data. */
-function wantsStill(): boolean {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
-  const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
-  if (connection?.saveData === true) return true;
-  return connection?.effectiveType === "slow-2g" || connection?.effectiveType === "2g";
-}
 
 const SCENE_SRC = "/lessons/expedition-begins/scene.webp";
 const SCENE_ALT =
@@ -71,44 +50,10 @@ const DRIFTING_GLYPHS: {
   { glyph: "𓆣", left: "82%", size: "text-lg", delay: "6.2s" },
 ];
 
-export default function GuestPlayBanner({ location, name, game = false, lazy = false }: Props) {
+export default function GuestPlayBanner({ location, name, lazy = false }: Props) {
   const { status } = useSession();
   const cardRef = useRef<HTMLElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [mountClip, setMountClip] = useState(false);
-  const [clipPlaying, setClipPlaying] = useState(false);
-  const variant = game ? "game_card" : location === "alphabet" ? "strip" : "card";
-
-  // Fetch the clip once the game card is near the screen.
-  useEffect(() => {
-    if (!game || status === "authenticated") return;
-    const card = cardRef.current;
-    if (!card || wantsStill()) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          io.disconnect();
-          setMountClip(true);
-        }
-      },
-      { rootMargin: "300px" },
-    );
-    io.observe(card);
-    return () => io.disconnect();
-  }, [game, status]);
-
-  // Autoplay needs muted set on the element itself before play(); if it is still refused the
-  // poster simply stays.
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!mountClip || !video) return;
-    video.muted = true;
-    video.defaultMuted = true;
-    video.setAttribute("muted", "");
-    video.setAttribute("playsinline", "");
-    const p = video.play();
-    if (p && typeof p.catch === "function") p.catch(() => {});
-  }, [mountClip]);
+  const variant = location === "alphabet" ? "strip" : "card";
 
   // One view event per page view, once half of the banner has actually been on screen.
   useEffect(() => {
@@ -133,66 +78,13 @@ export default function GuestPlayBanner({ location, name, game = false, lazy = f
 
   if (status === "authenticated") return null;
   const typed = (name ?? "").trim();
-  const href = game ? `${guestPlayHref(typed)}&mode=game` : guestPlayHref(typed);
+  const href = guestPlayHref(typed);
   const onClick = () =>
     trackEvent("guest_play_banner_click", {
       location,
       named: typed ? 1 : 0,
       question_type: variant,
     });
-
-  if (game) {
-    return (
-      <div
-        ref={cardRef as React.RefObject<HTMLDivElement>}
-        className="mb-8 flex flex-col overflow-hidden border border-gold-600/50 bg-gold-500/10 sm:flex-row"
-      >
-        <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-[#7a5a2a] sm:w-1/2">
-          <Image src={CLIP_POSTER} alt={CLIP_ALT} fill sizes="(min-width: 640px) 480px, 100vw" className="object-cover" />
-          {mountClip && (
-            <video
-              ref={videoRef}
-              src={CLIP_SRC}
-              poster={CLIP_POSTER}
-              loop
-              muted
-              playsInline
-              autoPlay
-              preload="auto"
-              aria-hidden="true"
-              onPlaying={() => setClipPlaying(true)}
-              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${clipPlaying ? "opacity-100" : "opacity-0"}`}
-            />
-          )}
-        </div>
-        <div className="flex flex-1 flex-col justify-center gap-1.5 p-6 sm:p-8">
-          <span className="font-body text-[11px] font-semibold uppercase tracking-[0.18em] text-gold-400">
-            Learn by playing
-          </span>
-          <p className="font-display text-2xl leading-tight text-sand-100 sm:text-3xl">
-            Cross the Causeway of Thoth
-          </p>
-          <p className="font-body text-sm leading-snug text-sand-300 sm:text-base">
-            Walk the torch-lit path, answer the scribe at each station, and
-            carve {typed || "your name"} on the temple gate, one hieroglyph at a
-            time. About 10 minutes, and you keep what you learn.
-          </p>
-          <div className="mt-1.5 flex flex-wrap items-center gap-3">
-            <Link
-              href={href}
-              onClick={onClick}
-              className="gp-ring inline-flex shrink-0 cursor-pointer items-center gap-2 bg-gold-500 px-5 py-2.5 font-body text-sm font-semibold text-black shadow-lg transition-colors hover:bg-gold-400"
-            >
-              Play level 1 free
-            </Link>
-            <span className="font-body text-xs text-sand-400">
-              No sign-up to start
-            </span>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   if (variant === "card") {
     return (

@@ -4,8 +4,7 @@
  * the daily nurture cron (src/lib/purchase-feedback-run.ts).
  *
  * The purchase time is Subscription.activatedAt, set on the first activation and never moved
- * (src/lib/subscription.ts). Licence (Classroom / School) buyers have no Subscription row, so they never
- * qualify. "Sent" is an EmailSend row with key PURCHASE_FEEDBACK_KEY: the unique (userId, key) pair is the
+ * (src/lib/subscription.ts). "Sent" is an EmailSend row with key PURCHASE_FEEDBACK_KEY: the unique (userId, key) pair is the
  * once-only guard, the same one the nurture drip uses.
  *
  * Pure rules and the email here (tested); the send is in purchase-feedback-run.ts.

@@ -3,14 +3,13 @@
  * email footer and the List-Unsubscribe header (so Gmail's button works,
  * which POSTs). Transactional mail (sign-in links, receipts) is unaffected.
  *
- * ?u=<user id>: an account (the nurture sequence). ?e=<email>: someone known only by address, such as the
- * "Christmas prints are open" opt-in (src/lib/gift-updates.ts); recorded as a "no-more" EmailLead row.
+ * ?u=<user id>: an account (the nurture sequence). ?e=<email>: someone known only by address (an EmailLead);
+ * recorded as a "no-more" EmailLead row.
  */
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { verifyLeadUnsubscribeToken, verifyUnsubscribeToken } from "@/lib/unsubscribe";
 import { recordLead } from "@/lib/leads";
-import { NO_MORE_SOURCE } from "@/lib/gift-updates";
 
 export const dynamic = "force-dynamic";
 
@@ -36,8 +35,8 @@ async function handle(req: NextRequest): Promise<NextResponse> {
         400
       );
     }
-    await recordLead({ email: email.trim().toLowerCase(), source: NO_MORE_SOURCE });
-    return page("You are unsubscribed", "No more emails from us. Anything you bought is untouched, and its download links still work.");
+    await recordLead({ email: email.trim().toLowerCase(), source: "no-more" });
+    return page("You are unsubscribed", "No more emails from us.");
   }
   const userId = req.nextUrl.searchParams.get("u") ?? "";
   const token = req.nextUrl.searchParams.get("t") ?? "";

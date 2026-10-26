@@ -6,8 +6,8 @@ import { prisma } from "@/lib/db";
 
 /**
  * POST /api/stripe/create-portal-session → { url }
- * Billing portal for whichever Stripe customer the user has: their own
- * purchase / Expedition Pass, or a Classroom / School licence they own.
+ * Billing portal for the user's Stripe customer: their own purchase /
+ * Expedition Pass.
  */
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
@@ -20,11 +20,10 @@ export async function POST(request: Request) {
     where: { email: session.user.email },
     select: {
       subscription: { select: { stripeCustomerId: true } },
-      ownedLicences: { select: { stripeCustomerId: true }, orderBy: { createdAt: "desc" } },
     },
   });
 
-  const customerId = user?.subscription?.stripeCustomerId ?? user?.ownedLicences.find((l) => l.stripeCustomerId)?.stripeCustomerId ?? null;
+  const customerId = user?.subscription?.stripeCustomerId ?? null;
   if (!customerId) {
     return NextResponse.json({ error: "No subscription found." }, { status: 404 });
   }

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 // Pages that are personal or transactional — no value in any index.
-const PRIVATE = ["/dashboard", "/account", "/certificate", "/checkout", "/cartouche-print", "/hieroglyphics-keyboard/hd", "/login", "/api/", "/play/"];
+const PRIVATE = ["/dashboard", "/account", "/certificate", "/checkout", "/login", "/api/"];
 
 // AI assistants already send real visitors (ChatGPT, Copilot, Perplexity show up
 // in GA4 as the "AI Assistant" channel). Listing their crawlers explicitly — with

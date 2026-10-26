@@ -18,9 +18,8 @@ export default function AccountContent() {
   const [toast, setToast] = useState<string | null>(null);
   const [subscription, setSubscription] = useState<{
     active: boolean;
-    via?: "lifetime" | "monthly" | "licence-owner" | "licence-member" | "free-unlock" | null;
+    via?: "lifetime" | "monthly" | "free-unlock" | null;
     periodEnd?: string | null;
-    licence?: { kind: string; code: string; schoolName: string | null } | null;
     trial: boolean;
   } | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -34,7 +33,7 @@ export default function AccountContent() {
 
   useEffect(() => {
     if (session?.user?.email) {
-      fetchJson<{ active: boolean; trial: boolean; via?: "lifetime" | "monthly" | "licence-owner" | "licence-member" | "free-unlock" | null; periodEnd?: string | null; licence?: { kind: string; code: string; schoolName: string | null } | null }>("/api/stripe/check-subscription")
+      fetchJson<{ active: boolean; trial: boolean; via?: "lifetime" | "monthly" | "free-unlock" | null; periodEnd?: string | null}>("/api/stripe/check-subscription")
         .then(setSubscription)
         .catch(() => setSubscription({ active: false, trial: false }));
     }
@@ -191,28 +190,15 @@ export default function AccountContent() {
                   <span className="font-body text-sm text-sand-100">
                     {subscription.via === "monthly"
                       ? "Expedition Pass"
-                      : subscription.via === "licence-owner"
-                        ? `${subscription.licence?.kind === "school" ? "School" : "Classroom"} licence (yours)`
-                        : subscription.via === "licence-member"
-                          ? `Class member${subscription.licence?.schoolName ? ` · ${subscription.licence.schoolName}` : ""}`
-                          : subscription.via === "free-unlock"
-                            ? "Full course, open to you free"
-                            : "Lifetime Access"}
+                      : subscription.via === "free-unlock"
+                        ? "Full course, open to you free"
+                        : "Lifetime Access"}
                   </span>
                 </div>
                 {subscription.via === "monthly" && subscription.periodEnd && (
                   <p className="font-body text-xs text-sand-500 mt-2">Renews {new Date(subscription.periodEnd).toLocaleDateString()}. Cancel any time in the billing portal below.</p>
                 )}
-                {subscription.via === "licence-owner" && (
-                  <p className="font-body text-xs text-sand-500 mt-2">
-                    Class code <span className="font-mono text-sand-200">{subscription.licence?.code}</span> ·{" "}
-                    <a href="/teachers/licence" className="text-gold-400 hover:text-gold-300">pupil progress and billing</a>
-                  </p>
-                )}
-                {subscription.via === "licence-member" && (
-                  <p className="font-body text-xs text-sand-500 mt-2">Your access runs while your teacher&apos;s licence does.</p>
-                )}
-                {(subscription.via === "monthly" || subscription.via === "licence-owner") && (
+                {subscription.via === "monthly" && (
                   <button
                     type="button"
                     onClick={async () => {
@@ -243,9 +229,6 @@ export default function AccountContent() {
                   All plans
                 </a>
                 <GuaranteeNote align="left" />
-                <p className="font-body text-xs text-sand-500 mt-4">
-                  In a class? <a href="/join" className="text-gold-400 hover:text-gold-300">Enter your class code</a>.
-                </p>
               </div>
             )}
           </section>

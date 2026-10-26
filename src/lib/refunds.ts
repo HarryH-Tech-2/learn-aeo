@@ -3,19 +3,16 @@
  * charge.refunded / charge.dispute.* events; this finds what the charge paid for, takes lifetime access away
  * when the money has gone back for good (a full refund or a lost dispute), and emails the owner.
  *
- * Only lifetime access is removed automatically. Monthly passes end through their subscription, and
- * licences and one-off products (prints, HD images, the unit pack) need no access change, so for those the
- * email says what to do, if anything.
+ * Only lifetime access is removed automatically. Monthly passes end through their subscription, so for those
+ * the email says what to do.
  */
 import type Stripe from "stripe";
 import { getStripe } from "@/lib/stripe";
 import { notifyOwner } from "@/lib/notify";
 import { revokeLifetime } from "@/lib/subscription";
 import { planById } from "@/lib/plans";
-import { isLicenceKind } from "@/lib/licence";
-import { GIFT_COURSE } from "@/lib/gift-course";
 
-export type PurchaseKind = "lifetime" | "monthly" | "licence" | "product" | "unknown";
+export type PurchaseKind = "lifetime" | "monthly" | "product" | "unknown";
 
 /** What a checkout session paid for, from the metadata checkout writes (null session: a charge we can't trace). */
 export function purchaseKind(metadata: Record<string, string> | null | undefined, found: boolean): { kind: PurchaseKind; label: string } {
@@ -26,7 +23,6 @@ export function purchaseKind(metadata: Record<string, string> | null | undefined
   // sessions from before checkout wrote a plan were all Lifetime (the webhook assumes the same)
   if (!plan || plan.id === "lifetime") return { kind: "lifetime", label: "Lifetime access" };
   if (plan.id === "monthly") return { kind: "monthly", label: plan.name };
-  if (isLicenceKind(plan.id)) return { kind: "licence", label: `${plan.name} licence` };
   return { kind: "unknown", label: plan.name };
 }
 
@@ -60,16 +56,6 @@ async function purchaseFor(charge: Stripe.Charge): Promise<Purchase> {
   const { kind, label } = purchaseKind(session?.metadata, !!session);
   const email = session?.customer_email ?? session?.customer_details?.email ?? charge.billing_details?.email ?? charge.receipt_email ?? null;
   const name = session?.customer_details?.name ?? charge.billing_details?.name ?? null;
-  // A gifted course (src/lib/gift-course.ts): the access belongs to whoever opened the gift, written on the PaymentIntent.
-  if (session?.metadata?.product === GIFT_COURSE.id && pi) {
-    try {
-      const redeemed = (await getStripe().paymentIntents.retrieve(pi)).metadata?.redeemed_email || null;
-      if (redeemed) return { kind: "lifetime", label: `Gifted course, opened by ${redeemed}`, email: redeemed, name };
-      return { kind: "product", label: "Gifted course, not yet opened (the gift link stops working)", email, name };
-    } catch (err) {
-      console.error("[refunds] gift lookup failed:", err);
-    }
-  }
   return { kind, label, email, name };
 }
 
@@ -83,7 +69,6 @@ async function revokeIfLifetime(p: Purchase): Promise<string> {
 const NEXT_STEP: Record<PurchaseKind, string> = {
   lifetime: "",
   monthly: " If they asked to stop, cancel the subscription in Stripe as well; access ends when it does.",
-  licence: " Licence access is unchanged; cancel the licence subscription in Stripe if the school is leaving.",
   product: " Nothing to remove on the site.",
   unknown: " Check it in Stripe.",
 };

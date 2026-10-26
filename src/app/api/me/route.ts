@@ -6,15 +6,13 @@ import { getUserProgress } from "@/lib/progress";
 import { checkSubscription } from "@/lib/subscription";
 import { getActiveOffer } from "@/lib/offers";
 import { pppBeatsOffer, requestCountry } from "@/lib/ppp";
-import { loadWall } from "@/lib/srs-server";
-import { wallSummary } from "@/lib/srs";
 import { ACCESS_TEST_GAME, armOf } from "@/lib/access-test";
 
 /**
  * GET /api/me — everything the dashboard needs in one round trip: one
  * session lookup, then the queries in parallel. Replaces eight separate
- * calls (progress, badges, subscription, offer, wall count, wall signs,
- * expedition state, expedition log), each of which paid for its own
+ * calls (progress, badges, subscription, offer, expedition state,
+ * expedition log), each of which paid for its own
  * session lookup against the database.
  */
 export const dynamic = "force-dynamic";
@@ -25,7 +23,6 @@ export async function GET(request: Request) {
   if (!user?.id || !user.email) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const userId = user.id;
   const email = user.email;
-  const now = Date.now();
 
   const [progress, badges, access, states, account] = await Promise.all([
     getUserProgress(userId),
@@ -35,11 +32,7 @@ export async function GET(request: Request) {
     prisma.user.findUnique({ where: { id: userId }, select: { heardAbout: true } }),
   ]);
 
-  // The wall is seeded from completed lessons and paid status, so it runs after access is known.
-  const [signs, offer] = await Promise.all([
-    loadWall(userId, access.active, now),
-    access.active ? Promise.resolve(null) : getActiveOffer(email),
-  ]);
+  const offer = access.active ? null : await getActiveOffer(email);
 
   return NextResponse.json({
     progress,
@@ -47,7 +40,6 @@ export async function GET(request: Request) {
     access,
     // (not where the visitor's purchasing-power price is already lower: checkout would never use it)
     offer: offer && !pppBeatsOffer(requestCountry(request), offer.percentOff) ? { code: offer.code, expiresAt: offer.expiresAt.toISOString(), percentOff: offer.percentOff, source: offer.source } : null,
-    wall: { signs, summary: wallSummary(signs, now) },
     expedition: states.find((s) => s.game === "expedition")?.state ?? null,
     expeditionLog: states.find((s) => s.game === "expedition-log")?.state ?? null,
     // The free-unlock test group, for the GA4 user property access_test (src/lib/access-test.ts); null when not in it

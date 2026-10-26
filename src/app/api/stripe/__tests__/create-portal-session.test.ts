@@ -49,16 +49,16 @@ describe("POST /api/stripe/create-portal-session", () => {
     expect(response.status).toBe(401);
   });
 
-  it("returns 404 when the user has neither a purchase nor a licence", async () => {
+  it("returns 404 when the user has no purchase", async () => {
     mockedGetServerSession.mockResolvedValue({ user: { email: "harry@example.com" } });
-    mockedFindUnique.mockResolvedValue({ subscription: null, ownedLicences: [] } as never);
+    mockedFindUnique.mockResolvedValue({ subscription: null } as never);
     const response = await POST(req());
     expect(response.status).toBe(404);
   });
 
   it("returns portal URL for the user's own Stripe customer", async () => {
     mockedGetServerSession.mockResolvedValue({ user: { email: "harry@example.com" } });
-    mockedFindUnique.mockResolvedValue({ subscription: { stripeCustomerId: "cus_test123" }, ownedLicences: [] } as never);
+    mockedFindUnique.mockResolvedValue({ subscription: { stripeCustomerId: "cus_test123" } } as never);
     const response = await POST(req());
     const data = await response.json();
     expect(response.status).toBe(200);
@@ -66,17 +66,17 @@ describe("POST /api/stripe/create-portal-session", () => {
     expect(mockPortalCreate).toHaveBeenCalledWith(expect.objectContaining({ customer: "cus_test123", return_url: "http://localhost:3000/account" }));
   });
 
-  it("falls back to a licence's customer and honours a safe returnTo", async () => {
+  it("honours a safe returnTo", async () => {
     mockedGetServerSession.mockResolvedValue({ user: { email: "t@example.com" } });
-    mockedFindUnique.mockResolvedValue({ subscription: null, ownedLicences: [{ stripeCustomerId: "cus_lic" }] } as never);
-    const response = await POST(req({ returnTo: "/teachers/licence" }));
+    mockedFindUnique.mockResolvedValue({ subscription: { stripeCustomerId: "cus_y" } } as never);
+    const response = await POST(req({ returnTo: "/dashboard" }));
     expect(response.status).toBe(200);
-    expect(mockPortalCreate).toHaveBeenCalledWith(expect.objectContaining({ customer: "cus_lic", return_url: "http://localhost:3000/teachers/licence" }));
+    expect(mockPortalCreate).toHaveBeenCalledWith(expect.objectContaining({ customer: "cus_y", return_url: "http://localhost:3000/dashboard" }));
   });
 
   it("ignores an off-site returnTo", async () => {
     mockedGetServerSession.mockResolvedValue({ user: { email: "t@example.com" } });
-    mockedFindUnique.mockResolvedValue({ subscription: { stripeCustomerId: "cus_x" }, ownedLicences: [] } as never);
+    mockedFindUnique.mockResolvedValue({ subscription: { stripeCustomerId: "cus_x" } } as never);
     await POST(req({ returnTo: "https://evil.example" }));
     expect(mockPortalCreate).toHaveBeenCalledWith(expect.objectContaining({ return_url: "http://localhost:3000/account" }));
   });

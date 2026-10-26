@@ -2,25 +2,6 @@ import { prisma } from "@/lib/db";
 
 export type LeadSource =
   | "newsletter"
-  | "cartouche"
-  | "cartouche-print"
-  | "worksheet"
-  | "keyboard"
-  | "keyboard-image"
-  /** bought the Ancient Egypt Writing Unit (src/lib/unit-pack) */
-  | "unit-pack"
-  /** asked for the unit's free Lesson 1 sample by email */
-  | "unit-pack-sample"
-  /** bought the Class Cartouche Set (src/lib/class-set.ts) */
-  | "class-set"
-  /** ticked "email me once when Christmas prints open" (src/lib/gift-updates.ts) */
-  | "gift-updates"
-  /** asked for the three-email "my name in hieroglyphs" follow-up (src/lib/name-drip.ts) */
-  | "name-drip"
-  /** bought the course as a gift for someone else (src/lib/gift-course.ts) */
-  | "gift-course"
-  /** asked to hear once if a cuneiform course opens (/write-your-name-in-cuneiform, a demand test from 2026-10-24) */
-  | "cuneiform-course"
   /**
    * Log rows, not leads: what happened after an unpaid checkout expired, one per Stripe session
    * (src/lib/checkout-recovery-log.ts). Nothing mails these.
@@ -44,7 +25,7 @@ export function isValidEmail(email: unknown): email is string {
 }
 
 /**
- * Record an email lead (newsletter box, "email me my cartouche", …) in our
+ * Record an email lead (newsletter box, …) in our
  * own database so the list outlives Resend's 30-day log. Idempotent per
  * (email, source). Never throws — capturing the lead must not block the
  * email that the visitor is actually waiting for.

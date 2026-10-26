@@ -3,8 +3,6 @@ import { notFound } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { CAMPAIGN_POSTS } from "@/lib/campaign-posts";
-import { TRIAL_STATUS } from "@/lib/licence";
 import { summariseCheckoutLog, type CheckoutLogOutcome, type PurchaseRow } from "@/lib/checkout-recovery-log";
 import { ACCESS_TEST_GAME, accessTestPercent, armOf, summariseAccessTest, type AccessTestPerson } from "@/lib/access-test";
 import { lessons } from "@/lib/lessons";
@@ -35,16 +33,10 @@ const OUTCOME_LABELS: Record<CheckoutLogOutcome, string> = {
 async function checkoutRecovery() {
   const rows = await prisma.emailLead.findMany({ where: { source: { startsWith: "checkout-" } }, select: { email: true, source: true, createdAt: true } });
   const emails = [...new Set(rows.map((r) => r.email))];
-  const [subs, licences] = emails.length
-    ? await Promise.all([
-        prisma.subscription.findMany({ where: { active: true, user: { email: { in: emails } } }, select: { activatedAt: true, createdAt: true, user: { select: { email: true } } } }),
-        prisma.licence.findMany({ where: { status: { not: TRIAL_STATUS }, owner: { email: { in: emails } } }, select: { createdAt: true, owner: { select: { email: true } } } }),
-      ])
-    : [[], []];
-  const purchases: PurchaseRow[] = [
-    ...subs.flatMap((s) => (s.user.email ? [{ email: s.user.email, at: s.activatedAt ?? s.createdAt }] : [])),
-    ...licences.flatMap((l) => (l.owner.email ? [{ email: l.owner.email, at: l.createdAt }] : [])),
-  ];
+  const subs = emails.length
+    ? await prisma.subscription.findMany({ where: { active: true, user: { email: { in: emails } } }, select: { activatedAt: true, createdAt: true, user: { select: { email: true } } } })
+    : [];
+  const purchases: PurchaseRow[] = subs.flatMap((s) => (s.user.email ? [{ email: s.user.email, at: s.activatedAt ?? s.createdAt }] : []));
   return summariseCheckoutLog(rows, purchases);
 }
 
@@ -125,12 +117,10 @@ export default async function MarketingPage() {
   const row = (source: string, campaign: string) => {
     const k = key(source, campaign);
     if (!rows.has(k)) {
-      const post = CAMPAIGN_POSTS.find((p) => p.source === source && p.campaign === campaign);
-      rows.set(k, { source, campaign, label: post?.label ?? (campaign || "(no campaign)"), where: post?.where ?? source, date: post?.date ?? "", visitors: 0, signups: 0, paid: 0 });
+      rows.set(k, { source, campaign, label: campaign || "(no campaign)", where: source, date: "", visitors: 0, signups: 0, paid: 0 });
     }
     return rows.get(k)!;
   };
-  CAMPAIGN_POSTS.forEach((p) => row(p.source, p.campaign));
   visits.forEach((v) => (row(v.source, v.campaign).visitors = v._count._all));
   signups.forEach((s) => (row(s.signupSource ?? "", s.signupCampaign ?? "").signups = s._count._all));
   paid.forEach((s) => (row(s.signupSource ?? "", s.signupCampaign ?? "").paid = s._count._all));
@@ -236,7 +226,7 @@ export default async function MarketingPage() {
       <p className="text-sm text-sand-400 mb-6 max-w-2xl">
         Unpaid course checkouts that expired (2 hours after opening) and the email the webhook sent, counted from{" "}
         {recovery.firstAt ? recovery.firstAt.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : "the first one recorded"}.
-        Checkouts with no email on them are not counted. Bought later means they have an active course plan or paid licence
+        Checkouts with no email on them are not counted. Bought later means they have an active course plan
         that started after that row. Resend tags these emails checkout=recovery and checkout=reminder.
       </p>
       <div className="overflow-x-auto border border-gold-700/30">

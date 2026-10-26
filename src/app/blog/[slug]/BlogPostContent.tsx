@@ -6,7 +6,6 @@ import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import GuestPlayBanner from "@/components/GuestPlayBanner";
-import NameBox from "@/components/NameBox";
 import { guestPlayHref } from "@/lib/guest-play";
 import Footer from "@/components/Footer";
 import type { BlogPost } from "@/lib/blog-posts";
@@ -31,12 +30,6 @@ export type PostSummary = Pick<
   | "faqs"
 >;
 type Related = Pick<BlogPost, "slug" | "title" | "excerpt">;
-
-/**
- * Posts about cartouches and names, where readers came for a name: they get the name box under the
- * quick answer instead of the Lesson 1 card (the "Start Lesson 1 Free" panel at the end stays on every post).
- */
-const NAME_BOX_POSTS = new Set(["tutankhamun-cartouche-explained", "reading-your-first-cartouche"]);
 
 type Props = {
   post: PostSummary | null;
@@ -227,11 +220,7 @@ export default function BlogPostContent({
 
           {/* The offer sits right after the answer (it used to open the page, above the title), so the
               answer still comes first and the offer is seen before the long body */}
-          {NAME_BOX_POSTS.has(post.slug) ? (
-            <NameBox location="blog" placement="top" className="mb-10" />
-          ) : (
-            <GuestPlayBanner location="blog" lazy />
-          )}
+          <GuestPlayBanner location="blog" lazy />
 
           {/* Hero Image */}
           <div

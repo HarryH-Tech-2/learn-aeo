@@ -47,24 +47,3 @@ export function leadUnsubscribeUrl(email: string, baseUrl?: string, secret?: str
   const base = (baseUrl ?? process.env.NEXTAUTH_URL ?? "").replace(/\/$/, "");
   return `${base}/api/email/unsubscribe?e=${encodeURIComponent(email.trim().toLowerCase())}&t=${leadUnsubscribeToken(email, secret)}`;
 }
-
-/**
- * "Yes, send me the three emails" in the name picture's own email (src/lib/name-drip.ts): a signed link that
- * records the opt-in for the address it was sent to, and only that address.
- */
-export function nameDripJoinToken(email: string, secret?: string): string {
-  return createHmac("sha256", secretOrThrow(secret)).update(`name-drip-join:${email.trim().toLowerCase()}`).digest("base64url");
-}
-
-export function verifyNameDripJoinToken(email: string, token: string, secret?: string): boolean {
-  if (!email || !token) return false;
-  const expected = Buffer.from(nameDripJoinToken(email, secret));
-  const given = Buffer.from(token);
-  return expected.length === given.length && timingSafeEqual(expected, given);
-}
-
-export function nameDripJoinUrl(email: string, name: string, baseUrl?: string, secret?: string): string {
-  const base = (baseUrl ?? process.env.NEXTAUTH_URL ?? "").replace(/\/$/, "");
-  const q = new URLSearchParams({ e: email.trim().toLowerCase(), n: name.slice(0, 60), t: nameDripJoinToken(email, secret) });
-  return `${base}/api/name-drip/join?${q.toString()}`;
-}

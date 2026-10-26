@@ -33,15 +33,6 @@ model User {
   offerExpiresAt DateTime?
   offerSource    String?
   gameStates     GameState[]
-  signReviews    SignReview[]
-  classRooms     ClassRoom[]
-  // Classroom / School licences (src/lib/licence.ts)
-  licenceId      String?
-  licence        Licence?  @relation("LicenceMembers", fields: [licenceId], references: [id], onDelete: SetNull)
-  ownedLicences  Licence[] @relation("LicenceOwner")
-  // Community board on the dashboard (src/lib/community-server.ts)
-  communityQuestions CommunityQuestion[]
-  communityAnswers   CommunityAnswer[]
   // Which marketing post brought them (src/lib/campaign.ts), from the lh_utm cookie at sign-up
   signupSource   String?
   signupCampaign String?
@@ -54,37 +45,6 @@ model User {
   nurtureStartedAt    DateTime?
   emailUnsubscribedAt DateTime?
   emailSends          EmailSend[]
-}
-
-/// The Community tab on the dashboard: questions from learners. Free
-/// accounts read the list; opening a thread, asking and answering need a
-/// paid plan (src/lib/community-server.ts). Seeded rows have no author.
-model CommunityQuestion {
-  id         String   @id @default(cuid())
-  authorId   String?
-  /// what is shown: the author's name at the time of posting
-  authorName String
-  title      String
-  body       String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  author     User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
-  answers    CommunityAnswer[]
-
-  @@index([createdAt])
-}
-
-model CommunityAnswer {
-  id         String   @id @default(cuid())
-  questionId String
-  authorId   String?
-  authorName String
-  body       String
-  createdAt  DateTime @default(now())
-  question   CommunityQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  author     User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
-
-  @@index([questionId, createdAt])
 }
 
 model Account {
@@ -137,28 +97,6 @@ model Subscription {
   stripeSubscriptionId String?   @unique
   /// For monthly: access runs to here (plus a short grace) even if a renewal is late
   currentPeriodEnd     DateTime?
-}
-
-/// A Classroom (30 seats) or School (unlimited) licence bought by a teacher.
-/// Pupils join with the code and get full access while it is active.
-/// See src/lib/licence.ts.
-model Licence {
-  id                   String    @id @default(cuid())
-  ownerUserId          String
-  owner                User      @relation("LicenceOwner", fields: [ownerUserId], references: [id], onDelete: Cascade)
-  kind                 String    // "classroom" | "school"
-  seats                Int       // 0 = unlimited
-  code                 String    @unique
-  schoolName           String?
-  stripeCustomerId     String?
-  stripeSubscriptionId String?   @unique
-  status               String    @default("active") // active | past_due | canceled
-  currentPeriodEnd     DateTime?
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
-  members              User[]    @relation("LicenceMembers")
-
-  @@index([ownerUserId])
 }
 
 model LessonProgress {
@@ -232,59 +170,6 @@ model GameState {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, game])
-}
-
-/// Fading Paint: one SM-2 record per learned sign (src/lib/srs.ts owns the
-/// maths). `due` drives the "N signs need repainting" counts.
-model SignReview {
-  id         String   @id @default(cuid())
-  userId     String
-  glyph      String
-  ease       Float    @default(2.5)
-  interval   Int      @default(2)
-  reps       Int      @default(0)
-  lapses     Int      @default(0)
-  lastReview DateTime @default(now())
-  due        DateTime
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, glyph])
-  @@index([userId, due])
-}
-
-/// Classroom mode (/teachers/class + /play/<code>): a live quiz room opened
-/// by a signed-in teacher. Pupils join with a team name only. Rooms are
-/// deleted three hours after creation (see src/lib/classroom.ts).
-model ClassRoom {
-  id                String      @id @default(cuid())
-  code              String      @unique
-  hostUserId        String
-  phase             String      @default("lobby")
-  questionIndex     Int         @default(-1)
-  questionStartedAt DateTime?
-  questionMs        Int         @default(20000)
-  quiz              Json
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
-  expiresAt         DateTime
-  host              User        @relation(fields: [hostUserId], references: [id], onDelete: Cascade)
-  teams             ClassTeam[]
-
-  @@index([expiresAt])
-}
-
-model ClassTeam {
-  id         String    @id @default(cuid())
-  roomId     String
-  name       String
-  answers    Json      @default("{}")
-  joinedAt   DateTime  @default(now())
-  lastSeenAt DateTime  @default(now())
-  room       ClassRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
-
-  @@unique([roomId, name])
 }
 
 /// One browser landing on a tagged marketing link (src/lib/campaign.ts); one row per visitor per campaign.

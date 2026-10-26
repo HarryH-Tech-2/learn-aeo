@@ -1,7 +1,7 @@
 /**
  * The Expedition — everything that makes the course feel like one dig rather
  * than eight lessons: relics found, the sealed door's inscription assembling
- * fragment by fragment, sign mastery tiers, tools earned with rank, the rival
+ * fragment by fragment, tools earned with rank, the rival
  * team next door, the depth reached, the expedition log, choice points,
  * letters home, boss inscriptions and second-pass seals.
  *
@@ -13,7 +13,6 @@ import { lessons, getLessonGlyphs, type Lesson } from "@/lib/lessons";
 import { generateSiteReport } from "@/lib/exercises";
 import { LEVEL_THRESHOLDS, calculateLevel } from "@/lib/gamification";
 import { modelForGlyph } from "@/lib/objects";
-import { isSignState, type SignState } from "@/lib/srs";
 import type { WallSign } from "@/lib/tomb-wall";
 import type { LessonReading } from "@/lib/content/lesson-extras";
 
@@ -187,37 +186,6 @@ export function computeRelics(progress: LessonProgressMap | null, state: Expedit
       sealed: !!seal && seal.score === seal.total,
     };
   });
-}
-
-// ─────────────────────────── Sign mastery ───────────────────────────
-
-export type MasteryTier = "fresh" | "bronze" | "silver" | "gold";
-export const MASTERY_TIERS: MasteryTier[] = ["fresh", "bronze", "silver", "gold"];
-
-/**
- * From the SM-2 state: fresh = never recalled; bronze = recalled once;
- * silver = interval of a week or more; gold = a three-week interval with no
- * recent lapse dragging the ease down.
- */
-export function masteryTier(s: SignState): MasteryTier {
-  if (s.reps <= 0) return "fresh";
-  if (s.interval >= 21 && s.reps >= 3 && s.ease >= 2.0) return "gold";
-  if (s.interval >= 6 || s.reps >= 2) return "silver";
-  return "bronze";
-}
-
-export function masterySummary(states: unknown[]): { total: number; byTier: Record<MasteryTier, number>; mastered: number; byGlyph: Record<string, MasteryTier> } {
-  const byTier: Record<MasteryTier, number> = { fresh: 0, bronze: 0, silver: 0, gold: 0 };
-  const byGlyph: Record<string, MasteryTier> = {};
-  let total = 0;
-  for (const x of states) {
-    if (!isSignState(x)) continue;
-    const t = masteryTier(x);
-    byTier[t] += 1;
-    byGlyph[x.glyph] = t;
-    total += 1;
-  }
-  return { total, byTier, mastered: byTier.silver + byTier.gold, byGlyph };
 }
 
 // ─────────────────────────── Tools by rank ───────────────────────────

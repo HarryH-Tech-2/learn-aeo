@@ -1,5 +1,4 @@
 import { Resend } from "resend";
-import { cartouchePrintFormatById, type CartouchePrintFormatId } from "@/lib/cartouche-print";
 import { isLicencePlan, type Plan } from "@/lib/plans";
 import { lessons } from "@/lib/lessons";
 import { ownerEmail } from "@/lib/notify";
@@ -60,7 +59,7 @@ function codePanel(label: string | null, code: string, under: string): string {
   );
 }
 
-/** The plans the purchase welcome covers (licences get sendLicenceEmail instead). */
+/** The plans the purchase welcome covers. */
 export type WelcomePlan = "lifetime" | "monthly";
 
 /**
@@ -149,7 +148,7 @@ type OfferEmailInput = {
   percentOff: number;
 };
 
-/** The footer the offer and licence emails share, after the reason line. */
+/** The footer the offer emails share, after the reason line. */
 const OFFER_FOOT = "One-time payment. Lifetime access. No subscription.";
 
 function fmtExpiry(d: Date): string {
@@ -255,135 +254,4 @@ export async function sendCheckoutReminderEmail(input: {
     return false;
   }
   return true;
-}
-
-/** Sent to a teacher when a Classroom / School licence is bought: the class code and where to manage it. */
-export async function sendLicenceEmail(input: { name: string | null | undefined; email: string; kind: "classroom" | "school"; code: string }): Promise<void> {
-  const displayName = input.name || "Teacher";
-  const licenceUrl = `${process.env.NEXTAUTH_URL}/teachers/licence`;
-  const joinUrl = `${process.env.NEXTAUTH_URL}/join?code=${encodeURIComponent(input.code)}`;
-  const label = input.kind === "school" ? "School" : "Classroom";
-  const result = await getResend().emails.send({
-    from: brandFrom(),
-    to: input.email,
-    subject: `Your ${label} licence is live: class code ${input.code}`,
-    html: emailLayout({
-      baseUrl: layoutBase(),
-      preheader: `Your class code is ${input.code}. Pupils sign in free and type it in.`,
-      body: `${heading(`Your ${label} licence is live`)}
-        ${p(`${esc(displayName)}, your licence is active and your own account now has the full course. Pupils join with the code below:
-          they sign in free, open the join page and type it in. ${input.kind === "school" ? "There is no seat limit." : "Up to 30 pupils can join."}`)}
-        ${codePanel("Class code", input.code, `Pupils enter it at <a href="${joinUrl}" style="color:${C.muted};">${joinUrl}</a>`)}
-        ${p("Your licence page shows every pupil's progress, lets you remove a pupil, and manages billing.")}
-        ${button(licenceUrl, "Open your licence page")}`,
-      reason: `You are getting this because you bought a ${label} licence at learnhieroglyphics.com.<br/>${contactLine()}`,
-    }),
-  });
-  if (result.error) console.error("[email:licence] Resend error:", result.error);
-}
-
-/** The Cartouche Print, attached, plus a link that re-downloads it. */
-export async function sendCartouchePrintEmail(input: {
-  email: string;
-  name: string;
-  /** A family print: `name` is every name joined ("Harry, Sally and Tom") and the heading says cartouches. */
-  family?: boolean;
-  format?: CartouchePrintFormatId;
-  /** The PDF, or the HD JPEG for the image format. */
-  file: Uint8Array;
-  filename: string;
-  downloadUrl: string;
-}): Promise<void> {
-  const base = process.env.NEXTAUTH_URL;
-  const format = cartouchePrintFormatById(input.format ?? "digital");
-  const intro = format.file === "jpeg"
-    ? `Thank you. Your cartouche is attached as a 300 dpi picture, sized for A4. Print it at 100% on the heaviest paper your printer takes and it is ready for a frame, or set it as the wallpaper on your phone or desktop. If you would like it printed on fine-art paper and posted to you, framed or not, open your cartouche on the translator and pick a print.`
-    : format.physical
-    ? `Thank you. Your ${format.label.toLowerCase()} is being made now and ships in ${format.shipsIn}; you will get another email with tracking the moment it leaves the printer. The PDF is attached too: three A4 pages with the cartouche itself, a sign-by-sign key and the story of why a name was written this way.`
-    : `Thank you. Your print is attached as a PDF: three A4 pages with the cartouche itself, a sign-by-sign key and the story of why a name was written this way. Print page one at 100% on the heaviest paper your printer takes, and it is ready for a frame.`;
-  const lessonUrl = `${base}/lessons/expedition-begins?utm_source=cartouche-print&utm_medium=email&utm_campaign=cartouche-print`;
-  const result = await getResend().emails.send({
-    from: brandFrom(),
-    to: input.email,
-    subject: `Your Cartouche Print: ${input.name} \u{13080}`,
-    attachments: [{ filename: input.filename, content: Buffer.from(input.file).toString("base64") }],
-    html: emailLayout({
-      baseUrl: layoutBase(),
-      preheader: `The cartouche${input.family ? "s" : ""} of ${input.name}, attached and ready to print.`,
-      body: `${heading(`The cartouche${input.family ? "s" : ""} of ${esc(input.name)}`)}
-        ${p(esc(intro))}
-        ${button(input.downloadUrl, "Download it again")}
-        ${p(`Every sign in the name is one of the 25 alphabet signs. ${link(lessonUrl, "The first lesson of our course")}
-          teaches all of them in about half an hour, free.`)}`,
-      reason: `You are getting this because you ordered a Cartouche Print at learnhieroglyphics.com.<br/>${contactLine()}`,
-    }),
-  });
-  if (result.error) {
-    console.error("[email:cartouche-print] Resend error:", result.error);
-    throw new Error("Cartouche print email failed");
-  }
-}
-
-/** The posted print has left the printer: the tracking link. */
-export async function sendCartouchePrintShippedEmail(input: {
-  email: string;
-  name: string;
-  carrier: string;
-  trackingUrl: string | null;
-  trackingNumber: string | null;
-}): Promise<void> {
-  const track = input.trackingUrl
-    ? button(input.trackingUrl, "Track the parcel")
-    : input.trackingNumber
-      ? p(`Tracking number: ${strong(esc(input.trackingNumber))}`)
-      : "";
-  const result = await getResend().emails.send({
-    from: brandFrom(),
-    to: input.email,
-    subject: `Your Cartouche Print is on its way \u{13080}`,
-    html: emailLayout({
-      baseUrl: layoutBase(),
-      preheader: `Your Cartouche Print has left the printer with ${input.carrier}.`,
-      body: `${heading("On its way")}
-        ${p(`${esc(input.name ? `${input.name}, your` : "Your")} Cartouche Print has left the printer with ${esc(input.carrier)}.`)}
-        ${track}`,
-      reason: `You are getting this because you ordered a Cartouche Print at learnhieroglyphics.com.<br/>${contactLine()}`,
-    }),
-  });
-  if (result.error) {
-    console.error("[email:cartouche-print-shipped] Resend error:", result.error);
-    throw new Error("Cartouche print shipped email failed");
-  }
-}
-
-/** A gifted course bought (src/lib/gift-course.ts): the gift link to pass on and the certificate to print or forward. */
-export async function sendGiftCourseEmail(input: {
-  email: string;
-  recipient: string;
-  from: string;
-  giftUrl: string;
-  certificateUrl: string;
-}): Promise<void> {
-  const recipient = esc(input.recipient);
-  const result = await getResend().emails.send({
-    from: personalFrom(),
-    to: input.email,
-    subject: `Your gift for ${input.recipient}: the hieroglyphics course \u{13080}`,
-    html: emailLayout({
-      baseUrl: layoutBase(),
-      preheader: `Lifetime access to the whole course is ready for ${input.recipient}.`,
-      body: `${heading(`A gift for ${recipient}`)}
-        ${p(`Thank you. Lifetime access to the whole course is ready for ${recipient}. Send them the gift link below, or print the
-          certificate and write the link inside a card. When they open it and sign in, every lesson unlocks. The link works once.`)}
-        ${button(input.giftUrl, `The gift link for ${recipient}`, { center: true })}
-        <p style="margin:-14px 0 24px;font-family:${FONT};font-size:12px;line-height:1.5;color:${C.muted};text-align:center;word-break:break-all;">${esc(input.giftUrl)}</p>
-        ${p(link(input.certificateUrl, "Open the certificate (their name in a cartouche) to print or forward"), { align: "center", size: 15 })}
-        ${p(`${input.from ? `It will say it is from ${esc(input.from)}. ` : ""}If anything goes wrong, just reply to this email.`)}`,
-      reason: `You are getting this because you bought the course as a gift at learnhieroglyphics.com.<br/>${contactLine("Contact us")}`,
-    }),
-  });
-  if (result.error) {
-    console.error("[email:gift-course] Resend error:", result.error);
-    throw new Error("Gift course email failed");
-  }
 }

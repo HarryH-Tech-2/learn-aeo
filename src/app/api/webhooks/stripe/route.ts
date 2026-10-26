@@ -3,13 +3,7 @@ import { notifyOwner } from "@/lib/notify";
 import Stripe from "stripe";
 import { getStripe } from "@/lib/stripe";
 import { activateSubscription, deactivateSubscription, syncMonthlySubscription } from "@/lib/subscription";
-import { createLicence, isLicenceKind, syncLicenceSubscription } from "@/lib/licence";
-import { sendWelcomeEmail, sendCheckoutRecoveryEmail, sendLicenceEmail, sendCartouchePrintEmail, sendGiftCourseEmail } from "@/lib/email";
-import { CARTOUCHE_PRINT, cartoucheHdImageFilename, cartoucheImageDownloadPath, cartouchePrintDownloadPath, cartouchePrintFilename, cartouchePrintFormat, cartouchePrintFormatById, cartouchePrintName, cartouchePrintNames, cartouchePrintSubject, cartouchePrintTheme, isCartouchePrintSession, isPaidCartouchePrintSession, joinCartoucheNames } from "@/lib/cartouche-print";
-import { assetUrl, createProdigiOrder, prodigiConfigured, type ProdigiRecipient } from "@/lib/prodigi";
-import { buildCartouchePrintPdf } from "@/lib/cartouche-print-pdf";
-import { renderCartouchePrintJpeg } from "@/lib/cartouche-print-image";
-import { recordLead } from "@/lib/leads";
+import { sendWelcomeEmail, sendCheckoutRecoveryEmail } from "@/lib/email";
 import { OFFER_PERCENT_OFF, grantOffer } from "@/lib/offers";
 import { pppBeatsOffer } from "@/lib/ppp";
 import { prisma } from "@/lib/db";
@@ -19,14 +13,6 @@ import { describeSource } from "@/lib/referrer";
 import { handleDispute, handleRefund } from "@/lib/refunds";
 import { sendCheckoutReminderIfDue } from "@/lib/checkout-reminder";
 import { recordCheckoutLog, type CheckoutLogOutcome } from "@/lib/checkout-recovery-log";
-import { KEYBOARD_HD, KEYBOARD_HD_PATH, cleanText, isKeyboardStyle, isKeyboardTemplate, keyboardStyleById } from "@/lib/keyboard-card";
-import { renderKeyboardJpeg } from "@/lib/keyboard-image";
-import { sendKeyboardHdEmail } from "@/lib/keyboard-email";
-import { fulfilUnitPack, isUnitPackSession } from "@/lib/unit-pack/fulfil";
-import { fulfilClassSet, isClassSetSession } from "@/lib/class-set-server";
-import { fulfilLicenceInvoice, isLicenceInvoice } from "@/lib/licence-invoice";
-import { GIFT_COURSE, certificateImagePath, giftFromSession, giftRedeemPath } from "@/lib/gift-course";
-import { giftCode } from "@/lib/gift-code";
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
@@ -38,241 +24,13 @@ function periodEnd(sub: Stripe.Subscription): Date | null {
   return ts ? new Date(ts * 1000) : null;
 }
 
-/** A bought HD keyboard picture: counted, kept as a lead, and emailed with a link that rebuilds it. */
-async function fulfilKeyboardImage(session: Stripe.Checkout.Session, email: string | null) {
-  const md = session.metadata ?? {};
-  const spell = md.spell === "name" ? "name" : "keys";
-  const typed = cleanText(md.keys ?? "", spell);
-  const style = isKeyboardStyle(md.style) ? md.style : "plain";
-  const template = isKeyboardTemplate(md.template) ? md.template : "none";
-  const letters = md.letters === "1";
-  console.log(`[stripe:checkout.session.completed] keyboard image email=${email} keys=${typed.join("")} style=${style} paid=${session.payment_status}`);
-  if (session.payment_status !== "paid" || !email || typed.length === 0) return;
-
-  const amount = (session.amount_total ?? 0) / 100;
-  await sendPurchaseToGA4({
-    clientId: md.ga_client_id,
-    sessionId: md.ga_session_id,
-    transactionId: session.id,
-    value: amount,
-    currency: session.currency ?? "usd",
-    plan: KEYBOARD_HD.id,
-    planName: KEYBOARD_HD.name,
-  });
-  await recordLead({ email, source: "keyboard-image", name: typed.join("").trim().slice(0, 60) });
-
-  try {
-    const file = await renderKeyboardJpeg(typed, style, template, "hd", spell, letters);
-    const downloadUrl = `${process.env.NEXTAUTH_URL}${KEYBOARD_HD_PATH}?session_id=${encodeURIComponent(session.id)}`;
-    await sendKeyboardHdEmail(email, { typed, style, template, spell, letters }, file, downloadUrl);
-  } catch (err) {
-    // The thank-you page can still serve the picture against the session id.
-    console.error("[stripe:checkout.session.completed] keyboard image delivery failed:", err);
-  }
-
-  void notifyOwner({
-    subject: `Keyboard HD picture sold: ${typed.join("").trim().slice(0, 40)}`,
-    text: `${email} bought the HD keyboard picture "${typed.join("").trim()}" on ${keyboardStyleById(style).label} (${amount.toFixed(2)} ${(session.currency ?? "usd").toUpperCase()}). Checkout session ${session.id}.`,
-    replyTo: email,
-  });
-}
-
-/** A gifted course bought: counted, the buyer kept as a lead, and emailed the gift link and the certificate. */
-async function fulfilGiftCourse(session: Stripe.Checkout.Session, email: string | null) {
-  const gift = giftFromSession(session);
-  console.log(`[stripe:checkout.session.completed] gift course email=${email} recipient=${gift?.recipient} paid=${session.payment_status}`);
-  if (!gift || session.payment_status !== "paid" || !email) return;
-  const amount = (session.amount_total ?? 0) / 100;
-  await sendPurchaseToGA4({
-    clientId: session.metadata?.ga_client_id,
-    sessionId: session.metadata?.ga_session_id,
-    transactionId: session.id,
-    value: amount,
-    currency: session.currency ?? "usd",
-    plan: GIFT_COURSE.id,
-    planName: GIFT_COURSE.name,
-  });
-  await recordLead({ email, source: "gift-course", name: gift.recipient });
-  const base = process.env.NEXTAUTH_URL;
-  const giftUrl = `${base}${giftRedeemPath(giftCode(session.id))}`;
-  try {
-    await sendGiftCourseEmail({ email, recipient: gift.recipient, from: gift.from, giftUrl, certificateUrl: `${base}${certificateImagePath(gift.recipient, new Date(), gift.from)}` });
-  } catch (err) {
-    // The thank-you page shows the same link against the session id.
-    console.error("[stripe:checkout.session.completed] gift email failed:", err);
-  }
-  void notifyOwner({
-    subject: `Gift course sold: for ${gift.recipient}`,
-    text: `${email} bought the course as a gift for "${gift.recipient}"${gift.from ? ` from ${gift.from}` : ""} (${amount.toFixed(2)} ${(session.currency ?? "usd").toUpperCase()}). Checkout session ${session.id}. Gift link: ${giftUrl}`,
-    replyTo: email,
-  });
-}
-
-/**
- * Deliver a paid Cartouche Print: the PDF (or, for the HD image, the JPEG) goes out by email with a link that
- * rebuilds it, the sale is counted, and the buyer is kept as a lead (they
- * asked to be emailed a product, not a newsletter).
- */
-async function fulfilCartouchePrint(session: Stripe.Checkout.Session, email: string | null) {
-  const name = cartouchePrintName(session);
-  const format = cartouchePrintFormatById(cartouchePrintFormat(session));
-  console.log(`[stripe:checkout.session.completed] cartouche print email=${email} name=${name} format=${format.id} paid=${session.payment_status}`);
-  if (!isPaidCartouchePrintSession(session) || !name || !email) return;
-  // Every name on the order: [name] for a one-name order, two to four for a family print.
-  const names = cartouchePrintNames(session);
-  const allNames = joinCartoucheNames(names);
-
-  const amount = (session.amount_total ?? 0) / 100;
-  const currency = (session.currency ?? "usd").toUpperCase();
-  await sendPurchaseToGA4({
-    clientId: session.metadata?.ga_client_id,
-    sessionId: session.metadata?.ga_session_id,
-    transactionId: session.id,
-    value: amount,
-    currency: session.currency ?? "usd",
-    plan: format.stripeProductId,
-    planName: `${CARTOUCHE_PRINT.name} · ${format.label}`,
-  });
-  await recordLead({ email, source: "cartouche-print", name });
-
-  // The posted print: hand the page-one PDF to Prodigi. If that cannot happen
-  // (no key, or Prodigi refuses), the owner is told to place it by hand; the
-  // buyer still gets their PDF and the shipping promise in the email.
-  let placed: { id: string } | null = null;
-  let placeError: string | null = null;
-  const recipient = format.physical ? recipientFrom(session, email) : null;
-  if (format.physical) {
-    if (!recipient) {
-      placeError = "no shipping address on the session";
-    } else if (!prodigiConfigured()) {
-      placeError = "PRODIGI_API_KEY is not set";
-    } else {
-      try {
-        placed = await createProdigiOrder({
-          sessionId: session.id,
-          format: format.id,
-          recipient,
-          assetUrl: assetUrl(session.id),
-          callbackUrl: `${process.env.NEXTAUTH_URL}/api/prodigi/callback`,
-          idempotencyKey: session.id,
-        });
-      } catch (err) {
-        placeError = err instanceof Error ? err.message : String(err);
-        console.error("[stripe:checkout.session.completed] prodigi order failed:", err);
-      }
-    }
-  }
-
-  try {
-    const theme = cartouchePrintTheme(session);
-    // One name builds exactly as before; a family print builds every name onto the page.
-    const subject = cartouchePrintSubject(session) ?? name;
-    const fileStem = names.join(" ");
-    const delivery =
-      format.file === "jpeg"
-        ? {
-            file: await renderCartouchePrintJpeg(subject, theme, "hd"),
-            filename: cartoucheHdImageFilename(fileStem, theme),
-            downloadUrl: `${process.env.NEXTAUTH_URL}${cartoucheImageDownloadPath(session.id)}`,
-          }
-        : {
-            file: await buildCartouchePrintPdf(subject, theme),
-            filename: cartouchePrintFilename(fileStem),
-            downloadUrl: `${process.env.NEXTAUTH_URL}${cartouchePrintDownloadPath(session.id)}`,
-          };
-    await sendCartouchePrintEmail({
-      email,
-      name: names.length > 1 ? joinCartoucheNames(names) : name,
-      ...(names.length > 1 ? { family: true } : {}),
-      format: format.id,
-      ...delivery,
-    });
-  } catch (err) {
-    // The success page can still serve the file against the session id.
-    console.error("[stripe:checkout.session.completed] cartouche print delivery failed:", err);
-  }
-
-  const address = recipient
-    ? `${recipient.name}, ${[recipient.line1, recipient.line2, recipient.city, recipient.state, recipient.postcode, recipient.country].filter(Boolean).join(", ")}`
-    : "n/a";
-  void notifyOwner({
-    subject: placeError
-      ? `ACTION NEEDED: Cartouche Print (${format.label}) not placed with Prodigi: ${allNames}`
-      : `Cartouche Print sold (${format.label}): ${allNames}`,
-    text: [
-      `${email} bought a Cartouche Print, ${format.label}, of "${allNames}"${names.length > 1 ? ` (family print, ${names.length} names)` : ""} (${amount.toFixed(2)} ${currency}). Checkout session ${session.id}.`,
-      format.physical ? `Ship to: ${address}` : "",
-      placed ? `Prodigi order ${placed.id} placed.` : "",
-      placeError ? `Prodigi order NOT placed (${placeError}). Place it by hand in the Prodigi dashboard using the artwork URL: ${assetUrlSafe(session.id)}` : "",
-    ]
-      .filter(Boolean)
-      .join("\n"),
-    replyTo: email,
-  });
-}
-
-/** The artwork URL for the owner email; never throws even if signing is unconfigured. */
-function assetUrlSafe(sessionId: string): string {
-  try {
-    return assetUrl(sessionId);
-  } catch {
-    return "(asset signing not configured)";
-  }
-}
-
-/** Stripe puts the shipping address in one of two places depending on the API version. */
-function recipientFrom(session: Stripe.Checkout.Session, email: string): ProdigiRecipient | null {
-  const legacy = (session as unknown as { shipping_details?: Stripe.Checkout.Session.ShippingDetails | null }).shipping_details;
-  const collected = session.collected_information?.shipping_details ?? null;
-  const details = legacy ?? collected;
-  const addr = details?.address;
-  if (!addr?.line1 || !addr.city || !addr.postal_code || !addr.country) return null;
-  return {
-    name: details?.name || session.customer_details?.name || email,
-    email,
-    line1: addr.line1,
-    line2: addr.line2 ?? null,
-    city: addr.city,
-    state: addr.state ?? null,
-    postcode: addr.postal_code,
-    country: addr.country,
-  };
-}
-
 /**
  * A checkout the buyer has finished: the money is in (checkout.session.completed with payment_status "paid", or
- * checkout.session.async_payment_succeeded when a delayed method clears). Digital goods are sent; plans unlock.
- * Each product's fulfilment checks payment_status itself, and plans are checked below, so an unpaid session that
- * completes does nothing until its payment succeeds.
+ * checkout.session.async_payment_succeeded when a delayed method clears). Plans unlock. Payment is
+ * checked below, so an unpaid session that completes does nothing until its payment succeeds.
  */
 async function fulfilCheckout(session: Stripe.Checkout.Session) {
     const email = session.customer_email ?? session.customer_details?.email ?? null;
-
-    // A Cartouche Print is a digital good with no account behind it: build
-    // the PDF and email it. Nothing below (plans, subscriptions) applies.
-    if (isCartouchePrintSession(session)) {
-      await fulfilCartouchePrint(session, email);
-      return;
-    }
-    if (session.metadata?.product === KEYBOARD_HD.id) {
-      await fulfilKeyboardImage(session, email);
-      return;
-    }
-    // A course bought for someone else: nothing is unlocked until they open the gift link (src/app/api/gift/redeem).
-    if (session.metadata?.product === GIFT_COURSE.id) {
-      await fulfilGiftCourse(session, email);
-      return;
-    }
-    // The Ancient Egypt Writing Unit (teacher pack PDF): src/lib/unit-pack/fulfil.ts.
-    if (isUnitPackSession(session)) {
-      await fulfilUnitPack(session, email);
-      return;
-    }
-    // The Class Cartouche Set (every pupil's cartouche, one PDF): src/lib/class-set-server.ts.
-    if (isClassSetSession(session)) {
-      await fulfilClassSet(session, email);
-      return;
-    }
 
     const customerId = typeof session.customer === "string" ? session.customer : (session.customer?.id ?? null);
     const plan = planById(session.metadata?.plan) ?? PLANS.lifetime;
@@ -379,30 +137,6 @@ async function fulfilCheckout(session: Stripe.Checkout.Session) {
       return;
     }
 
-    if (isLicenceKind(plan.id)) {
-      const user = await prisma.user.findUnique({ where: { email }, select: { id: true } });
-      if (!user) {
-        console.error(`[stripe:checkout.session.completed] licence buyer ${email} has no account`);
-        return;
-      }
-      const licence = await createLicence({
-        ownerUserId: user.id,
-        kind: plan.id,
-        stripeCustomerId: customerId,
-        stripeSubscriptionId: subId,
-        currentPeriodEnd: end,
-      });
-      void notifyOwner({
-        subject: `New ${plan.name} licence: ${email}`,
-        text: `${name ?? "Someone"} <${email}> bought a ${plan.name} licence (${licence.code}). Stripe customer ${customerId}, subscription ${subId}.${pppNote}${sourceNote}`,
-        replyTo: email,
-      });
-      try {
-        await sendLicenceEmail({ name, email, kind: plan.id, code: licence.code });
-      } catch (err) {
-        console.error("[stripe:checkout.session.completed] Licence email failed:", err);
-      }
-    }
 }
 
 export async function POST(request: NextRequest) {
@@ -452,7 +186,6 @@ export async function POST(request: NextRequest) {
         const email = session.customer_email ?? session.customer_details?.email ?? null;
         const plan = session.metadata?.plan ?? "lifetime";
         console.log(`[stripe:checkout.session.expired] email=${email} plan=${plan}`);
-        if (isCartouchePrintSession(session) || session.metadata?.product === KEYBOARD_HD.id || session.metadata?.product === GIFT_COURSE.id || isUnitPackSession(session) || isClassSetSession(session)) break;
         // Every step below is kept in EmailLead (src/lib/checkout-recovery-log.ts) so /admin/marketing can count
         // expired sessions, emails sent and who bought afterwards.
         const log = (outcome: CheckoutLogOutcome, reason?: string) =>
@@ -488,7 +221,7 @@ export async function POST(request: NextRequest) {
             console.error("[stripe:checkout.session.expired] recovery offer failed:", err);
           }
         }
-        // Everyone the discount email didn't reach (monthly, licences, parity prices, no offer possible) gets the
+        // Everyone the discount email didn't reach (monthly, parity prices, no offer possible) gets the
         // plain reminder instead: what's included, the guarantee, a way back (src/lib/checkout-reminder.ts).
         if (!offerSent) {
           console.log(`[stripe:checkout.session.expired] no discount email: ${noOfferWhy}`);
@@ -512,10 +245,8 @@ export async function POST(request: NextRequest) {
         const end = periodEnd(subscription);
         console.log(`[stripe:${event.type}] subscription=${subscription.id} status=${status}`);
 
-        // New-style rows are keyed by subscription id: monthly passes and licences.
-        const matchedMonthly = await syncMonthlySubscription(subscription.id, status, end);
-        const matchedLicence = matchedMonthly ? false : await syncLicenceSubscription(subscription.id, status, end);
-        if (matchedMonthly || matchedLicence) break;
+        // New-style rows are keyed by subscription id: monthly passes.
+        if (await syncMonthlySubscription(subscription.id, status, end)) break;
 
         // Legacy rows (pre-2026 monthly plan) were keyed by customer email.
         const customerId = typeof subscription.customer === "string" ? subscription.customer : subscription.customer.id;
@@ -529,21 +260,6 @@ export async function POST(request: NextRequest) {
         }
         break;
       }
-
-      // ── Licence paid by invoice / purchase order (src/lib/licence-invoice.ts) ──────────────────────────
-      // Only invoices we raised for a school (metadata.product "licence-invoice"); subscription renewals
-      // also fire invoice.paid and are left to customer.subscription.updated above.
-      case "invoice.paid": {
-        const invoice = event.data.object as Stripe.Invoice;
-        if (!isLicenceInvoice(invoice)) {
-          console.log(`[stripe:invoice.paid] ${invoice.id} is not a licence invoice; ignored`);
-          break;
-        }
-        const outcome = await fulfilLicenceInvoice(invoice);
-        console.log(`[stripe:invoice.paid] licence invoice ${invoice.id}: ${outcome}`);
-        break;
-      }
-      // ── end licence invoice ─────────────────────────────────────────────────────────────────────────
 
       // Refunds and disputes (src/lib/refunds.ts): a full refund or a lost dispute removes lifetime access,
       // and the owner is emailed either way.

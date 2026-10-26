@@ -105,16 +105,14 @@ export function toInternalPath(href: string): string {
 }
 
 /**
- * Every post links, in its body, to the two pages that turn a reader into a
- * learner: the name translator and the free first lesson. Both were
- * "discovered, not indexed" in Search Console while the posts that should
- * link to them were indexed, so the link has to sit in the prose, not the
- * footer. It goes in after the first section (before the second `## `);
+ * Every post links, in its body, to the page that turns a reader into a
+ * learner: the free first lesson. It was "discovered, not indexed" in Search
+ * Console while the posts that should link to it were indexed, so the link
+ * has to sit in the prose, not the footer. It goes in after the first section (before the second `## `);
  * a post with a single section gets it at the end.
  */
 export const IN_BODY_LINKS_MD =
-  "**Try it as you read:** [write your own name in hieroglyphs](/translate-name-to-hieroglyphics) with the free translator, " +
-  "or [take the free first lesson](/lessons/expedition-begins) and learn all 25 alphabet signs on a sealed door.";
+  "**Try it as you read:** [take the free first lesson](/lessons/expedition-begins) and learn all 25 alphabet signs on a sealed door.";
 
 export function withInBodyLinks(md: string, links = IN_BODY_LINKS_MD): string {
   if (md.includes(links)) return md;

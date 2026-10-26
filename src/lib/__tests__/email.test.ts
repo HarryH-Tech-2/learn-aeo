@@ -101,26 +101,6 @@ describe("emails on the shared layout", () => {
     expect(html).not.toMatch(/→|&rarr;/);
   });
 
-  it("licence: class code, join link and licence page", async () => {
-    const { sendLicenceEmail } = await import("@/lib/email");
-    await sendLicenceEmail({ name: "Ms Lee", email: "t@example.com", kind: "classroom", code: "NILE-42" });
-    const { html } = mockSend.mock.calls[0][0];
-    expect(html).toContain("NILE-42");
-    expect(html).toContain("/join?code=NILE-42");
-    expect(html).toContain("/teachers/licence");
-    expect(html).toContain("Up to 30 pupils can join.");
-  });
-
-  it("gift: the gift link as a button and written out, plus the certificate", async () => {
-    const { sendGiftCourseEmail } = await import("@/lib/email");
-    await sendGiftCourseEmail({ email: "g@example.com", recipient: "Sam <3", from: "Mum", giftUrl: "https://x.test/gift/abc", certificateUrl: "https://x.test/cert/abc" });
-    const { html } = mockSend.mock.calls[0][0];
-    expect(html).toContain('href="https://x.test/gift/abc"');
-    expect(html).toContain("A gift for Sam &lt;3");
-    expect(html).toContain("https://x.test/cert/abc");
-    expect(html).toContain("It will say it is from Mum.");
-  });
-
   it("checkout reminder keeps its unsubscribe link and header", async () => {
     const { sendCheckoutReminderEmail } = await import("@/lib/email");
     const { PLANS } = await import("@/lib/plans");

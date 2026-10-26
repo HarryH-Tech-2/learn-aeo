@@ -32,7 +32,6 @@ import type { Lesson, Hieroglyph } from "@/lib/lessons";
 import { getLessonGlyphs } from "@/lib/lessons";
 import { generateSiteReport } from "@/lib/exercises";
 import { XP_REWARDS } from "@/lib/gamification";
-import { gamesForLesson } from "@/lib/games";
 import { modelForGlyph } from "@/lib/objects";
 import { getLessonMechanic, getLessonReading, type LessonMechanic } from "@/lib/content/lesson-extras";
 import { primeSpeech, speak, speechSupported, toSpeakable } from "@/lib/speech";
@@ -315,7 +314,6 @@ export default function LessonStage({ lesson, onXPEarned, onReportComplete, gues
   const reviewGlyphs = lesson.review ?? [];
   const mechanic = getLessonMechanic(lesson.id);
   const reading = getLessonReading(lesson.id);
-  const practiceGames = useMemo(() => gamesForLesson(lesson.id), [lesson.id]);
   const siteReportQuestions = useMemo(() => generateSiteReport(allGlyphs, lesson.exerciseConfig), [allGlyphs, lesson.exerciseConfig]);
 
   // ─── Stage transitions ───
@@ -1288,23 +1286,6 @@ export default function LessonStage({ lesson, onXPEarned, onReportComplete, gues
           </motion.div>
         )}
 
-        {practiceGames.length > 0 && (
-          <div className="lesson-sheet p-6 md:p-8 text-left">
-            <p className="font-body text-sm text-gold-500 mb-1 font-semibold">Practice</p>
-            <p className="font-body text-sm text-sand-400 mb-5">Make what you just learned stick: these games drill exactly these skills.</p>
-            <div className="grid sm:grid-cols-2 gap-3">
-              {practiceGames.map((g) => (
-                <Link key={g.id} href={g.href} className="group block p-4 border border-gold-700/20 bg-obsidian-lighter hover:border-gold-500/40 hover:bg-gold-500/5 transition-colors rounded-xl">
-                  <p className="font-display text-lg text-sand-100 group-hover:text-gold-300 transition-colors">
-                    {g.title}
-                    <span className="text-gold-500 text-sm font-body ml-2 align-middle font-semibold">{g.free ? `Free · ${g.tech ?? "3D"}` : g.tech ?? "3D"}</span>
-                  </p>
-                  <p className="font-body text-xs text-sand-400 mt-1">{g.skill}</p>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
       </motion.div>
     );
   }

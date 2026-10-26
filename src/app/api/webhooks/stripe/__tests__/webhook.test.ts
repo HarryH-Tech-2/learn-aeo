@@ -6,10 +6,7 @@ const mockSubscriptionsRetrieve = vi.hoisted(() => vi.fn());
 const mockActivate = vi.hoisted(() => vi.fn().mockResolvedValue(undefined));
 const mockDeactivate = vi.hoisted(() => vi.fn().mockResolvedValue(undefined));
 const mockSyncMonthly = vi.hoisted(() => vi.fn().mockResolvedValue(false));
-const mockSyncLicence = vi.hoisted(() => vi.fn().mockResolvedValue(false));
-const mockCreateLicence = vi.hoisted(() => vi.fn().mockResolvedValue({ id: "lic_1", code: "ABCD-EFGH" }));
 const mockSendWelcome = vi.hoisted(() => vi.fn().mockResolvedValue(undefined));
-const mockSendLicence = vi.hoisted(() => vi.fn().mockResolvedValue(undefined));
 const mockUserFindUnique = vi.hoisted(() => vi.fn().mockResolvedValue({ id: "user_1" }));
 
 vi.mock("@/lib/stripe", () => ({
@@ -26,40 +23,19 @@ vi.mock("@/lib/subscription", () => ({
   syncMonthlySubscription: mockSyncMonthly,
 }));
 
-vi.mock("@/lib/licence", () => ({
-  createLicence: mockCreateLicence,
-  syncLicenceSubscription: mockSyncLicence,
-  isLicenceKind: (x: unknown) => x === "classroom" || x === "school",
-}));
-
 vi.mock("@/lib/db", () => ({ prisma: { user: { findUnique: mockUserFindUnique } } }));
 
 vi.mock("@/lib/notify", () => ({ notifyOwner: vi.fn().mockResolvedValue(true), ownerEmail: () => "contact@learnhieroglyphics.com" }));
 
-const mockSendPrint = vi.hoisted(() => vi.fn().mockResolvedValue(undefined));
-const mockBuildPdf = vi.hoisted(() => vi.fn().mockResolvedValue(new Uint8Array([0x25, 0x50, 0x44, 0x46])));
 const mockRecordLead = vi.hoisted(() => vi.fn().mockResolvedValue(undefined));
 const mockGrantOffer = vi.hoisted(() => vi.fn().mockResolvedValue(null));
 const mockSendRecovery = vi.hoisted(() => vi.fn().mockResolvedValue(true));
 
 vi.mock("@/lib/email", () => ({
   sendWelcomeEmail: mockSendWelcome,
-  sendLicenceEmail: mockSendLicence,
   sendCheckoutRecoveryEmail: mockSendRecovery,
-  sendCartouchePrintEmail: mockSendPrint,
 }));
 
-vi.mock("@/lib/cartouche-print-pdf", () => ({ buildCartouchePrintPdf: mockBuildPdf }));
-const mockRenderJpeg = vi.hoisted(() => vi.fn().mockResolvedValue(Buffer.from([0xff, 0xd8, 0xff])));
-vi.mock("@/lib/cartouche-print-image", () => ({ renderCartouchePrintJpeg: mockRenderJpeg }));
-
-const mockCreateProdigiOrder = vi.hoisted(() => vi.fn().mockResolvedValue({ id: "ord_1", status: { stage: "InProgress" } }));
-const mockProdigiConfigured = vi.hoisted(() => vi.fn().mockReturnValue(true));
-vi.mock("@/lib/prodigi", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("@/lib/prodigi")>()),
-  createProdigiOrder: mockCreateProdigiOrder,
-  prodigiConfigured: mockProdigiConfigured,
-}));
 vi.mock("@/lib/leads", () => ({ recordLead: mockRecordLead, normaliseEmail: (e: string) => e.trim().toLowerCase() }));
 
 vi.mock("@/lib/offers", () => ({ grantOffer: mockGrantOffer, OFFER_PERCENT_OFF: 33 }));
@@ -80,7 +56,6 @@ describe("POST /api/webhooks/stripe", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockSyncMonthly.mockResolvedValue(false);
-    mockSyncLicence.mockResolvedValue(false);
     mockUserFindUnique.mockResolvedValue({ id: "user_1" });
     mockSendRecovery.mockResolvedValue(true);
     mockReminder.mockResolvedValue("sent");
@@ -168,8 +143,7 @@ describe("POST /api/webhooks/stripe", () => {
     it("an unpaid monthly or licence checkout unlocks nothing", async () => {
       mockConstructEvent.mockReturnValue({ type: "checkout.session.completed", data: { object: lifetime({ payment_status: "unpaid", subscription: "sub_t", metadata: { plan: "classroom" } }) } });
       await send();
-      expect(mockCreateLicence).not.toHaveBeenCalled();
-      mockConstructEvent.mockReturnValue({ type: "checkout.session.completed", data: { object: lifetime({ payment_status: "unpaid", subscription: "sub_m", metadata: { plan: "monthly" } }) } });
+        mockConstructEvent.mockReturnValue({ type: "checkout.session.completed", data: { object: lifetime({ payment_status: "unpaid", subscription: "sub_m", metadata: { plan: "monthly" } }) } });
       await send();
       expect(mockActivate).not.toHaveBeenCalled();
     });
@@ -191,14 +165,6 @@ describe("POST /api/webhooks/stripe", () => {
       expect(notifyOwner).toHaveBeenCalledWith(expect.objectContaining({ subject: expect.stringMatching(/payment failed/i) }));
     });
 
-    it("a print paid by a delayed method is sent when the payment arrives", async () => {
-      mockConstructEvent.mockReturnValue({
-        type: "checkout.session.async_payment_succeeded",
-        data: { object: { id: "cs_p", customer_email: "a@example.com", payment_status: "paid", amount_total: 399, currency: "usd", metadata: { product: "cartouche-print", name: "Harry", theme: "papyrus", format: "image" } } },
-      });
-      await send();
-      expect(mockSendPrint).toHaveBeenCalled();
-    });
   });
 
   it("skips activation when email or customer id is missing", async () => {
@@ -218,10 +184,9 @@ describe("POST /api/webhooks/stripe", () => {
     expect(res.status).toBe(200);
     expect(mockActivate).toHaveBeenCalledWith("m@example.com", "cus_m", expect.objectContaining({ plan: "monthly", stripeSubscriptionId: "sub_m", currentPeriodEnd: new Date(1_800_000_000 * 1000) }));
     expect(mockSendWelcome).toHaveBeenCalledWith("Mo", "m@example.com", "monthly");
-    expect(mockCreateLicence).not.toHaveBeenCalled();
   });
 
-  it("classroom checkout: creates a licence for the buyer and emails the code", async () => {
+  it("classroom checkout: no licence branch any more, so nothing is created or granted", async () => {
     mockConstructEvent.mockReturnValue({
       type: "checkout.session.completed",
       data: { object: { payment_status: "paid", customer_email: "t@example.com", customer: "cus_t", subscription: "sub_t", customer_details: { name: "Ms T" }, metadata: { plan: "classroom" } } },
@@ -229,9 +194,8 @@ describe("POST /api/webhooks/stripe", () => {
     mockSubscriptionsRetrieve.mockResolvedValue({ id: "sub_t", items: { data: [{ current_period_end: 1_800_000_000 }] } });
     const res = await send();
     expect(res.status).toBe(200);
-    expect(mockCreateLicence).toHaveBeenCalledWith(expect.objectContaining({ ownerUserId: "user_1", kind: "classroom", stripeSubscriptionId: "sub_t", stripeCustomerId: "cus_t" }));
-    expect(mockSendLicence).toHaveBeenCalledWith(expect.objectContaining({ email: "t@example.com", kind: "classroom", code: "ABCD-EFGH" }));
     expect(mockActivate).not.toHaveBeenCalled();
+    expect(mockSendWelcome).not.toHaveBeenCalled();
   });
 
   it("subscription.updated for a known monthly row is synced, not routed to the legacy path", async () => {
@@ -241,14 +205,6 @@ describe("POST /api/webhooks/stripe", () => {
     expect(res.status).toBe(200);
     expect(mockSyncMonthly).toHaveBeenCalledWith("sub_m", "past_due", new Date(1_800_000_000 * 1000));
     expect(mockCustomersRetrieve).not.toHaveBeenCalled();
-  });
-
-  it("subscription.deleted for a licence marks it canceled", async () => {
-    mockConstructEvent.mockReturnValue({ type: "customer.subscription.deleted", data: { object: { id: "sub_t", status: "canceled", customer: "cus_t" } } });
-    mockSyncLicence.mockResolvedValue(true);
-    await send();
-    expect(mockSyncLicence).toHaveBeenCalledWith("sub_t", "canceled", null);
-    expect(mockDeactivate).not.toHaveBeenCalled();
   });
 
   it("legacy subscription.updated (unknown id) with status active → activates by customer email", async () => {
@@ -280,199 +236,6 @@ describe("POST /api/webhooks/stripe", () => {
     expect(res.status).toBe(200);
     expect(mockActivate).not.toHaveBeenCalled();
     expect(mockDeactivate).not.toHaveBeenCalled();
-  });
-
-  describe("cartouche print", () => {
-    const printSession = (extra: Record<string, unknown> = {}) => ({
-      id: "cs_test_print",
-      customer_email: null,
-      customer: null,
-      customer_details: { email: "buyer@example.com", name: "Harry" },
-      payment_status: "paid",
-      amount_total: 1999,
-      currency: "usd",
-      metadata: { product: "cartouche-print", name: "Harry" },
-      ...extra,
-    });
-
-    it("emails the PDF, keeps the lead, and never touches plans or subscriptions", async () => {
-      process.env.NEXTAUTH_URL = "https://test.example.com";
-      mockConstructEvent.mockReturnValue({ type: "checkout.session.completed", data: { object: printSession() } });
-      const res = await send();
-      expect(res.status).toBe(200);
-      expect(mockBuildPdf).toHaveBeenCalledWith("Harry", "cream");
-      expect(mockCreateProdigiOrder).not.toHaveBeenCalled();
-      expect(mockSendPrint).toHaveBeenCalledWith(
-        expect.objectContaining({
-          email: "buyer@example.com",
-          name: "Harry",
-          format: "digital",
-          filename: "harry-cartouche-print.pdf",
-          downloadUrl: "https://test.example.com/api/cartouche-print/download?session_id=cs_test_print",
-        })
-      );
-      expect(mockRecordLead).toHaveBeenCalledWith({ email: "buyer@example.com", source: "cartouche-print", name: "Harry" });
-      expect(mockActivate).not.toHaveBeenCalled();
-      expect(mockSendWelcome).not.toHaveBeenCalled();
-      expect(mockCreateLicence).not.toHaveBeenCalled();
-    });
-
-    it("emails the HD image, not the PDF, for the image format, and places no print", async () => {
-      process.env.NEXTAUTH_URL = "https://test.example.com";
-      mockConstructEvent.mockReturnValue({
-        type: "checkout.session.completed",
-        data: { object: printSession({ amount_total: 399, metadata: { product: "cartouche-print", name: "Harry", theme: "papyrus", format: "image" } }) },
-      });
-      await send();
-      expect(mockRenderJpeg).toHaveBeenCalledWith("Harry", "papyrus", "hd");
-      expect(mockBuildPdf).not.toHaveBeenCalled();
-      expect(mockCreateProdigiOrder).not.toHaveBeenCalled();
-      expect(mockSendPrint).toHaveBeenCalledWith(
-        expect.objectContaining({
-          format: "image",
-          filename: "harry-cartouche-papyrus-hd.jpg",
-          downloadUrl: "https://test.example.com/api/cartouche-print/image?session_id=cs_test_print",
-        })
-      );
-    });
-
-    it("builds the PDF on the paper the buyer chose", async () => {
-      process.env.NEXTAUTH_URL = "https://test.example.com";
-      mockConstructEvent.mockReturnValue({
-        type: "checkout.session.completed",
-        data: { object: printSession({ metadata: { product: "cartouche-print", name: "Harry", theme: "night" } }) },
-      });
-      await send();
-      expect(mockBuildPdf).toHaveBeenCalledWith("Harry", "night");
-    });
-
-    it("a posted print is placed with Prodigi against the shipping address, with the signed artwork URL", async () => {
-      process.env.NEXTAUTH_URL = "https://test.example.com";
-      process.env.NEXTAUTH_SECRET = "test-secret";
-      mockConstructEvent.mockReturnValue({
-        type: "checkout.session.completed",
-        data: {
-          object: printSession({
-            amount_total: 7999,
-            metadata: { product: "cartouche-print", name: "Harry", theme: "temple", format: "framed" },
-            shipping_details: {
-              name: "Harry Harrison",
-              address: { line1: "1 Nile St", line2: "Flat 2", city: "London", state: null, postal_code: "N1 1AA", country: "GB" },
-            },
-          }),
-        },
-      });
-      const res = await send();
-      expect(res.status).toBe(200);
-      expect(mockCreateProdigiOrder).toHaveBeenCalledTimes(1);
-      const order = mockCreateProdigiOrder.mock.calls[0][0];
-      expect(order).toMatchObject({
-        sessionId: "cs_test_print",
-        format: "framed",
-        recipient: { name: "Harry Harrison", email: "buyer@example.com", line1: "1 Nile St", line2: "Flat 2", city: "London", postcode: "N1 1AA", country: "GB" },
-        callbackUrl: "https://test.example.com/api/prodigi/callback",
-        idempotencyKey: "cs_test_print",
-      });
-      expect(order.assetUrl).toMatch(/^https:\/\/test\.example\.com\/api\/cartouche-print\/asset\?session_id=cs_test_print&sig=[0-9a-f]{64}$/);
-      expect(mockSendPrint).toHaveBeenCalledWith(expect.objectContaining({ format: "framed" }));
-      const { notifyOwner } = await import("@/lib/notify");
-      const subjects = vi.mocked(notifyOwner).mock.calls.map((c) => c[0].subject);
-      expect(subjects.some((x) => x.startsWith("Cartouche Print sold (Framed A4 print)"))).toBe(true);
-    });
-
-    it("a family print builds every name into the file and the email, and names them all to the owner", async () => {
-      process.env.NEXTAUTH_URL = "https://test.example.com";
-      process.env.NEXTAUTH_SECRET = "test-secret";
-      const { notifyOwner } = await import("@/lib/notify");
-      vi.mocked(notifyOwner).mockClear();
-      mockConstructEvent.mockReturnValue({
-        type: "checkout.session.completed",
-        data: {
-          object: printSession({
-            amount_total: 3999,
-            metadata: { product: "cartouche-print", name: "Harry", names: "Harry|Sally|Tom", theme: "night", format: "print" },
-            shipping_details: {
-              name: "Harry Harrison",
-              address: { line1: "1 Nile St", line2: null, city: "London", state: null, postal_code: "N1 1AA", country: "GB" },
-            },
-          }),
-        },
-      });
-      expect((await send()).status).toBe(200);
-      expect(mockBuildPdf).toHaveBeenCalledWith(["Harry", "Sally", "Tom"], "night");
-      expect(mockSendPrint).toHaveBeenCalledWith(
-        expect.objectContaining({ name: "Harry, Sally and Tom", family: true, format: "print", filename: "harry-sally-tom-cartouche-print.pdf" })
-      );
-      // Prodigi fetches the artwork from the asset route, which rebuilds the family page from the same session.
-      expect(mockCreateProdigiOrder).toHaveBeenCalledWith(expect.objectContaining({ format: "print" }));
-      const subjects = vi.mocked(notifyOwner).mock.calls.map((c) => c[0].subject);
-      expect(subjects.some((x) => x === "Cartouche Print sold (A4 print, posted): Harry, Sally and Tom")).toBe(true);
-    });
-
-    it("a family HD image renders every name", async () => {
-      process.env.NEXTAUTH_URL = "https://test.example.com";
-      mockConstructEvent.mockReturnValue({
-        type: "checkout.session.completed",
-        data: { object: printSession({ amount_total: 399, metadata: { product: "cartouche-print", name: "Harry", names: "Harry|Sally", theme: "papyrus", format: "image" } }) },
-      });
-      expect((await send()).status).toBe(200);
-      expect(mockRenderJpeg).toHaveBeenCalledWith(["Harry", "Sally"], "papyrus", "hd");
-      expect(mockSendPrint).toHaveBeenCalledWith(expect.objectContaining({ filename: "harry-sally-cartouche-papyrus-hd.jpg" }));
-    });
-
-    it("a posted print without an address, or with Prodigi refusing, still emails the PDF and asks the owner to place it by hand", async () => {
-      process.env.NEXTAUTH_URL = "https://test.example.com";
-      process.env.NEXTAUTH_SECRET = "test-secret";
-      const { notifyOwner } = await import("@/lib/notify");
-      vi.mocked(notifyOwner).mockClear();
-
-      mockConstructEvent.mockReturnValue({
-        type: "checkout.session.completed",
-        data: { object: printSession({ metadata: { product: "cartouche-print", name: "Harry", format: "print" } }) },
-      });
-      await send();
-      expect(mockCreateProdigiOrder).not.toHaveBeenCalled();
-      expect(mockSendPrint).toHaveBeenCalledTimes(1);
-      expect(vi.mocked(notifyOwner).mock.calls[0][0].subject).toMatch(/^ACTION NEEDED/);
-      expect(vi.mocked(notifyOwner).mock.calls[0][0].text).toContain("no shipping address");
-
-      mockCreateProdigiOrder.mockRejectedValueOnce(new Error("Prodigi order failed (400 ValidationFailed): bad sku"));
-      mockConstructEvent.mockReturnValue({
-        type: "checkout.session.completed",
-        data: {
-          object: printSession({
-            metadata: { product: "cartouche-print", name: "Harry", format: "print" },
-            shipping_details: { name: "H", address: { line1: "1 Nile St", city: "London", postal_code: "N1 1AA", country: "GB" } },
-          }),
-        },
-      });
-      const res = await send();
-      expect(res.status).toBe(200);
-      expect(mockSendPrint).toHaveBeenCalledTimes(2);
-      expect(vi.mocked(notifyOwner).mock.calls[1][0].subject).toMatch(/^ACTION NEEDED/);
-      expect(vi.mocked(notifyOwner).mock.calls[1][0].text).toContain("bad sku");
-    });
-
-    it("does nothing for an unpaid print session", async () => {
-      mockConstructEvent.mockReturnValue({ type: "checkout.session.completed", data: { object: printSession({ payment_status: "unpaid" }) } });
-      expect((await send()).status).toBe(200);
-      expect(mockBuildPdf).not.toHaveBeenCalled();
-      expect(mockSendPrint).not.toHaveBeenCalled();
-      expect(mockActivate).not.toHaveBeenCalled();
-    });
-
-    it("still answers 200 when the email fails, since the download page can serve the PDF", async () => {
-      mockSendPrint.mockRejectedValueOnce(new Error("resend down"));
-      mockConstructEvent.mockReturnValue({ type: "checkout.session.completed", data: { object: printSession() } });
-      expect((await send()).status).toBe(200);
-    });
-
-    it("an abandoned print checkout does not earn a Lifetime recovery offer", async () => {
-      mockConstructEvent.mockReturnValue({ type: "checkout.session.expired", data: { object: printSession({ payment_status: "unpaid" }) } });
-      expect((await send()).status).toBe(200);
-      expect(mockGrantOffer).not.toHaveBeenCalled();
-      expect(mockReminder).not.toHaveBeenCalled();
-    });
   });
 
   describe("abandoned Lifetime checkout", () => {
@@ -589,11 +352,6 @@ describe("POST /api/webhooks/stripe", () => {
         expect(mockRecordLead).not.toHaveBeenCalled();
       });
 
-      it("print checkouts are not recorded", async () => {
-        mockConstructEvent.mockReturnValue({ type: "checkout.session.expired", data: { object: { id: "cs_p", customer_email: "a@example.com", payment_status: "unpaid", metadata: { product: "cartouche-print", name: "Harry" } } } });
-        await send();
-        expect(mockRecordLead).not.toHaveBeenCalled();
-      });
     });
   });
 });
