@@ -72,14 +72,14 @@ describe("feedbackPlanOf", () => {
 });
 
 describe("renderFeedbackEmail", () => {
-  it("is a short plain-text note from Harry asking the one question", () => {
+  it("is a short plain-text note from the team asking the one question", () => {
     const e = renderFeedbackEmail("Ana Lopez", "lifetime");
     expect(e.subject).toBe("One quick question");
     expect(e.text.startsWith("Hi Ana,")).toBe(true);
     expect(e.text).toContain("What's one thing that would make the course better?");
     expect(e.text).toContain("hit reply");
     expect(e.text).toContain("since you bought the course");
-    expect(e.text.trim().endsWith("Harry")).toBe(true);
+    expect(e.text.trim().endsWith("The Learn AEO team")).toBe(true);
     expect(e.text).not.toMatch(/<[a-z]/i);
     expect(e.text).not.toMatch(/https?:\/\//);
   });

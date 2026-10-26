@@ -130,7 +130,7 @@ function layout(opts: { preheader: string; hero?: string; body: string; ctx: Nur
 
 /** Plain-text part: the same words, links written out. */
 function textOf(lines: string[], ctx: NurtureEmailContext): string {
-  return [...lines, "Harry\nFounder, Learn AEO (just reply, I read every email)", `Unsubscribe: ${ctx.unsubscribeUrl}`].join(
+  return [...lines, "The Learn AEO team\nJust reply, we read every email", `Unsubscribe: ${ctx.unsubscribeUrl}`].join(
     "\n\n"
   );
 }
@@ -383,24 +383,22 @@ ${chamberText()}`,
     }
 
     case "coffee": {
-      const coffeeUrl = "https://buymeacoffee.com/harryhh";
       const dashboardUrl = tagged("/dashboard");
       const body = [
-        eyebrow("From Harry"),
-        heading(`A small favour, ${name}`),
+        eyebrow("Your account"),
+        heading(`Everything is open, ${name}`),
         p("Your account has the whole course open: all eight lessons, the 3D levels, the Journey and the community board. There is nothing to pay, and that will not change."),
-        p("I build and look after Learn AEO on my own. If it has been useful to you, a coffee helps me keep building it."),
-        button(coffeeUrl, "Buy me a coffee"),
-        p(`Or just carry on: ${link(dashboardUrl, "your next chamber is waiting")}. And if something could be better, reply and tell me.`),
+        p("If something could be clearer or is missing, reply to this email and tell us. It is the quickest way to make the course better."),
+        p(`Or just carry on: ${link(dashboardUrl, "your next chamber is waiting")}. `),
       ].join("");
       return {
-        subject: "The course is yours. A small favour?",
-        html: layout({ preheader: "Everything is open on your account. If it helps, a coffee keeps it going.", body, ctx }),
+        subject: "The course is yours",
+        html: layout({ preheader: "Everything is open on your account. Reply with anything that could be better.", body, ctx }),
         text: textOf(
           [
             `Hi ${ctx.firstName},`,
             "Your account has the whole course open: all eight lessons, the 3D levels, the Journey and the community board. There is nothing to pay.",
-            `I build and look after Learn AEO on my own. If it has been useful to you, a coffee helps me keep building it: ${coffeeUrl}`,
+            "If something could be clearer or is missing, reply to this email and tell us.",
             `Or carry on with your next chamber: ${dashboardUrl}`,
           ],
           ctx

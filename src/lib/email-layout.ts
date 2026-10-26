@@ -90,12 +90,12 @@ export function heroImage(src: string, alt: string, href?: string): string {
   return `<tr><td style="padding:0 24px 20px;">${href ? `<a href="${href}">${img}</a>` : img}</td></tr>`;
 }
 
-/** Harry's sign-off. */
-export function signature(line = "Founder, Learn AEO &middot; just reply, I read every email"): string {
+/** The team sign-off. */
+export function signature(line = "Learn AEO &middot; just reply, we read every email"): string {
   return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0 0;">
   <tr>
     <td valign="middle" style="padding-right:12px;"><div style="width:40px;height:2px;background:${C.gold};font-size:0;line-height:0;">&nbsp;</div></td>
-    <td valign="middle" style="font-family:${DISPLAY_FONT};font-size:18px;font-weight:600;color:${C.sand};">Harry</td>
+    <td valign="middle" style="font-family:${DISPLAY_FONT};font-size:18px;font-weight:600;color:${C.sand};">The Learn AEO team</td>
   </tr>
   <tr><td></td><td style="padding-top:4px;font-family:${BODY_FONT};font-size:13px;line-height:1.5;color:${C.muted};">${line}</td></tr>
   </table>`;
@@ -111,7 +111,7 @@ export type EmailLayoutOptions = {
   /** Rows from heroImage(), shown between the header and the framed body. */
   hero?: string;
   body: string;
-  /** Harry's sign-off under the body (default on); a string replaces its second line. */
+  /** The team sign-off under the body (default on); a string replaces its second line. */
   signature?: boolean | string;
   /** Why they got it, in the footer (plain text or simple HTML). */
   reason: string;

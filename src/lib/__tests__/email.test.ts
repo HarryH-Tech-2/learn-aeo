@@ -39,7 +39,7 @@ describe("sendWelcomeEmail", () => {
     expect(callArgs.html).toContain("Scholar");
   });
 
-  it("opens with a thank-you from Harry and invites a reply to the owner inbox", async () => {
+  it("opens with a thank-you from the team and invites a reply to the owner inbox", async () => {
     const prev = process.env.CONTACT_TO_EMAIL;
     process.env.CONTACT_TO_EMAIL = "owner@example.com";
     try {
@@ -55,7 +55,7 @@ describe("sendWelcomeEmail", () => {
     expect(callArgs.html).toContain("Thank you for buying the course");
     expect(callArgs.html).toContain("reply to this email");
     expect(callArgs.text).toContain("Thank you for buying the course");
-    expect(callArgs.text.trim().split("\n")).toContain("Harry");
+    expect(callArgs.text.trim().split("\n")).toContain("The Learn AEO team");
   });
 
   it("lifetime: says lifetime and one-time payment, with the real lesson count", async () => {

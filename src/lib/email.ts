@@ -24,10 +24,10 @@ function getResend(): Resend {
   return _resend;
 }
 
-/** "Harry from Learn AEO <addr>" unless the env already carries a display name. */
+/** "Learn AEO <addr>" unless the env already carries a display name. */
 function personalFrom(): string {
   const raw = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
-  return raw.includes("<") ? raw : `Harry from Learn AEO <${raw}>`;
+  return raw.includes("<") ? raw : `Learn AEO <${raw}>`;
 }
 
 /** The origin the shared layout draws its frieze, mark and header link from. */
@@ -65,7 +65,7 @@ export type WelcomePlan = "lifetime" | "monthly";
 
 /**
  * Sent by the Stripe webhook after a Lifetime or Expedition Pass (monthly) purchase. Opens with a short
- * thank-you from Harry; replies go to the owner inbox (CONTACT_TO_EMAIL, see notify.ts).
+ * thank-you from the Learn AEO team; replies go to the owner inbox (CONTACT_TO_EMAIL, see notify.ts).
  */
 export async function sendWelcomeEmail(
   name: string | null | undefined,
@@ -80,8 +80,8 @@ export async function sendWelcomeEmail(
   const monthly = plan === "monthly";
 
   const thanks = monthly
-    ? `Thank you for picking up the Expedition Pass. It genuinely means a lot: Learn AEO is just me, and every pass helps keep it going.`
-    : `Thank you for buying the course. It genuinely means a lot: Learn AEO is just me, and every purchase helps keep it going.`;
+    ? `Thank you for picking up the Expedition Pass. It genuinely means a lot: Learn AEO is a small independent team, and every pass helps keep it going.`
+    : `Thank you for buying the course. It genuinely means a lot: Learn AEO is a small independent team, and every purchase helps keep it going.`;
   const access = monthly
     ? `Your Expedition Pass is active, so every lesson, exercise and reading practice is open to you for as long as the pass runs.`
     : `Your lifetime access is active, so every lesson, exercise and reading practice is yours to keep, forever.`;
@@ -123,7 +123,7 @@ export async function sendWelcomeEmail(
       "",
       "If anything is confusing, broken, or you just want to say hello, reply to this email. It comes straight to me and I read every one.",
       "",
-      "Harry",
+      "The Learn AEO team",
       "",
       `Begin your studies: ${dashboardUrl}`,
       "",

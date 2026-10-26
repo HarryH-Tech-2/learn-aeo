@@ -101,7 +101,7 @@
  *   alphabet_print      — /hieroglyphic-alphabet/print printed or saved as PDF
  *   coffee_view         — the Buy Me a Coffee seal (bottom right) shown on a page, with page          [2026-10-21]
  *   coffee_hover        — its note opened (once per page), with page                                  [2026-10-21]
- *   coffee_click        — the seal clicked through to buymeacoffee.com, with page; CTR = click / view [2026-10-21]
+ *   coffee_click        — (removed) the corner coffee seal, with page; CTR = click / view [2026-10-21]
  *   worksheet_email     — "Email it to me" submitted on the worksheet (lead source "worksheet")       [2026-10-05]
  *   worksheet_offer_click — class quiz / Classroom licence pressed on the worksheet (target: class | licence) [2026-10-05]
  *   teachers_contact    — "Contact us" clicked on /teachers (location)

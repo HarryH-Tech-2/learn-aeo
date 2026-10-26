@@ -41,10 +41,10 @@ function baseUrl(): string {
   return (process.env.NEXTAUTH_URL ?? SITE.url).replace(/\/$/, "");
 }
 
-/** "Harry from Learn AEO <addr>" unless the env already carries a display name. */
+/** "Learn AEO <addr>" unless the env already carries a display name. */
 function fromAddress(): string {
   const raw = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
-  return raw.includes("<") ? raw : `Harry from Learn AEO <${raw}>`;
+  return raw.includes("<") ? raw : `Learn AEO <${raw}>`;
 }
 
 const userSelect = {

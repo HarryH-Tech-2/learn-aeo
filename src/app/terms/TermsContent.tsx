@@ -62,7 +62,7 @@ const sections = [
     id: "limitation-of-liability",
     title: "8. Limitation of Liability",
     content:
-      "To the maximum extent permitted by applicable law, Learn AEO and its founders, employees, and affiliates shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or data, arising out of or in connection with your use of the service. Our total liability for any claim arising from these terms or your use of the service shall not exceed the amount you paid us in the twelve (12) months preceding the claim.",
+      "To the maximum extent permitted by applicable law, Learn AEO and its owners, employees, and affiliates shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or data, arising out of or in connection with your use of the service. Our total liability for any claim arising from these terms or your use of the service shall not exceed the amount you paid us in the twelve (12) months preceding the claim.",
   },
   {
     id: "changes-to-terms",

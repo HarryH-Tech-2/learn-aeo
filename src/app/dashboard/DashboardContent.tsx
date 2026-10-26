@@ -1,7 +1,6 @@
 "use client";
 
 import OfferBanner, { type OfferData } from "@/components/OfferBanner";
-import CoffeeAsk from "@/components/CoffeeAsk";
 import UpgradePanel from "@/components/lesson/UpgradePanel";
 import { lessons, getLessonGlyphs } from "@/lib/lessons";
 
@@ -239,13 +238,6 @@ function DashboardInner() {
         {!offer && me && hasSubscription === false && (
           <div className="mb-8">
             <UpgradePanel paid={false} offer={null} location="dashboard" />
-          </div>
-        )}
-
-        {/* The free-unlock group's ask, where the paid group's offer sits (src/lib/access-test.ts) */}
-        {me?.access?.via === "free-unlock" && (
-          <div className="mb-8">
-            <CoffeeAsk location="dashboard" />
           </div>
         )}
 

@@ -3,10 +3,8 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import Image from "next/image";
 import { motion } from "framer-motion";
 
-export const LINKEDIN_URL = "https://www.linkedin.com/in/harry-harrison/";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -126,91 +124,6 @@ export default function AboutContent() {
               comprehensive curriculum covering the full Middle Egyptian sign
               list, grammar, and reading practice drawn from real historical
               inscriptions.
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Founder */}
-      <section className="relative py-20">
-        <div className="max-w-4xl mx-auto px-6 lg:px-8">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
-            variants={fadeUp}
-            custom={0}
-          >
-            <div className="flex items-center gap-3 mb-4">
-              <span className="text-2xl text-gold-500">𓀀</span>
-              <h2 className="font-display text-3xl md:text-4xl font-semibold text-sand-100">
-                Meet the Founder
-              </h2>
-            </div>
-            <div className="mb-8" />
-          </motion.div>
-
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
-            variants={fadeUp}
-            custom={1}
-            className="space-y-6 font-body text-sand-400 leading-relaxed"
-          >
-            {/* Harry's photo and LinkedIn: who is behind the course */}
-            <figure className="float-none mx-auto mb-2 w-40 sm:float-right sm:mb-4 sm:ml-8 sm:w-48">
-              <Image
-                src="/about/harry-640.webp"
-                alt="Harry Harrison, founder of Learn AEO"
-                width={640}
-                height={720}
-                sizes="(min-width: 640px) 192px, 160px"
-                className="w-full h-auto border border-gold-600/40 shadow-[0_18px_40px_-20px_rgba(0,0,0,0.6)]"
-                priority={false}
-              />
-              <figcaption className="mt-3 text-center font-body text-sm text-sand-300">
-                Harry Harrison
-                <a
-                  href={LINKEDIN_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-1 flex items-center justify-center gap-1.5 text-gold-400 underline-offset-4 hover:text-gold-300 hover:underline"
-                >
-                  <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4 fill-current">
-                    <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z" />
-                  </svg>
-                  Connect on LinkedIn
-                </a>
-              </figcaption>
-            </figure>
-            <p>
-              Hi, I&rsquo;m Harry, a software engineer and lifelong history
-              enthusiast. My fascination with ancient Egypt started during a
-              childhood visit to the British Museum, standing in front of the
-              Rosetta Stone and wondering what those symbols actually said.
-            </p>
-            <p>
-              Years later, I finally sat down to learn. I worked through
-              Gardiner&rsquo;s <em>Egyptian Grammar</em>, Allen&rsquo;s{" "}
-              <em>Middle Egyptian: An Introduction to the Language and Culture
-              of Hieroglyphs</em>, and Collier &amp; Manley&rsquo;s{" "}
-              <em>How to Read Egyptian Hieroglyphs</em>. The content was
-              incredible, but the learning experience felt stuck in the 1950s.
-              No interactivity, no progress tracking, no way to test yourself
-              against real inscriptions.
-            </p>
-            <p>
-              So I built what I wished had existed: a structured, interactive
-              course that teaches hieroglyphics the way modern language apps
-              teach Spanish or Japanese: progressively, with real practice, and
-              with the cultural context that makes each sign come alive.
-            </p>
-            <p>
-              Every lesson is grounded in the latest Egyptological scholarship,
-              drawing on primary sources from the Middle Kingdom through the
-              Ptolemaic period. I consult published sign lists, peer-reviewed
-              translations, and museum collections to ensure accuracy.
             </p>
           </motion.div>
         </div>

@@ -2864,14 +2864,6 @@ html:not(.light) .faq-a {
   color: #cbbd9d;
 }
 
-/* ── Coffee seal (src/components/CoffeeSeal.tsx) ── */
-/* phones: sit above the translator's "keep your name" bar when it is showing */
-@media (max-width: 639px) {
-  body:has([data-keep-bar]) .coffee-seal {
-    bottom: 5.25rem;
-  }
-}
-
 /* ── Written lessons (2026-10-25) ──
    One loud thing per step: the sign, gold on a lapis inlay like a tomb ceiling's
    stars. Everything round it is a quiet sheet with plain headings. */

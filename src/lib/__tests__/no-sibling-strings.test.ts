@@ -33,6 +33,8 @@ describe("no sibling-site strings", () => {
       const p = path.join(ROOT, f);
       if (fs.existsSync(p)) files.push(p);
     }
+    // a wrong ROOT would walk nothing and pass silently
+    expect(files.length).toBeGreaterThan(50);
     const hits: string[] = [];
     for (const file of files) {
       if (path.resolve(file) === SELF) continue;

@@ -81,10 +81,10 @@ describe("renderNurtureEmail", () => {
 describe("renderNurtureEmail — free-unlock group", () => {
   const base = "https://www.learnaeo.com";
 
-  it("coffee: links Buy Me a Coffee and sells nothing", () => {
+  it("coffee: says the course is open, asks for feedback and sells nothing", () => {
     const e = renderNurtureEmail("coffee", sampleContext(base, { freeUnlock: true, offer: null }));
-    expect(e.html).toContain("buymeacoffee.com/harryhh");
-    expect(e.text).toContain("buymeacoffee.com/harryhh");
+    expect(e.html).not.toContain("buymeacoffee");
+    expect(e.text).not.toContain("buymeacoffee");
     expect(e.html).not.toContain("/checkout");
     expect(e.html).toContain("utm_campaign=coffee");
   });

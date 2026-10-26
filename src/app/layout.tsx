@@ -6,7 +6,6 @@ import Script from "next/script";
 import Providers from "@/components/Providers";
 import CampaignTracker from "@/components/CampaignTracker";
 import CookieScroll from "@/components/CookieScroll";
-import CoffeeSeal from "@/components/CoffeeSeal";
 import LastPathTracker from "@/components/LastPathTracker";
 import { analyticsAllowedScript } from "@/lib/consent";
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -178,7 +177,6 @@ export default function RootLayout({
             <AuthModalProvider>{children}</AuthModalProvider>
             <CampaignTracker />
             <CookieScroll />
-            <CoffeeSeal />
             <LastPathTracker />
           </ThemeProvider>
         </Providers>

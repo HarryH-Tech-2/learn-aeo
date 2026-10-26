@@ -166,14 +166,7 @@ export default function BlogPostContent({
                 </>
               )}
               <span className="text-sand-700">|</span>
-              <a
-                href="https://x.com/HarryHH1993"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-body text-xs text-sand-500 hover:text-gold-400 transition-colors"
-              >
-                By Harry Harrison
-              </a>
+              <span className="font-body text-xs text-sand-500">By the Learn AEO team</span>
             </div>
 
             <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-light text-sand-100 mb-6 leading-tight">
@@ -286,57 +279,6 @@ export default function BlogPostContent({
           >
             {body}
           </div>
-
-          {/* Author — visible E-E-A-T block (Person schema is in page.tsx) */}
-          <aside className="mt-14 border border-gold-700/20 bg-obsidian-light/40 p-6 md:p-7 flex gap-5 items-start">
-            <div className="w-14 h-14 shrink-0 rounded-full bg-gradient-to-br from-gold-400 to-gold-700 p-[2px]">
-              <div
-                className="w-full h-full rounded-full bg-obsidian flex items-center justify-center text-2xl"
-                aria-hidden="true"
-              >
-                𓂀
-              </div>
-            </div>
-            <div className="min-w-0">
-              <p className="font-body text-[10px] tracking-[0.25em] uppercase text-gold-500 mb-1">
-                Written by
-              </p>
-              <p className="font-display text-lg font-semibold text-sand-100">
-                Harry Harrison
-              </p>
-              <p className="font-body text-sm text-sand-400 font-light leading-relaxed mt-1">
-                Founder of Learn AEO. Harry writes every lesson and
-                article on this site, builds the 3D practice games, checks each
-                sign against Gardiner&apos;s sign list and Allen&apos;s{" "}
-                <em>Middle Egyptian</em>, and has run a hieroglyphics workshop
-                in a UK primary school.
-              </p>
-              <p className="font-body text-xs text-sand-500 mt-2">
-                <a
-                  href="https://x.com/HarryHH1993"
-                  target="_blank"
-                  rel="noopener noreferrer me"
-                  className="hover:text-gold-400 transition-colors"
-                >
-                  @HarryHH1993 on X
-                </a>
-                <span className="mx-2 text-sand-700">·</span>
-                <Link
-                  href="/about"
-                  className="hover:text-gold-400 transition-colors"
-                >
-                  About the site
-                </Link>
-                <span className="mx-2 text-sand-700">·</span>
-                <Link
-                  href="/contact"
-                  className="hover:text-gold-400 transition-colors"
-                >
-                  Report a mistake
-                </Link>
-              </p>
-            </div>
-          </aside>
 
           {/* FAQs */}
           {post.faqs && post.faqs.length > 0 && (

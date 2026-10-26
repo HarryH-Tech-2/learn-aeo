@@ -7,7 +7,7 @@
  *
  * With a live offer it is the countdown banner; without one, the Lifetime
  * price with the monthly pass as the way in. Paying learners never see it.
- * The free-unlock group (src/lib/access-test.ts) gets the coffee ask here instead.
+ * The free-unlock group (src/lib/access-test.ts) sees nothing here: the course is already open to them.
  */
 import Link from "next/link";
 import { useEffect } from "react";
@@ -17,7 +17,6 @@ import Price from "@/components/Price";
 import GuaranteeNote from "@/components/GuaranteeNote";
 import { PLANS } from "@/lib/plans";
 import { trackEvent } from "@/lib/analytics";
-import CoffeeAsk from "@/components/CoffeeAsk";
 import FreeCourseCta from "@/components/FreeCourseCta";
 import { useFreeCourseGuest } from "@/components/useFreeCourseGuest";
 
@@ -25,7 +24,7 @@ export type UpgradeInfo = {
   /** null while the subscription check is still out: the panel waits rather than flashing at a payer */
   paid: boolean | null;
   offer: OfferData | null;
-  /** In the free-unlock test's free group (src/lib/access-test.ts): the coffee ask takes the pitch's place */
+  /** In the free-unlock test's free group (src/lib/access-test.ts): nothing is shown in the pitch's place */
   freeUnlock?: boolean;
 };
 
@@ -38,7 +37,7 @@ type Props = UpgradeInfo & {
 
 export default function UpgradePanel({ paid, offer: given, location, progressLine, freeUnlock }: Props) {
   const freeGuest = useFreeCourseGuest();
-  if (freeUnlock) return <CoffeeAsk location={location} progressLine={progressLine} />;
+  if (freeUnlock) return null;
   if (freeGuest && paid === false) {
     return (
       <section aria-label="The whole course is free for you" className="lesson-sheet p-6 md:p-8 text-left border border-gold-500/30">
