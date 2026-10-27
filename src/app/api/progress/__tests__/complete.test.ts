@@ -23,7 +23,7 @@ vi.mock("@/lib/offers", () => ({
 }));
 
 vi.mock("@/lib/email", () => ({
-  sendNextChamberEmail: vi.fn(async () => undefined),
+  sendLessonCompleteEmail: vi.fn(async () => undefined),
 }));
 
 vi.mock("@/lib/db", () => ({
@@ -51,11 +51,13 @@ import { getServerSession } from "next-auth";
 import { recordQuizScore } from "@/lib/progress";
 import { checkSubscription } from "@/lib/subscription";
 import { grantOffer } from "@/lib/offers";
+import { sendLessonCompleteEmail } from "@/lib/email";
 
 const mockedSession = vi.mocked(getServerSession);
 const mockedRecord = vi.mocked(recordQuizScore);
 const mockedCheck = vi.mocked(checkSubscription);
 const mockedGrant = vi.mocked(grantOffer);
+const mockedEmail = vi.mocked(sendLessonCompleteEmail);
 
 const FREE_ID = "how-answer-engines-choose-sources";
 
@@ -153,5 +155,20 @@ describe("POST /api/progress/complete", () => {
     expect(mockedRecord).toHaveBeenCalledWith("u1", FREE_ID, 6, 10);
     expect(mockedGrant).toHaveBeenCalledWith("learner@example.com", "lesson-complete");
     expect(mockedCheck).not.toHaveBeenCalled();
+  });
+
+  it("emails the lesson-complete offer, naming the lesson that was passed", async () => {
+    const expiresAt = new Date("2026-10-28T12:00:00Z");
+    mockedGrant.mockResolvedValueOnce({ code: "AEO-ABC123", expiresAt, source: "lesson-complete", percentOff: 33 });
+    const res = await post({ lessonId: FREE_ID, score: 8, totalQuestions: 10 });
+    expect(res.status).toBe(200);
+    expect(mockedEmail).toHaveBeenCalledWith({
+      name: "Lee",
+      email: "learner@example.com",
+      code: "AEO-ABC123",
+      expiresAt,
+      percentOff: 33,
+      lessonId: FREE_ID,
+    });
   });
 });

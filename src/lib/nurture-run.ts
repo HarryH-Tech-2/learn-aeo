@@ -2,9 +2,9 @@
  * Runs the nurture sequence against the database: enrolment on sign-up, and
  * the daily pass that the cron route calls.
  *
- * Only the day-0 welcome is sent unless NURTURE_ENABLED=true. Without it every daily run is a dry
- * run that reports what would go out, so the sequence can be deployed,
- * previewed and backfilled before it goes live.
+ * Nothing is sent unless NURTURE_ENABLED=true, the day-0 welcome included. Without it sign-ups are
+ * still enrolled (nurtureStartedAt is set) and every daily run is a dry run that reports what would
+ * go out, so the sequence can be deployed, previewed and backfilled before it goes live.
  */
 import { FIRST_LESSON_ID } from "@/lib/lesson-catalog";
 import { Resend } from "resend";
@@ -130,15 +130,16 @@ async function deliver(u: NurtureSnapshot, step: NurtureStep, offer: NurtureEmai
   console.log(`[nurture] sent ${step.key} to ${u.email}`);
 }
 
-/** Sign-up hook: mark the enrolment time and send the day-0 welcome. */
+/** Sign-up hook: mark the enrolment time and, when NURTURE_ENABLED=true, send the day-0 welcome. */
 export async function enrolInNurture(userId: string): Promise<void> {
   const row = await prisma.user.update({
     where: { id: userId },
     data: { nurtureStartedAt: new Date() },
     select: userSelect,
   });
-  // The welcome goes out even while NURTURE_ENABLED is off (every new account
-  // got one before the sequence existed); only the later steps wait for it.
+  // Off by default: no welcome until the sequence is switched on. Once it is, the daily cron also
+  // sends the welcome to anyone enrolled within the grace window who did not get one here.
+  if (!nurtureEnabled()) return;
   const snap = await snapshotOf(row);
   if (!snap) return;
   const step = nextDueStep(snap, new Date());

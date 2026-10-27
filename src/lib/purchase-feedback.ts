@@ -63,7 +63,7 @@ export type FeedbackEmail = { subject: string; text: string };
 /** Plain text on purpose: it should read like a note from a person, not a newsletter. */
 export function renderFeedbackEmail(name: string | null | undefined, plan: FeedbackPlan): FeedbackEmail {
   const first = firstName(name);
-  const hi = first === "Scholar" ? "Hi," : `Hi ${first},`;
+  const hi = `Hi ${first},`;
   const opener =
     plan === "monthly"
       ? "It's been about five days since you started the monthly plan, so I wanted to ask you one thing:"

@@ -31,12 +31,14 @@ describe("sendWelcomeEmail", () => {
     expect(callArgs.html).toContain("/dashboard");
   });
 
-  it("falls back to 'Scholar' when name is not provided", async () => {
+  it("greets someone with no name as 'there', with no stand-in name in the subject", async () => {
     await sendWelcomeEmail(null, "harry@example.com");
 
     const callArgs = mockSend.mock.calls[0][0];
-    expect(callArgs.subject).toContain("Scholar");
-    expect(callArgs.html).toContain("Scholar");
+    expect(callArgs.subject).toMatch(/^Thank you: /);
+    expect(callArgs.html).toContain("Hi there,");
+    expect(callArgs.text).toContain("Hi there,");
+    for (const part of [callArgs.subject, callArgs.html, callArgs.text]) expect(part).not.toMatch(/scholar/i);
   });
 
   it("opens with a thank-you from the team and invites a reply to the owner inbox", async () => {
@@ -88,17 +90,49 @@ describe("sendWelcomeEmail", () => {
 describe("emails on the shared layout", () => {
   beforeEach(() => mockSend.mockClear());
 
-  it("next chamber: the code, the expiry and the checkout button, no arrows", async () => {
-    const { sendNextChamberEmail } = await import("@/lib/email");
-    await sendNextChamberEmail({ name: "Ana", email: "a@example.com", code: "SCRIBE20", expiresAt: new Date("2026-10-22T12:00:00Z"), percentOff: 20 });
+  it("lesson complete: names the lesson passed and the next district by its catalog title, with the code and checkout", async () => {
+    const { sendLessonCompleteEmail } = await import("@/lib/email");
+    await sendLessonCompleteEmail({ name: "Ana", email: "a@example.com", code: "AEO-TEST20", expiresAt: new Date("2026-10-22T12:00:00Z"), percentOff: 20 });
+    const [first, second] = LESSON_CATALOG;
     const { html, subject } = mockSend.mock.calls[0][0];
     expect(subject).toContain("20% off");
-    expect(html).toContain("/email/frieze.png");
-    expect(html).toContain("SCRIBE20");
+    expect(subject).toContain(first.title);
+    expect(subject).toContain(second.district);
+    expect(html).toContain(first.title);
+    expect(html).toContain(second.district);
+    expect(html).toContain(second.title);
+    expect(html).toContain(`/lessons/${second.id}`);
+    expect(html).toContain("/email/city-header.png");
+    expect(html).toContain("/email/mark-aeo.png");
+    expect(html).toContain("AEO-TEST20");
     expect(html).toContain("/get-started?next=checkout");
-    expect(html).toContain("Unlock the next chamber");
     expect(html).toContain("One-time payment. Lifetime access. No subscription.");
     expect(html).not.toMatch(/→|&rarr;/);
+  });
+
+  it("lesson complete: works from the lesson passed when given one", async () => {
+    const { sendLessonCompleteEmail } = await import("@/lib/email");
+    const [, second, third] = LESSON_CATALOG;
+    await sendLessonCompleteEmail({ name: "Ana", email: "a@example.com", code: "AEO-TEST20", expiresAt: new Date("2026-10-22T12:00:00Z"), percentOff: 20, lessonId: second.id });
+    const { html, subject } = mockSend.mock.calls[0][0];
+    expect(subject).toContain(second.title);
+    expect(subject).toContain(third.district);
+    expect(html).toContain(`/lessons/${third.id}`);
+  });
+
+  it("purchase welcome, lesson-complete and recovery emails use no old-course words", async () => {
+    const { sendLessonCompleteEmail, sendCheckoutRecoveryEmail } = await import("@/lib/email");
+    const OLD = /egypt|hieroglyph|glyph|papyrus|pharaoh|tomb|cartouche|\bscrib(e|al)|expedition|chamber|ankh|rosetta|\bnile\b|horus|scarab|courtyard|hypostyle|sanctum|chapel|treasury|scholar|academy|inscription|frieze|[\u{13000}-\u{1342F}]/iu;
+    const offer = { name: "Ana", email: "a@example.com", code: "AEO-TEST20", expiresAt: new Date("2026-10-22T12:00:00Z"), percentOff: 20 };
+    await sendWelcomeEmail("Ana", "a@example.com", "lifetime");
+    await sendWelcomeEmail(null, "a@example.com", "monthly");
+    await sendLessonCompleteEmail(offer);
+    await sendLessonCompleteEmail({ ...offer, name: null });
+    await sendCheckoutRecoveryEmail({ ...offer, name: null });
+    expect(mockSend).toHaveBeenCalledTimes(5);
+    for (const [args] of mockSend.mock.calls) {
+      for (const part of [args.subject, args.html, args.text ?? ""]) expect(part).not.toMatch(OLD);
+    }
   });
 
   it("checkout reminder keeps its unsubscribe link and header", async () => {

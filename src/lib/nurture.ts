@@ -5,11 +5,11 @@
  * (src/app/api/cron/nurture/route.ts) builds a snapshot per learner, asks
  * `nextDueStep` what to send, and records the send in EmailSend.
  *
- *   day 0  welcome         sent from the sign-up hook (cron catches failures)
+ *   day 0  welcome         sent from the sign-up hook when NURTURE_ENABLED=true (cron catches failures)
  *   day 1  door-sealed     lesson 1 not finished   } one or the other
- *                          (copy differs: never started = "your door is waiting", part-way = "your place is saved")
- *   day 1  next-door       lesson 1 finished       }
- *   day 3  free-stuff      translator, daily cartouche, blog
+ *                          (copy differs: never started = "Lesson 1 is waiting", part-way = "your place is saved")
+ *   day 1  next-door       lesson 1 finished: what you learned in The Gate, and the districts ahead
+ *   day 3  free-stuff      what's inside the course (how a lesson works, levels, certificate)
  *   day 5  offer           33% code (src/lib/offers.ts, source "nurture")
  *   day 7  offer-expires   only while that code is still live
  *   day 5  coffee          the free-unlock group instead of the two offers (src/lib/access-test.ts)
@@ -98,7 +98,10 @@ export function nextDueStep(u: NurtureSnapshot, now: Date): NurtureStep | null {
   return null;
 }
 
+/** The fallback when a learner has no name: emails read "Hi there,". */
+export const NO_NAME = "there";
+
 export function firstName(name: string | null | undefined): string {
   const n = (name ?? "").trim().split(/\s+/)[0];
-  return n || "Scholar";
+  return n || NO_NAME;
 }

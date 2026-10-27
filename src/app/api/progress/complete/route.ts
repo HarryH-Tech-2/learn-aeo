@@ -6,7 +6,7 @@ import { isLessonComplete } from "@/lib/pass-mark";
 import { getLesson, isLive } from "@/lib/lessons";
 import { checkSubscription } from "@/lib/subscription";
 import { OFFER_PERCENT_OFF, grantOffer, getActiveOffer } from "@/lib/offers";
-import { sendNextChamberEmail } from "@/lib/email";
+import { sendLessonCompleteEmail } from "@/lib/email";
 import { prisma } from "@/lib/db";
 import { pppBeatsOffer, requestCountry } from "@/lib/ppp";
 
@@ -76,12 +76,13 @@ export async function POST(request: Request) {
         // An earlier section-complete offer carried no email; this is the one that does.
         if (!hadOffer || hadOffer.source === "section-complete") {
           const dbUser = await prisma.user.findUnique({ where: { id: user.id }, select: { name: true } });
-          void sendNextChamberEmail({
+          void sendLessonCompleteEmail({
             name: dbUser?.name ?? user.name,
             email: user.email,
             code: granted.code,
             expiresAt: granted.expiresAt,
             percentOff: granted.percentOff,
+            lessonId: lesson.id,
           }).catch((err) => console.error("[progress/complete] offer email failed:", err));
         }
       }

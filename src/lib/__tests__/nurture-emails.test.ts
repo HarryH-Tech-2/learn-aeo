@@ -1,9 +1,51 @@
-import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
+import { FIRST_LESSON_PATH, LESSON_CATALOG } from "@/lib/lesson-catalog";
 import { describe, it, expect } from "vitest";
-import { renderNurtureEmail, sampleContext } from "@/lib/nurture-emails";
+import fs from "node:fs";
+import path from "node:path";
+import { renderNurtureEmail, sampleContext, type NurtureEmailContext } from "@/lib/nurture-emails";
 import { NURTURE_STEPS } from "@/lib/nurture";
 
 const base = "https://www.learnaeo.com";
+const ROOT = path.resolve(__dirname, "../../..");
+
+/** Every combination of context flags the sequence can be rendered with. */
+const VARIANTS: Partial<NurtureEmailContext>[] = [
+  { lesson1Completed: false, lesson1Started: false },
+  { lesson1Completed: false, lesson1Started: true },
+  { lesson1Completed: true, lesson1Started: true },
+  { lesson1Completed: true, lesson1Started: true, freeUnlock: true, offer: null },
+  { firstName: "there" },
+];
+
+function allRenders() {
+  const out: { key: string; subject: string; html: string; text: string }[] = [];
+  for (const step of NURTURE_STEPS) {
+    for (const v of VARIANTS) {
+      const ctx = sampleContext(base, v);
+      if ((step.key === "offer" || step.key === "offer-expires") && !ctx.offer) continue;
+      out.push({ key: step.key, ...renderNurtureEmail(step.key, ctx) });
+    }
+  }
+  return out;
+}
+
+/** The app's routes, read from src/app (page.tsx and route.ts), as regexes over a URL path. */
+function appRoutes(): RegExp[] {
+  const routes: RegExp[] = [];
+  const walk = (dir: string, segs: string[]) => {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (e.isDirectory()) walk(path.join(dir, e.name), [...segs, e.name]);
+      else if (e.name === "page.tsx" || e.name === "route.ts") {
+        const parts = segs
+          .filter((s) => !/^\(.*\)$/.test(s)) // route groups add nothing to the URL
+          .map((s) => (/^\[\.\.\..+\]$/.test(s) ? ".+" : /^\[.+\]$/.test(s) ? "[^/]+" : s.replace(/[.]/g, "\\.")));
+        routes.push(new RegExp(`^/${parts.join("/")}$`));
+      }
+    }
+  };
+  walk(path.join(ROOT, "src/app"), []);
+  return routes;
+}
 
 describe("renderNurtureEmail", () => {
   it("renders every step with a subject, an unsubscribe link, and a plain-text part", () => {
@@ -36,6 +78,38 @@ describe("renderNurtureEmail", () => {
     }
   });
 
+  it("links only to routes the app really has, and lesson links only to catalog lessons", () => {
+    const routes = appRoutes();
+    expect(routes.length).toBeGreaterThan(10); // a wrong ROOT would find nothing and pass
+    const ids = new Set(LESSON_CATALOG.map((l) => l.id));
+    for (const email of allRenders()) {
+      const urls = [
+        ...[...email.html.matchAll(/<a\s[^>]*href="([^"]+)"/g)].map((m) => m[1]),
+        ...[...email.text.matchAll(/https?:\/\/\S+/g)].map((m) => m[0]),
+      ];
+      for (const raw of urls) {
+        const url = raw.replace(/&amp;/g, "&");
+        expect(url.startsWith(base), `${email.key}: ${url}`).toBe(true);
+        const p = new URL(url).pathname.replace(/\/$/, "") || "/";
+        expect(routes.some((r) => r.test(p)), `${email.key}: ${p} is not an app route`).toBe(true);
+        const lesson = p.match(/^\/lessons\/([^/]+)$/);
+        if (lesson) expect(ids.has(lesson[1]), `${email.key}: ${p}`).toBe(true);
+        for (const gone of ["/cartouche-image", "/translate", "/daily"]) expect(p, email.key).not.toContain(gone);
+      }
+    }
+  });
+
+  it("only uses images that exist in public/", () => {
+    for (const email of allRenders()) {
+      for (const [, src] of email.html.matchAll(/<img[^>]+src="([^"]+)"/g)) {
+        expect(src.startsWith(`${base}/`), src).toBe(true);
+        const file = path.join(ROOT, "public", new URL(src).pathname);
+        expect(fs.existsSync(file), `${email.key}: ${src}`).toBe(true);
+        expect(src, email.key).toMatch(/\.(png|jpe?g)$/);
+      }
+    }
+  });
+
   it("escapes the learner's name", () => {
     const html = renderNurtureEmail("door-sealed", sampleContext(base, { firstName: "<b>Bob</b>" })).html;
     expect(html).not.toContain("<b>Bob</b>");
@@ -44,44 +118,55 @@ describe("renderNurtureEmail", () => {
 
   it("writes door-sealed for someone who never started, and for someone part-way, differently", () => {
     const fresh = renderNurtureEmail("door-sealed", sampleContext(base, { lesson1Started: false }));
-    expect(fresh.subject).toBe("Your door is waiting");
-    expect(fresh.html).toContain("haven't opened the door");
-    expect(fresh.text).toContain("haven't opened the door");
+    expect(fresh.subject).toBe("Lesson 1 is waiting for you");
+    expect(fresh.html).toContain("haven't started Lesson 1");
+    expect(fresh.text).toContain("haven't started Lesson 1");
     const partWay = renderNurtureEmail("door-sealed", sampleContext(base, { lesson1Started: true }));
     expect(partWay.subject).toMatch(/place .*saved/i);
-    expect(partWay.text).not.toContain("haven't opened");
+    expect(partWay.text).not.toContain("haven't started");
     for (const email of [fresh, partWay]) expect(email.html).toContain(`${base}${FIRST_LESSON_PATH}?utm_source=nurture`);
+  });
+
+  it("next-door recaps what the learner covered in The Gate and names the next district", () => {
+    const e = renderNurtureEmail("next-door", sampleContext(base, { lesson1Completed: true, lesson1Started: true }));
+    expect(e.subject).toBe("What you learned in The Gate");
+    expect(e.html).toContain(LESSON_CATALOG[1].district);
+    expect(e.text).toContain(LESSON_CATALOG[1].title);
+  });
+
+  it("free-stuff is now a short tour of what is inside the course, with no tools promised", () => {
+    const e = renderNurtureEmail("free-stuff", sampleContext(base));
+    expect(e.subject).toBe("What's inside the course");
+    for (const part of [e.html, e.text]) expect(part.toLowerCase()).not.toMatch(/\btools?\b|template/);
   });
 
   it("refuses to render the offer emails without an offer", () => {
     expect(() => renderNurtureEmail("offer", sampleContext(base, { offer: null }))).toThrow();
   });
 
-  it("never writes a price (it differs by country) or a raw hieroglyph (most mail clients lack the font)", () => {
-    for (const step of NURTURE_STEPS) {
-      for (const [done, started] of [[false, false], [false, true], [true, true]]) {
-        const email = renderNurtureEmail(step.key, sampleContext(base, { lesson1Completed: done, lesson1Started: started }));
-        for (const part of [email.subject, email.html, email.text]) {
-          expect(part, step.key).not.toMatch(/[$£€]\s?\d/);
-          expect(part, step.key).not.toMatch(/[\u{13000}-\u{1345F}]/u);
-        }
+  it("never writes a price (it differs by country) or a learner count", () => {
+    for (const email of allRenders()) {
+      for (const part of [email.subject, email.html, email.text]) {
+        expect(part, email.key).not.toMatch(/[$£€]\s?\d/);
+        expect(part, email.key).not.toMatch(/\d[\d,]* (learners|marketers|students|people)/i);
       }
     }
   });
 
-  it("puts the learner's own name in the welcome cartouche, and falls back to the door for names it can't spell", () => {
-    expect(renderNurtureEmail("welcome", sampleContext(base)).html).toContain(`${base}/cartouche-image?name=Nancy`);
-    for (const firstName of ["Scholar", "Zoë", "李"]) {
-      const html = renderNurtureEmail("welcome", sampleContext(base, { firstName })).html;
-      expect(html, firstName).not.toContain("/cartouche-image");
-      expect(html, firstName).toContain("/email/door.jpg");
+  it("uses no words from the old course and never says 'Scholar'", () => {
+    const OLD = /egypt|hieroglyph|glyph|papyrus|pharaoh|tomb|cartouche|\bscrib(e|al)|expedition|chamber|ankh|rosetta|\bnile\b|horus|thoth|scarab|courtyard|hypostyle|sanctum|chapel|treasury|base camp|scholar|academy|causeway|door\.jpg/i;
+    for (const email of allRenders()) {
+      for (const part of [email.subject, email.html, email.text]) expect(part, email.key).not.toMatch(OLD);
     }
+  });
+
+  it("greets a learner with no name as 'there'", () => {
+    const e = renderNurtureEmail("welcome", sampleContext(base, { firstName: "there" }));
+    expect(e.text).toContain("Hi there,");
   });
 });
 
 describe("renderNurtureEmail — free-unlock group", () => {
-  const base = "https://www.learnaeo.com";
-
   it("coffee: says the course is open, asks for feedback and sells nothing", () => {
     const e = renderNurtureEmail("coffee", sampleContext(base, { freeUnlock: true, offer: null }));
     expect(e.html).not.toContain("buymeacoffee");

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { SITE } from "@/lib/site";
+import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
 import { Resend } from "resend";
 import { ownerEmail } from "@/lib/notify";
 import { recordLead, isValidEmail, normaliseEmail } from "@/lib/leads";
@@ -56,7 +57,7 @@ export async function POST(request: Request) {
     await resend.emails.send({
       from: brandFrom(),
       to: email,
-      subject: "Welcome to Learn AEO!",
+      subject: "Welcome to Learn AEO",
       html: welcomeHtml((process.env.NEXTAUTH_URL || SITE.url).replace(/\/$/, "")),
     });
 
@@ -73,14 +74,14 @@ export async function POST(request: Request) {
 function welcomeHtml(site: string): string {
   return emailLayout({
     baseUrl: site,
-    preheader: "Weekly updates on Ancient Egypt and platform news, straight to your inbox.",
+    preheader: "Course news from Learn AEO, and a free first lesson to start with.",
     body: [
-      heading("Welcome to Learn AEO!"),
-      paragraph("Thank you for subscribing! You'll receive weekly updates on Ancient Egypt and platform news straight to your inbox."),
-      paragraph("In the meantime, why not start exploring? We have lessons that take you from the Valley of the Kings to the Rosetta Stone."),
-      button(`${site}/get-started`, "Get Lifetime Access"),
+      heading("Welcome to Learn AEO"),
+      paragraph("Thanks for subscribing. We will email you when there is news about the course, such as a new lesson opening."),
+      paragraph("While you wait, Lesson 1 is free: how answer engines like Google's AI Overviews, ChatGPT search and Perplexity build an answer, and how they choose which pages to cite."),
+      button(`${site}${FIRST_LESSON_PATH}`, "Start Lesson 1"),
     ].join(""),
     signature: false,
-    reason: "Learn AEO: Master the writing of Ancient Egypt",
+    reason: "You are getting this because you subscribed at learnaeo.com.",
   });
 }

@@ -90,7 +90,7 @@ describe("renderFeedbackEmail", () => {
     expect(e.text).not.toContain("bought the course");
   });
 
-  it("falls back to a plain Hi when there is no name", () => {
-    expect(renderFeedbackEmail(null, "lifetime").text.startsWith("Hi,")).toBe(true);
+  it("falls back to \"Hi there,\" when there is no name", () => {
+    expect(renderFeedbackEmail(null, "lifetime").text.startsWith("Hi there,\n")).toBe(true);
   });
 });

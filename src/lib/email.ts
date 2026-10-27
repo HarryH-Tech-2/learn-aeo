@@ -2,6 +2,7 @@ import { Resend } from "resend";
 import { SITE } from "@/lib/site";
 import type { Plan } from "@/lib/plans";
 import { LESSONS } from "@/lib/lessons";
+import { FIRST_LESSON_ID, LESSON_CATALOG, lessonMeta, lessonPath, nextLessonMeta } from "@/lib/lesson-catalog";
 import { ownerEmail } from "@/lib/notify";
 import {
   BODY_FONT as FONT,
@@ -30,7 +31,7 @@ function personalFrom(): string {
   return raw.includes("<") ? raw : `Learn AEO <${raw}>`;
 }
 
-/** The origin the shared layout draws its frieze, mark and header link from. */
+/** The origin the shared layout draws its header image, mark and header link from. */
 function layoutBase(): string {
   return (process.env.NEXTAUTH_URL ?? SITE.url).replace(/\/$/, "");
 }
@@ -72,19 +73,21 @@ export async function sendWelcomeEmail(
   email: string,
   plan: WelcomePlan = "lifetime"
 ): Promise<void> {
-  const displayName = name || "Scholar";
-  const greetingName = name?.trim().split(/\s+/)[0] || "there";
+  const displayName = name?.trim() || null;
+  const greetingName = displayName?.split(/\s+/)[0] || "there";
   const dashboardUrl = `${process.env.NEXTAUTH_URL}/dashboard`;
   const accountUrl = `${process.env.NEXTAUTH_URL}/account`;
   const lessonCount = LESSONS.length;
+  const firstTitle = LESSON_CATALOG[0].title.toLowerCase();
+  const lastTitle = LESSON_CATALOG[LESSON_CATALOG.length - 1].title.toLowerCase().replace(/\baeo\b/, "AEO");
   const monthly = plan === "monthly";
 
   const thanks = monthly
     ? `Thank you for starting the monthly plan. It genuinely means a lot: Learn AEO is a small independent team, and every subscriber helps keep it going.`
     : `Thank you for buying the course. It genuinely means a lot: Learn AEO is a small independent team, and every purchase helps keep it going.`;
   const access = monthly
-    ? `Your monthly plan is active, so every lesson, tool and template is open to you for as long as it runs.`
-    : `Your lifetime access is active, so every lesson, exercise and reading practice is yours to keep, forever.`;
+    ? `Your monthly plan is active, so every lesson is open to you for as long as it runs, including new ones as they are released.`
+    : `Your lifetime access is active, so every lesson is yours to keep, forever, including new ones as they are released.`;
   const footer = monthly
     ? `Monthly plan: renews monthly, cancel any time. Your progress is kept if you come back.`
     : `One-time payment. Lifetime access.`;
@@ -94,11 +97,11 @@ export async function sendWelcomeEmail(
     from: personalFrom(),
     to: email,
     replyTo: ownerEmail(),
-    subject: monthly ? `Thank you, ${displayName}: your monthly plan is active` : `Thank you, ${displayName}: welcome to the Academy 𓂀`,
+    subject: `Thank you${displayName ? `, ${displayName}` : ""}: ${monthly ? "your monthly plan is active" : "welcome to Learn AEO"}`,
     html: emailLayout({
       baseUrl: layoutBase(),
       preheader: access,
-      body: `${heading(`Thank you, ${esc(displayName)}`)}
+      body: `${heading(displayName ? `Thank you, ${esc(displayName)}` : "Thank you")}
         ${p(`Hi ${esc(greetingName)},`)}
         ${p(thanks)}
         ${p(access)}
@@ -106,12 +109,12 @@ export async function sendWelcomeEmail(
         ${panel(
           `<p style="margin:0;font-family:${FONT};font-size:15px;line-height:1.8;color:${C.sand};">
             ${strong("What you've unlocked:")}<br/>
-            ${bullet}All ${lessonCount} lessons, from the alphabet to pharaohs' names and monumental texts<br/>
-            ${bullet}Interactive exercises with instant feedback<br/>
-            ${bullet}Reading practices with real inscriptions
+            ${bullet}All ${lessonCount} lessons, from ${esc(firstTitle)} to ${esc(lastTitle)}<br/>
+            ${bullet}Quick checks and hands-on exercises with instant feedback<br/>
+            ${bullet}A certificate when you finish
           </p>`
         )}
-        ${button(dashboardUrl, "Begin Your Studies")}`,
+        ${button(dashboardUrl, "Go to your dashboard")}`,
       reason: `You are getting this because you ${monthly ? "started the monthly plan" : "bought the course"} at learnaeo.com.<br/>${footer}<br/>${footLink(accountUrl, "Manage your account")}`,
     }),
     text: [
@@ -125,7 +128,7 @@ export async function sendWelcomeEmail(
       "",
       "The Learn AEO team",
       "",
-      `Begin your studies: ${dashboardUrl}`,
+      `Go to your dashboard: ${dashboardUrl}`,
       "",
       `${footer} Manage your account: ${accountUrl}`,
     ].join("\n"),
@@ -156,48 +159,65 @@ function fmtExpiry(d: Date): string {
   return d.toLocaleString("en-GB", { weekday: "long", hour: "numeric", minute: "2-digit", timeZone: "Europe/London" });
 }
 
-/** Sent when the free lesson is completed by someone who hasn't bought. */
-export async function sendNextChamberEmail(input: OfferEmailInput): Promise<void> {
-  const displayName = input.name || "Scholar";
-  const checkoutUrl = `${process.env.NEXTAUTH_URL}/get-started?next=checkout`;
+/** First name for a greeting, or null when there is none. */
+function firstNameOf(name: string | null | undefined): string | null {
+  return name?.trim().split(/\s+/)[0] || null;
+}
+
+/**
+ * Sent when a learner who hasn't bought passes a lesson (today only the free one, from
+ * src/app/api/progress/complete/route.ts): names the lesson they passed and the next district,
+ * with their offer code. `lessonId` is the lesson passed; it defaults to the first lesson.
+ */
+export async function sendLessonCompleteEmail(input: OfferEmailInput & { lessonId?: string }): Promise<void> {
+  const first = firstNameOf(input.name);
+  const base = process.env.NEXTAUTH_URL;
+  const passed = lessonMeta(input.lessonId ?? FIRST_LESSON_ID) ?? LESSON_CATALOG[0];
+  const next = nextLessonMeta(passed.id);
+  const checkoutUrl = `${base}/get-started?next=checkout`;
+  const nextUrl = next ? `${base}${lessonPath(next.id)}` : `${base}/pricing`;
+  const expiry = fmtExpiry(input.expiresAt);
+  const nextLine = next
+    ? `Next is ${strong(esc(next.district))}: ${esc(next.title)}. ${esc(next.summary)}${next.status === "coming-soon" ? " It is coming soon, and included when it opens." : ""}`
+    : "That was the last district, so the whole course is behind you.";
   const result = await getResend().emails.send({
     from: brandFrom(),
     to: input.email,
-    subject: `You read your first inscription, ${displayName}. The next chamber is open (${input.percentOff}% off until ${fmtExpiry(input.expiresAt)})`,
+    subject: `You passed ${passed.title}${next ? `. Next: ${next.district}` : ""} (${input.percentOff}% off until ${expiry})`,
     html: emailLayout({
       baseUrl: layoutBase(),
-      preheader: `You finished the whole 25-sign alphabet. Here is ${input.percentOff}% off the next chamber.`,
-      body: `${heading("The Outer Courtyard awaits")}
-        ${p(`${esc(displayName)}, you just finished ${strong("The Expedition Begins")}, the whole 25-sign alphabet.
-          Most people never get that far. You can now sound out names, and you are one lesson away from reading real words:
-          the animal and plant signs of the Outer Courtyard.`)}
-        ${codePanel(`Your ${input.percentOff}% off code`, input.code, `Applied automatically at checkout &middot; expires ${fmtExpiry(input.expiresAt)}`)}
-        ${p("Lifetime access unlocks all 8 lessons, the Tomb Wall and Sign Hunt 3D games, your certificate, and everything added later.")}
-        ${button(checkoutUrl, "Unlock the next chamber")}`,
-      reason: `You are getting this because you finished the free lesson at learnaeo.com.<br/>${OFFER_FOOT}<br/>${contactLine()}`,
+      preheader: `You passed ${passed.district}. Here is ${input.percentOff}% off the rest of the course.`,
+      body: `${heading(next ? `${esc(next.district)} is next` : "You finished the course")}
+        ${p(`${first ? `${esc(first)}, you` : "You"} passed ${strong(`${esc(passed.district)}: ${esc(passed.title)}`)}.`)}
+        ${p(nextLine)}
+        ${codePanel(`Your ${input.percentOff}% off code`, input.code, `Applied automatically at checkout &middot; expires ${expiry}`)}
+        ${p("Lifetime access opens every lesson, including each new one as it is released, and your certificate when you finish.")}
+        ${button(checkoutUrl, next ? `Unlock ${esc(next.district)}` : "Unlock the course")}
+        ${p(link(nextUrl, next ? `See what ${esc(next.district)} covers` : "See the plans"), { size: 14 })}`,
+      reason: `You are getting this because you passed a lesson at learnaeo.com.<br/>${OFFER_FOOT}<br/>${contactLine()}`,
     }),
   });
-  if (result.error) console.error("[email:next-chamber] Resend error:", result.error);
+  if (result.error) console.error("[email:lesson-complete] Resend error:", result.error);
 }
 
 /** Sent when a Checkout Session expires unpaid. Returns whether Resend accepted it. */
 export async function sendCheckoutRecoveryEmail(input: OfferEmailInput): Promise<boolean> {
-  const displayName = input.name || "Scholar";
+  const first = firstNameOf(input.name);
   const checkoutUrl = `${process.env.NEXTAUTH_URL}/get-started?next=checkout`;
   const result = await getResend().emails.send({
     from: brandFrom(),
     to: input.email,
-    subject: `Your place in the Academy is still open: ${input.percentOff}% off for 48 hours`,
+    subject: `Your place in Learn AEO is still open: ${input.percentOff}% off for 48 hours`,
     tags: [{ name: "checkout", value: "recovery" }],
     html: emailLayout({
       baseUrl: layoutBase(),
-      preheader: `Your place in the Academy is still open, with ${input.percentOff}% off for the next two days.`,
-      body: `${heading(`Still want in, ${esc(displayName)}?`)}
+      preheader: `Your place in Learn AEO is still open, with ${input.percentOff}% off for the next two days.`,
+      body: `${heading(first ? `Still want in, ${esc(first)}?` : "Still want in?")}
         ${p(`You started checking out for lifetime access but didn't finish. No problem. If something put you off, just reply and tell me;
           I read every message. And if it was the price, here is ${input.percentOff}% off for the next two days.`)}
         ${codePanel(null, input.code, `Applied automatically at checkout &middot; expires ${fmtExpiry(input.expiresAt)}`)}
-        ${p("One payment, all 8 lessons, the 3D games and your certificate, forever. Apple Pay and Google Pay now work at checkout.")}
-        ${button(checkoutUrl, "Finish unlocking the Academy")}`,
+        ${p("One payment opens every lesson, including each new one as it is released, and your certificate when you finish.")}
+        ${button(checkoutUrl, "Finish checking out")}`,
       reason: `You are getting this because you started a checkout at learnaeo.com.<br/>${OFFER_FOOT}<br/>${contactLine()}`,
     }),
   });

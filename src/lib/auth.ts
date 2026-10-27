@@ -92,8 +92,8 @@ export const authOptions: NextAuthOptions = {
   },
   events: {
     // Every new account: record the marketing post that brought them, then
-    // enrol in the nurture sequence, which sends the day-0 welcome (replaces
-    // the old standalone welcome; see src/lib/nurture-run.ts).
+    // enrol in the nurture sequence, which sends the day-0 welcome only when
+    // NURTURE_ENABLED=true (src/lib/nurture-run.ts).
     async createUser({ user }) {
       if (!user.id) return;
       await recordSignupCampaign(user.id);
