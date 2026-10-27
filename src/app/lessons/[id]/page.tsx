@@ -4,6 +4,9 @@ import { Suspense } from "react";
 import { LESSON_CATALOG, lessonMeta, lessonPath } from "@/lib/lesson-catalog";
 import LessonContent from "./LessonContent";
 
+// Only the catalog's lessons exist: any other id is a real 404, not an empty shell.
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   return LESSON_CATALOG.map((l) => ({ id: l.id }));
 }

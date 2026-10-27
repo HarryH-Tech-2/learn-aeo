@@ -13,7 +13,7 @@ import GuaranteeNote from "@/components/GuaranteeNote";
 import LessonPlayer from "@/components/player/LessonPlayer";
 import { BTN_PRIMARY, BTN_SECONDARY, EYEBROW, FOCUS } from "@/components/player/ui";
 import { trackEvent } from "@/lib/analytics";
-import { fetchJson } from "@/lib/fetch-json";
+import { HttpError, fetchJson } from "@/lib/fetch-json";
 import { nextLessonMeta } from "@/lib/lesson-catalog";
 import type { LessonMeta } from "@/lib/lesson-types";
 import type { LiveLesson } from "@/lib/lessons";
@@ -53,7 +53,9 @@ export default function LessonContent() {
   const { data: session, status } = useSession();
   const { openAuthModal } = useAuthModal();
   const [lesson, setLesson] = useState<LessonResponse | null>(null);
-  const [missing, setMissing] = useState(false);
+  // "missing" only for a 404; any other failure (network, 5xx) offers a retry instead
+  const [loadError, setLoadError] = useState<"missing" | "failed" | null>(null);
+  const [attempt, setAttempt] = useState(0);
   const [offer, setOffer] = useState<OfferData | null>(null);
   // null until the subscription check answers, so the upgrade pitch never flashes at a payer.
   // It always resolves: a failed check, or local preview without an account, counts as unpaid.
@@ -62,10 +64,11 @@ export default function LessonContent() {
   const guest = status === "unauthenticated" && !preview;
 
   useEffect(() => {
+    setLoadError(null);
     fetchJson<LessonResponse>(`/api/lessons/${id}`)
       .then(setLesson)
-      .catch(() => setMissing(true));
-  }, [id]);
+      .catch((err) => setLoadError(err instanceof HttpError && err.status === 404 ? "missing" : "failed"));
+  }, [id, attempt]);
 
   useEffect(() => {
     if (!session) {
@@ -133,7 +136,21 @@ export default function LessonContent() {
     }).catch(() => null);
   }
 
-  if (missing) {
+  if (loadError === "failed") {
+    return (
+      <Shell>
+        <section className={`${PANEL} text-center`} role="alert">
+          <h1 className="font-display text-3xl text-sand-100 mb-3">Couldn&rsquo;t load this lesson</h1>
+          <p className="font-sans text-sand-300 mb-8">Check your connection and try again.</p>
+          <button type="button" onClick={() => setAttempt((n) => n + 1)} className={BTN_PRIMARY}>
+            Retry
+          </button>
+        </section>
+      </Shell>
+    );
+  }
+
+  if (loadError === "missing") {
     return (
       <Shell>
         <section className={`${PANEL} text-center`}>

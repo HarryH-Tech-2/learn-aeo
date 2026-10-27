@@ -130,7 +130,7 @@ function PaidPitch({ paid, offer: given, location, progressLine }: Props) {
         >
           See every plan
         </Link>{" "}
-        {location === "dashboard" ? "· Lesson 1 stays free either way." : "· Your place in this lesson is saved either way."}
+        · Lesson 1 stays free either way.
       </p>
     </section>
   );

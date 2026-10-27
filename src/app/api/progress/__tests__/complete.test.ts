@@ -107,6 +107,18 @@ describe("POST /api/progress/complete", () => {
     expect(mockedRecord).not.toHaveBeenCalled();
   });
 
+  it("rejects a malformed JSON body", async () => {
+    const res = await POST(
+      new Request("http://localhost:3000/api/progress/complete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: "{",
+      })
+    );
+    expect(res.status).toBe(400);
+    expect(mockedRecord).not.toHaveBeenCalled();
+  });
+
   it("rejects a coming-soon lesson", async () => {
     const res = await post({ lessonId: "structured-data-and-entities", score: 6, totalQuestions: 10 });
     expect(res.status).toBe(400);
