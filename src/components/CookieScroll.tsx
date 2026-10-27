@@ -1,33 +1,24 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { transliterateName } from "@/lib/hieroglyph-translator";
 import { trackEvent } from "@/lib/analytics";
 import { CONSENT_COOKIE, CONSENT_EVENT, MEASUREMENT_COOKIES } from "@/lib/consent";
 import { GA_MEASUREMENT_ID } from "@/lib/ga-server";
 
 const YEAR_S = 365 * 24 * 60 * 60;
-// "cookies" spelled in the hieroglyphic alphabet, along the top of the sheet, one sign at a time so they can light up in turn
-const COOKIES_GLYPHS = transliterateName("cookies").map((r) => r.mapping.glyph);
-
 // full-screen play and teaching screens, pages framed on other sites, and the buying pages (on /pricing it covered
-// the Lifetime price), where the scroll would sit over the action
+// the Lifetime price), where the banner would sit over the action
 const HIDDEN_ON = ["/lessons/", "/admin", "/pricing", "/checkout", "/get-started"];
 
 type GtagConsent = (cmd: "consent", action: "update", params: Record<string, "granted" | "denied">) => void;
 type LhWindow = { gtag?: GtagConsent; __lhGaStart?: () => void };
 
-/**
- * The site-wide cookie notice: a papyrus scroll that unrolls in the bottom corner. The heading is in red,
- * as scribes wrote headings (rubrics) in red ink, and 𓊵, the offering loaf on its mat, stands in for a cookie.
- * On hover, the light of Ra sweeps across the sheet and the signs along the top are gilded one by one.
- */
+/** The site-wide cookie notice: a plain banner in the bottom corner (full width on phones). */
 export default function CookieScroll() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [closing, setClosing] = useState(false);
 
   useEffect(() => {
     if (new RegExp(`(?:^|; )${CONSENT_COOKIE}=`).test(document.cookie)) return;
@@ -54,48 +45,40 @@ export default function CookieScroll() {
     }
     // CampaignTracker waits on this when a UK/EU visitor lands before choosing
     window.dispatchEvent(new CustomEvent(CONSENT_EVENT, { detail: choice }));
-    setClosing(true);
-    window.setTimeout(() => setOpen(false), window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 650);
+    setOpen(false);
   }
 
   if (!open || HIDDEN_ON.some((p) => pathname?.startsWith(p))) return null;
 
   return (
-    <aside className="cookie-scroll" role="region" aria-label="Cookie notice" data-closing={closing || undefined}>
-      <div className="cookie-rod" aria-hidden="true" />
-      <div className="cookie-sheet px-4 sm:px-6 pt-3 sm:pt-4 pb-4 sm:pb-5">
-        <p className="cookie-glyph-row text-lg text-center select-none" aria-hidden="true">
-          {COOKIES_GLYPHS.map((glyph, i) => (
-            <span key={i} style={{ "--i": i } as CSSProperties}>
-              {glyph}
-            </span>
-          ))}
-        </p>
-        <div className="cookie-text mt-2">
-          <h2 className="cookie-heading font-display text-lg sm:text-xl font-semibold flex items-center gap-2">
-            <span className="cookie-loaf text-3xl leading-none" aria-hidden="true">
-              𓊵
-            </span>
-            An offering of cookies
-          </h2>
-          <p className="cookie-body font-body text-sm sm:text-[0.95rem] leading-relaxed mt-2">
-            Some keep you signed in. Others, from Google Analytics, show us which lessons help. Accept them all, or keep only the ones the site needs.{" "}
-            <Link href="/privacy#cookies">What each one does</Link>
-          </p>
-          <div className="cookie-actions flex flex-wrap items-center gap-x-4 gap-y-2 mt-3 sm:mt-4">
-            <button type="button" className="cookie-accept" onClick={() => choose("all")}>
-              <span className="cookie-accept-seal" aria-hidden="true">
-                𓊵
-              </span>
-              Accept all
-            </button>
-            <button type="button" className="cookie-decline" onClick={() => choose("essential")}>
-              Essentials only
-            </button>
-          </div>
-        </div>
+    <aside
+      role="region"
+      aria-label="Cookie notice"
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-gold-500/30 bg-obsidian-light p-4 shadow-2xl sm:inset-x-auto sm:bottom-4 sm:left-4 sm:max-w-md sm:rounded-2xl sm:border"
+    >
+      <h2 className="font-display text-xl text-sand-100">Cookies</h2>
+      <p className="font-body text-sm leading-relaxed text-sand-300 mt-2">
+        Some keep you signed in. Others, from Google Analytics, show us which lessons help. Accept them all, or keep only the ones the site needs.{" "}
+        <Link href="/privacy#cookies" className="text-cyan underline underline-offset-2 hover:text-cyan-300">
+          What each one does
+        </Link>
+      </p>
+      <div className="flex flex-wrap items-center gap-3 mt-4">
+        <button
+          type="button"
+          onClick={() => choose("all")}
+          className="rounded-lg bg-gold-500 px-4 py-2 font-body text-sm font-semibold text-obsidian hover:bg-gold-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
+        >
+          Accept all
+        </button>
+        <button
+          type="button"
+          onClick={() => choose("essential")}
+          className="rounded-lg border border-sand-500/40 px-4 py-2 font-body text-sm font-medium text-sand-200 hover:border-cyan hover:text-cyan focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
+        >
+          Essentials only
+        </button>
       </div>
-      <div className="cookie-rod" aria-hidden="true" />
     </aside>
   );
 }

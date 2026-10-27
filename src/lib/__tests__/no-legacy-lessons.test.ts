@@ -40,6 +40,15 @@ const DELETED = [
   "public/lessons",
   "public/models",
   "public/videos",
+  "src/lib/hieroglyph-translator.ts",
+  "src/lib/hieroglyph-translator-locales.ts",
+  "src/lib/__tests__/hieroglyph-translator.test.ts",
+  "src/components/GuestPlayBanner.tsx",
+  "src/lib/guest-play.ts",
+  "src/lib/__tests__/guest-play.test.ts",
+  "public/audio",
+  "public/dev-audio",
+  "scripts/dev/build-og-image.ts",
 ];
 
 function walk(dir: string, out: string[] = []): string[] {

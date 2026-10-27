@@ -6,8 +6,6 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
-import GuestPlayBanner from "@/components/GuestPlayBanner";
-import { guestPlayHref } from "@/lib/guest-play";
 import Footer from "@/components/Footer";
 import type { BlogPost } from "@/lib/blog-posts";
 import { useAuthPrompt } from "@/components/useAuthPrompt";
@@ -212,10 +210,6 @@ export default function BlogPostContent({
             </p>
           </section>
 
-          {/* The offer sits right after the answer (it used to open the page, above the title), so the
-              answer still comes first and the offer is seen before the long body */}
-          <GuestPlayBanner location="blog" lazy />
-
           {/* Hero Image */}
           <div
             className="reveal relative mb-12"
@@ -378,16 +372,10 @@ export default function BlogPostContent({
                 a sealed door and read it in hieroglyphs, then learn the rest of
                 the alphabet through real Egyptian words.
               </p>
-              {/* (guest play: straight into Lesson 1, the account is asked for after the door; src/lib/guest-play.ts) */}
               <Link
-                href={guestPlayHref()}
+                href={FIRST_LESSON_PATH}
                 onClick={() => {
                   trackEvent("free_lesson_cta", { location: "blog" });
-                  trackEvent("guest_play_banner_click", {
-                    location: "blog_footer",
-                    named: 0,
-                    question_type: "blog_footer",
-                  });
                 }}
                 className="btn-primary inline-flex justify-center text-base py-4 px-8"
               >
@@ -418,7 +406,6 @@ export default function BlogPostContent({
           body="Lesson 1: uncover your name on a sealed door, then the rest of the alphabet through real words. Free, and no sign-up to start."
           ctaLabel="Start Lesson 1"
           next={FIRST_LESSON_PATH}
-          playHref={guestPlayHref()}
           onAccept={prompt.accept}
           onDismiss={prompt.dismiss}
         />

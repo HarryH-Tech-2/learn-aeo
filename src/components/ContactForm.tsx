@@ -1,16 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { getHieroglyphs } from "@/lib/hieroglyph-translator";
 import { trackEvent } from "@/lib/analytics";
 
-const GLYPH_FONT = { fontFamily: "'Noto Sans Egyptian Hieroglyphs', serif" } as const;
 const MAX_MESSAGE = 2000;
 
-/**
- * The contact form on /contact and at the foot of the homepage. A letter to the scribes: the sender's
- * name is written into a cartouche as they type it, and that cartouche is the seal pressed on sending.
- */
+const FIELD =
+  "w-full rounded-lg border border-sand-500/30 bg-ink px-3 py-2.5 text-sand-100 font-body text-base placeholder:text-sand-500/70 focus:outline-none focus-visible:border-cyan focus-visible:ring-2 focus-visible:ring-cyan/40";
+const LABEL = "block font-body text-sm font-medium text-sand-300 mb-1.5";
+
+/** The contact form on /contact and at the foot of the homepage. */
 export default function ContactForm({ idPrefix = "contact" }: { idPrefix?: string }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -18,8 +17,6 @@ export default function ContactForm({ idPrefix = "contact" }: { idPrefix?: strin
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const glyphs = name.trim() ? getHieroglyphs(name.trim().split(/\s+/)[0]) : "";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -43,11 +40,8 @@ export default function ContactForm({ idPrefix = "contact" }: { idPrefix?: strin
 
   if (submitted) {
     return (
-      <div className="letter-card letter-sent p-8 md:p-12 text-center" role="status">
-        <div className="letter-seal letter-seal-pressed mx-auto" aria-hidden="true">
-          <span style={GLYPH_FONT}>{glyphs || "𓂀"}</span>
-        </div>
-        <h3 className="font-display text-3xl font-light text-sand-100 mt-6">Sent. Thank you, {name.trim().split(/\s+/)[0]}.</h3>
+      <div className="rounded-2xl border border-gold-500/20 bg-obsidian-light p-8 md:p-12 text-center" role="status">
+        <h3 className="font-display text-3xl font-light text-sand-100">Sent. Thank you, {name.trim().split(/\s+/)[0]}.</h3>
         <p className="font-body text-base text-sand-400 mt-3 max-w-sm mx-auto leading-relaxed">
           We reply within a day, to <span className="text-sand-200">{email}</span>. Look in your spam folder if nothing arrives.
         </p>
@@ -55,21 +49,18 @@ export default function ContactForm({ idPrefix = "contact" }: { idPrefix?: strin
     );
   }
 
-  const field =
-    "letter-input w-full bg-transparent text-sand-100 font-body text-base placeholder:text-sand-500/70 focus:outline-none";
-
   return (
-    <form onSubmit={handleSubmit} className="letter-card p-6 sm:p-8 md:p-10">
+    <form onSubmit={handleSubmit} className="rounded-2xl border border-gold-500/20 bg-obsidian-light p-6 sm:p-8 md:p-10">
       <div className="mb-8">
-        <p className="font-display text-3xl sm:text-4xl font-light text-sand-100 leading-tight">Dear scribes,</p>
+        <p className="font-display text-3xl sm:text-4xl font-light text-sand-100 leading-tight">Get in touch</p>
         <p className="font-body text-sm text-sand-400 mt-1.5">Questions, ideas, or help with your account.</p>
       </div>
 
       <div className="grid sm:grid-cols-2 gap-x-6 gap-y-6">
-        <label className="letter-line block" htmlFor={`${idPrefix}-name`}>
-          <span className="letter-label">
-            <span style={GLYPH_FONT} aria-hidden="true">𓀀</span> Your name
-          </span>
+        <div>
+          <label className={LABEL} htmlFor={`${idPrefix}-name`}>
+            Your name
+          </label>
           <input
             id={`${idPrefix}-name`}
             name="name"
@@ -79,15 +70,15 @@ export default function ContactForm({ idPrefix = "contact" }: { idPrefix?: strin
             maxLength={80}
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className={field}
-            placeholder="Nefertari"
+            className={FIELD}
+            placeholder="Alex Morgan"
           />
-        </label>
+        </div>
 
-        <label className="letter-line block" htmlFor={`${idPrefix}-email`}>
-          <span className="letter-label">
-            <span style={GLYPH_FONT} aria-hidden="true">𓅭</span> Where we reply
-          </span>
+        <div>
+          <label className={LABEL} htmlFor={`${idPrefix}-email`}>
+            Where we reply
+          </label>
           <input
             id={`${idPrefix}-email`}
             name="email"
@@ -96,22 +87,20 @@ export default function ContactForm({ idPrefix = "contact" }: { idPrefix?: strin
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className={field}
+            className={FIELD}
             placeholder="you@example.com"
           />
-        </label>
+        </div>
 
-        <label className="letter-line block sm:col-span-2" htmlFor={`${idPrefix}-message`}>
-          <span className="letter-label flex justify-between">
-            <span>
-              <span style={GLYPH_FONT} aria-hidden="true">𓏛</span> Your message
-            </span>
+        <div className="sm:col-span-2">
+          <label className={`${LABEL} flex justify-between`} htmlFor={`${idPrefix}-message`}>
+            <span>Your message</span>
             {message.length > MAX_MESSAGE * 0.8 && (
               <span className="text-sand-500 tabular-nums">
                 {message.length}/{MAX_MESSAGE}
               </span>
             )}
-          </span>
+          </label>
           <textarea
             id={`${idPrefix}-message`}
             name="message"
@@ -120,10 +109,10 @@ export default function ContactForm({ idPrefix = "contact" }: { idPrefix?: strin
             maxLength={MAX_MESSAGE}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            className={`${field} letter-ruled resize-y min-h-[8.5rem]`}
+            className={`${FIELD} resize-y min-h-[8.5rem]`}
             placeholder="How can we help?"
           />
-        </label>
+        </div>
       </div>
 
       {error && (
@@ -133,13 +122,8 @@ export default function ContactForm({ idPrefix = "contact" }: { idPrefix?: strin
       )}
 
       <div className="mt-8 flex sm:justify-end">
-        <button type="submit" disabled={sending} className="hero-cta self-stretch sm:self-auto justify-center disabled:opacity-60">
-          <span className="hero-cta-seal" aria-hidden="true">
-            𓂀
-          </span>
-          <span className="hero-cta-text">
-            <span className="hero-cta-label">{sending ? "Sending…" : "Send message"}</span>
-          </span>
+        <button type="submit" disabled={sending} className="btn-primary self-stretch sm:self-auto justify-center disabled:opacity-60">
+          {sending ? "Sending…" : "Send message"}
         </button>
       </div>
     </form>

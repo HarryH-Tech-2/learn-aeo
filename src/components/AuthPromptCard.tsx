@@ -10,7 +10,7 @@ type Props = {
   ctaLabel: string;
   /** Where to send them after sign-up (relative path). */
   next: string;
-  /** Go straight here instead of opening the sign-up form (guest play: src/lib/guest-play.ts). */
+  /** Go straight here instead of opening the sign-up form. */
   playHref?: string;
   /** Called when the CTA is pressed, before the auth modal opens. */
   onAccept: () => void;
