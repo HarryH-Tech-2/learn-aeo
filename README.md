@@ -2,7 +2,7 @@
 
 Learn AEO is a course for marketers on answer engine optimisation: how to get a brand cited and recommended by ChatGPT, Perplexity, Google AI Overviews and other answer engines. It is a Next.js app (App Router, Prisma, NextAuth, Stripe, Resend) forked from the learn-hieroglyphics codebase, with the hieroglyph-specific features removed. Pricing is $100 lifetime or $10 a month (GBP options at £80 and £8).
 
-Status: Plan 1 (fork, strip, rebrand, pricing) is done. Plan 2 (lesson model, lesson player, lessons 1-3) comes next.
+Status: Plan 1 (fork, strip, rebrand, pricing) and Plan 2 (lesson model, lesson player, lessons 1-3) are done. Plan 3 (gamification, certificate, emails) comes next.
 
 ## Setup
 
@@ -30,7 +30,7 @@ npx tsc --noEmit && npm test && npm run build
 
 ### Dev auth bypass
 
-With `AEO_DEV_BYPASS_AUTH=1` sign-in is skipped locally. It is ignored when `NODE_ENV` is `production` (src/lib/dev-bypass.ts); never set it on Vercel.
+With `AEO_DEV_BYPASS_AUTH=1` sign-in is skipped locally. It is ignored when `NODE_ENV` is `production` (src/lib/dev-bypass.ts); never set it on Vercel. The dashboard still redirects without a real session, so under the bypass open a lesson by its URL, e.g. `/lessons/make-your-site-reachable-by-ai`.
 
 ### Local smoke results (no database, no external services)
 
@@ -38,6 +38,35 @@ With `AEO_DEV_BYPASS_AUTH=1` sign-in is skipped locally. It is ignored when `NOD
 404 by design: `/teachers` (removed), `/admin` (needs an admin session).
 
 Needs a database: anything that reads or writes Postgres (real sign-in and sessions, progress, purchases and entitlements, checkout, the Stripe webhook, newsletter and nurture email, leaderboard, certificates, admin pages). These were not exercised in the smoke run.
+
+## Lessons
+
+The course is eight lessons, one per district of the City of Answers. Lessons 1-3 are live; 4-8 show as "coming soon". Lesson 1 is free with a sign-in; the rest need Lifetime or Monthly access. A lesson lives at `/lessons/<id>`.
+
+### How a lesson is built
+
+- `src/lib/lesson-catalog.ts`: the catalog. One entry per lesson (id, order, district, title, summary, description, level, minutes, `isFree`, `status: "live" | "coming-soon"`). Middleware imports it, so it must stay edge-safe: it imports only `lesson-types.ts`.
+- `src/lib/lesson-types.ts`: the types for content (`LessonContent`, `Concept`, `Question`, `Source`, ...). Types only.
+- `src/lib/content/lesson-<n>-<district>.ts`: one file per live lesson, exporting its `LessonContent`: an intro, 3-4 concept groups (each concept with an explanation, why it matters, a pitfall and at least one source; each group ends with a quick check), a signature exercise, a real-world example to dissect, an audit of 8-12 questions, and an outro.
+- `src/lib/lessons.ts`: the registry. Joins the catalog with `CONTENT` (lesson id to content). A catalog entry marked `live` with no content throws at import.
+- `src/lib/questions.ts`: answer checking for the six question kinds (`choice`, `passage`, `blank`, `order`, `match`, `spot`). In a `blank` question, `___` marks each gap and `\n` starts a new line.
+- `src/components/player/`: the lesson player (`LessonPlayer.tsx`) and one component per question kind under `questions/`. The learner's place is saved in localStorage under `aeo_lesson_<id>`. The audit passes at 60% (`isLessonComplete` in `src/lib/progress.ts`).
+
+### Sources
+
+Every concept and example cites a named, linkable source, checked against the live page when written. `src/lib/__tests__/lesson-content.test.ts` checks the shape of every live lesson (and that no wording from the old course is left). To check that every cited URL still resolves (network-bound, so it is off by default):
+
+```bash
+CHECK_SOURCES=1 npx vitest run src/lib/__tests__/lesson-sources.live.test.ts
+```
+
+### Adding a lesson
+
+1. Write `src/lib/content/lesson-<n>-<district>.ts` exporting a `LessonContent`, following lessons 1-3. Source every claim; British English; no author bylines.
+2. Add it to `CONTENT` in `src/lib/lessons.ts` under the lesson's catalog id.
+3. Set that catalog entry's `status` to `"live"` in `src/lib/lesson-catalog.ts`. Do not change ids: they are the URLs.
+4. Run `npx tsc --noEmit && npm test && npm run build`, then the `CHECK_SOURCES=1` check above.
+5. Walk the lesson with `AEO_DEV_BYPASS_AUTH=1` at desktop and phone widths, in both themes, from intro to outro.
 
 ## Stripe scripts
 
@@ -64,4 +93,4 @@ A `sk_live_` key is refused unless you pass `--live`. The scripts are idempotent
 
 ## Next
 
-Plan 2: lesson model, lesson player, lessons 1-3.
+Plan 3: gamification, certificate, emails.
