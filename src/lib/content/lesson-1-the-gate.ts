@@ -167,7 +167,7 @@ export const LESSON_1: LessonContent = {
           term: "The passage is the unit",
           summary: "Engines lift and cite a sentence or passage, not a whole page.",
           explanation:
-            "Engines judge pages passage by passage. In 2020 Google said it could now \"better understand the relevancy of specific passages\", because \"the single sentence that answers your question might be buried deep in a web page\". The original RAG research split each Wikipedia article \"into disjoint 100-word chunks\" before retrieval.\n\nCitations work at the same scale. Claude's web search citations carry \"up to 150 characters of the cited content\", and Copilot Search links \"the entire sentence or passage\" to its source.",
+            "Engines judge pages passage by passage. In 2020 Google said it could now \"better understand the relevancy of specific passages\", because \"the single sentence that answers your question might be buried deep in a web page\". The original RAG research split each Wikipedia article \"into disjoint 100-word chunks\" before retrieval.\n\nCitations work at the same scale. Claude's web search citations carry \"up to 150 characters of the cited content\": a sentence or two, not a page.",
           whyItMatters:
             "You are not competing page against page. You are competing paragraph against paragraph. One clear paragraph on a modest page can beat a vague paragraph on a strong one.",
           example: {
@@ -180,7 +180,7 @@ export const LESSON_1: LessonContent = {
           },
           pitfall:
             "Checking only where the whole page ranks. A page can rank well and still offer no passage worth quoting.",
-          sources: [GOOGLE_PASSAGES, RAG_PAPER_FULL, CLAUDE_WEB_SEARCH, BING_COPILOT_SEARCH],
+          sources: [GOOGLE_PASSAGES, RAG_PAPER_FULL, CLAUDE_WEB_SEARCH],
         },
       ],
       check: [
@@ -215,7 +215,7 @@ export const LESSON_1: LessonContent = {
           kind: "blank",
           id: "q-g1-blank",
           prompt: "Complete Google's eligibility rule for AI features.",
-          text: "To be shown as a supporting link in AI Overviews or AI Mode, a page must be ___ and eligible to be shown in Google Search with a ___.",
+          text: "To be eligible to be shown as a supporting link in AI Overviews or AI Mode, a page must be ___ and eligible to be shown in Google Search with a ___.",
           answers: ["indexed", "snippet"],
           distractors: ["marked up with FAQ schema", "listed in llms.txt", "rich result"],
           explanation:
@@ -242,7 +242,7 @@ export const LESSON_1: LessonContent = {
             code: "# OpenAI search crawler (ChatGPT search)\nMozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36; compatible; OAI-SearchBot/1.4; +https://openai.com/searchbot\n\n# OpenAI training crawler\nMozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; GPTBot/1.4; +https://openai.com/gptbot\n\n# Perplexity search crawler\nMozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; PerplexityBot/1.0; +https://perplexity.ai/perplexitybot)",
           },
           pitfall:
-            "Blocking every AI bot at once to stop training. OpenAI states that sites opted out of OAI-SearchBot \"will not be shown in ChatGPT search answers\".",
+            "Blocking every AI bot at once to stop training. OpenAI states that sites opted out of OAI-SearchBot \"will not be shown in ChatGPT search answers, though can still appear as navigational links\".",
           sources: [RAG_PAPER, OPENAI_CRAWLERS, ANTHROPIC_CRAWLERS, PERPLEXITY_CRAWLERS],
         },
         {
@@ -250,7 +250,7 @@ export const LESSON_1: LessonContent = {
           term: "Retrieval-augmented generation (RAG)",
           summary: "Retrieve relevant passages first, then generate an answer conditioned on them.",
           explanation:
-            "Lewis et al. (2020) set out the pattern most answer engines follow. A **retriever** searches an index for the passages most relevant to the question. A **generator** then writes the answer using those passages as context. In the paper, the index was \"a dense vector index of Wikipedia, accessed with a pre-trained neural retriever\".\n\nThe paper also showed why retrieval matters for freshness. Because the knowledge lives in the index, it \"can be easily updated at test time\" by swapping the index, with no retraining.",
+            "Lewis et al. (2020) set out the retrieve-then-generate pattern that the engines' own docs show in outline: search first, then answer from the results. A **retriever** searches an index for the passages most relevant to the question. A **generator** then writes the answer using those passages as context. In the paper, the index was \"a dense vector index of Wikipedia, accessed with a pre-trained neural retriever\".\n\nThe paper also showed why retrieval matters for freshness. Because the knowledge lives in the index, it \"can be easily updated at test time\" by swapping the index, with no retraining.",
           whyItMatters:
             "This is why indexing and passage quality come before anything else. If your passage is not retrieved, the generator never sees it, however good the model is.",
           pitfall:
@@ -274,7 +274,7 @@ export const LESSON_1: LessonContent = {
           term: "Engines depend on a search index",
           summary: "Retrieval runs over an index built by crawlers, so crawlability and indexing come first.",
           explanation:
-            "Every engine here retrieves from an index of the web. For Google's AI features, the page must be in Google's index. PerplexityBot exists \"to surface and link websites in search results on Perplexity\". OAI-SearchBot does the same job for ChatGPT search. Anthropic says disabling Claude-SearchBot \"prevents our system from indexing your content\". Copilot Search runs inside Bing.\n\nSeparate user-triggered fetchers (ChatGPT-User, Perplexity-User, Claude-User) visit a page while answering a particular question. Lesson 2 covers how they treat robots.txt.",
+            "Every engine here retrieves from an index of the web. For Google's AI features, the page must be in Google's index. PerplexityBot exists \"to surface and link websites in search results on Perplexity\". OAI-SearchBot does the same job for ChatGPT search. Anthropic says disabling Claude-SearchBot \"prevents our system from indexing your content for search optimization, which may reduce your site's visibility and accuracy in user search results\". Copilot Search runs inside Bing.\n\nSeparate user-triggered fetchers (ChatGPT-User, Perplexity-User, Claude-User) visit a page while answering a particular question. Lesson 2 covers how they treat robots.txt.",
           whyItMatters:
             "Classic technical SEO is the entry ticket. A page the crawler cannot reach, or that the index drops, is not a candidate for any answer.",
           pitfall:
@@ -347,12 +347,12 @@ export const LESSON_1: LessonContent = {
           term: "A wider candidate set",
           summary: "More queries pull in more candidate pages, but only some of them get cited.",
           explanation:
-            "Each sub-query brings back its own results, so the pool of candidate pages is wider than one results page. Google says that as responses are generated its models \"identify more supporting web pages\", so it can show a wider and more varied set of links than a classic search.\n\nThe pool is then narrowed. Copilot Search lets users see \"a list of every link used to generate the curated answer\", and OpenAI says the sources consulted often outnumber the citations shown.",
+            "Each sub-query brings back its own results, so the pool of candidate pages is wider than one results page. Google says that as responses are generated its models \"identify more supporting web pages\", so it can show a wider and more varied set of links than a classic search.\n\nThe pool is then narrowed. OpenAI's web search docs say the number of sources the model consulted \"is often greater than the number of citations\" it shows.",
           whyItMatters:
             "Being outside the top three for a head term does not rule you out. Being retrieved does not guarantee a citation either. The passage has to be the one the answer actually relies on.",
           pitfall:
             "Judging AI visibility from rankings for one head keyword. The sub-queries, and the passages they surface, matter more.",
-          sources: [GOOGLE_AI_FEATURES, BING_COPILOT_SEARCH, OPENAI_WEB_SEARCH],
+          sources: [GOOGLE_AI_FEATURES, OPENAI_WEB_SEARCH],
         },
         {
           id: "c-liftable",
@@ -393,18 +393,18 @@ export const LESSON_1: LessonContent = {
         {
           kind: "spot",
           id: "q-g3-spot",
-          prompt: "This is part of a (made-up) help page. Which line would be hardest to cite on its own?",
-          language: "markdown",
+          prompt:
+            "These are the answer sentences under the heading \"How long does a refund take?\" on a (made-up) help page. Which sentence would be hardest to cite on its own?",
+          language: "text",
           lines: [
-            "## How long does a refund take?",
             "Card refunds arrive within 5 working days of us receiving your return.",
             "PayPal refunds take up to 2 working days.",
             "As mentioned above, this also applies to it in most cases.",
             "Gift card purchases are refunded as store credit on the same day.",
           ],
-          answer: 3,
+          answer: 2,
           explanation:
-            "\"This\", \"it\" and \"as mentioned above\" all point at text the reader cannot see once the line is lifted out. The other lines each carry their own subject, figure and condition.",
+            "\"This\", \"it\" and \"as mentioned above\" all point at text the reader cannot see once the line is lifted out. The other sentences each carry their own subject, figure and condition.",
         },
         {
           kind: "blank",
@@ -434,11 +434,10 @@ export const LESSON_1: LessonContent = {
           "The engine decides the prompt needs information from the web",
           "It generates one or more search queries",
           "The search system returns candidate pages from its index",
-          "The model reads the retrieved passages and writes the answer",
-          "It attaches citations to the passages it relied on",
+          "The model writes the answer from the retrieved passages, attaching a citation to each claim it took from a source",
         ],
         explanation:
-          "This follows the flow in Anthropic's web search docs: Claude decides when to search, the searches run (Google's Gemini docs note one prompt can lead to several queries), and the final response carries cited sources. Citation comes last, so it can only point to passages that were retrieved.",
+          "This follows the flow in Anthropic's web search docs: Claude decides when to search, the searches run (Google's Gemini docs note one prompt can lead to several queries), and the final response carries cited sources. Citations are attached as the answer is written, and OpenAI's API records where in the response each source was used. They can only point to passages that were retrieved.",
       },
       {
         kind: "choice",

@@ -4,7 +4,7 @@ import { LESSON_CATALOG } from "@/lib/lesson-catalog";
 import { blankCount } from "@/lib/questions";
 import type { LessonContent, Question, Source } from "@/lib/lesson-types";
 
-const BANNED = /hieroglyph|egypt|pharaoh|papyrus|scribe|glyph|tomb|cartouche|expedition/i;
+const BANNED = /\b(hieroglyph\w*|egypt\w*|pharaoh\w*|papyr\w*|scribes?|glyphs?|tombs?|cartouches?|expeditions?)\b/i;
 
 function allQuestions(c: LessonContent): Question[] {
   return [...c.groups.flatMap((g) => g.check), ...c.exercise.steps, ...c.audit];
@@ -56,6 +56,14 @@ function checkQuestion(q: Question) {
       break;
   }
 }
+
+describe("banned-word pattern", () => {
+  it("catches old-course words but not ordinary ones", () => {
+    expect("describe the subscribe button").not.toMatch(BANNED);
+    expect("an Egyptian scribe").toMatch(BANNED);
+    expect("Hieroglyphs").toMatch(BANNED);
+  });
+});
 
 describe("lesson registry", () => {
   it("follows catalog order", () => {
