@@ -187,7 +187,7 @@ export default function PricingSection() {
             </span>
             <span className="text-left">
               <span className="block font-body text-sm md:text-base text-sand-100 font-medium">14-day money-back guarantee</span>
-              <span className="block font-body text-xs md:text-sm text-sand-400">Not for you? Email us within 14 days for a full refund. No questions asked.</span>
+              <span className="block font-body text-xs md:text-sm text-sand-400">Not for you? Email us within 14 days for a full refund.</span>
             </span>
           </div>
         </div>
@@ -283,7 +283,7 @@ export default function PricingSection() {
 
         <div className="mt-10 grid sm:grid-cols-3 gap-4 text-center">
           {[
-            ["14-day guarantee", "Not for you? Email us within 14 days for a full refund, no questions asked."],
+            ["14-day guarantee", "Not for you? Email us within 14 days for a full refund."],
             ["Always up to date", "New lessons land as answer engines change, included on both plans."],
             ["Cancel in one click", "Monthly stops from your account page. No emails, no phone calls."],
           ].map(([t, d]) => (

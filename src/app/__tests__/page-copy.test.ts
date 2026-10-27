@@ -72,6 +72,10 @@ describe("page copy", () => {
     expect(hits).toEqual([]);
   });
 
+  it.each(FILES)("%s does not promise more than the Terms' refund wording", (rel) => {
+    expect(read(rel)).not.toMatch(/no questions asked/i);
+  });
+
   it("layout metadata descriptions say the course is about answer engines", () => {
     const text = read("src/app/layout.tsx");
     const descriptions = [...text.matchAll(/description:\s*"([^"]+)"/g)].map((m) => m[1]);
