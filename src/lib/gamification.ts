@@ -13,6 +13,19 @@ export const XP_REWARDS = {
   mechanicPerfect: 50,
   /** Reading the lesson's real inscription */
   readingComplete: 40,
+  // The AEO lesson player (src/components/player)
+  /** Moving on from a concept card */
+  conceptRead: 5,
+  /** A quick check right on the first try */
+  checkCorrect: 10,
+  /** A signature-exercise step right on the first try */
+  exerciseCorrect: 20,
+  /** Every exercise step right on the first try */
+  exerciseClean: 50,
+  /** Each correct audit answer */
+  auditCorrect: 25,
+  /** Every audit answer correct */
+  perfectAudit: 100,
 } as const;
 
 export const LEVEL_THRESHOLDS = [

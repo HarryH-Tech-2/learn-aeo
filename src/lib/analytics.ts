@@ -121,6 +121,10 @@
  *                             new box is filled, 2–4) [2026-10-16]; the card's begin_checkout carries names too
  *   cartouche_print_success — the buyer reached the download page after paying (name_length);
  *                             the sale itself is recorded server-side as `purchase` with item cartouche-print
+ *
+ * Lesson player (2026-10-26, src/components/player/LessonPlayer.tsx):
+ *   lesson_step           — a lesson step came on screen (step_kind: intro | concept | check | exercise | example | audit | outro)
+ *   lesson_audit_complete — the final audit's last answer given (score, total, passed: 1 | 0)
  */
 
 type Gtag = (...args: unknown[]) => void;

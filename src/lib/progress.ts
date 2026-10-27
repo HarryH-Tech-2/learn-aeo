@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/db";
+import { isLessonComplete } from "@/lib/pass-mark";
 
-export function isLessonComplete(score: number, totalQuestions: number): boolean {
-  return score >= Math.ceil(totalQuestions * 0.6);
-}
+// (defined in pass-mark.ts so the client-side lesson player can import it without Prisma)
+export { isLessonComplete };
 
 export function shouldIncrementStreak(
   lastActiveDate: Date | null,
