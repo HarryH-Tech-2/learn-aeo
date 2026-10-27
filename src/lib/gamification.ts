@@ -14,6 +14,15 @@ export const XP_REWARDS = {
   perfectAudit: 100,
 } as const;
 
+/** How many questions a lesson's final audit may have (enforced by the lesson content test). */
+export const AUDIT_LENGTH = { min: 8, max: 12 } as const;
+
+/**
+ * Largest XP a single award can carry: a perfect audit of the longest allowed length.
+ * Every other award (concept, check, exercise step or clean exercise) is smaller.
+ */
+export const MAX_XP_AWARD = AUDIT_LENGTH.max * XP_REWARDS.auditCorrect + XP_REWARDS.perfectAudit;
+
 export const LEVEL_THRESHOLDS = [
   { level: 1, xp: 0, title: "Volunteer Digger" },
   { level: 2, xp: 200, title: "Field Assistant" },

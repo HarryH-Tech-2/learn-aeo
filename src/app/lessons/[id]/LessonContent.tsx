@@ -106,11 +106,12 @@ export default function LessonContent() {
 
   function handleXP(xp: number) {
     if (!session) return; // local preview without an account: nothing to save
-    fetch("/api/progress/xp", {
+    // fetchJson rejects on a non-2xx response, so a refused award is logged, not silently treated as saved.
+    fetchJson("/api/progress/xp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ lessonId: id, xp }),
-    }).catch(() => null);
+    }).catch((err) => console.error("XP award not saved", { lessonId: id, xp, err }));
   }
 
   function handleAuditComplete(score: number, total: number) {

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { CONTENT, LESSONS, getLesson, isLive } from "@/lib/lessons";
 import { LESSON_CATALOG } from "@/lib/lesson-catalog";
 import { blankCount } from "@/lib/questions";
+import { AUDIT_LENGTH } from "@/lib/gamification";
 import type { LessonContent, Question, Source } from "@/lib/lesson-types";
 
 const BANNED = /\b(hieroglyph\w*|egypt\w*|pharaoh\w*|papyr\w*|scribes?|glyphs?|tombs?|cartouches?|expeditions?)\b/i;
@@ -104,8 +105,8 @@ describe.each(live.map((l) => [l.id, l] as const))("lesson content: %s", (_id, l
       expect(g.check.length, g.id).toBeLessThanOrEqual(4);
     }
     expect(c.exercise.steps.length).toBeGreaterThanOrEqual(3);
-    expect(c.audit.length).toBeGreaterThanOrEqual(8);
-    expect(c.audit.length).toBeLessThanOrEqual(12);
+    expect(c.audit.length).toBeGreaterThanOrEqual(AUDIT_LENGTH.min);
+    expect(c.audit.length).toBeLessThanOrEqual(AUDIT_LENGTH.max);
     expect(new Set(allQuestions(c).map((q) => q.kind)).size).toBeGreaterThanOrEqual(4);
   });
 

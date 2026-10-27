@@ -3,9 +3,10 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { recordXP } from "@/lib/progress";
 import { lessonMeta } from "@/lib/lesson-catalog";
+import { MAX_XP_AWARD } from "@/lib/gamification";
 
-/** Largest XP award a single call may carry. */
-const MAX_XP = 200;
+/** Largest XP award a single call may carry: a perfect audit of the longest allowed length. */
+const MAX_XP = MAX_XP_AWARD;
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
