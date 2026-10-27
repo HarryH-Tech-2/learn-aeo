@@ -203,7 +203,11 @@ export default function AuthCard({
       {/* Logo */}
       <div className="text-center mb-8">
         <Link href="/" className="inline-flex items-center gap-3 mb-6">
-          <span className="text-4xl">&#x13080;</span>
+          <svg aria-hidden="true" viewBox="0 0 64 64" className="w-10 h-10">
+            <rect width="64" height="64" rx="14" fill="#04060d" />
+            <rect x="7" y="21" width="50" height="22" rx="11" fill="none" stroke="#6fe3ff" strokeWidth="3.5" />
+            <rect x="30.25" y="14" width="3.5" height="36" rx="1.75" fill="#ffc76b" />
+          </svg>
           <span className="font-display text-2xl font-semibold text-gold-400">
             Learn AEO
           </span>
@@ -234,18 +238,18 @@ export default function AuthCard({
           <>
             {isSignIn ? (
               <h1 className="font-display text-3xl font-light text-sand-100 mb-2">
-                Enter the{" "}
-                <span className="text-gradient-gold font-medium">Temple</span>
+                Welcome{" "}
+                <span className="text-gradient-gold font-medium">back</span>
               </h1>
             ) : (
               <h1 className="font-display text-3xl font-light text-sand-100 mb-2">
-                Begin Your{" "}
-                <span className="text-gradient-gold font-medium">Journey</span>
+                Start{" "}
+                <span className="text-gradient-gold font-medium">learning AEO</span>
               </h1>
             )}
             <p className="font-body text-sm text-sand-500 font-light">
               {isSignIn
-                ? "Sign in to continue your journey through ancient Egypt"
+                ? "Sign in to pick up the course where you left off"
                 : buyIntent
                   ? <BuyIntro destination={destination} />
                   : intro ?? "Create a free account and start your first lesson. No payment needed."}

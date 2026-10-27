@@ -185,7 +185,7 @@ html.light ::selection {
   color: #fff;
 }
 
-/* ── Hero subtitle: lift it off the busy video with a soft shadow ── */
+/* ── Hero subtitle: a soft shadow so it stays crisp over the glow ── */
 .hero-subtitle {
   color: #f6f8fc;
   text-shadow:
@@ -210,12 +210,6 @@ html.theme-transitioning *::after {
     fill 0.3s ease,
     stroke 0.3s ease,
     box-shadow 0.3s ease !important;
-}
-
-/* Utility for inline hieroglyphs in prose/tables: the
-   Windows system font that ships the block, then whatever serif has it. */
-.hieroglyph-font {
-  font-family: "Segoe UI Historic", serif;
 }
 
 /* ── Animated Grain Overlay ── */
@@ -329,16 +323,14 @@ html.js .enter-down {
   animation: enter-down 0.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
-/* The 3D hero's button (2026-10-01): a gold cartouche (a pill inside a thin gold ring) with an eye-of-Horus seal,
-   and the call to action over a reassuring line. A sheen crosses it every few
-   seconds, so it draws the eye over the sunset without a busy pulse. (The pulsing outer ring went 2026-10-26.) */
+/* The hero's button: a gold pill with the call to action over a reassuring line. A sheen crosses it every few
+   seconds, so it draws the eye without a busy pulse. */
 .hero-cta {
   position: relative;
   isolation: isolate;
   display: inline-flex;
   align-items: center;
-  gap: 0.7rem;
-  padding: 0.5rem 1.4rem 0.5rem 0.5rem;
+  padding: 0.7rem 1.6rem;
   border: 0;
   border-radius: 999px;
   cursor: pointer;
@@ -386,26 +378,10 @@ html.js .enter-down {
   outline: 2px solid #fff3cf;
   outline-offset: 10px;
 }
-.hero-cta-seal {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 2.6rem;
-  height: 2.6rem;
-  border-radius: 999px;
-  background: radial-gradient(circle at 35% 30%, #3a2a12, #140d04 70%);
-  box-shadow:
-    inset 0 0 0 1.5px rgba(246, 210, 120, 0.7),
-    0 2px 6px rgba(80, 50, 5, 0.45);
-  color: #f6d27a;
-  font-size: 1.55rem;
-  line-height: 1;
-}
 .hero-cta-text {
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
-  padding-right: 0.25rem;
 }
 .hero-cta-label {
   font-family: var(--font-display);
@@ -425,13 +401,7 @@ html.js .enter-down {
 }
 @media (min-width: 640px) {
   .hero-cta {
-    gap: 1.05rem;
-    padding: 0.65rem 1.9rem 0.65rem 0.65rem;
-  }
-  .hero-cta-seal {
-    width: 3.3rem;
-    height: 3.3rem;
-    font-size: 1.8rem;
+    padding: 0.85rem 2.1rem;
   }
   .hero-cta-label {
     font-size: 1.3rem;
@@ -616,20 +586,7 @@ html.light .lg\:hero-media .nav-signin:hover {
     animation: none;
   }
 }
-/* Hero video cross-fades in over the poster once it is actually playing */
-.hero-video {
-  opacity: 0;
-  transition: opacity 1s ease;
-}
-.hero-video.is-playing {
-  opacity: 1;
-}
-/* the poster, lifted so the sunset carries. The clips have the same lift baked in (a filter on a
-   playing video is redone every frame), so the cross-fade from poster to video has no jump */
-.hero-bright {
-  filter: brightness(1.12) saturate(1.15);
-}
-/* the gold "Hieroglyphics" is background-clipped, so text-shadow can't reach it; a drop-shadow can */
+/* the gold word is background-clipped, so text-shadow can't reach it; a drop-shadow can */
 .hero-title {
   filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.55));
 }
@@ -746,8 +703,7 @@ html.light .lg\:hero-media .nav-signin:hover {
     opacity: 1;
     transform: none;
   }
-  .accordion-panel,
-  .hero-video {
+  .accordion-panel {
     transition: none;
   }
 }
@@ -999,10 +955,6 @@ html.light footer {
 }
 
 /* ── Classroom worksheet (/teachers/worksheet) — print-first, A4 ── */
-.glyph-font {
-  font-family: "Segoe UI Historic", serif;
-}
-
 .worksheet {
   --ws-ink: #1c1a17;
   --ws-muted: #5a544a;
@@ -1078,26 +1030,10 @@ html.light footer {
   }
 }
 
-/* Footer (2026-10-01): dark in both themes, an engraved Nile scene (Nano Banana Pro) along the bottom
-   (Footer.tsx). The background is the picture's sky colour and its top edge fades out, so there is no seam; the
-   picture rises under the links (negative margin) the way the sky does in a printed endpaper. Narrow screens
-   crop it rather than shrink it, keeping the felucca and the pyramids in view. */
-.footer-egypt,
-html.light footer.footer-egypt {
+/* Footer: dark in both themes (Footer.tsx). */
+.site-footer,
+html.light footer.site-footer {
   background: #060a14;
-}
-.footer-egypt-scene {
-  position: relative;
-  display: block;
-  width: 100%;
-  height: clamp(240px, 42.4vw, 600px);
-  margin-top: clamp(-190px, -16vw, -60px);
-  object-fit: cover;
-  object-position: 66% 100%;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 22%);
-  mask-image: linear-gradient(to bottom, transparent 0, #000 22%);
-  pointer-events: none;
-  user-select: none;
 }
 
 /* ── Pricing: the 14-day guarantee seal (src/components/PricingSection.tsx) ── */

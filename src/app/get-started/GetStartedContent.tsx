@@ -47,7 +47,7 @@ function GetStartedInner() {
     return (
       <div className="flex-1 flex items-center justify-center bg-obsidian">
         <div className="text-center">
-          <span className="text-5xl block mb-4 animate-pulse">&#x13080;</span>
+          <span className="mx-auto mb-4 block h-10 w-10 rounded-full border-2 border-cyan-500/30 border-t-cyan-500 animate-spin" aria-hidden="true" />
           <p className="font-body text-sand-400 text-sm">Redirecting...</p>
         </div>
       </div>
@@ -62,19 +62,9 @@ function GetStartedInner() {
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 60% 40% at 50% 50%, rgba(212,168,50,0.04) 0%, transparent 60%)",
+            "radial-gradient(ellipse 60% 40% at 50% 50%, rgba(111,227,255,0.05) 0%, transparent 60%)",
         }}
       />
-
-      {/* Decorative glyph */}
-      <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
-        <span
-          className="text-[40rem] text-gold-500"
-          style={{ fontFamily: "'Noto Sans Egyptian Hieroglyphs', serif" }}
-        >
-          &#x13080;
-        </span>
-      </div>
 
       {/* Card */}
       <motion.div

@@ -44,7 +44,7 @@ function LoginInner() {
     return (
       <div className="flex-1 flex items-center justify-center bg-obsidian">
         <div className="text-center">
-          <span className="text-5xl block mb-4 animate-pulse">&#x13080;</span>
+          <span className="mx-auto mb-4 block h-10 w-10 rounded-full border-2 border-cyan-500/30 border-t-cyan-500 animate-spin" aria-hidden="true" />
           <p className="font-body text-sand-400 text-sm">Redirecting...</p>
         </div>
       </div>
@@ -105,19 +105,9 @@ function LoginInner() {
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 60% 40% at 50% 50%, rgba(212,168,50,0.04) 0%, transparent 60%)",
+            "radial-gradient(ellipse 60% 40% at 50% 50%, rgba(111,227,255,0.05) 0%, transparent 60%)",
         }}
       />
-
-      {/* Decorative glyph */}
-      <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
-        <span
-          className="text-[40rem] text-gold-500"
-          style={{ fontFamily: "'Noto Sans Egyptian Hieroglyphs', serif" }}
-        >
-          &#x13080;
-        </span>
-      </div>
 
       {/* Login Card */}
       <motion.div
@@ -139,7 +129,11 @@ function LoginInner() {
           {/* Logo */}
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-3 mb-6">
-              <span className="text-4xl">&#x13080;</span>
+              <svg aria-hidden="true" viewBox="0 0 64 64" className="w-10 h-10">
+                <rect width="64" height="64" rx="14" fill="#04060d" />
+                <rect x="7" y="21" width="50" height="22" rx="11" fill="none" stroke="#6fe3ff" strokeWidth="3.5" />
+                <rect x="30.25" y="14" width="3.5" height="36" rx="1.75" fill="#ffc76b" />
+              </svg>
               <span className="font-display text-2xl font-semibold text-gold-400">
                 Learn AEO
               </span>
@@ -169,11 +163,11 @@ function LoginInner() {
             ) : (
               <>
                 <h1 className="font-display text-3xl font-light text-sand-100 mb-2">
-                  Enter the{" "}
-                  <span className="text-gradient-gold font-medium">Temple</span>
+                  Welcome{" "}
+                  <span className="text-gradient-gold font-medium">back</span>
                 </h1>
                 <p className="font-body text-sm text-sand-500 font-light">
-                  Sign in to continue your journey through ancient Egypt
+                  Sign in to pick up the course where you left off
                 </p>
               </>
             )}

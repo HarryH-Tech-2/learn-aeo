@@ -1,53 +1,60 @@
 import InView from "@/components/InView";
 import { reveal } from "@/components/reveal";
+import { LESSON_CATALOG } from "@/lib/lesson-catalog";
 
-const features = [
+/** Six "what you'll learn" cards. Each names the districts (lessons) it comes from; the district names, lesson
+ *  numbers and live / coming-soon status are read from the catalog, so they never drift from the course. */
+const features: { title: string; description: string; lessons: number[] }[] = [
   {
-    icon: "𓂀",
-    title: "Eye of Discovery",
+    title: "How AI answers get built",
     description:
-      "Interactive lessons that reveal the meaning behind every stroke. Learn how ancient scribes encoded language into art over millennia.",
-    accent: "from-gold-500/20 to-transparent",
+      "Follow a question through retrieval, grounding and query fan-out, and learn the difference between being cited and being mentioned.",
+    lessons: [1],
   },
   {
-    icon: "𓇳",
-    title: "Living History",
+    title: "Let the right bots in",
     description:
-      "Study real inscriptions from the Valley of the Kings, Karnak, and the Book of the Dead. Context that textbooks can't provide.",
-    accent: "from-turquoise/20 to-transparent",
+      "Tell training crawlers from search bots and user-triggered fetchers, then check robots.txt, rendering and CDN rules so they can reach your pages.",
+    lessons: [2],
   },
   {
-    icon: "𓋴",
-    title: "Progressive Mastery",
+    title: "Write passages engines can lift",
     description:
-      "From single signs to complete sentences. Our curriculum builds systematically from uniliteral glyphs to complex grammar.",
-    accent: "from-terracotta/20 to-transparent",
+      "Lead with the answer, use question headings, lists and tables, and keep each section clear enough to stand on its own when it is quoted.",
+    lessons: [3],
   },
   {
-    icon: "𓁐",
-    title: "Cultural Immersion",
+    title: "Structured data and entities",
     description:
-      "Understand the mythology, rituals, and daily life encoded in hieroglyphic texts. Language is the gateway to civilization.",
-    accent: "from-lapis-light/20 to-transparent",
+      "Get the JSON-LD essentials right and make your brand one unambiguous entity, with consistent names and sameAs links.",
+    lessons: [4],
   },
   {
-    icon: "𓆣",
-    title: "Sacred Symbols",
+    title: "Authority and platforms",
     description:
-      "Master determinatives, logograms, and phonetic complements. Learn why the scarab means transformation and how the ankh grants life.",
-    accent: "from-gold-500/20 to-transparent",
+      "Look at the mentions, reviews and lists answer engines lean on, then at what each major engine tends to favour and how to test it.",
+    lessons: [5, 6],
   },
   {
-    icon: "𓉐",
-    title: "Temple Reading",
+    title: "Measure it and run it",
     description:
-      "Graduate to reading monumental inscriptions in their original context. From tomb walls to temple pylons, read what the ancients wrote.",
-    accent: "from-turquoise/20 to-transparent",
+      "Track whether you appear in AI answers and what that sends you, then turn it into an audit, a roadmap and a 90-day plan.",
+    lessons: [7, 8],
   },
 ];
 
+function lessonsFor(orders: number[]) {
+  return orders.map((order) => {
+    const lesson = LESSON_CATALOG.find((l) => l.order === order);
+    if (!lesson) throw new Error(`FeaturesSection: no lesson ${order} in the catalog`);
+    return lesson;
+  });
+}
+
 // Server component; scroll-reveal is CSS via <InView> + .reveal.
 export default function FeaturesSection() {
+  const first = LESSON_CATALOG[0];
+  const last = LESSON_CATALOG[LESSON_CATALOG.length - 1];
   return (
     <section id="features" className="relative py-20 overflow-hidden">
       <InView className="max-w-7xl mx-auto px-6 lg:px-8" margin="-100px">
@@ -55,9 +62,7 @@ export default function FeaturesSection() {
         <div className="text-center mb-20">
           <div className="reveal inline-flex items-center gap-3 mb-6">
             <span className="h-px w-12 bg-gold-700" />
-            <span className="font-body text-xs tracking-[0.3em] uppercase text-gold-500">
-              Why Learn With Us
-            </span>
+            <span className="font-body text-xs tracking-[0.3em] uppercase text-gold-500">What you&apos;ll learn</span>
             <span className="h-px w-12 bg-gold-700" />
           </div>
 
@@ -65,17 +70,13 @@ export default function FeaturesSection() {
             className="reveal font-display text-4xl md:text-5xl lg:text-6xl font-light text-sand-100 mb-6"
             style={reveal(0.1, { y: 30 })}
           >
-            A <span className="text-gradient-gold font-medium">Scholar&apos;s Path</span>
-            <br />
-            to Ancient Wisdom
+            From the first prompt <br />
+            to a <span className="text-gradient-gold font-medium">plan you can run</span>
           </h2>
 
-          <p
-            className="reveal font-body text-lg text-sand-400 max-w-2xl mx-auto font-light"
-            style={reveal(0.2)}
-          >
-            Our curriculum mirrors the training of ancient Egyptian scribes:
-            methodical, immersive, and deeply rewarding.
+          <p className="reveal font-body text-lg text-sand-400 max-w-2xl mx-auto font-light" style={reveal(0.2)}>
+            The course is a City of Answers with {LESSON_CATALOG.length} districts, one lesson each. You come in at{" "}
+            {first.district} and finish at {last.district}.
           </p>
         </div>
 
@@ -87,25 +88,21 @@ export default function FeaturesSection() {
               className="reveal card-ancient p-8"
               style={reveal(0.3 + i * 0.1, { y: 40, dur: 0.6 })}
             >
-              {/* Icon */}
-              <div className="mb-6 hidden md:block">
-                <span
-                  className="text-5xl block"
-                  style={{
-                    fontFamily: "'Noto Sans Egyptian Hieroglyphs', serif",
-                  }}
-                >
-                  {feature.icon}
-                </span>
-              </div>
-
-              {/* Text */}
-              <h3 className="font-display text-xl font-semibold text-sand-100 mb-3">
-                {feature.title}
-              </h3>
-              <p className="font-body text-sm text-sand-400 leading-relaxed font-light">
-                {feature.description}
-              </p>
+              <ul className="mb-5 flex flex-wrap gap-2">
+                {lessonsFor(feature.lessons).map((lesson) => (
+                  <li
+                    key={lesson.id}
+                    className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 px-3 py-1 font-body text-xs text-cyan-500"
+                  >
+                    <span>
+                      Lesson {lesson.order} · {lesson.district}
+                    </span>
+                    {lesson.status === "coming-soon" && <span className="text-sand-400">· coming soon</span>}
+                  </li>
+                ))}
+              </ul>
+              <h3 className="font-display text-xl font-semibold text-sand-100 mb-3">{feature.title}</h3>
+              <p className="font-body text-sm text-sand-400 leading-relaxed font-light">{feature.description}</p>
             </div>
           ))}
         </div>

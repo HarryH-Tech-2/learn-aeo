@@ -3,9 +3,9 @@ import { SITE, absoluteUrl } from "@/lib/site";
 import AboutContent from "./AboutContent";
 
 export const metadata: Metadata = {
-  title: `About ${SITE.name} | Our Mission & Methodology`,
+  title: `About ${SITE.name} | How the course works`,
   description:
-    "Learn about our mission to make ancient Egyptian hieroglyphics accessible to everyone through structured online lessons.",
+    "What Learn AEO is: an answer engine optimisation course for marketers who know SEO, and how its lessons are sourced.",
   alternates: {
     canonical: absoluteUrl("/about"),
   },

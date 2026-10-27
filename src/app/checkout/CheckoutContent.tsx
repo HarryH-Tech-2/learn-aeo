@@ -134,9 +134,7 @@ export default function CheckoutContent() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-obsidian px-6">
         <div className="text-center max-w-sm">
-          <span className="text-5xl block mb-4 text-gold-400" aria-hidden="true">
-            &#x13080;
-          </span>
+          <span className="mx-auto mb-4 block h-px w-16 bg-gold-500/60" aria-hidden="true" />
           <p className="font-body text-sand-200 mb-1">You left checkout.</p>
           <p className="font-body text-sm text-sand-500 mb-6">You have not been charged.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -162,9 +160,9 @@ export default function CheckoutContent() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-obsidian">
       <div className="text-center">
-        <span className="text-5xl block mb-4 animate-pulse">&#x13080;</span>
+        <span className="mx-auto mb-4 block h-10 w-10 rounded-full border-2 border-cyan-500/30 border-t-cyan-500 animate-spin" aria-hidden="true" />
         <p className="font-body text-sand-400 text-sm">
-          Preparing your expedition...
+          Opening secure checkout...
         </p>
       </div>
     </div>

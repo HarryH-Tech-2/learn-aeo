@@ -4,11 +4,14 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import GetStartedContent from "./GetStartedContent";
 import { PLANS, formatPlanPrice } from "@/lib/plans";
+import { LESSON_CATALOG } from "@/lib/lesson-catalog";
+
+const FIRST = LESSON_CATALOG[0];
 
 export const metadata: Metadata = {
-  title: "Start Learning Hieroglyphics | Free First Lesson",
+  title: "Start Learning AEO | Lesson 1 Free",
   description:
-    `Create a free account and start your first lesson. Unlock the full course anytime with a one-time ${formatPlanPrice(PLANS.lifetime, "USD")} payment.`,
+    `Sign in free and start lesson 1 of the Learn AEO answer engine optimisation course. Unlock the rest for a one-time ${formatPlanPrice(PLANS.lifetime, "USD")} payment or ${formatPlanPrice(PLANS.monthly, "USD")} a month.`,
   alternates: {
     canonical: absoluteUrl("/get-started"),
   },
@@ -20,28 +23,25 @@ export default function GetStartedPage() {
       <Navbar />
       {/* Server-rendered SEO content — visible to crawlers, visually hidden for users who see the form */}
       <section className="sr-only" aria-hidden="false">
-        <h1>Start Learning Hieroglyphics: First Lesson Free</h1>
+        <h1>Start learning answer engine optimisation: lesson 1 free</h1>
         <p>
-          Create a free account and begin your first lesson right away. When
-          you&apos;re ready, unlock the full hieroglyphics course for a single
-          one-time payment of {formatPlanPrice(PLANS.lifetime, "USD")}, or learn month by month for {formatPlanPrice(PLANS.monthly, "USD")}.
-          Every current and future lesson included.
+          Sign in with Google or your email address and start lesson 1, {FIRST.title}, straight away. When you&apos;re
+          ready, unlock the rest of the course for a single payment of {formatPlanPrice(PLANS.lifetime, "USD")}, or learn
+          month by month for {formatPlanPrice(PLANS.monthly, "USD")}. Both include every lesson as it opens.
         </p>
-        <h2>What you&apos;ll learn</h2>
+        <h2>The {LESSON_CATALOG.length} lessons</h2>
         <ul>
-          <li>The 24 uniliteral signs that form the hieroglyphic alphabet</li>
-          <li>Interactive quizzes to reinforce each sign</li>
-          <li>Pronunciation guide for every glyph</li>
-          <li>How to read royal cartouches and temple inscriptions</li>
-          <li>Cultural context and mythology of ancient Egypt</li>
-          <li>Real inscription reading from tombs and monuments</li>
+          {LESSON_CATALOG.map((l) => (
+            <li key={l.id}>
+              Lesson {l.order}, {l.district}: {l.title}
+              {l.status === "coming-soon" ? " (coming soon)" : l.isFree ? " (free)" : ""}. {l.summary}
+            </li>
+          ))}
         </ul>
-        <h2>Why learn hieroglyphics?</h2>
+        <h2>Who it is for</h2>
         <p>
-          Hieroglyphics were the writing system of ancient Egypt for over 3,000
-          years. Learning to read them connects you directly with one of
-          history&apos;s greatest civilizations, from the pyramids of Giza to the
-          temples of Luxor.
+          Marketers who know SEO basics and want their pages cited by ChatGPT, Perplexity, Google AI Overviews and other
+          AI answer engines.
         </p>
       </section>
       <GetStartedContent />

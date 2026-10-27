@@ -132,7 +132,7 @@ export default function FeedbackButton({ page }: FeedbackButtonProps) {
 
               {state === "sent" ? (
                 <div className="text-center py-4">
-                  <span className="text-4xl block mb-4">𓂀</span>
+                  <span className="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-full bg-cyan-500/15 text-2xl text-cyan-500" aria-hidden="true">&#10003;</span>
                   <h2 className="font-display text-xl text-sand-100 font-light mb-2">
                     Thank you
                   </h2>

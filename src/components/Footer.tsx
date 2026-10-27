@@ -14,7 +14,7 @@ const LINKS = [
 export default function Footer() {
   return (
     // Always dark, in both themes (hero-media pins the dark tokens).
-    <footer className="footer-egypt hero-media relative">
+    <footer className="site-footer hero-media relative">
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-12">
         <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
           <Link href="/" className="flex items-center gap-3">

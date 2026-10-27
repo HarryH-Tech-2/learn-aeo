@@ -123,7 +123,7 @@ export default function TermsContent() {
             custom={0}
             className="mb-6 text-center"
           >
-            <span className="text-4xl">𓏏</span>
+            <span className="mx-auto block h-px w-16 bg-gold-500/60" aria-hidden="true" />
           </motion.div>
 
           <motion.h1
@@ -155,7 +155,7 @@ export default function TermsContent() {
           >
             Welcome to Learn AEO. These Terms of Service
             (&ldquo;Terms&rdquo;) govern your access to and use of the Learn
-            Hieroglyphics website, applications, and services. Please read them
+            AEO website, applications, and services. Please read them
             carefully before using our platform.
           </motion.p>
         </div>

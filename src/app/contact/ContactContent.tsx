@@ -6,28 +6,24 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ContactForm from "@/components/ContactForm";
 
-const GLYPH_FONT = { fontFamily: "'Noto Sans Egyptian Hieroglyphs', serif" } as const;
-
 /** Where to go for the common questions, so people with a quick answer don't wait for a reply. */
 const ROUTES = [
   {
-    glyph: "𓏞",
     title: "Email us directly",
     body: (
       <>
-        <a href="mailto:hello@learnaeo.com" className="text-gold-400 hover:text-gold-300 underline underline-offset-4">
-          hello@learnaeo.com
+        <a href={`mailto:${SITE.supportEmail}`} className="text-gold-400 hover:text-gold-300 underline underline-offset-4">
+          {SITE.supportEmail}
         </a>{" "}
         reaches the same inbox as the form.
       </>
     ),
   },
   {
-    glyph: "𓋹",
     title: "Billing and refunds",
     body: (
       <>
-        Every purchase has a 14-day money-back guarantee. Manage a subscription from{" "}
+        Lifetime access has a 14-day money-back guarantee. Manage a subscription from{" "}
         <Link href="/account" className="text-gold-400 hover:text-gold-300 underline underline-offset-4">
           your account
         </Link>
@@ -66,17 +62,15 @@ export default function ContactContent() {
 
         <div className="grid lg:grid-cols-[0.85fr_1.15fr] gap-12 lg:gap-16 items-start">
           <div>
-            <h1 className="font-display text-4xl md:text-6xl font-light text-sand-100 leading-[1.05]">Write to the scribes</h1>
+            <h1 className="font-display text-4xl md:text-6xl font-light text-sand-100 leading-[1.05]">Get in touch</h1>
             <p className="font-body text-lg text-sand-400 font-light mt-5 max-w-md leading-relaxed">
-              Questions about the course, a stuck lesson, a sign you can&rsquo;t read, or an idea for something we should make. A real person reads every message and replies within a day.
+              Questions about the course, a lesson that isn&rsquo;t working, a source you think is out of date, or a topic you want covered. A person reads every message.
             </p>
 
             <dl className="mt-10 space-y-7 border-t border-gold-700/25 pt-8">
               {ROUTES.map((r) => (
                 <div key={r.title} className="flex gap-4">
-                  <span className="text-3xl leading-none text-gold-500 w-9 shrink-0 text-center" style={GLYPH_FONT} aria-hidden="true">
-                    {r.glyph}
-                  </span>
+                  <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-cyan-500" aria-hidden="true" />
                   <div>
                     <dt className="font-display text-lg text-sand-100">{r.title}</dt>
                     <dd className="font-body text-sm text-sand-400 mt-1 leading-relaxed">{r.body}</dd>

@@ -5,75 +5,86 @@ import InView from "@/components/InView";
 import { reveal } from "@/components/reveal";
 import { useFreeCourseGuest } from "@/components/useFreeCourseGuest";
 import { PLANS, formatPlanPrice } from "@/lib/plans";
+import { LESSON_CATALOG } from "@/lib/lesson-catalog";
 
 // What the free-unlock test's free group reads instead (src/lib/access-test.ts); the FAQ schema keeps the real answer.
-const FREE_PRICING_ANSWER = "For you, the whole course is free: make an account and all eight lessons, the 3D levels, the Journey and the certificate open on it, with nothing to pay.";
+const FREE_PRICING_ANSWER =
+  "For you, the whole course is free: make an account and every live lesson, and the certificate when you finish, open on it, with nothing to pay.";
+
+const PRICING_QUESTION = "How does pricing work?";
+
+// Course facts come from the catalog (src/lib/lesson-catalog.ts), prices from src/lib/plans.ts, and the refund and
+// discount terms from the Terms of Service (src/app/terms/TermsContent.tsx), so the answers never drift from them.
+const FIRST = LESSON_CATALOG[0];
+const LIVE = LESSON_CATALOG.filter((l) => l.status === "live");
+const SOON = LESSON_CATALOG.filter((l) => l.status === "coming-soon");
+const MINUTES = LESSON_CATALOG.map((l) => l.minutes);
+const TOTAL = LESSON_CATALOG.length;
+
+function orderRange(lessons: readonly { order: number }[]): string {
+  if (lessons.length === 1) return `Lesson ${lessons[0].order}`;
+  return `Lessons ${lessons[0].order} to ${lessons[lessons.length - 1].order}`;
+}
 
 const faqs = [
   {
-    question: "How long does it take to learn hieroglyphics?",
+    question: "What is answer engine optimisation (AEO)?",
     answer:
-      "You can learn the 25 core uniliteral signs (the hieroglyphic \"alphabet\") in just a few hours. With consistent practice over 2-3 months, you'll be able to recognize common words, read royal cartouches, and understand basic inscriptions. Full fluency in reading Middle Egyptian texts typically takes 1-2 years of dedicated study, similar to learning any ancient language.",
+      "AEO is the work of making your pages easy for AI answer engines (ChatGPT search, Perplexity, Google AI Overviews and AI Mode, Copilot, Claude) to reach, understand and cite when they answer a question. It builds on SEO rather than replacing it: a page an engine cannot crawl or index is a page it cannot cite.",
   },
   {
-    question: "How do I learn Egyptian hieroglyphs?",
+    question: "How is AEO different from SEO?",
     answer:
-      "Start with the 25 alphabet signs, the ones that each stand for a single sound, and use them to spell names. Then add the common two- and three-sound signs, the silent determinatives that tell you what a word means, and the royal cartouches you see on every monument. Practise writing the signs yourself, not just recognising them. Our first lesson teaches the alphabet signs in one sitting and is free, so you can try the method before deciding to go further.",
+      "SEO wins you a place in a list of results. AEO wins you a place inside an answer: a link the engine cites, or your brand named in the text it writes. The foundations carry over, but what gets used is often a single passage rather than a whole page, and part of what engines know about you comes from sites you do not control.",
   },
   {
-    question: "Is learning hieroglyphics the same as learning ancient Egyptian?",
+    question: "Who is the course for?",
     answer:
-      "Not quite. Hieroglyphics is the script; ancient Egyptian is the language it writes, which was also written in hieratic and demotic. Learning hieroglyphs means learning to read the signs and sound out words, which is where everyone starts. Learning the language means its grammar too, usually Middle Egyptian, the classical form used on most monuments. Our course takes you from the signs to reading real names, titles and offering formulae; for full grammar you would move on to a textbook such as Allen's Middle Egyptian.",
+      "Marketers who already know SEO basics: in-house, agency or freelance. You do not need to code, though you will read robots.txt files and JSON-LD snippets and decide what they should say.",
   },
   {
-    question: "Do I need any prior knowledge to start?",
+    question: "Do I need to know SEO first?",
     answer:
-      "No prior knowledge of ancient Egyptian, linguistics, or archaeology is required. Our curriculum starts from absolute zero: the first lesson introduces the alphabet one sign at a time. Each subsequent lesson builds on the previous one, gradually increasing complexity. We provide pronunciation guides, cultural context, and memory aids throughout.",
+      "You should know the basics: what crawling and indexing are, and what a title tag and a sitemap do. The course does not teach them again; it starts where they stop.",
   },
   {
-    question: "Are these real hieroglyphs or simplified versions?",
-    answer:
-      "We use authentic Unicode Egyptian Hieroglyph characters from the official Unicode block (U+13000–U+1342F) and follow the standard Egyptological transliteration system used in academic publications worldwide. Our lessons are based on real inscriptions from temples, tombs, and papyri, not simplified or invented symbols.",
+    question: "What is in the course?",
+    answer: `${TOTAL} lessons, one for each district of the City of Answers: ${LESSON_CATALOG.map(
+      (l) => `${l.district} (${l.title.charAt(0).toLowerCase()}${l.title.slice(1)})`,
+    ).join(", ")}. Each lesson mixes short explanations with checks, hands-on exercises and an audit at the end.`,
   },
   {
-    question: "How are hieroglyphics different from an alphabet?",
+    question: "Are all the lessons out yet?",
     answer:
-      "Unlike modern alphabets where each letter represents a single sound, hieroglyphs can function in three different ways: as phonograms (representing sounds, like letters), as logograms (representing whole words or concepts), or as determinatives (silent classifiers indicating a word's meaning category). A single hieroglyphic text uses all three types simultaneously, making it more complex but also more expressive than alphabetic writing.",
+      SOON.length === 0
+        ? `Yes. All ${TOTAL} lessons are live.`
+        : `Not yet. ${orderRange(LIVE)} are live now: ${LIVE.map((l) => l.title).join(", ")}. ${orderRange(SOON)} are coming soon, and both plans include every lesson as it opens.`,
   },
   {
-    question: "Can I read actual Egyptian monuments after this course?",
-    answer:
-      "Yes! By the intermediate level, you'll be able to identify and read royal names in cartouches, recognize offering formulas on tomb walls, and decode basic temple inscriptions. Our advanced lessons focus specifically on reading real monumental texts from Karnak, Luxor, Abu Simbel, and the Valley of the Kings. Many of our students report being able to read inscriptions during visits to museums and Egyptian sites.",
+    question: "What is free?",
+    answer: `Lesson ${FIRST.order}, ${FIRST.title}, is free once you sign in with Google or your email address. No card is needed.`,
   },
   {
-    question: "How does pricing work?",
-    answer:
-      `Lifetime access is a single one-time payment of ${formatPlanPrice(PLANS.lifetime, "USD")} (${formatPlanPrice(PLANS.lifetime, "GBP")}): no recurring charges, no upgrade tiers. If you'd rather not pay up front there's a Monthly plan at ${formatPlanPrice(PLANS.monthly, "USD")} a month. You can also try the first lesson for free before buying. We use Stripe for secure payment processing.`,
-  },
-  {
-    question: "Is hieroglyphic writing read left-to-right or right-to-left?",
-    answer:
-      "Hieroglyphs can be written in either direction! The key is to look at the animal and human signs, which always face toward the beginning of the text. If a bird faces left, you read from left to right. If it faces right, read right to left. Hieroglyphs can also be written in vertical columns (read top to bottom). Our lessons teach you to identify reading direction from context clues.",
-  },
-  {
-    question: "How many hieroglyphic signs are there in total?",
-    answer:
-      "The complete hieroglyphic inventory contains over 700 distinct signs, though some lists count over 1,000 when including rare and variant forms. However, you don't need all of them; about 130-150 signs cover the vast majority of common texts. Our 8-lesson curriculum focuses on the most essential and frequently encountered signs, giving you a practical reading ability that covers real-world inscriptions.",
+    question: "How long does it take?",
+    answer: `Each lesson takes about ${Math.min(...MINUTES)} to ${Math.max(...MINUTES)} minutes. It is self-paced, so you can do one in a lunch break or several in a sitting, and your progress is saved as you go.`,
   },
   {
     question: "Do I get a certificate?",
-    answer:
-      "Yes. When you complete all 8 lessons in the Temple of Thoth curriculum, you earn a certificate of completion that you can download and share. It recognises your achievement in learning to read ancient Egyptian hieroglyphics.",
+    answer: `Yes. Once you have completed all ${TOTAL} lessons you can download a Learn AEO certificate with your name on it, ready to share on LinkedIn.`,
   },
   {
-    question: "How often is the site updated?",
-    answer:
-      "We update Learn AEO weekly, adding new lessons, improving existing content, publishing blog posts, and refining the learning experience based on student feedback. Lifetime access includes all current and future content at no additional cost.",
+    question: PRICING_QUESTION,
+    answer: `Lifetime access is a single payment of ${formatPlanPrice(PLANS.lifetime, "USD")} (${formatPlanPrice(PLANS.lifetime, "GBP")}), with no recurring charges. If you would rather not pay up front, the Monthly plan is ${formatPlanPrice(PLANS.monthly, "USD")} (${formatPlanPrice(PLANS.monthly, "GBP")}) a month and you can cancel any time from your account. Payments are handled by Stripe.`,
   },
   {
-    question: "Do I get a discount if I'm a student?",
+    question: "Can I get a refund?",
     answer:
-      "Yes, students get free access. Use the contact form at the bottom of this page to get in touch from your .edu email address, and we'll set you up with a free account. We believe cost shouldn't be a barrier to learning about ancient civilisation.",
+      "Yes. There is a 14-day money-back guarantee: if you are unhappy with the course within 14 days of buying it, email us and we will refund you in full. A Monthly plan can be cancelled at any time, and your access runs to the end of the period you have paid for.",
+  },
+  {
+    question: "Is there a discount?",
+    answer:
+      "If you are visiting from a country with lower purchasing power, a percentage discount is offered automatically and applied at checkout.",
   },
 ];
 
@@ -103,7 +114,7 @@ export default function FAQSection() {
           </h2>
 
           <p className="reveal font-body text-sand-400 font-light" style={reveal(0.2)}>
-            Everything you need to know about learning hieroglyphics.
+            What the course covers, what it costs, and what you get.
           </p>
         </div>
 
@@ -142,7 +153,7 @@ export default function FAQSection() {
                   <div>
                     <div className="px-5 pb-5 pt-0">
                       <p className="faq-a font-body text-sm text-sand-400 font-light leading-relaxed">
-                        {freeGuest && faq.question === "How does pricing work?" ? FREE_PRICING_ANSWER : faq.answer}
+                        {freeGuest && faq.question === PRICING_QUESTION ? FREE_PRICING_ANSWER : faq.answer}
                       </p>
                     </div>
                   </div>

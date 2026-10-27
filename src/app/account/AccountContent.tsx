@@ -50,7 +50,7 @@ export default function AccountContent() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-obsidian">
         <div className="text-center">
-          <span className="text-5xl block mb-4 animate-pulse">𓂀</span>
+          <span className="mx-auto mb-4 block h-10 w-10 rounded-full border-2 border-cyan-500/30 border-t-cyan-500 animate-spin" aria-hidden="true" />
           <p className="font-body text-sand-500 text-sm">Loading your account...</p>
         </div>
       </div>
@@ -119,7 +119,7 @@ export default function AccountContent() {
           {/* Page Header */}
           <div className="mb-8">
             <div className="flex items-center gap-3">
-              <span className="text-2xl">𓁐</span>
+              <span className="h-2 w-2 rounded-full bg-cyan-500" aria-hidden="true" />
               <h1 className="font-body text-xs tracking-[0.2em] uppercase text-gold-500">
                 Account
               </h1>

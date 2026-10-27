@@ -8,10 +8,7 @@ import FAQSection from "@/components/FAQSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 
-/**
- * The homepage: the door video hero (HeroSection) over the page's own background. The 3D stela version it was
- * tested against from 2026-10-01 was removed on 2026-10-26.
- */
+/** The homepage: the static hero (HeroSection), then what you'll learn, the lessons, pricing, FAQ and contact. */
 export default function HomePage() {
   return (
     <main className="grain-overlay">
@@ -23,7 +20,7 @@ export default function HomePage() {
             "@type": "Course",
             name: "Learn AEO",
             description:
-              "Master ancient Egyptian hieroglyphic writing with structured lessons covering phonograms, logograms, determinatives, and real inscription reading.",
+              "Online course for marketers who know SEO on answer engine optimisation (AEO): how ChatGPT, Perplexity, Google AI Overviews and other answer engines choose sources, how to let AI crawlers reach your site, and how to write passages they can cite.",
             provider: {
               "@type": "Organization",
               name: "Learn AEO",

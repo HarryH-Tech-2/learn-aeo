@@ -41,9 +41,9 @@ export default function LessonsPreview() {
             className="reveal font-display text-4xl md:text-5xl lg:text-6xl font-light text-sand-100 mb-6"
             style={reveal(0.1, { y: 30 })}
           >
-            Your Journey Through
+            {LESSON_CATALOG.length} districts,
             <br />
-            <span className="text-gradient-gold font-medium">3,000 Years</span>
+            <span className="text-gradient-gold font-medium">one City of Answers</span>
           </h2>
         </div>
 

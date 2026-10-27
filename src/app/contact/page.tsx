@@ -3,9 +3,9 @@ import { absoluteUrl } from "@/lib/site";
 import ContactContent from "./ContactContent";
 
 export const metadata: Metadata = {
-  title: "Contact the Learn AEO Team",
+  title: "Contact Learn AEO",
   description:
-    "Get in touch with the Learn AEO team. We'd love to hear from you about our ancient Egyptian writing course.",
+    "Get in touch with Learn AEO about the answer engine optimisation course: lessons, sources, billing or ideas for what to cover next.",
   alternates: {
     canonical: absoluteUrl("/contact"),
   },

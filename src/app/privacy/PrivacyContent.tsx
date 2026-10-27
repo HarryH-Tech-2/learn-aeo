@@ -156,7 +156,7 @@ export default function PrivacyContent() {
             custom={0}
             className="mb-6 text-center"
           >
-            <span className="text-4xl">𓅓</span>
+            <span className="mx-auto block h-px w-16 bg-gold-500/60" aria-hidden="true" />
           </motion.div>
 
           <motion.h1
