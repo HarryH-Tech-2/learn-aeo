@@ -16,7 +16,7 @@ export type Leaderboard = {
   entries: LeaderboardEntry[];
   /** The viewer's own row — present even if they fall outside the top N. Null when not signed in. */
   you: LeaderboardEntry | null;
-  /** Scholars with at least 1 XP (i.e. everyone who has a rank). */
+  /** Learners with at least 1 XP (i.e. everyone who has a rank). */
   totalRanked: number;
 };
 

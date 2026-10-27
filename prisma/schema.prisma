@@ -93,7 +93,7 @@ model Subscription {
   activatedAt      DateTime?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
-  /// "lifetime" (one payment) or "monthly" (Expedition Pass); see src/lib/plans.ts
+  /// "lifetime" (one payment) or "monthly" (monthly pass); see src/lib/plans.ts
   plan                 String    @default("lifetime")
   stripeSubscriptionId String?   @unique
   /// For monthly: access runs to here (plus a short grace) even if a renewal is late
@@ -146,8 +146,8 @@ model UserBadge {
   @@unique([userId, badgeId])
 }
 
-/// Email addresses captured outside of account creation (newsletter box,
-/// "email me my cartouche"). Kept here so the list outlives Resend's 30-day log.
+/// Email addresses captured outside of account creation (newsletter box
+/// and other sign-up forms). Kept here so the list outlives Resend's 30-day log.
 model EmailLead {
   id        String   @id @default(cuid())
   email     String
@@ -158,8 +158,7 @@ model EmailLead {
   @@unique([email, source])
 }
 
-/// Per-user, per-game state blob (Decipher campaign progress, Cartouche of
-/// the Day streak…). Games keep a localStorage copy for guests and merge it
+/// Per-user, per-game state blob (arbitrary per-game progress). Games keep a localStorage copy for guests and merge it
 /// here on sign-in, so the shape of `state` is owned by the game module.
 model GameState {
   id        String   @id @default(cuid())

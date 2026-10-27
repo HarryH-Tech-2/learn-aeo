@@ -5,9 +5,9 @@ const OWN = "www.learnaeo.com";
 
 describe("referrerHost", () => {
   it("keeps only the referring host, without www", () => {
-    expect(referrerHost("https://www.google.com/search?q=hieroglyphs", OWN)).toBe("google.com");
+    expect(referrerHost("https://www.google.com/search?q=answer+engine+optimisation", OWN)).toBe("google.com");
     expect(referrerHost("https://chatgpt.com/c/abc123", OWN)).toBe("chatgpt.com");
-    expect(referrerHost("https://old.reddit.com/r/egyptology/comments/x", OWN)).toBe("old.reddit.com");
+    expect(referrerHost("https://old.reddit.com/r/seo/comments/x", OWN)).toBe("old.reddit.com");
   });
 
   it("calls no referrer direct", () => {
@@ -28,7 +28,7 @@ describe("referrerHost", () => {
 
 describe("landingPath", () => {
   it("keeps plain paths and drops anything else", () => {
-    expect(landingPath("/blog/how-to-read-hieroglyphics")).toBe("/blog/how-to-read-hieroglyphics");
+    expect(landingPath("/blog/how-to-get-cited-by-ai")).toBe("/blog/how-to-get-cited-by-ai");
     expect(landingPath("/name/<script>")).toBe("/");
     expect(landingPath("")).toBe("/");
   });
@@ -36,7 +36,7 @@ describe("landingPath", () => {
 
 describe("encode/decodeReferrer", () => {
   it("round-trips", () => {
-    const r = { host: "google.com", landing: "/hieroglyphics-translator" };
+    const r = { host: "google.com", landing: "/answer-engine-checker" };
     expect(decodeReferrer(encodeURIComponent(encodeReferrer(r)))).toEqual(r);
   });
 

@@ -16,7 +16,7 @@ describe("newUserLanding", () => {
     const keep = [
       "/checkout",
       "/checkout?plan=monthly",
-      "/games/scribe",
+      "/games/crawler",
       "/join?code=ABC123",
       `${FIRST_LESSON_PATH}?play=1`,
       `${FIRST_LESSON_PATH}?name=Nancy`,

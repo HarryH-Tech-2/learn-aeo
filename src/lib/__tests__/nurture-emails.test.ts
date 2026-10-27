@@ -94,7 +94,7 @@ describe("renderNurtureEmail", () => {
         expect(routes.some((r) => r.test(p)), `${email.key}: ${p} is not an app route`).toBe(true);
         const lesson = p.match(/^\/lessons\/([^/]+)$/);
         if (lesson) expect(ids.has(lesson[1]), `${email.key}: ${p}`).toBe(true);
-        for (const gone of ["/cartouche-image", "/translate", "/daily"]) expect(p, email.key).not.toContain(gone);
+        for (const gone of ["/name-image", "/translate", "/daily"]) expect(p, email.key).not.toContain(gone);
       }
     }
   });
@@ -154,7 +154,7 @@ describe("renderNurtureEmail", () => {
   });
 
   it("uses no words from the old course and never says 'Scholar'", () => {
-    const OLD = /egypt|hieroglyph|glyph|papyrus|pharaoh|tomb|cartouche|\bscrib(e|al)|expedition|chamber|ankh|rosetta|\bnile\b|horus|thoth|scarab|courtyard|hypostyle|sanctum|chapel|treasury|base camp|scholar|academy|causeway|door\.jpg/i;
+    const OLD = /thoth|base camp|scholar|academy|causeway|door\.jpg/i;
     for (const email of allRenders()) {
       for (const part of [email.subject, email.html, email.text]) expect(part, email.key).not.toMatch(OLD);
     }

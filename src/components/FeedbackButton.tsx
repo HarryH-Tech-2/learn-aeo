@@ -137,8 +137,8 @@ export default function FeedbackButton({ page }: FeedbackButtonProps) {
                     Thank you
                   </h2>
                   <p className="font-body text-sm text-sand-400 mb-6">
-                    Your feedback has been received. It helps improve the
-                    Academy for everyone.
+                    Your feedback has been received. It helps improve Learn
+                    AEO for everyone.
                   </p>
                   <button
                     onClick={close}

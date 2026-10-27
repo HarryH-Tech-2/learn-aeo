@@ -17,7 +17,6 @@ function page(title: string, body: string, status = 200): NextResponse {
   const html = `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title></head>
 <body style="margin:0;background:#1a1a2e;color:#c4b590;font-family:Georgia,serif;">
   <div style="max-width:480px;margin:64px auto;padding:40px;border:1px solid rgba(212,168,50,0.3);text-align:center;">
-    <div style="font-size:48px;">&#x13080;</div>
     <h1 style="color:#d4a832;font-weight:400;font-size:24px;">${title}</h1>
     <p style="font-size:15px;line-height:1.6;">${body}</p>
   </div>

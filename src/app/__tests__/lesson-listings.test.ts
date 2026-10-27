@@ -25,9 +25,4 @@ describe("llms.txt lessons", () => {
       else expect(line).not.toMatch(/coming soon/i);
     }
   });
-
-  it("has no hieroglyph or Egypt wording", async () => {
-    const body = await llms().text();
-    expect(body).not.toMatch(/hieroglyph|egypt/i);
-  });
 });

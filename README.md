@@ -1,8 +1,8 @@
 # Learn AEO
 
-Learn AEO is a course for marketers on answer engine optimisation: how to get a brand cited and recommended by ChatGPT, Perplexity, Google AI Overviews and other answer engines. It is a Next.js app (App Router, Prisma, NextAuth, Stripe, Resend) forked from the learn-hieroglyphics codebase, with the hieroglyph-specific features removed. Pricing is $100 lifetime or $10 a month (GBP options at £80 and £8).
+Learn AEO is a course for marketers on answer engine optimisation: how to get a brand cited and recommended by ChatGPT, Perplexity, Google AI Overviews and other answer engines. It is a Next.js app (App Router, Prisma, NextAuth, Stripe, Resend) forked from an earlier course codebase, with the old subject-specific features removed. Pricing is $100 lifetime or $10 a month (GBP options at £80 and £8).
 
-Status: Plan 1 (fork, strip, rebrand, pricing) and Plan 2 (lesson model, lesson player, lessons 1-3) are done. Plan 3 (gamification, certificate, emails) comes next.
+Status: Plan 1 (fork, strip, rebrand, pricing) and Plan 2 (lesson model, lesson player, lessons 1-3) are done. Plan 3 (removal of the old theme, server-side XP, levels and badges, certificate, rewritten emails, site-wide ban test) is done.
 
 ## Setup
 
@@ -93,4 +93,4 @@ A `sk_live_` key is refused unless you pass `--live`. The scripts are idempotent
 
 ## Next
 
-Plan 3: gamification, certificate, emails.
+The remaining lessons in the catalogue are marked coming soon.

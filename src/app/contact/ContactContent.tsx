@@ -23,7 +23,7 @@ const ROUTES = [
     title: "Billing and refunds",
     body: (
       <>
-        Lifetime access has a 14-day money-back guarantee. Manage a subscription from{" "}
+        Any purchase has a 14-day money-back guarantee, with a full refund. Manage a subscription from{" "}
         <Link href="/account" className="text-gold-400 hover:text-gold-300 underline underline-offset-4">
           your account
         </Link>

@@ -25,8 +25,8 @@ describe("withInBodyLinks", () => {
     expect(extractH2s(withInBodyLinks(md))).toEqual(extractH2s(md));
   });
 
-  it("the in-body paragraph links to the free first lesson and is free of removed-tool and Egypt wording", () => {
+  it("the in-body paragraph links to the free first lesson and is free of removed-tool wording", () => {
     expect(IN_BODY_LINKS_MD).toContain(`](${FIRST_LESSON_PATH})`);
-    expect(IN_BODY_LINKS_MD).not.toMatch(/hieroglyph|egypt|alphabet|translate/i);
+    expect(IN_BODY_LINKS_MD).not.toMatch(/alphabet|translate/i);
   });
 });

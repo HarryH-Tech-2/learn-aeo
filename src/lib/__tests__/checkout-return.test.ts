@@ -44,7 +44,7 @@ describe("isBuyIntent", () => {
   });
 
   it("leaves everything else as a free sign-up", () => {
-    for (const other of [null, undefined, "", "/dashboard", "/checkout-faq", "/lessons/expedition-begins"]) expect(isBuyIntent(other)).toBe(false);
+    for (const other of [null, undefined, "", "/dashboard", "/checkout-faq", "/lessons/old-lesson-id"]) expect(isBuyIntent(other)).toBe(false);
   });
 });
 

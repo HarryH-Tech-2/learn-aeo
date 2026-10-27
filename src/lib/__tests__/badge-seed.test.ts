@@ -10,11 +10,11 @@ describe("staleBadgeNames", () => {
   it("leaves only the new definitions after re-seeding an old database", () => {
     const old = [
       "Base Camp Secured",
-      "Courtyard Cleared",
+      "Old District Cleared",
       "Perfect Report",
       "Sharp Memory",
-      "3-Day Dig",
-      "All 61 Glyphs Mastered",
+      "Old 3-Day Streak",
+      "All 61 Old Lessons Mastered",
     ];
     const existing = [...old, ...BADGE_DEFINITIONS.map((b) => b.name)];
     const stale = staleBadgeNames(existing, BADGE_DEFINITIONS);

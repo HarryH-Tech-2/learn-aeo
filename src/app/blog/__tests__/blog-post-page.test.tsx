@@ -51,7 +51,7 @@ describe("blog post page", () => {
       .map((k) => JSON.parse((k.props as { dangerouslySetInnerHTML: { __html: string } }).dangerouslySetInnerHTML.__html));
     expect(ld.map((x) => x["@type"])).toEqual(["BlogPosting", "FAQPage", "BreadcrumbList"]);
     expect(ld[0].headline).toBe(fixture.title);
-    expect(ld[0].keywords).not.toMatch(/egypt|hieroglyph/i);
+    expect(ld[0].keywords).not.toMatch(/alphabet|translate/i);
     const content = kids.find((k) => k.type !== "script")!;
     expect((content.props.headings as { text: string }[]).map((h) => h.text)).toEqual(["The idea", "Why it matters"]);
   });

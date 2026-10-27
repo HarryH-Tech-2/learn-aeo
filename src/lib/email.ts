@@ -263,7 +263,7 @@ export async function sendCheckoutReminderEmail(input: {
           ${features.map((f) => `<p style="margin:0 0 6px;font-family:${FONT};font-size:14px;line-height:1.5;color:${C.sand};"><span style="color:${C.gold};">&#10003;</span>&nbsp; ${esc(f)}</p>`).join("")}
           <p style="margin:12px 0 0;font-family:${FONT};font-size:13px;color:${C.muted};">${esc(terms)}</p>`
         )}
-        ${p(`${strong("14-day money-back guarantee.")} If it isn't for you, email us within 14 days for a full refund, no questions asked.
+        ${p(`${strong("14-day money-back guarantee.")} If it isn't for you, email us within 14 days for a full refund.
           Card, Apple Pay and Google Pay all work at checkout.`)}
         ${button(input.checkoutUrl, "Return to checkout")}`,
       reason: `You are getting this because you started a checkout at learnaeo.com.<br/>${contactLine()}`,
