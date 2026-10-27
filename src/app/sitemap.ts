@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/site";
-import { blogPosts } from "@/lib/blog-posts";
+import { blogPosts, type BlogPost } from "@/lib/blog-posts";
 import { LESSONS } from "@/lib/lessons";
 
 // Static content lastmod — bump this when marketing pages (home/about/etc.)
@@ -14,6 +14,13 @@ const HOME_LASTMOD = new Date("2026-08-24");
 const LESSONS_LASTMOD = new Date("2026-04-18");
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  return buildSitemap(blogPosts);
+}
+
+/** Parameterised on the posts so the with-posts path can be tested while the real list is empty. */
+export function buildSitemap(
+  posts: Pick<BlogPost, "slug" | "publishedAt" | "updatedAt">[]
+): MetadataRoute.Sitemap {
   const baseUrl = SITE.url;
 
   const staticPages: MetadataRoute.Sitemap = [
@@ -69,7 +76,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // /blog is noindex while there are no posts, so it stays out until the first post exists. Its lastmod is then
   // the newest post date.
-  const newestPost = blogPosts.reduce<string | null>((max, post) => {
+  const newestPost = posts.reduce<string | null>((max, post) => {
     const d = post.updatedAt ?? post.publishedAt;
     return max === null || d > max ? d : max;
   }, null);
@@ -78,7 +85,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       ? []
       : [{ url: `${baseUrl}/blog`, lastModified: new Date(newestPost), changeFrequency: "weekly", priority: 0.9 }];
 
-  const blogPages: MetadataRoute.Sitemap = blogPosts.map((post) => ({
+  const blogPages: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: new Date(post.updatedAt ?? post.publishedAt),
     changeFrequency: "monthly" as const,
