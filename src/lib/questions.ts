@@ -30,7 +30,7 @@ export function checkAnswer(q: Question, r: QuestionResponse): boolean {
     case "order":
       return r.kind === "order" && r.order.length === q.items.length && q.items.every((it, i) => it === r.order[i]);
     case "match":
-      return r.kind === "match" && q.pairs.every((p) => r.pairs[p.term] === p.definition);
+      return r.kind === "match" && q.pairs.every((p) => Object.hasOwn(r.pairs, p.term) && r.pairs[p.term] === p.definition);
     case "spot":
       return r.kind === "spot" && r.line === q.answer;
   }

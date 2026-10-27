@@ -1,7 +1,12 @@
+import { COOKIE_PREFIX } from "@/lib/site";
+
 export type Theme = "dark" | "light";
 
 /** Browser-chrome colour (the <meta name="theme-color">): the brand navy, matching site.webmanifest. */
 export const THEME_COLOR = "#04060d";
+
+/** localStorage key for the toggle's saved choice. */
+export const THEME_STORAGE_KEY = `${COOKIE_PREFIX}theme`;
 
 /** Viewports narrower than this (Tailwind `md`) default to light mode. */
 export const MOBILE_MAX_WIDTH = 767;
@@ -25,7 +30,7 @@ export function resolveInitialTheme(
  * Keep in sync with resolveInitialTheme.
  */
 export const THEME_INIT_SCRIPT =
-  "(function(){try{var t=localStorage.getItem('theme');" +
+  `(function(){try{var t=localStorage.getItem('${THEME_STORAGE_KEY}');` +
   `if(t!=='light'&&t!=='dark'){t=window.innerWidth<=${MOBILE_MAX_WIDTH}?'light':'dark'}` +
   // `js` lets globals.css hide scroll-reveal content only when scripts run.
   "var c=document.documentElement.classList;c.add('js');if(t==='light'){c.add('light')}else{c.remove('light')}}catch(e){}})()";

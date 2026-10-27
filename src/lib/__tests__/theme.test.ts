@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { resolveInitialTheme, THEME_INIT_SCRIPT, MOBILE_MAX_WIDTH } from "@/lib/theme";
+import { resolveInitialTheme, THEME_INIT_SCRIPT, THEME_STORAGE_KEY, MOBILE_MAX_WIDTH } from "@/lib/theme";
 
 describe("resolveInitialTheme", () => {
   it("defaults to light on phone-sized viewports", () => {
@@ -36,6 +36,15 @@ describe("THEME_INIT_SCRIPT", () => {
     );
     return classes.has("light");
   }
+
+  it("reads the prefixed storage key", () => {
+    expect(THEME_STORAGE_KEY).toBe("aeo_theme");
+    const keys: string[] = [];
+    const ls = { getItem: (k: string) => (keys.push(k), "light") };
+    const doc = { documentElement: { classList: { add: () => {}, remove: () => {} } } };
+    new Function("window", "localStorage", "document", THEME_INIT_SCRIPT)({ innerWidth: 1440 }, ls, doc);
+    expect(keys).toEqual(["aeo_theme"]);
+  });
 
   it("matches resolveInitialTheme for every case", () => {
     for (const stored of [null, "light", "dark", "banana"]) {

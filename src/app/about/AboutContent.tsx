@@ -88,7 +88,7 @@ export default function AboutContent() {
           <h2 className="font-display text-3xl md:text-4xl font-semibold text-sand-100">How the lessons are sourced</h2>
           <p>
             Each concept in a lesson ends with its sources, linked to the original page, with the date it was
-            published or the date we last checked it. Sources in the live lessons include {SOURCE_EXAMPLES.join(", ")}.
+            published or last updated, or the date we last checked it. Sources in the live lessons include {SOURCE_EXAMPLES.join(", ")}.
           </p>
           <p>
             When a vendor documents how its own crawler or answer engine behaves, that is the source we use.

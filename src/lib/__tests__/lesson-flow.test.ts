@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildSteps, clampResume, progressFraction, resumeKey } from "../lesson-flow";
+import { auditEventParams, buildSteps, clampResume, progressFraction, resumeKey, stepEventParams, stepToSave } from "../lesson-flow";
 import type { Concept, LessonContent, Question } from "../lesson-types";
 
 const concept = (id: string): Concept => ({ id, term: id, summary: "s", explanation: "e", whyItMatters: "w", pitfall: "p", sources: [] });
@@ -52,5 +52,22 @@ describe("lesson flow", () => {
     expect(progressFraction(steps.length - 1, steps)).toBe(1);
     expect(progressFraction(-5, steps)).toBe(0);
     expect(progressFraction(999, steps)).toBe(1);
+  });
+
+  it("clears the saved step once the audit is passed, and keeps it otherwise", () => {
+    expect(stepToSave(3, false)).toBe(3);
+    expect(stepToSave(auditIndex, false)).toBe(auditIndex);
+    // passed: nothing is saved, so reopening (or reloading on the outro) starts at the intro
+    expect(stepToSave(steps.length - 1, true)).toBeNull();
+    expect(stepToSave(2, true)).toBeNull();
+    // a failed audit still resumes at the audit, never past it
+    expect(clampResume(stepToSave(steps.length - 1, false), steps)).toBe(auditIndex);
+  });
+
+  it("lesson events carry lesson_id", () => {
+    expect(stepEventParams("the-gate", steps[0])).toEqual({ lesson_id: "the-gate", step_kind: "intro" });
+    expect(stepEventParams("the-gate", undefined)).toEqual({ lesson_id: "the-gate", step_kind: undefined });
+    expect(auditEventParams("the-gate", 8, 10, true)).toEqual({ lesson_id: "the-gate", score: 8, total: 10, passed: 1 });
+    expect(auditEventParams("the-gate", 3, 10, false)).toEqual({ lesson_id: "the-gate", score: 3, total: 10, passed: 0 });
   });
 });

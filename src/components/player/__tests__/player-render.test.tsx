@@ -24,7 +24,8 @@ const CONCEPT: Concept = {
   example: { kind: "code", language: "json", caption: "A made-up record", code: '{ "cited": true }' },
   pitfall: "Assuming the model remembers your page.",
   sources: [
-    { title: "Source one", publisher: "Publisher A", url: "https://example.com/one", published: "2025-05-21", accessed: "2026-10-26" },
+    { title: "Source one", publisher: "Publisher A", url: "https://example.com/one", date: "2025-05-21", dateKind: "published", accessed: "2026-10-26" },
+    { title: "Source three", publisher: "Publisher C", url: "https://example.net/three", date: "2026-08", dateKind: "updated", accessed: "2026-10-26" },
     { title: "Source two", publisher: "Publisher B", url: "https://example.org/two", accessed: "2026-10-26" },
   ],
 };
@@ -147,9 +148,32 @@ describe("QuestionCard", () => {
       explanation: "Because.",
     };
     const html = renderToStaticMarkup(<QuestionCard question={BLANK} mode="practice" onAnswered={noop} />);
-    expect(html).toMatch(/User-agent: \*<br\/>Disallow: /);
-    expect(html).toMatch(/<br\/>Sitemap: /);
+    expect(html).toContain('<span class="block">User-agent: *</span><span class="block">Disallow: ');
+    expect(html).toMatch(/<span class="block">Sitemap: /);
     expect(html).not.toContain("User-agent: *\nDisallow");
+    expect(html).toContain("font-sans");
+    expect(html).not.toContain("font-mono");
+  });
+
+  it("blank: mono renders in a monospace font, and an empty line is normal height", () => {
+    const BLANK: Question = {
+      kind: "blank",
+      id: "q-blank-mono",
+      prompt: "Fill the file.",
+      text: "User-agent: *\nDisallow: ___\n\nUser-agent: GPTBot\nDisallow: /",
+      answers: ["/checkout/"],
+      distractors: ["/"],
+      explanation: "Because.",
+      mono: true,
+    };
+    const html = renderToStaticMarkup(<QuestionCard question={BLANK} mode="practice" onAnswered={noop} />);
+    const para = html.match(/<p class="[^"]*leading-\[2\.4\][^"]*">/)?.[0];
+    expect(para).toBeDefined();
+    expect(para).toContain("font-mono");
+    expect(para).not.toContain("font-sans");
+    // the blank line between groups is its own normal-height line, not a 2.4 line-height one
+    expect(html).toContain('<span class="block leading-normal" aria-hidden="true">');
+    expect(html).toContain('<span class="block">User-agent: GPTBot</span>');
   });
 
   it("spot: one button per line", () => {
@@ -180,6 +204,13 @@ describe("ConceptCard", () => {
       expect(link).toContain('rel="noopener"');
       expect(html).toContain(s.publisher);
     }
+  });
+
+  it("labels a source's date as published, updated or checked", () => {
+    expect(html).toContain("Published 21 May 2025");
+    expect(html).toContain("Updated Aug 2026");
+    expect(html).toContain("Checked 26 Oct 2026");
+    expect(html).not.toContain("Published Aug 2026");
   });
 });
 

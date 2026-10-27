@@ -12,7 +12,8 @@ const NNG_INVERTED_PYRAMID: Source = {
   title: "Inverted Pyramid: Writing for Comprehension",
   publisher: "Nielsen Norman Group",
   url: "https://www.nngroup.com/articles/inverted-pyramid/",
-  published: "2018-02-11",
+  date: "2018-02-11",
+  dateKind: "published",
   accessed: ACCESSED,
 };
 
@@ -27,7 +28,8 @@ const BING_AI_ANSWERS: Source = {
   title: "Optimizing Your Content for Inclusion in AI Search Answers",
   publisher: "Microsoft Advertising Blog (Microsoft Bing)",
   url: "https://about.ads.microsoft.com/en/blog/post/october-2025/optimizing-your-content-for-inclusion-in-ai-search-answers",
-  published: "2025-10-08",
+  date: "2025-10-08",
+  dateKind: "published",
   accessed: ACCESSED,
 };
 
@@ -35,7 +37,8 @@ const GOOGLE_PASSAGES: Source = {
   title: "How AI is powering a more helpful Google",
   publisher: "Google",
   url: "https://blog.google/products-and-platforms/products/search/search-on/",
-  published: "2020-10-15",
+  date: "2020-10-15",
+  dateKind: "published",
   accessed: ACCESSED,
 };
 
@@ -43,7 +46,8 @@ const GOOGLE_RANKING_SYSTEMS: Source = {
   title: "A guide to Google Search ranking systems",
   publisher: "Google Search Central",
   url: "https://developers.google.com/search/docs/appearance/ranking-systems-guide",
-  published: "2025-12-10",
+  date: "2025-12-10",
+  dateKind: "updated",
   accessed: ACCESSED,
 };
 
@@ -51,7 +55,8 @@ const MDN_HEADINGS: Source = {
   title: "<h1>–<h6>: The HTML Section Heading elements",
   publisher: "MDN Web Docs",
   url: "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/Heading_Elements",
-  published: "2026-08-26",
+  date: "2026-08-26",
+  dateKind: "updated",
   accessed: ACCESSED,
 };
 
@@ -59,7 +64,8 @@ const MDN_OL: Source = {
   title: "<ol>: The Ordered List element",
   publisher: "MDN Web Docs",
   url: "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ol",
-  published: "2026-10-06",
+  date: "2026-10-06",
+  dateKind: "updated",
   accessed: ACCESSED,
 };
 
@@ -67,7 +73,8 @@ const MDN_TABLE: Source = {
   title: "<table>: The Table element",
   publisher: "MDN Web Docs",
   url: "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/table",
-  published: "2026-04-24",
+  date: "2026-04-24",
+  dateKind: "updated",
   accessed: ACCESSED,
 };
 
@@ -75,7 +82,8 @@ const GOOGLE_AI_FEATURES: Source = {
   title: "AI features and your website",
   publisher: "Google Search Central",
   url: "https://developers.google.com/search/docs/appearance/ai-features",
-  published: "2025-12-10",
+  date: "2025-12-10",
+  dateKind: "updated",
   accessed: ACCESSED,
 };
 
@@ -83,7 +91,8 @@ const GOOGLE_BYLINE_DATES: Source = {
   title: "Influence your byline dates in Google Search",
   publisher: "Google Search Central",
   url: "https://developers.google.com/search/docs/appearance/publication-dates",
-  published: "2025-12-10",
+  date: "2025-12-10",
+  dateKind: "updated",
   accessed: ACCESSED,
 };
 
@@ -91,7 +100,8 @@ const GOOGLE_HELPFUL: Source = {
   title: "Creating helpful, reliable, people-first content",
   publisher: "Google Search Central",
   url: "https://developers.google.com/search/docs/fundamentals/creating-helpful-content",
-  published: "2026-10-05",
+  date: "2026-10-05",
+  dateKind: "updated",
   accessed: ACCESSED,
 };
 
@@ -99,7 +109,8 @@ const GEO_PAPER: Source = {
   title: "GEO: Generative Engine Optimization (Aggarwal et al., KDD 2024), full text (v3)",
   publisher: "arXiv",
   url: "https://arxiv.org/html/2311.09735v3",
-  published: "2024-06-28",
+  date: "2024-06-28",
+  dateKind: "published",
   accessed: ACCESSED,
 };
 
@@ -490,7 +501,7 @@ export const LESSON_3: LessonContent = {
     id: "x-rewrite-answer-first",
     title: "Rewrite it answer-first",
     brief:
-      "Fernhill Garden Supply (made up) has this passage on its compost bin page, under the heading \"Getting started\": \"Thanks for choosing Fernhill! We know you're excited to get composting, and we've designed this bin with you in mind. It's really easy. First you find a level spot, then it's a case of clicking the side panels together, after which the lid goes on and you slide it in at the front until it clicks. It shouldn't take long and you won't need anything.\" The facts behind it: assembly takes about 20 minutes and needs no tools. Improve it one decision at a time.",
+      "Fernhill Garden Supply (made up) has this passage on its compost bin page, under the heading \"Getting started\": \"Thanks for choosing Fernhill! We know you're excited to get composting, and we've designed this bin with you in mind. It's really easy. First you find a level spot, then it's a case of clicking the side panels together, after which the lid goes on, and then there is the access hatch: you slide it in at the front until it clicks. It shouldn't take long and you won't need anything.\" The facts behind it: assembly takes about 20 minutes and needs no tools. Improve it one decision at a time.",
     steps: [
       {
         kind: "passage",
@@ -572,7 +583,7 @@ export const LESSON_3: LessonContent = {
       },
       {
         label: "What it does not show",
-        text: "On the day it was fetched, the page showed no published or last updated date. Facts like these can change, so for your own pages, follow Google's advice and show a labelled date that changes when the content does.",
+        text: "On the day it was fetched, the page showed no published or last updated date. Its dates sat only in the code, and they disagreed: the JSON-LD gave a dateModified of 17 November 2014, matching the govuk:public-updated-at meta tag, while the govuk:updated-at tag said 16 October 2026. Facts like these can change, so for your own pages, follow Google's advice: show a labelled date that changes when the content does, and keep the dates in your markup in step with it.",
       },
     ],
     source: GOVUK_HOLIDAY,

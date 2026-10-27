@@ -37,8 +37,8 @@
  *     (location: section_1 | section_2 | lesson_outro; offer: 0|1; target: checkout | pricing)
  *
  * Lesson player (2026-10-26, src/components/player/LessonPlayer.tsx):
- *   lesson_step           — a lesson step came on screen (step_kind: intro | concept | check | exercise | example | audit | outro)
- *   lesson_audit_complete — the final audit's last answer given (score, total, passed: 1 | 0)
+ *   lesson_step           — a lesson step came on screen (lesson_id, step_kind: intro | concept | check | exercise | example | audit | outro)
+ *   lesson_audit_complete — the final audit's last answer given (lesson_id, score, total, passed: 1 | 0)
  */
 
 type Gtag = (...args: unknown[]) => void;
@@ -126,54 +126,16 @@ export function trackEventWhenReady(name: string, params: Record<string, unknown
   return () => window.clearInterval(id);
 }
 
-export type ExerciseKind =
-  | "mini"
-  | "quiz"
-  | "matching"
-  | "drag-drop"
-  | "fill-blank"
-  | "decode"
-  | "site-report"
-  | "sign-hunt"
-  | "tomb-wall"
-  | "daily"
-  | "decipher"
-  | "stela"
-  | "wall"
-  | "scribe"
-  | "descent"
-  // lesson spine
-  | "field-notes"
-  | "read-it"
-  // per-lesson signature mechanics
-  | "spell-it"
-  | "field-sketchbook"
-  | "pick-the-ending"
-  | "counting-house"
-  | "cartouche-reader"
-  | "stela-builder"
-  | "walk-the-hall"
-  | "word-anatomy"
-  // expedition (2026-09-08): story beats and harder passes
-  | "choice"
-  | "letter"
-  | "boss"
-  | "second-pass"
-  | "audit"
-  | "quick-object"
-  | "quick-listen"
-  | "quick-speed"
-  | "quick-silent"
-  // free tool pages (2026-10-10, src/lib/sign-quiz.ts)
-  | "read-back"
-  | "alphabet-test"
-  // Lesson 1 word cards: sound it out, pick the reading (2026-10-24)
-  | "word-decode";
+/**
+ * Which part of a lesson a question belongs to, matching the player's step kinds
+ * (src/lib/lesson-flow.ts): a quick check, the signature exercise or the final audit.
+ */
+export type ExerciseKind = "check" | "exercise" | "audit";
 
 export function trackExerciseAnswer(input: {
   exercise: ExerciseKind;
   questionType: string;
-  /** The glyph / prompt being asked about; clipped for GA4's param limits. */
+  /** The prompt being asked about; clipped for GA4's param limits. */
   question: string;
   correct: boolean;
 }): void {

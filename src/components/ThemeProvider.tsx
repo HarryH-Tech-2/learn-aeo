@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useRef, useState, useCallback } from "react";
-import { resolveInitialTheme, type Theme } from "@/lib/theme";
+import { resolveInitialTheme, THEME_STORAGE_KEY, type Theme } from "@/lib/theme";
 
 interface ThemeContextValue {
   theme: Theme;
@@ -25,7 +25,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     // phones / dark on larger screens) so hydration never flips the theme.
     let stored: string | null = null;
     try {
-      stored = localStorage.getItem("theme");
+      stored = localStorage.getItem(THEME_STORAGE_KEY);
     } catch {}
     const initial = resolveInitialTheme(stored, window.innerWidth);
     setTheme(initial);
@@ -39,7 +39,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const toggleTheme = useCallback(() => {
     const next: Theme = theme === "dark" ? "light" : "dark";
     try {
-      localStorage.setItem("theme", next);
+      localStorage.setItem(THEME_STORAGE_KEY, next);
     } catch {}
 
     const root = document.documentElement;

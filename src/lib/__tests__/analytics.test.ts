@@ -40,24 +40,24 @@ describe("analytics", () => {
 
   it("sends exercise_answer with correct as 0/1 and clipped question", () => {
     trackExerciseAnswer({
-      exercise: "quiz",
-      questionType: "symbol-to-meaning",
-      question: "𓅓".repeat(200),
+      exercise: "check",
+      questionType: "choice",
+      question: "🙂".repeat(200),
       correct: true,
     });
     expect(gtag).toHaveBeenCalledTimes(1);
     const [, name, params] = gtag.mock.calls[0] as [string, string, Record<string, unknown>];
     expect(name).toBe("exercise_answer");
-    expect(params.exercise).toBe("quiz");
-    expect(params.question_type).toBe("symbol-to-meaning");
+    expect(params.exercise).toBe("check");
+    expect(params.question_type).toBe("choice");
     expect(params.correct).toBe(1);
     expect((params.question as string).length).toBeLessThanOrEqual(100);
   });
 
   it("sends exercise_complete with score/total/pct and optional attempts", () => {
-    trackExerciseComplete({ exercise: "matching", score: 4, total: 4, attempts: 6 });
+    trackExerciseComplete({ exercise: "exercise", score: 4, total: 4, attempts: 6 });
     expect(gtag).toHaveBeenCalledWith("event", "exercise_complete", {
-      exercise: "matching",
+      exercise: "exercise",
       score: 4,
       total: 4,
       pct: 100,
@@ -66,9 +66,9 @@ describe("analytics", () => {
   });
 
   it("omits attempts when not provided and rounds pct", () => {
-    trackExerciseComplete({ exercise: "quiz", score: 2, total: 3 });
+    trackExerciseComplete({ exercise: "audit", score: 2, total: 3 });
     const [, , params] = gtag.mock.calls[0] as [string, string, Record<string, unknown>];
-    expect(params).toEqual({ exercise: "quiz", score: 2, total: 3, pct: 67 });
+    expect(params).toEqual({ exercise: "audit", score: 2, total: 3, pct: 67 });
   });
 
   describe("setAnalyticsUserId", () => {

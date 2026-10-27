@@ -3,15 +3,24 @@
 
 export type LessonLevel = "beginner" | "intermediate" | "advanced";
 
+/** Which date a source page shows: when it was first published, or when it was last updated. */
+export type SourceDateKind = "published" | "updated";
+
 export type Source = {
   title: string;
   publisher: string;
   url: string;
-  /** YYYY-MM-DD or YYYY-MM, as the page shows it. */
-  published?: string;
   /** YYYY-MM-DD: the day the page was checked. */
   accessed: string;
-};
+} & (
+  | {
+      /** YYYY-MM-DD or YYYY-MM, as the page shows it. */
+      date: string;
+      /** "published" if the page labels the date as its publication date, "updated" for a last-updated or last-modified date. */
+      dateKind: SourceDateKind;
+    }
+  | { date?: undefined; dateKind?: undefined }
+);
 
 export type CodeLanguage = "text" | "robots" | "json" | "html" | "http" | "markdown";
 
@@ -42,6 +51,8 @@ export type Question =
       answers: string[];
       distractors: string[];
       explanation: string;
+      /** Render the text in a monospace font, for code such as a robots.txt file. */
+      mono?: boolean;
     }
   | { kind: "order"; id: string; prompt: string; /** Correct order. */ items: string[]; explanation: string }
   | { kind: "match"; id: string; prompt: string; pairs: { term: string; definition: string }[]; explanation: string }

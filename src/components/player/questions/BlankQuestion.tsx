@@ -4,14 +4,19 @@ import { Fragment, useMemo, useState } from "react";
 import { blankCount, seedFrom, shuffled } from "@/lib/questions";
 import { FOCUS, type QuestionInputProps } from "../ui";
 
-/** Text with each newline rendered as a line break. */
-function withBreaks(text: string) {
-  return text.split("\n").map((line, i) => (
-    <Fragment key={i}>
-      {i > 0 && <br />}
-      {line}
-    </Fragment>
-  ));
+type Piece = { text: string } | { gap: number };
+
+/** Split the text into lines of text and gaps; "\n" starts a new line. */
+function toLines(parts: string[], gaps: number): Piece[][] {
+  const lines: Piece[][] = [[]];
+  parts.forEach((part, i) => {
+    part.split("\n").forEach((seg, j) => {
+      if (j > 0) lines.push([]);
+      if (seg) lines[lines.length - 1].push({ text: seg });
+    });
+    if (i < gaps) lines[lines.length - 1].push({ gap: i });
+  });
+  return lines;
 }
 
 /** Word-bank chips fill the gaps in order; tapping a filled gap empties it. */
@@ -45,32 +50,51 @@ export default function BlankQuestion({ question, locked, onChange }: QuestionIn
   };
 
   const used = new Set(fills.filter((f): f is number => f !== null));
+  const lines = toLines(parts, gaps);
+
+  const renderGap = (i: number) =>
+    fills[i] === null ? (
+      <span
+        key={`gap-${i}`}
+        className="mx-1 inline-block min-w-[6rem] rounded-md border border-dashed border-sand-500/60 px-2 align-middle leading-8 text-sand-500"
+      >
+        <span className="sr-only">Gap {i + 1}, empty</span>
+        <span aria-hidden="true">&nbsp;</span>
+      </span>
+    ) : (
+      <button
+        key={`gap-${i}`}
+        type="button"
+        disabled={locked}
+        onClick={() => clear(i)}
+        aria-label={`Gap ${i + 1}: ${bank[fills[i] as number]}. Clear it`}
+        className={`mx-1 inline-block rounded-md border border-cyan-500 bg-cyan-500/10 px-2 align-middle font-semibold leading-8 text-sand-100 enabled:hover:bg-cyan-500/20 ${FOCUS}`}
+      >
+        {bank[fills[i] as number]}
+      </button>
+    );
+  const renderPieces = (line: Piece[]) =>
+    line.map((p, k) => ("gap" in p ? renderGap(p.gap) : <Fragment key={k}>{p.text}</Fragment>));
 
   return (
     <div className="space-y-5">
-      <p className="max-w-[68ch] font-sans text-lg leading-[2.4] text-sand-200">
-        {parts.map((part, i) => (
-          <Fragment key={i}>
-            {withBreaks(part)}
-            {i < gaps &&
-              (fills[i] === null ? (
-                <span className="mx-1 inline-block min-w-[6rem] rounded-md border border-dashed border-sand-500/60 px-2 align-middle leading-8 text-sand-500">
-                  <span className="sr-only">Gap {i + 1}, empty</span>
-                  <span aria-hidden="true">&nbsp;</span>
+      <p
+        className={`max-w-[68ch] ${question.mono ? "font-mono text-base" : "font-sans text-lg"} leading-[2.4] text-sand-200`}
+      >
+        {lines.length === 1
+          ? renderPieces(lines[0])
+          : lines.map((line, n) =>
+              line.length === 0 ? (
+                // an empty line keeps a normal height rather than the 2.4 line-height the gaps need
+                <span key={n} className="block leading-normal" aria-hidden="true">
+                  &nbsp;
                 </span>
               ) : (
-                <button
-                  type="button"
-                  disabled={locked}
-                  onClick={() => clear(i)}
-                  aria-label={`Gap ${i + 1}: ${bank[fills[i] as number]}. Clear it`}
-                  className={`mx-1 inline-block rounded-md border border-cyan-500 bg-cyan-500/10 px-2 align-middle font-semibold leading-8 text-sand-100 enabled:hover:bg-cyan-500/20 ${FOCUS}`}
-                >
-                  {bank[fills[i] as number]}
-                </button>
-              ))}
-          </Fragment>
-        ))}
+                <span key={n} className="block">
+                  {renderPieces(line)}
+                </span>
+              ),
+            )}
       </p>
 
       <div>

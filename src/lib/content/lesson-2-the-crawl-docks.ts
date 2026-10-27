@@ -19,7 +19,8 @@ const ANTHROPIC_CRAWLERS: Source = {
   title: "Does Anthropic crawl data from the web, and how can site owners block the crawler?",
   publisher: "Claude Help Center",
   url: "https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler",
-  published: "2026-04-07",
+  date: "2026-04-07",
+  dateKind: "updated",
   accessed: ACCESSED,
 };
 
@@ -34,7 +35,8 @@ const GOOGLE_COMMON_CRAWLERS: Source = {
   title: "Google's common crawlers",
   publisher: "Google Crawling Infrastructure",
   url: "https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers",
-  published: "2026-10-15",
+  date: "2026-10-15",
+  dateKind: "updated",
   accessed: ACCESSED,
 };
 
@@ -42,7 +44,8 @@ const GOOGLE_AI_FEATURES: Source = {
   title: "AI features and your website",
   publisher: "Google Search Central",
   url: "https://developers.google.com/search/docs/appearance/ai-features",
-  published: "2025-12-10",
+  date: "2025-12-10",
+  dateKind: "updated",
   accessed: ACCESSED,
 };
 
@@ -64,7 +67,8 @@ const RFC_9309: Source = {
   title: "RFC 9309: Robots Exclusion Protocol",
   publisher: "IETF (RFC Editor)",
   url: "https://www.rfc-editor.org/rfc/rfc9309.html",
-  published: "2022-09",
+  date: "2022-09",
+  dateKind: "published",
   accessed: ACCESSED,
 };
 
@@ -72,7 +76,8 @@ const GOOGLE_ROBOTS_SPEC: Source = {
   title: "How Google interprets the robots.txt specification",
   publisher: "Google Crawling Infrastructure",
   url: "https://developers.google.com/crawling/docs/robots-txt/robots-txt-spec",
-  published: "2026-10-23",
+  date: "2026-10-23",
+  dateKind: "updated",
   accessed: ACCESSED,
 };
 
@@ -80,7 +85,8 @@ const GOOGLE_ROBOTS_INTRO: Source = {
   title: "Introduction to robots.txt",
   publisher: "Google Search Central",
   url: "https://developers.google.com/search/docs/crawling-indexing/robots/intro",
-  published: "2025-12-10",
+  date: "2025-12-10",
+  dateKind: "updated",
   accessed: ACCESSED,
 };
 
@@ -88,7 +94,8 @@ const GOOGLE_JS_SEO: Source = {
   title: "Understand JavaScript SEO basics",
   publisher: "Google Search Central",
   url: "https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics",
-  published: "2026-03-04",
+  date: "2026-03-04",
+  dateKind: "updated",
   accessed: ACCESSED,
 };
 
@@ -96,7 +103,8 @@ const VERCEL_AI_CRAWLERS: Source = {
   title: "The rise of the AI crawler (with MERJ)",
   publisher: "Vercel",
   url: "https://vercel.com/blog/the-rise-of-the-ai-crawler",
-  published: "2024-12-17",
+  date: "2024-12-17",
+  dateKind: "published",
   accessed: ACCESSED,
 };
 
@@ -104,7 +112,8 @@ const SITEMAPS_HOME: Source = {
   title: "What are Sitemaps?",
   publisher: "sitemaps.org",
   url: "https://www.sitemaps.org/",
-  published: "2020-04-17",
+  date: "2020-04-17",
+  dateKind: "updated",
   accessed: ACCESSED,
 };
 
@@ -112,7 +121,8 @@ const SITEMAPS_PROTOCOL: Source = {
   title: "Sitemaps XML format",
   publisher: "sitemaps.org",
   url: "https://www.sitemaps.org/protocol.html",
-  published: "2016-11-21",
+  date: "2016-11-21",
+  dateKind: "updated",
   accessed: ACCESSED,
 };
 
@@ -141,7 +151,8 @@ const LLMS_TXT: Source = {
   title: "The /llms.txt file, v2",
   publisher: "llmstxt.org (Jeremy Howard)",
   url: "https://llmstxt.org/",
-  published: "2026-08-10",
+  date: "2026-08-10",
+  dateKind: "updated",
   accessed: ACCESSED,
 };
 
@@ -149,7 +160,8 @@ const CLOUDFLARE_ONE_CLICK: Source = {
   title: "Declare your AIndependence: block AI bots, scrapers and crawlers with a single click",
   publisher: "Cloudflare Blog",
   url: "https://blog.cloudflare.com/declaring-your-aindependence-block-ai-bots-scrapers-and-crawlers-with-a-single-click/",
-  published: "2024-07-03",
+  date: "2024-07-03",
+  dateKind: "published",
   accessed: ACCESSED,
 };
 
@@ -157,7 +169,8 @@ const CLOUDFLARE_DEFAULT_BLOCK: Source = {
   title: "Content Independence Day: no AI crawl without compensation!",
   publisher: "Cloudflare Blog",
   url: "https://blog.cloudflare.com/content-independence-day-no-ai-crawl-without-compensation/",
-  published: "2025-07-01",
+  date: "2025-07-01",
+  dateKind: "published",
   accessed: ACCESSED,
 };
 
@@ -165,7 +178,8 @@ const CLOUDFLARE_AI_BOTS_DOCS: Source = {
   title: "Block AI Bots",
   publisher: "Cloudflare Docs",
   url: "https://developers.cloudflare.com/bots/additional-configurations/block-ai-bots/",
-  published: "2026-07-01",
+  date: "2026-07-01",
+  dateKind: "updated",
   accessed: ACCESSED,
 };
 
@@ -173,7 +187,8 @@ const GOOGLE_VERIFY: Source = {
   title: "Verify requests from Google crawlers and fetchers",
   publisher: "Google Crawling Infrastructure",
   url: "https://developers.google.com/crawling/docs/crawlers-fetchers/verify-google-requests",
-  published: "2026-03-20",
+  date: "2026-03-20",
+  dateKind: "updated",
   accessed: ACCESSED,
 };
 
@@ -303,7 +318,7 @@ export const LESSON_2: LessonContent = {
           term: "Groups, and how a bot finds its own",
           summary: "A bot obeys one group: the one that names it, or the * group if none does.",
           explanation:
-            "RFC 9309 defines a **group** as \"One or more user-agent lines that are followed by one or more rules\". The group ends at the next user-agent line or the end of the file. So several bots can share one set of rules by stacking their user-agent lines.\n\nTo find its group, a crawler matches its product token, and \"Crawlers MUST use case-insensitive matching\". If two groups name the same token, their rules \"MUST be combined into one group\". Only \"If no matching group exists\" does the crawler fall back to the `User-agent: *` group.\n\nGoogle spells out the consequence: \"User agent specific groups and global groups (*) are not combined.\" Once a bot has a group of its own, the rules under `*` no longer apply to it. Google also says the order of groups in the file \"is irrelevant\".",
+            "RFC 9309 defines a **group** as \"One or more user-agent lines that are followed by one or more rules\". The group ends at the next user-agent line that comes after its rules, or at the end of the file. So several bots can share one set of rules by stacking their user-agent lines.\n\nTo find its group, a crawler matches its product token, and \"Crawlers MUST use case-insensitive matching\". If two groups name the same token, their rules \"MUST be combined into one group\". Only \"If no matching group exists\" does the crawler fall back to the `User-agent: *` group.\n\nGoogle spells out the consequence: \"User agent specific groups and global groups (*) are not combined.\" Once a bot has a group of its own, the rules under `*` no longer apply to it. Google also says the order of groups in the file \"is irrelevant\".",
           whyItMatters:
             "This is where most self-inflicted damage happens. Add a group for one bot, and that bot stops seeing every rule you wrote for `*`. The file also covers only its own host: Google says \"A robots.txt on a subdomain is only valid for that subdomain\", and Anthropic asks you to set rules \"for every subdomain that you wish to opt out from\".",
           example: {
@@ -636,6 +651,7 @@ export const LESSON_2: LessonContent = {
         prompt:
           "One problem is left: PerplexityBot has its own group, so it ignores the * rule for /checkout/. Fill in the fixed file.",
         text: "User-agent: *\nDisallow: /checkout/\n\nUser-agent: GPTBot\nUser-agent: ___\nDisallow: /\n\nUser-agent: PerplexityBot\nDisallow: ___",
+        mono: true,
         answers: ["ClaudeBot", "/checkout/"],
         distractors: ["Claude-SearchBot", "OAI-SearchBot", "/"],
         explanation:

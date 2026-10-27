@@ -6,7 +6,16 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } fro
 import type { LessonMeta, Question } from "@/lib/lesson-types";
 import type { LiveLesson } from "@/lib/lessons";
 import { lessonPath } from "@/lib/lesson-catalog";
-import { buildSteps, clampResume, progressFraction, resumeKey, type Step } from "@/lib/lesson-flow";
+import {
+  auditEventParams,
+  buildSteps,
+  clampResume,
+  progressFraction,
+  resumeKey,
+  stepEventParams,
+  stepToSave,
+  type Step,
+} from "@/lib/lesson-flow";
 import { isLessonComplete } from "@/lib/pass-mark";
 import { XP_REWARDS } from "@/lib/gamification";
 import { trackEvent } from "@/lib/analytics";
@@ -124,6 +133,8 @@ export default function LessonPlayer({ lesson, onXP, onAuditComplete, upgrade, n
   // with persistence on, saving waits until the saved step has been read back
   const [restored, setRestored] = useState(!persist);
   const [auditAnswers, setAuditAnswers] = useState<boolean[] | null>(null);
+  // once passed in this sitting, the lesson is finished: the saved step is cleared (stepToSave)
+  const [auditPassed, setAuditPassed] = useState(false);
   const [auditRun, setAuditRun] = useState(0);
   const [sessionXp, setSessionXp] = useState(0);
   const awarded = useRef(new Set<string>());
@@ -167,17 +178,19 @@ export default function LessonPlayer({ lesson, onXP, onAuditComplete, upgrade, n
 
   useEffect(() => {
     if (!persist || !restored) return;
+    const save = stepToSave(index, auditPassed);
     try {
-      window.localStorage.setItem(resumeKey(lesson.id), JSON.stringify(index));
+      if (save === null) window.localStorage.removeItem(resumeKey(lesson.id));
+      else window.localStorage.setItem(resumeKey(lesson.id), JSON.stringify(save));
     } catch {
       // storage unavailable: the lesson still works, it just will not resume
     }
-  }, [persist, restored, index, lesson.id]);
+  }, [persist, restored, index, auditPassed, lesson.id]);
 
   useEffect(() => {
     if (!restored) return;
-    trackEvent("lesson_step", { step_kind: steps[index]?.kind });
-  }, [restored, index, steps]);
+    trackEvent("lesson_step", stepEventParams(lesson.id, steps[index]));
+  }, [restored, index, steps, lesson.id]);
 
   // Bring the top of the player back into view when a step changes below the fold.
   useEffect(() => {
@@ -206,8 +219,9 @@ export default function LessonPlayer({ lesson, onXP, onAuditComplete, upgrade, n
     const score = answers.filter(Boolean).length;
     const passed = isLessonComplete(score, total);
     setAuditAnswers(answers);
+    if (passed) setAuditPassed(true);
     onAuditComplete(score, total);
-    trackEvent("lesson_audit_complete", { score, total, passed: passed ? 1 : 0 });
+    trackEvent("lesson_audit_complete", auditEventParams(lesson.id, score, total, passed));
     // a retake earns only what it adds over the best run (the server keeps the best across sittings)
     const value = auditXp(score, total);
     const gain = auditGain(auditBest.current, value);

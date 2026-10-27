@@ -19,11 +19,12 @@ const MD_COMPONENTS: Components = {
   ),
 };
 
-/** A source as a link (new tab) with its publisher and date. */
+/** A source as a link (new tab) with its publisher and date: "Published …" or "Updated …" as the page labels it, else the day it was checked. */
 export function SourceLink({ source }: { source: Source }) {
-  const date = source.published
-    ? formatSourceDate(source.published)
-    : `checked ${formatSourceDate(source.accessed)}`;
+  const date =
+    source.date !== undefined
+      ? `${source.dateKind === "updated" ? "Updated" : "Published"} ${formatSourceDate(source.date)}`
+      : `Checked ${formatSourceDate(source.accessed)}`;
   return (
     <>
       <a
@@ -37,7 +38,7 @@ export function SourceLink({ source }: { source: Source }) {
       </a>
       <span className="text-sand-400">
         {" "}
-        · {source.publisher}, {date}
+        · {source.publisher} · {date}
       </span>
     </>
   );

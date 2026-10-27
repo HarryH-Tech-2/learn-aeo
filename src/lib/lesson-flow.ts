@@ -40,3 +40,23 @@ export function progressFraction(index: number, steps: Step[]): number {
   if (steps.length <= 1) return 0;
   return Math.min(1, Math.max(0, index / (steps.length - 1)));
 }
+
+/**
+ * The step to save for resuming, or null to clear the saved step. Once the
+ * audit is passed the lesson is finished, so nothing is saved and reopening it
+ * (or reloading on the outro) starts at the intro. Until then the current step
+ * is saved, and clampResume brings a saved outro back to the audit.
+ */
+export function stepToSave(index: number, auditPassed: boolean): number | null {
+  return auditPassed ? null : index;
+}
+
+/** Params for the lesson_step event. */
+export function stepEventParams(lessonId: string, step: Step | undefined) {
+  return { lesson_id: lessonId, step_kind: step?.kind };
+}
+
+/** Params for the lesson_audit_complete event. */
+export function auditEventParams(lessonId: string, score: number, total: number, passed: boolean) {
+  return { lesson_id: lessonId, score, total, passed: passed ? 1 : 0 };
+}

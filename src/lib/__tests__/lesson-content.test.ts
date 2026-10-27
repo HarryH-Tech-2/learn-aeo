@@ -17,7 +17,12 @@ function checkSource(s: Source) {
   expect(s.publisher.length).toBeGreaterThan(0);
   expect(s.url.startsWith("https://")).toBe(true);
   expect(s.accessed).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-  if (s.published !== undefined) expect(s.published).toMatch(/^\d{4}-\d{2}(-\d{2})?$/);
+  expect(s.date === undefined, s.url).toBe(s.dateKind === undefined);
+  if (s.date !== undefined) {
+    expect(s.date, s.url).toMatch(/^\d{4}-\d{2}(-\d{2})?$/);
+    expect(["published", "updated"], s.url).toContain(s.dateKind);
+    expect(s.date <= s.accessed, s.url).toBe(true);
+  }
 }
 
 function checkQuestion(q: Question) {
@@ -154,5 +159,34 @@ describe.each(live.map((l) => [l.id, l] as const))("lesson content: %s", (_id, l
 
   it("has no leftover wording from the old course", () => {
     expect(JSON.stringify(c)).not.toMatch(BANNED);
+  });
+});
+
+describe("Plan 2 polish", () => {
+  const byId = (id: string) => {
+    const l = getLesson(id);
+    if (!isLive(l)) throw new Error(`${id} is not live`);
+    return l.content;
+  };
+
+  it("sets mono on lesson 2's robots.txt blank", () => {
+    const c = byId("make-your-site-reachable-by-ai");
+    const blanks = allQuestions(c).filter((q) => q.kind === "blank" && q.text.includes("User-agent:"));
+    expect(blanks.length).toBeGreaterThan(0);
+    for (const q of blanks) expect(q.kind === "blank" && q.mono, q.id).toBe(true);
+  });
+
+  it("says a group ends at a user-agent line that follows its rules", () => {
+    const text = JSON.stringify(byId("make-your-site-reachable-by-ai"));
+    expect(text).not.toContain("The group ends at the next user-agent line or the end of the file.");
+    expect(text).toContain("user-agent line that comes after its rules");
+  });
+
+  it("names the access hatch in lesson 3's original passage, and flags the GOV.UK date mismatch", () => {
+    const c = byId("writing-citable-content");
+    expect(c.exercise.brief).toContain("access hatch");
+    expect(c.example.points.length).toBeGreaterThanOrEqual(3);
+    expect(c.example.points.length).toBeLessThanOrEqual(4);
+    expect(c.example.points.map((p) => p.text).join(" ")).toContain("dateModified");
   });
 });

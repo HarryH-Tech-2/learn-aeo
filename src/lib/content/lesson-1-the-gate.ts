@@ -10,7 +10,8 @@ const GOOGLE_AI_FEATURES: Source = {
   title: "AI features and your website",
   publisher: "Google Search Central",
   url: "https://developers.google.com/search/docs/appearance/ai-features",
-  published: "2025-12-10",
+  date: "2025-12-10",
+  dateKind: "updated",
   accessed: ACCESSED,
 };
 
@@ -18,7 +19,8 @@ const GOOGLE_AI_MODE: Source = {
   title: "AI in Search: Going beyond information to intelligence",
   publisher: "Google",
   url: "https://blog.google/products-and-platforms/products/search/google-search-ai-mode-update/",
-  published: "2025-05-20",
+  date: "2025-05-20",
+  dateKind: "published",
   accessed: ACCESSED,
 };
 
@@ -26,7 +28,8 @@ const GOOGLE_PASSAGES: Source = {
   title: "How AI is powering a more helpful Google",
   publisher: "Google",
   url: "https://blog.google/products-and-platforms/products/search/search-on/",
-  published: "2020-10-15",
+  date: "2020-10-15",
+  dateKind: "published",
   accessed: ACCESSED,
 };
 
@@ -34,7 +37,8 @@ const GOOGLE_SUCCEEDING: Source = {
   title: "Top ways to ensure your content performs well in Google's AI experiences on Search",
   publisher: "Google Search Central Blog",
   url: "https://developers.google.com/search/blog/2025/05/succeeding-in-ai-search",
-  published: "2025-05-21",
+  date: "2025-05-21",
+  dateKind: "published",
   accessed: ACCESSED,
 };
 
@@ -42,7 +46,8 @@ const GOOGLE_SPAM: Source = {
   title: "Spam policies for Google web search",
   publisher: "Google Search Central",
   url: "https://developers.google.com/search/docs/essentials/spam-policies",
-  published: "2026-08-28",
+  date: "2026-08-28",
+  dateKind: "updated",
   accessed: ACCESSED,
 };
 
@@ -50,15 +55,18 @@ const GEMINI_GROUNDING: Source = {
   title: "Grounding with Google Search",
   publisher: "Google Cloud Documentation",
   url: "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/grounding/grounding-with-google-search",
-  published: "2026-10-26",
-  accessed: ACCESSED,
+  date: "2026-10-27",
+  dateKind: "updated",
+  // re-checked on 2026-10-27, when the page showed a newer update
+  accessed: "2026-10-27",
 };
 
 const RAG_PAPER: Source = {
   title: "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks (Lewis et al.)",
   publisher: "arXiv",
   url: "https://arxiv.org/abs/2005.11401",
-  published: "2020-05-22",
+  date: "2020-05-22",
+  dateKind: "published",
   accessed: ACCESSED,
 };
 
@@ -66,7 +74,8 @@ const RAG_PAPER_FULL: Source = {
   title: "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks, full text (v4)",
   publisher: "arXiv",
   url: "https://arxiv.org/html/2005.11401v4",
-  published: "2021-04-12",
+  date: "2021-04-12",
+  dateKind: "published",
   accessed: ACCESSED,
 };
 
@@ -109,6 +118,8 @@ const ANTHROPIC_CRAWLERS: Source = {
   title: "Does Anthropic crawl data from the web, and how can site owners block the crawler?",
   publisher: "Claude Help Center",
   url: "https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler",
+  date: "2026-04-07",
+  dateKind: "updated",
   accessed: ACCESSED,
 };
 
@@ -116,7 +127,8 @@ const BING_COPILOT_SEARCH: Source = {
   title: "Introducing Copilot Search in Bing",
   publisher: "Microsoft Bing Blog",
   url: "https://blogs.bing.com/search/2025/4/Introducing-Copilot-Search-in-Bing/",
-  published: "2025-04-04",
+  date: "2025-04-04",
+  dateKind: "published",
   accessed: ACCESSED,
 };
 
