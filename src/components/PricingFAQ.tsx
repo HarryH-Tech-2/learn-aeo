@@ -8,14 +8,17 @@ import { useState } from "react";
 import { reveal } from "@/components/reveal";
 import { useFreeCourseGuest } from "@/components/useFreeCourseGuest";
 import { PLANS, formatPlanPrice } from "@/lib/plans";
+import { LESSON_CATALOG } from "@/lib/lesson-catalog";
 
 const both = (plan: (typeof PLANS)[keyof typeof PLANS]) => `${formatPlanPrice(plan, "USD")} (${formatPlanPrice(plan, "GBP")})`;
 const MONTHS_TO_LIFETIME = Math.round(PLANS.lifetime.usd / PLANS.monthly.usd);
+const LIVE_COUNT = LESSON_CATALOG.filter((l) => l.status === "live").length;
+const MINUTES = LESSON_CATALOG.map((l) => l.minutes);
 
 const faqs = [
   {
     question: "Is Lifetime really a one-time payment?",
-    answer: `Yes. You pay ${both(PLANS.lifetime)} once and keep the full course for good: every lesson, including each new one as it's released, plus the tools, templates and certificate. No recurring charge.`,
+    answer: `Yes. You pay ${both(PLANS.lifetime)} once and keep the full course for good: every lesson, including each new one as it's released, and the certificate when you finish. No recurring charge.`,
   },
   {
     question: "How does the Monthly plan work?",
@@ -27,15 +30,15 @@ const faqs = [
   },
   {
     question: "What exactly does 'lifetime access' cover?",
-    answer: "Every lesson, tool, template and quiz on the platform now, plus any new lessons we add as answer engines change. No extra charges, no upgrade tiers.",
+    answer: `Every lesson and exercise on the site now (${LIVE_COUNT} of the ${LESSON_CATALOG.length} lessons are live), each remaining lesson as it opens, any new lessons we add as answer engines change, and the certificate. No extra charges, no upgrade tiers.`,
   },
   {
     question: "Do I need any prior knowledge?",
-    answer: "No. If you work in marketing you have everything you need. The course starts from how answer engines pick their sources and builds up from there.",
+    answer: "You should know SEO basics: crawling, indexing, title tags and sitemaps. The course does not teach those again. It starts from how answer engines pick their sources and builds up from there.",
   },
   {
     question: "How long does it take to complete the course?",
-    answer: "Most learners finish all 8 lessons in a few weeks, a couple of hours a week. It's entirely self-paced, so you can go faster or slower.",
+    answer: `Each lesson takes about ${Math.min(...MINUTES)} to ${Math.max(...MINUTES)} minutes. It's entirely self-paced, so you can go faster or slower, and your progress is saved as you go.`,
   },
   {
     question: "Will new lessons be added?",
@@ -43,14 +46,14 @@ const faqs = [
   },
   {
     question: "Do you offer refunds?",
-    answer: "If you're unhappy with the course within 14 days of purchase, contact us and we'll refund you in full, no questions asked.",
+    answer: "If you're unhappy with the course within 14 days of purchase, contact us and we'll refund you in full.",
   },
 ];
 
 // The free-unlock test's free group (src/lib/access-test.ts) is not asked to buy, so the buying questions give way
 // to one about the free course. (The FAQ schema below keeps the full list for crawlers.)
 const PAID_ONLY = new Set(["Is Lifetime really a one-time payment?", "How does the Monthly plan work?", "Can I try a lesson before I buy?", "What exactly does 'lifetime access' cover?", "Do you offer refunds?"]);
-const FREE_FAQ = { question: "Is the course really free?", answer: "For you, the whole course is free: make an account and all eight lessons, the tools and the certificate open on it, with nothing to pay." };
+const FREE_FAQ = { question: "Is the course really free?", answer: "For you, the whole course is free: make an account and every live lesson, and the certificate when you finish, open on it, with nothing to pay." };
 
 export default function PricingFAQ() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);

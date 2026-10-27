@@ -10,7 +10,11 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { trackEvent } from "@/lib/analytics";
 
-export const FREE_COURSE_LINES = ["All eight lessons", "The 3D levels and every game", "The Journey, the community board and your certificate"];
+export const FREE_COURSE_LINES = [
+  "Every live lesson, and each new one as it opens",
+  "Your XP, levels, badges and the leaderboard",
+  "Your certificate when you finish",
+];
 
 export default function FreeCourseCta({
   location,
@@ -49,8 +53,8 @@ export default function FreeCourseCta({
       <ul className="mt-2 space-y-1">
         {FREE_COURSE_LINES.map((l) => (
           <li key={l} className="font-body text-sm text-sand-300 flex gap-2">
-            <span className="text-gold-500" aria-hidden="true">
-              𓋹
+            <span className="text-cyan-500" aria-hidden="true">
+              &#10003;
             </span>
             {l}
           </li>

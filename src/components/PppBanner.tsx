@@ -6,7 +6,12 @@
  */
 import { useEffect, useState } from "react";
 import { readCountryCookie } from "@/lib/pricing";
-import { pppFor, countryName, flagEmoji, type Ppp } from "@/lib/ppp";
+import { pppFor, countryName, flagEmoji, COUNTRY_TIER, PPP_PERCENT, type Ppp } from "@/lib/ppp";
+
+// Read from the tier table, so the banner never claims more or fewer countries than checkout discounts.
+const PPP_COUNTRIES = Object.keys(COUNTRY_TIER).length;
+const PPP_MIN = Math.min(...Object.values(PPP_PERCENT));
+const PPP_MAX = Math.max(...Object.values(PPP_PERCENT));
 
 export function usePpp(): Ppp | null {
   const [ppp, setPpp] = useState<Ppp | null>(null);
@@ -39,14 +44,14 @@ export default function PppBanner() {
             <span className="mr-1.5" aria-hidden="true">
               🌍
             </span>
-            Fair prices everywhere: learners in around 100 countries pay 30% to 65% less, matched to local purchasing power and applied automatically.{" "}
+            Fair prices everywhere: learners in {PPP_COUNTRIES} countries pay {PPP_MIN}% to {PPP_MAX}% less, matched to local purchasing power and applied automatically.{" "}
             <button type="button" onClick={() => setDetail((d) => !d)} className="text-gold-400 hover:text-gold-300 underline underline-offset-2">
               {detail ? "Less" : "Why?"}
             </button>
           </p>
           {detail && (
             <p className="font-body text-xs text-sand-500 mt-2 max-w-xl mx-auto leading-relaxed">
-              We know a VPN can claim a lower price. We have decided that is a price worth paying to bring the script of ancient Egypt to people who could not otherwise afford it. If you can pay the full price, thank you: it is what keeps the parity prices possible. If not, that&apos;s totally fine too.
+              We know a VPN can claim a lower price. We have decided that is a price worth paying to bring the course to people who could not otherwise afford it. If you can pay the full price, thank you: it is what keeps the parity prices possible. If not, that&apos;s totally fine too.
             </p>
           )}
         </div>

@@ -14,6 +14,10 @@
  * currency_option on the same Price.
  */
 import type { Currency } from "@/lib/pricing";
+import { LESSON_CATALOG } from "@/lib/lesson-catalog";
+
+const LESSON_TOTAL = LESSON_CATALOG.length;
+const LESSONS_LIVE = LESSON_CATALOG.filter((l) => l.status === "live").length;
 
 export type PlanId = "lifetime" | "monthly";
 
@@ -46,8 +50,10 @@ export const PLANS: Record<PlanId, Plan> = {
     gbp: 80,
     audience: "For marketers who want the whole course, for good",
     features: [
-      "All 8 lessons, including every lesson as it's released",
-      "Free AEO tools and templates",
+      LESSONS_LIVE === LESSON_TOTAL
+        ? `All ${LESSON_TOTAL} lessons`
+        : `All ${LESSON_TOTAL} lessons as they open (${LESSONS_LIVE} live now)`,
+      "Every new lesson we add, at no extra cost",
       "Certificate to share on LinkedIn",
       "14-day money-back guarantee",
     ],

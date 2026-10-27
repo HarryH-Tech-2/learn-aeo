@@ -23,7 +23,7 @@ function remaining(expiresAt: string): { h: number; m: number; s: number; done: 
 }
 
 /**
- * "Unlock the next chamber" — shown after the free lesson and on the
+ * "Unlock the rest of the city" — shown after the free lesson and on the
  * dashboard while an offer is live. The code is applied automatically at
  * checkout; it's displayed only so the learner can see it's real.
  */
@@ -54,19 +54,16 @@ export default function OfferBanner({
       ? `Your ${offer.percentOff}% off is still open · ends ${offerEndsLabel(offer.expiresAt)}`
       : offer.source === "checkout-abandoned"
         ? "Your place is still open"
-        : "Unlock the next chamber";
+        : "Unlock the rest of the city";
 
   return (
     <div className="relative border border-gold-500/40 bg-gold-500/5 p-6 md:p-7 overflow-hidden">
-      <div className="absolute -top-8 -right-6 text-8xl text-gold-500/10 select-none hieroglyph-font" aria-hidden="true">
-        𓋹
-      </div>
       <div className="flex flex-col md:flex-row md:items-center gap-5 relative">
         <div className="flex-1">
           <p className="font-body text-[10px] tracking-[0.25em] uppercase text-gold-500 mb-2">Limited offer · {offer.percentOff}% off</p>
           <h2 className="font-display text-2xl text-sand-100 mb-2">{headline}</h2>
           <p className="font-body text-sm text-sand-300 font-light leading-relaxed">
-            Lifetime access to all 8 lessons and the 3D games for{" "}
+            Lifetime access to every lesson, including each new one as it opens, for{" "}
             <span className="text-sand-100 font-medium">{formatPrice(currency, discounted(currency, offer.percentOff))}</span>{" "}
             <span className="line-through text-sand-500">{formatPrice(currency)}</span>. One payment, no subscription. Code{" "}
             <span className="font-mono text-gold-400">{offer.code}</span> is applied automatically.
