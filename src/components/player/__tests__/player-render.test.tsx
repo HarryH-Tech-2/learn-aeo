@@ -198,3 +198,26 @@ describe("claimXp", () => {
     expect(claimXp(claimed, "exercise-clean:x", 50)).toBe(0);
   });
 });
+
+describe("claimExerciseAnswer", () => {
+  it("a wrong first answer forfeits the clean bonus, even after leaving and redoing the exercise", async () => {
+    const { claimExerciseAnswer, claimXp, cleanKey } = await import("@/components/player/xp");
+    const claimed = new Set<string>();
+    // first mount: Q1 wrong
+    expect(claimExerciseAnswer(claimed, "x", "q1", false, 20)).toBe(0);
+    // Back, Next (remount, clean ref resets): Q1 right pays 0, the rest right pay
+    expect(claimExerciseAnswer(claimed, "x", "q1", true, 20)).toBe(0);
+    expect(claimExerciseAnswer(claimed, "x", "q2", true, 20)).toBe(20);
+    expect(claimExerciseAnswer(claimed, "x", "q3", true, 20)).toBe(20);
+    // the remounted set looks clean, but the bonus is already claimed at 0
+    expect(claimXp(claimed, cleanKey("x"), 50)).toBe(0);
+  });
+
+  it("an honest clean run still earns the bonus", async () => {
+    const { claimExerciseAnswer, claimXp, cleanKey } = await import("@/components/player/xp");
+    const claimed = new Set<string>();
+    expect(claimExerciseAnswer(claimed, "x", "q1", true, 20)).toBe(20);
+    expect(claimExerciseAnswer(claimed, "x", "q2", true, 20)).toBe(20);
+    expect(claimXp(claimed, cleanKey("x"), 50)).toBe(50);
+  });
+});

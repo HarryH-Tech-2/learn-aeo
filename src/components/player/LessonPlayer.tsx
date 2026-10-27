@@ -17,7 +17,7 @@ import QuestionCard from "./QuestionCard";
 import ExampleDissect from "./ExampleDissect";
 import AuditResult, { passMark } from "./AuditResult";
 import { BTN_PRIMARY, BTN_SECONDARY, EYEBROW, FOCUS, HEADING, PROSE } from "./ui";
-import { claimXp } from "./xp";
+import { claimExerciseAnswer, claimXp, cleanKey } from "./xp";
 
 export type LessonPlayerProps = {
   lesson: LiveLesson;
@@ -142,6 +142,14 @@ export default function LessonPlayer({ lesson, onXP, onAuditComplete, upgrade, n
     [onXP],
   );
 
+  /** An exercise answer: a wrong first answer also forfeits the clean-run bonus for the sitting. */
+  const awardExercise = (exerciseId: string, questionId: string, right: boolean) => {
+    const paid = claimExerciseAnswer(awarded.current, exerciseId, questionId, right, XP_REWARDS.exerciseCorrect);
+    if (paid <= 0) return;
+    setSessionXp((x) => x + paid);
+    onXP(paid);
+  };
+
   useEffect(() => {
     if (!persist) return;
     try {
@@ -262,8 +270,8 @@ export default function LessonPlayer({ lesson, onXP, onAuditComplete, upgrade, n
             <PracticeSet
               key="exercise"
               questions={x.steps}
-              onAnswered={(q, right) => award(`q:${q.id}`, right ? XP_REWARDS.exerciseCorrect : 0)}
-              onFinish={(clean) => award(`exercise-clean:${x.id}`, clean ? XP_REWARDS.exerciseClean : 0)}
+              onAnswered={(q, right) => awardExercise(x.id, q.id, right)}
+              onFinish={(clean) => award(cleanKey(x.id), clean ? XP_REWARDS.exerciseClean : 0)}
               done={
                 <div className="max-w-[68ch] rounded-xl border-l-2 border-cyan-500 bg-cyan-500/5 py-3 pl-4 pr-4">
                   <h3 className="mb-1.5 font-sans text-sm font-semibold text-cyan-400">Debrief</h3>
