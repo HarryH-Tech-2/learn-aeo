@@ -17,11 +17,11 @@ export default function CertificateContent() {
   const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
 
   // The name printed is the account name. Accounts made by email link have none, so the
-  // learner can type it here (saved to the account); until they do, it reads "Scholar".
+  // learner can type it here (saved to the account); until they do, it reads "Learner".
   const accountName = session?.user?.name?.trim() ?? "";
   const [typedName, setTypedName] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
-  const userName = (typedName ?? accountName).trim() || "Scholar";
+  const userName = (typedName ?? accountName).trim() || "Learner";
   const unsaved = typedName !== null && typedName.trim() !== "" && typedName.trim() !== accountName;
 
   async function saveName() {
@@ -86,7 +86,7 @@ export default function CertificateContent() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-obsidian">
         <div className="text-center">
-          <span className="text-5xl block mb-4 animate-pulse">𓋹</span>
+          <span className="text-5xl block mb-4 animate-pulse" aria-hidden="true">✦</span>
           <p className="font-body text-sand-500 text-sm">
             Preparing your certificate...
           </p>
@@ -100,7 +100,7 @@ export default function CertificateContent() {
       <div className="min-h-screen bg-obsidian grain-overlay">
         <Navbar />
         <div className="max-w-3xl mx-auto px-6 pt-28 pb-20 text-center">
-          <span className="text-5xl block mb-4">𓂀</span>
+          <span className="text-5xl block mb-4" aria-hidden="true">✦</span>
           <h1 className="font-display text-3xl text-sand-100 mb-4">
             Sign in to view your certificate
           </h1>
@@ -121,7 +121,7 @@ export default function CertificateContent() {
       <div className="min-h-screen bg-obsidian grain-overlay">
         <Navbar />
         <div className="max-w-3xl mx-auto px-6 pt-28 pb-20 text-center">
-          <span className="text-5xl block mb-4">𓏛</span>
+          <span className="text-5xl block mb-4" aria-hidden="true">✦</span>
           <h1 className="font-display text-3xl font-light text-sand-100 mb-3">
             Certificate{" "}
             <span className="text-gradient-gold font-medium">Locked</span>
@@ -174,7 +174,7 @@ export default function CertificateContent() {
           transition={{ duration: 0.8 }}
           className="text-center mb-10"
         >
-          <span className="text-4xl block mb-3">𓋹</span>
+          <span className="text-4xl block mb-3" aria-hidden="true">✦</span>
           <h1 className="font-display text-4xl md:text-5xl font-light text-sand-100 mb-2">
             Congratulations,{" "}
             <span className="text-gradient-gold font-medium">
@@ -202,7 +202,7 @@ export default function CertificateContent() {
               />
             ) : (
               <div className="aspect-[1.414/1] flex items-center justify-center">
-                <span className="text-5xl animate-pulse">𓋹</span>
+                <span className="text-5xl animate-pulse" aria-hidden="true">✦</span>
               </div>
             )}
           </div>
