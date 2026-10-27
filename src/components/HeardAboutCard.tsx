@@ -26,7 +26,7 @@ export default function HeardAboutCard() {
   if (state === "thanks") {
     return (
       <div className="border border-gold-700/30 bg-obsidian-lighter/60 px-5 py-4">
-        <p className="font-body text-sm text-sand-300">Thank you. That helps more people find the Academy.</p>
+        <p className="font-body text-sm text-sand-300">Thank you. That helps more people find Learn AEO.</p>
       </div>
     );
   }

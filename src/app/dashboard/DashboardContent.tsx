@@ -118,7 +118,7 @@ function DashboardInner() {
           items: [{ item_id: plan.id, item_name: plan.name, price: plan.usd, quantity: 1 }],
         });
       }
-      setToast(plan.id === "monthly" ? "Your monthly plan is active. Every lesson is open." : "Welcome! You now have lifetime access to the Academy.");
+      setToast(plan.id === "monthly" ? "Your monthly plan is active. Every lesson is open." : "Welcome! You now have lifetime access to Learn AEO.");
       window.history.replaceState({}, "", "/dashboard");
     }
   }, [searchParams, status]);

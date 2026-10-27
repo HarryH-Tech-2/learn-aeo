@@ -28,7 +28,8 @@ const ALLOW = new Set([
 const WORDS = [
   String.raw`egypt\w*`, String.raw`\w*glyph\w*`, String.raw`papyr\w*`, String.raw`pharaoh\w*`, "tombs?",
   String.raw`cartouche\w*`, "scribe[sd]?", "scribal", "expeditions?", "chambers?", "ankhs?", "rosetta",
-  "nile", "tutankhamun", "horus", "scarabs?", "dig", "diggers?", String.raw`archaeolog\w*`,
+  "nile", "tutankhamun", "horus", "scarabs?", "dig", "digs", "digging", "diggers?", "thoth", "anubis", "karnak", "mumm(?:y|ies)",
+  String.raw`valley\s+of\s+the\s+kings`, String.raw`book\s+of\s+the\s+dead`, String.raw`archaeolog\w*`,
   String.raw`egyptolog\w*`, "courtyards?", "hypostyle", "sanctum", "chapels?", "treasury",
   String.raw`royal\s+hall`, String.raw`segoe\s+ui\s+historic`,
 ];
@@ -94,12 +95,19 @@ describe("no Egyptian references anywhere", () => {
   });
 
   it("the matcher itself behaves", () => {
-    for (const s of ["Egypt", "hieroglyphs", "a scribe", "the Tomb", "Royal  Hall", "dig deeper"])
+    for (const s of [
+      "Egypt", "hieroglyphs", "a scribe", "the Tomb", "Royal  Hall", "dig deeper", "an Egyptian scribe",
+      'fontFamily: "Noto Sans Egyptian Hieroglyphs"', "footer-egypt", "the glyph-font class",
+      "Unlock the next chamber", "the chapel", "the treasury", "an expedition", "Segoe UI Historic",
+      "digging", "digs", "Thoth", "Anubis", "Karnak", "a mummy", "mummies", "Valley of the Kings", "Book of the Dead",
+    ])
       expect(BANNED.test(s), s).toBe(true);
-    for (const s of ["describe", "subscribe", "digital", "inverted pyramid", "subscribed"])
+    for (const s of ["describe", "subscribe", "digital", "digest", "inverted pyramid", "subscribed"])
       expect(BANNED.test(s), s).toBe(false);
+    expect(RAW_GLYPH.test(String.fromCodePoint(0x13080))).toBe(true);
     expect(escapedGlyph("&#x13080;")).toBeTruthy();
     expect(escapedGlyph("&#77952;")).toBeTruthy();
+    expect(escapedGlyph("String.raw`" + String.fromCharCode(92) + "u{13080}`")).toBeTruthy();
     expect(escapedGlyph("&#x2014;")).toBeNull();
   });
 });

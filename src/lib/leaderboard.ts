@@ -78,7 +78,7 @@ const SELECT = {
 } as const;
 
 /**
- * Top-N scholars by XP (ties broken by lessons completed, then name so the
+ * Top-N learners by XP (ties broken by lessons completed, then name so the
  * order is stable), plus the viewer's own rank wherever they sit.
  */
 export async function getLeaderboard(viewerId?: string, limit = 10): Promise<Leaderboard> {
@@ -103,7 +103,7 @@ export async function getLeaderboard(viewerId?: string, limit = 10): Promise<Lea
     } else {
       const me = await prisma.user.findUnique({ where: { id: viewerId }, select: SELECT });
       if (me) {
-        // Rank = 1 + number of scholars strictly ahead (matches competition ranking above).
+        // Rank = 1 + number of learners strictly ahead (matches competition ranking above).
         const ahead = me.xp > 0 ? await prisma.user.count({ where: { xp: { gt: me.xp } } }) : totalRanked;
         you = toEntry({ ...me, rank: me.xp > 0 ? ahead + 1 : totalRanked + 1 }, viewerId);
       }
