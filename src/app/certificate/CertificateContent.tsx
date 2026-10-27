@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useAuthModal } from "@/components/AuthModal";
 import Navbar from "@/components/Navbar";
+import { LESSON_CATALOG } from "@/lib/lesson-catalog";
 import { fetchJson } from "@/lib/fetch-json";
 
 export default function CertificateContent() {
@@ -41,16 +42,7 @@ export default function CertificateContent() {
     if (session?.user) {
       fetchJson<{ lessons: Record<string, { completed: boolean }> }>("/api/progress")
         .then((data) => {
-          const lessonIds = [
-            "expedition-begins",
-            "outer-courtyard",
-            "pilgrims-gallery",
-            "the-treasury",
-            "royal-hall",
-            "sacred-chapel",
-            "hypostyle-hall",
-            "inner-sanctum",
-          ];
+          const lessonIds = LESSON_CATALOG.map((l) => l.id);
           const completed = lessonIds.every(
             (id) => data.lessons[id]?.completed
           );
@@ -135,7 +127,7 @@ export default function CertificateContent() {
             <span className="text-gradient-gold font-medium">Locked</span>
           </h1>
           <p className="font-body text-sm text-sand-400 mb-8">
-            Complete all 8 lessons to unlock your Certificate of Hieroglyphics.
+            Complete all 8 lessons to unlock your Learn AEO Certificate.
           </p>
           <Link href="/dashboard" className="btn-primary py-3 px-8 text-sm">
             Back to Dashboard
@@ -148,7 +140,7 @@ export default function CertificateContent() {
   function handleDownload() {
     if (!imageDataUrl) return;
     const link = document.createElement("a");
-    link.download = "hieroglyphics-certificate.png";
+    link.download = "learn-aeo-certificate.png";
     link.href = imageDataUrl;
     link.click();
   }
@@ -156,13 +148,13 @@ export default function CertificateContent() {
   async function handleShare() {
     if (!imageDataUrl) return;
     const blob = await (await fetch(imageDataUrl)).blob();
-    const file = new File([blob], "hieroglyphics-certificate.png", {
+    const file = new File([blob], "learn-aeo-certificate.png", {
       type: "image/png",
     });
     if (navigator.share && navigator.canShare({ files: [file] })) {
       navigator.share({
-        title: "My Hieroglyphics Certificate",
-        text: "I completed the Hieroglyphics Education Course!",
+        title: "My Learn AEO Certificate",
+        text: "I completed the Learn AEO course!",
         files: [file],
       });
     } else {
@@ -205,7 +197,7 @@ export default function CertificateContent() {
             {imageDataUrl ? (
               <img
                 src={imageDataUrl}
-                alt="Certificate of Hieroglyphics"
+                alt="Learn AEO Certificate"
                 className="w-full h-auto"
               />
             ) : (

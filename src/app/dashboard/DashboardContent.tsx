@@ -2,7 +2,9 @@
 
 import OfferBanner, { type OfferData } from "@/components/OfferBanner";
 import UpgradePanel from "@/components/lesson/UpgradePanel";
-import { lessons, getLessonGlyphs } from "@/lib/legacy-lessons";
+import { LESSON_CATALOG } from "@/lib/lesson-catalog";
+import { districtViews } from "@/lib/city-map";
+import CityMap from "@/components/CityMap";
 
 import { setAnalyticsUserProperty, trackEvent } from "@/lib/analytics";
 
@@ -13,15 +15,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import ProgressMap from "@/components/ProgressMap";
 import XPBar from "@/components/XPBar";
 import BadgeShelf from "@/components/BadgeShelf";
 import Leaderboard from "@/components/Leaderboard";
-import ExpeditionHeader from "@/components/journey/ExpeditionHeader";
-import SealedDoor from "@/components/journey/SealedDoor";
-import FindsTray from "@/components/journey/FindsTray";
-import ExpeditionLog from "@/components/journey/ExpeditionLog";
-import { useExpedition, useExpeditionLog } from "@/lib/expedition-client";
 import { planById, PLANS } from "@/lib/plans";
 import HeardAboutCard from "@/components/HeardAboutCard";
 import { fetchJson } from "@/lib/fetch-json";
@@ -39,35 +35,16 @@ type Me = {
   badges: any[];
   access: { active: boolean; via?: string | null };
   offer: OfferData | null;
-  expedition: unknown;
-  expeditionLog: unknown;
   askHeardAbout?: boolean;
   /** The free-unlock test group (src/lib/access-test.ts) */
   accessTest?: "free" | "paid" | null;
 };
 
-const dashboardLessons = [
-  { id: "expedition-begins", title: "The Expedition Begins", subtitle: "Uniliteral Signs", category: "Fundamentals", difficulty: "beginner", duration: "30 min", icon: "𓄿", progress: 0, isFree: true },
-  { id: "outer-courtyard", title: "The Outer Courtyard", subtitle: "Flora & Fauna", category: "Fundamentals", difficulty: "beginner", duration: "20 min", icon: "𓃭", progress: 0, isFree: false },
-  { id: "pilgrims-gallery", title: "The Pilgrim's Gallery", subtitle: "Determinatives", category: "Fundamentals", difficulty: "beginner", duration: "20 min", icon: "𓀀", progress: 0, isFree: false },
-  { id: "the-treasury", title: "The Treasury", subtitle: "Egyptian Numerals", category: "Applied", difficulty: "intermediate", duration: "20 min", icon: "𓏤", progress: 0, isFree: false },
-  { id: "royal-hall", title: "The Royal Hall", subtitle: "Pharaoh Names", category: "Applied", difficulty: "intermediate", duration: "25 min", icon: "𓇳", progress: 0, isFree: false },
-  { id: "sacred-chapel", title: "The Sacred Chapel", subtitle: "Funerary Formulas", category: "Advanced", difficulty: "advanced", duration: "30 min", icon: "𓂀", progress: 0, isFree: false },
-  { id: "hypostyle-hall", title: "The Hypostyle Hall", subtitle: "Monumental Texts", category: "Advanced", difficulty: "advanced", duration: "30 min", icon: "𓉐", progress: 0, isFree: false },
-  { id: "inner-sanctum", title: "The Inner Sanctum", subtitle: "Complex Constructions", category: "Mastery", difficulty: "advanced", duration: "35 min", icon: "𓐍", progress: 0, isFree: false },
-];
-
-const diffColors: Record<string, string> = {
-  beginner: "text-turquoise border-turquoise/30 bg-turquoise/5",
-  intermediate: "text-gold-400 border-gold-500/30 bg-gold-500/5",
-  advanced: "text-terracotta border-terracotta/30 bg-terracotta/5",
-};
-
 const TABS = [
-  { id: "journey", label: "Journey", short: "Journey", glyph: "\u{13250}" },
-  { id: "badges", label: "Badges", short: "Badges", glyph: "\u{13080}" },
-  { id: "scribes", label: "Leaderboard", short: "Ranks", glyph: "\u{133DE}" },
-  { id: "certificate", label: "Certificate", short: "Certificate", glyph: "\u{131CB}" },
+  { id: "journey", label: "City map", short: "Map" },
+  { id: "badges", label: "Badges", short: "Badges" },
+  { id: "ranks", label: "Leaderboard", short: "Ranks" },
+  { id: "certificate", label: "Certificate", short: "Certificate" },
 ] as const;
 type TabId = (typeof TABS)[number]["id"];
 const isTabId = (v: string | null): v is TabId => TABS.some((t) => t.id === v);
@@ -90,8 +67,6 @@ function DashboardInner() {
   const [progress, setProgress] = useState<Progress | null>(null);
   const [offer, setOffer] = useState<OfferData | null>(null);
   const [me, setMe] = useState<Me | null>(null);
-  const { state: expedition } = useExpedition({ fetch: false, remote: me ? me.expedition : undefined });
-  const expeditionLog = useExpeditionLog(me ? me.expeditionLog : undefined);
   const [tab, setTab] = useState<TabId>(() => {
     const t = searchParams.get("tab");
     return isTabId(t) ? t : "journey";
@@ -157,9 +132,8 @@ function DashboardInner() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-obsidian">
         <div className="text-center">
-          <span className="text-5xl block mb-4 animate-pulse">𓂀</span>
           <p className="font-body text-sand-500 text-sm">
-            Opening the scrolls...
+            Loading your dashboard...
           </p>
         </div>
       </div>
@@ -171,10 +145,12 @@ function DashboardInner() {
     return null;
   }
 
-  const completedCount = progress
-    ? dashboardLessons.filter((l) => progress.lessons[l.id]?.completed).length
-    : 0;
-  const allCompleted = completedCount === dashboardLessons.length;
+  const districts = districtViews(LESSON_CATALOG, progress?.lessons ?? null, !!hasSubscription);
+  const liveLessons = LESSON_CATALOG.filter((l) => l.status === "live");
+  const comingSoon = LESSON_CATALOG.length - liveLessons.length;
+  const completedLive = liveLessons.filter((l) => progress?.lessons[l.id]?.completed).length;
+  const completedCount = LESSON_CATALOG.filter((l) => progress?.lessons[l.id]?.completed).length;
+  const allCompleted = completedCount === LESSON_CATALOG.length;
 
   return (
     <div className="min-h-screen bg-obsidian grain-overlay flex flex-col">
@@ -202,20 +178,19 @@ function DashboardInner() {
           className="mb-12"
         >
           <div className="flex items-center gap-3 mb-2">
-            <span className="text-2xl">𓁐</span>
             <span className="font-body text-xs tracking-[0.2em] uppercase text-gold-500">
-              Scholar&apos;s Chamber
+              Your dashboard
             </span>
           </div>
           <h1 className="font-display text-4xl md:text-5xl font-light text-sand-100 mb-2">
             Welcome back,{" "}
             <span className="text-gradient-gold font-medium">
-              {session.user?.name?.split(" ")[0] || "Scholar"}
+              {session.user?.name?.split(" ")[0] || "there"}
             </span>
           </h1>
           <div className="flex items-center gap-4">
             <p className="font-body text-sand-500 font-light">
-              Continue your journey through the language of the pharaohs.
+              Pick up where you left off in the City of Answers.
             </p>
             {progress && progress.streak > 0 && (
               <span className="font-body text-xs text-gold-400 bg-gold-500/10 border border-gold-500/20 px-3 py-1">
@@ -291,15 +266,6 @@ function DashboardInner() {
                     className="absolute inset-0 border border-transparent group-hover:border-gold-500/40 group-hover:bg-gold-500/5 transition-colors duration-200"
                   />
                 )}
-                <motion.span
-                  variants={{ hover: { y: -2, rotate: -6, scale: 1.15 } }}
-                  transition={{ type: "spring", stiffness: 500, damping: 18 }}
-                  className={`relative text-2xl sm:text-lg leading-none ${active ? "text-obsidian" : "text-gold-500 group-hover:text-gold-300"}`}
-                  style={{ fontFamily: "'Noto Sans Egyptian Hieroglyphs', serif" }}
-                  aria-hidden="true"
-                >
-                  {t.glyph}
-                </motion.span>
                 <span className="relative sm:hidden">{t.short}</span>
                 <span className="relative hidden sm:inline">{t.label}</span>
                 {!active && (
@@ -324,42 +290,14 @@ function DashboardInner() {
         >
         {tab === "journey" && (
           <>
-        <ExpeditionHeader
-          name={session.user?.name ?? "Scholar"}
-          xp={progress?.xp ?? 0}
-          progress={progress?.lessons ?? null}
-          state={expedition}
-          log={expeditionLog}
-        />
-
-        {/* Progress Map */}
-        <ProgressMap
-          zones={dashboardLessons.map((l) => ({
-            id: l.id,
-            name: l.title,
-            areaName: l.subtitle,
-            completed: progress?.lessons[l.id]?.completed ?? false,
-            started: progress?.lessons[l.id]?.started ?? false,
-            bestScore: progress?.lessons[l.id]?.bestScore ?? null,
-            locked: !l.isFree && !hasSubscription,
-            position: { top: "0", left: "0" },
-            teaser: (() => {
-              const g = getLessonGlyphs(lessons.find((x) => x.id === l.id) ?? lessons[0])[0];
-              return g ? { symbol: g.symbol, meaning: g.meaning.split(/: | — /)[0], transliteration: g.transliteration } : undefined;
-            })(),
-            // the first two sentences, for the sealed panel
-            description: lessons.find((x) => x.id === l.id)?.description.split(/(?<=\.)\s+/).slice(0, 2).join(" "),
-          }))}
-          offer={offer}
-          streak={progress?.streak ?? 0}
-          xp={progress?.xp ?? 0}
-          expedition={expedition}
-        />
-        <div className="mt-8 space-y-8">
-          <SealedDoor progress={progress?.lessons ?? null} masteryClean={!!expedition.bosses.Mastery?.clean} />
-          <FindsTray progress={progress?.lessons ?? null} state={expedition} />
-          <ExpeditionLog log={expeditionLog} streak={progress?.streak ?? 0} />
+        <div className="mb-8">
+          <h2 className="font-display text-3xl md:text-4xl text-sand-100 mb-2">The City of Answers</h2>
+          <p className="font-sans text-sm text-sand-400">
+            {completedLive} of {liveLessons.length} {liveLessons.length === 1 ? "lesson" : "lessons"} complete
+            {comingSoon > 0 ? ` · ${comingSoon} more ${comingSoon === 1 ? "district" : "districts"} opening soon` : ""}
+          </p>
         </div>
+        <CityMap districts={districts} />
           </>
         )}
 
@@ -373,7 +311,7 @@ function DashboardInner() {
           </>
         )}
 
-        {tab === "scribes" && (
+        {tab === "ranks" && (
           <>
         {/* Leaderboard */}
         <div>
@@ -404,7 +342,7 @@ function DashboardInner() {
               >
                 {completedCount}
               </span>
-              <span className="text-sand-600"> / {dashboardLessons.length} lessons</span>
+              <span className="text-sand-600"> / {LESSON_CATALOG.length} lessons</span>
             </p>
           </div>
 
@@ -420,7 +358,7 @@ function DashboardInner() {
             >
               <img
                 src="/certificate-template.webp"
-                alt="Certificate of Hieroglyphics preview"
+                alt="Certificate of completion preview"
                 loading="lazy"
                 decoding="async"
                 className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ${
@@ -446,7 +384,7 @@ function DashboardInner() {
                   color: "#1a1a1a",
                 }}
               >
-                {session.user?.name || "Scholar"}
+                {session.user?.name || "Learner"}
               </span>
 
               {/* Locked overlay */}
@@ -457,7 +395,7 @@ function DashboardInner() {
                       Locked
                     </p>
                     <p className="font-body text-sm text-sand-100 max-w-sm mx-auto">
-                      Complete all {dashboardLessons.length} lessons to unlock your
+                      Complete all {LESSON_CATALOG.length} lessons to unlock your
                       personalized certificate.
                     </p>
                   </div>

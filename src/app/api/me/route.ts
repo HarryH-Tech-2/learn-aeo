@@ -11,8 +11,7 @@ import { ACCESS_TEST_GAME, armOf } from "@/lib/access-test";
 /**
  * GET /api/me — everything the dashboard needs in one round trip: one
  * session lookup, then the queries in parallel. Replaces eight separate
- * calls (progress, badges, subscription, offer, expedition state,
- * expedition log), each of which paid for its own
+ * calls (progress, badges, subscription, offer), each of which paid for its own
  * session lookup against the database.
  */
 export const dynamic = "force-dynamic";
@@ -28,7 +27,7 @@ export async function GET(request: Request) {
     getUserProgress(userId),
     prisma.userBadge.findMany({ where: { userId }, include: { badge: true }, orderBy: { earnedAt: "desc" } }),
     checkSubscription(email),
-    prisma.gameState.findMany({ where: { userId, game: { in: ["expedition", "expedition-log", ACCESS_TEST_GAME] } }, select: { game: true, state: true } }),
+    prisma.gameState.findMany({ where: { userId, game: { in: [ACCESS_TEST_GAME] } }, select: { game: true, state: true } }),
     prisma.user.findUnique({ where: { id: userId }, select: { heardAbout: true } }),
   ]);
 
@@ -40,8 +39,6 @@ export async function GET(request: Request) {
     access,
     // (not where the visitor's purchasing-power price is already lower: checkout would never use it)
     offer: offer && !pppBeatsOffer(requestCountry(request), offer.percentOff) ? { code: offer.code, expiresAt: offer.expiresAt.toISOString(), percentOff: offer.percentOff, source: offer.source } : null,
-    expedition: states.find((s) => s.game === "expedition")?.state ?? null,
-    expeditionLog: states.find((s) => s.game === "expedition-log")?.state ?? null,
     // The free-unlock test group, for the GA4 user property access_test (src/lib/access-test.ts); null when not in it
     accessTest: armOf(states.find((s) => s.game === ACCESS_TEST_GAME)?.state),
     // false once they've answered (or skipped) "How did you find us?" (src/components/HeardAboutCard.tsx)
