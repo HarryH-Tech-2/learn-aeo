@@ -4,6 +4,7 @@
 import { LESSON_CATALOG } from "./lesson-catalog";
 import type { LessonContent, LessonMeta } from "./lesson-types";
 import { LESSON_1 } from "./content/lesson-1-the-gate";
+import { LESSON_2 } from "./content/lesson-2-the-crawl-docks";
 
 export type LiveLesson = LessonMeta & { status: "live"; content: LessonContent };
 export type Lesson = LiveLesson | (LessonMeta & { status: "coming-soon" });
@@ -11,6 +12,7 @@ export type Lesson = LiveLesson | (LessonMeta & { status: "coming-soon" });
 /** Content for each live lesson, keyed by lesson id. */
 export const CONTENT: Readonly<Record<string, LessonContent>> = {
   "how-answer-engines-choose-sources": LESSON_1,
+  "make-your-site-reachable-by-ai": LESSON_2,
 };
 
 export const LESSONS: readonly Lesson[] = LESSON_CATALOG.map((meta): Lesson => {

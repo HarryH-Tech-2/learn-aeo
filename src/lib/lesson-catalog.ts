@@ -28,7 +28,7 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
     level: "beginner",
     minutes: 30,
     isFree: false,
-    status: "coming-soon",
+    status: "live",
   },
   {
     id: "writing-citable-content",
