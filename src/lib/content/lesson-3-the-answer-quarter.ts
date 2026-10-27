@@ -127,7 +127,7 @@ export const LESSON_3: LessonContent = {
           term: "Lead with the answer",
           summary: "Put a one- or two-sentence direct answer straight under the question, then add the detail.",
           explanation:
-            "Journalists call this the **inverted pyramid**. Nielsen Norman Group describes it as a structure where \"the most important information (or what might even be considered the conclusion) is presented first\", and says the style is \"perfectly suited to writing for the web\".\n\nThe GOV.UK style guide gives the same instruction: \"Put the most important information first.\" Then \"taper down to smaller and smaller details as your content goes on.\"\n\nMicrosoft Bing's guidance on AI search answers points the same way. Among the things that make content eligible for snippets, it lists \"Concise answers: One- to two-sentence responses that directly address a question.\"",
+            "Journalists call this the **inverted pyramid**. Nielsen Norman Group describes it as a structure where \"the most important information (or what might even be considered the conclusion) is presented first\", and says the style is \"perfectly suited to writing for the web\".\n\nGOV.UK's content guidance gives the same instruction: \"Put the most important information first.\" Then \"taper down to smaller and smaller details as your content goes on.\"\n\nMicrosoft Bing's guidance on AI search answers points the same way. Among the things that make content eligible for snippets, it lists \"Concise answers: One- to two-sentence responses that directly address a question.\"",
           whyItMatters:
             "A reader who stops after one sentence still gets the answer, and so does an engine that lifts one sentence. Nielsen Norman Group notes that readers \"can stop reading at any point on the page and still come away with the main point\".",
           example: {
@@ -139,7 +139,7 @@ export const LESSON_3: LessonContent = {
             note: "Fernhill is made up. The first version spends two sentences warming up and answers nothing. The second answers \"how long does delivery take?\" in its first sentence and adds the main condition in the second.",
           },
           pitfall:
-            "Writing a summary at the top and then repeating it word for word in the first paragraph. GOV.UK says \"Do not repeat the summary in the first paragraph.\" Use the space after the answer for conditions, exceptions and detail.",
+            "Writing a summary at the top and then repeating it in the first paragraph. GOV.UK says \"Do not repeat the summary in the first paragraph.\" Use the space after the answer for conditions, exceptions and detail.",
           sources: [NNG_INVERTED_PYRAMID, GOVUK_STRUCTURE, BING_AI_ANSWERS],
         },
         {
@@ -302,7 +302,7 @@ export const LESSON_3: LessonContent = {
           term: "Question-shaped headings",
           summary: "A heading that matches the question people ask, with the answer straight under it.",
           explanation:
-            "Microsoft Bing says headings \"mark where one idea ends and another begins\", and that for AI \"they act like chapter titles that define clear content slices\". Instead of a vague heading such as \"Learn More\", it suggests a question: \"What Makes This Dishwasher Quieter Than Most Models?\" It adds that \"Direct questions with clear answers mirror the way people search.\"\n\nNot every style guide agrees. GOV.UK says headings should not \"be questions – they're hard to frontload and users want answers, not questions\", and prefers descriptive, active headings such as \"Apply for a driving licence\".\n\nThe two agree on the part that matters: no generic headings (GOV.UK also rules out \"Introduction\"), and the answer must come straight away. If you use a question heading, put the direct answer in the first sentence under it.",
+            "Microsoft Bing says headings \"mark where one idea ends and another begins\", and that for AI \"they act like chapter titles that define clear content slices\". Instead of a vague heading such as \"Learn More\", it suggests a question: \"What Makes This Dishwasher Quieter Than Most Models?\" In its section on Q&A formats, it adds that \"Direct questions with clear answers mirror the way people search.\"\n\nNot every style guide agrees. GOV.UK says headings should not \"be questions – they're hard to frontload and users want answers, not questions\", and prefers descriptive, active headings such as \"Apply for a driving licence\".\n\nThe two agree on the part that matters: no generic headings (GOV.UK also rules out \"Introduction\"), and the answer must come straight away. If you use a question heading, put the direct answer in the first sentence under it.",
           whyItMatters:
             "A heading tells a reader and an engine what the next passage answers. A heading such as \"Learn more\" tells neither. Google's own content questions ask whether \"the main heading or page title provide[s] a descriptive, helpful summary of the content\".",
           example: {
@@ -415,7 +415,7 @@ export const LESSON_3: LessonContent = {
           term: "Cite sources and publish original data",
           summary: "Show where your facts come from, and add something other pages do not have.",
           explanation:
-            "Google's self-assessment questions ask whether content provides \"original information, reporting, research, or analysis\", and whether it presents information \"in a way that makes you want to trust it, such as clear sourcing\". Google also says \"Attribution or giving credit to other sources doesn't replace the need for original effort.\" Its ranking systems guide describes original content systems that show original reporting \"ahead of those who merely cite it\".\n\nOne research study points the same way. In the GEO paper (Aggarwal et al., KDD 2024), the authors rewrote web pages and measured how visible they were in answers generated by GPT-3.5 Turbo on their GEO-bench benchmark. Their top methods were adding citations (Cite Sources), quotations (Quotation Addition) and statistics (Statistics Addition). Keyword stuffing gave \"little to no improvement\".\n\nThe authors also ran a smaller follow-up on Perplexity.ai, \"a commercially deployed generative engine\", using 200 test queries. Because Perplexity does not let users specify source URLs, they uploaded the source text as files instead. They report that the methods which worked on their test engine also improved visibility there, and that keyword stuffing again performed poorly.",
+            "Google's self-assessment questions ask whether content provides \"original information, reporting, research, or analysis\", and whether it presents information \"in a way that makes you want to trust it, such as clear sourcing\". Google also says \"Attribution or giving credit to other sources doesn't replace the need for original effort.\" Its ranking systems guide describes original content systems that show original reporting \"ahead of those who merely cite it\".\n\nOne research study points the same way. In the GEO paper (Aggarwal et al., KDD 2024), the authors rewrote web pages and measured how visible they were in answers generated by GPT-3.5 Turbo on their GEO-bench benchmark. Their top methods were adding citations (Cite Sources), quotations (Quotation Addition) and statistics (Statistics Addition). Keyword stuffing gave \"little to no improvement\".\n\nThe authors also ran a smaller follow-up on Perplexity.ai, \"a commercially deployed generative engine\", using 200 test queries. Because Perplexity does not let users specify source URLs, they uploaded the source text as files instead. They report that the methods which worked on their test engine also improved visibility there, and that keyword stuffing did worse than the unoptimised pages on one of their two visibility measures (a word count weighted by position in the answer), though it scored higher on the other (a subjective impression score).",
           whyItMatters:
             "A claim with a named source is easier for readers to check, and Google says its original content systems aim to show original reporting ahead of pages that merely cite it. The GEO study's main results come from a test engine built on GPT-3.5 Turbo, with a smaller follow-up on Perplexity.ai. Treat it as one research study, not a rule for any particular engine.",
           example: {
@@ -560,7 +560,7 @@ export const LESSON_3: LessonContent = {
     points: [
       {
         label: "The answer is the first sentence",
-        text: "The page does not open with background on employment law. It gives the number, 5.6 weeks, and who it applies to, then lists the groups it includes. That is the inverted pyramid GOV.UK's own style guide asks for.",
+        text: "The page does not open with background on employment law. It gives the number, 5.6 weeks, and who it applies to, then lists the groups it includes. That is the inverted pyramid GOV.UK's content guidance asks for.",
       },
       {
         label: "Self-contained, with the condition attached",
@@ -624,12 +624,11 @@ export const LESSON_3: LessonContent = {
       prompt: "Put the parts of an answer-first section in inverted-pyramid order, most important first.",
       items: [
         "A one- or two-sentence direct answer to the question",
-        "The conditions or exceptions that change the answer",
-        "Supporting details and examples",
+        "The conditions, exceptions, supporting details and examples",
         "Background on the topic",
       ],
       explanation:
-        "The answer comes first, then smaller and smaller details. Nielsen Norman Group describes the broad facts at the top, followed by supporting details and background.",
+        "The answer comes first, then the detail, then background. Nielsen Norman Group puts the most important information first, \"followed by supporting details and background information\".",
     },
     {
       kind: "match",
@@ -647,7 +646,7 @@ export const LESSON_3: LessonContent = {
     {
       kind: "blank",
       id: "a-blank-dates",
-      prompt: "Complete Google's byline date guidance.",
+      prompt: "Fill in what Google asks for when you show a date on a page that also has structured data.",
       text: "Add a ___ date to the page and feature it prominently. Make sure it matches the date in your ___ data.",
       answers: ["user-visible", "structured"],
       distractors: ["future", "hidden", "estimated"],

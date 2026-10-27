@@ -413,7 +413,7 @@ export const LESSON_2: LessonContent = {
           explanation:
             "Google documents its own process: it handles JavaScript pages in \"three main phases\", crawling, rendering and indexing. It still adds that \"server-side or pre-rendering is still a great idea because it makes your website faster for users and crawlers, and not all bots can run JavaScript.\"\n\nFor AI crawlers, there are two kinds of evidence:\n\n- **A vendor statement.** Common Crawl says of CCBot: \"Currently, JavaScript is not executed\".\n- **A published study.** In December 2024, Vercel and MERJ analysed crawler traffic on nextjs.org and the Vercel network. They reported that \"none of the major AI crawlers currently render JavaScript\", naming OpenAI's OAI-SearchBot, ChatGPT-User and GPTBot, Anthropic's ClaudeBot and PerplexityBot among others. They found Gemini uses Googlebot's infrastructure and renders fully.\n\nOpenAI, Anthropic and Perplexity's crawler pages do not say whether their bots render JavaScript. Claude-SearchBot and Claude-User were not in the study's list.",
           whyItMatters:
-            "If your prices, product details or answers only appear after JavaScript runs, some bots that are allowed in may still see an empty page. Server-rendered HTML is the safe default, because every crawler can read it.",
+            "If your prices, product details or answers only appear after JavaScript runs, some bots that are allowed in may still see an empty page. Server-rendered HTML is the safe default, because a crawler does not need to run JavaScript to read it.",
           example: {
             kind: "before-after",
             before:
@@ -600,7 +600,7 @@ export const LESSON_2: LessonContent = {
       {
         kind: "spot",
         id: "x-step-spot",
-        prompt: "Which line blocks a search crawler that Fernhill wants to keep?",
+        prompt: "Which line puts a search crawler Fernhill wants to keep into the wrong group?",
         language: "robots",
         lines: [
           "User-agent: *",
@@ -643,7 +643,7 @@ export const LESSON_2: LessonContent = {
       },
     ],
     debrief:
-      "The two bugs came from one rule: a bot obeys only the group that names it. Stacking a search crawler into a training group blocked it. Giving another search crawler its own group quietly dropped the * rules. When you edit a real file, check each token against the vendor's page, re-read every group from the bot's point of view, and note the date. OpenAI and Perplexity both say changes can take up to about 24 hours to show.",
+      "The two bugs came from one rule: a bot obeys only the group that names it. Stacking a search crawler into a training group blocked it. Giving another search crawler its own group quietly dropped the * rules. When you edit a real file, check each token against the vendor's page, re-read every group from the bot's point of view, and note the date. OpenAI says its search results can take about 24 hours to adjust after a robots.txt update, and Perplexity says its systems may take up to 24 hours to reflect changes.",
   },
 
   example: {
