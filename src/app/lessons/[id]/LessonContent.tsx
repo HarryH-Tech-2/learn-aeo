@@ -13,6 +13,7 @@ import GuaranteeNote from "@/components/GuaranteeNote";
 import LessonPlayer from "@/components/player/LessonPlayer";
 import { BTN_PRIMARY, BTN_SECONDARY, EYEBROW, FOCUS } from "@/components/player/ui";
 import { trackEvent } from "@/lib/analytics";
+import { submitAuditResult } from "@/lib/audit-submit";
 import { HttpError, fetchJson } from "@/lib/fetch-json";
 import { nextLessonMeta } from "@/lib/lesson-catalog";
 import type { LessonMeta } from "@/lib/lesson-types";
@@ -119,24 +120,13 @@ export default function LessonContent() {
   function handleAuditComplete(score: number, total: number) {
     trackEvent("lesson_complete", { lesson_id: id, score, total });
     if (!session) return;
-    fetch("/api/progress/complete", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ lessonId: id, score, totalQuestions: total }),
-    })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data: { offer?: OfferData | null } | null) => {
-        if (data?.offer) {
-          setOffer(data.offer);
-          trackEvent("offer_shown", { offer_source: data.offer.source, location: "lesson_outro" });
-        }
-      })
-      .catch(() => null);
-    fetch("/api/badges/check", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ lessonId: id, score, total }),
-    }).catch(() => null);
+    // Badges are checked only once the result is saved, so streak and completed-count milestones see it.
+    void submitAuditResult<{ offer?: OfferData | null }>(id, score, total, (data) => {
+      if (data?.offer) {
+        setOffer(data.offer);
+        trackEvent("offer_shown", { offer_source: data.offer.source, location: "lesson_outro" });
+      }
+    });
   }
 
   if (loadError === "failed") {
