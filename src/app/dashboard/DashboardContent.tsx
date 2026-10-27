@@ -38,6 +38,8 @@ type Me = {
   askHeardAbout?: boolean;
   /** The free-unlock test group (src/lib/access-test.ts) */
   accessTest?: "free" | "paid" | null;
+  /** Questions in each live lesson's audit, keyed by lesson id */
+  auditLengths?: Record<string, number>;
 };
 
 const TABS = [
@@ -145,7 +147,7 @@ function DashboardInner() {
     return null;
   }
 
-  const districts = districtViews(LESSON_CATALOG, progress?.lessons ?? null, !!hasSubscription);
+  const districts = districtViews(LESSON_CATALOG, progress?.lessons ?? null, !!hasSubscription, me?.auditLengths);
   const liveLessons = LESSON_CATALOG.filter((l) => l.status === "live");
   const comingSoon = LESSON_CATALOG.length - liveLessons.length;
   const completedLive = liveLessons.filter((l) => progress?.lessons[l.id]?.completed).length;

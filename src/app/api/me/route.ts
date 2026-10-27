@@ -7,6 +7,7 @@ import { checkSubscription } from "@/lib/subscription";
 import { getActiveOffer } from "@/lib/offers";
 import { pppBeatsOffer, requestCountry } from "@/lib/ppp";
 import { ACCESS_TEST_GAME, armOf } from "@/lib/access-test";
+import { auditLengths } from "@/lib/lessons";
 
 /**
  * GET /api/me — everything the dashboard needs in one round trip: one
@@ -43,5 +44,7 @@ export async function GET(request: Request) {
     accessTest: armOf(states.find((s) => s.game === ACCESS_TEST_GAME)?.state),
     // false once they've answered (or skipped) "How did you find us?" (src/components/HeardAboutCard.tsx)
     askHeardAbout: !account?.heardAbout,
+    // Questions in each live lesson's audit, so the city map can show a stored best score as "N of M"
+    auditLengths: auditLengths(),
   });
 }

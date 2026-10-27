@@ -33,4 +33,19 @@ describe("CityMap", () => {
     expect(soon.length).toBe(5);
     for (const s of soon) expect(s.split("data-district=")[0]).not.toContain("href=");
   });
+
+  it("shows a completed district's best score as N of M, not a percentage", () => {
+    const done = renderToStaticMarkup(
+      <CityMap
+        districts={districtViews(
+          catalog,
+          { [catalog[0].id]: { started: true, bestScore: 8, completed: true } },
+          false,
+          { [catalog[0].id]: 10 }
+        )}
+      />
+    );
+    expect(done).toContain("Best score 8 of 10");
+    expect(done).not.toContain("8%");
+  });
 });

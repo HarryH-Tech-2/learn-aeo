@@ -32,6 +32,18 @@ describe("districtViews", () => {
     expect(v[1]).toMatchObject({ started: false, bestScore: null });
   });
 
+  it("carries each lesson's audit length so a best score reads as N of M", () => {
+    const v = districtViews(
+      catalog,
+      { "lesson-1": { started: true, bestScore: 8, completed: true } },
+      true,
+      { "lesson-1": 10, "lesson-2": 9 }
+    );
+    expect(v[0]).toMatchObject({ bestScore: 8, auditTotal: 10 });
+    expect(v[1].auditTotal).toBe(9);
+    expect(v[3].auditTotal).toBeNull();
+  });
+
   it("keeps a completed coming-soon id as coming-soon", () => {
     const v = districtViews(catalog, { "lesson-4": { started: true, bestScore: 100, completed: true } }, true);
     expect(v[3].districtStatus).toBe("coming-soon");

@@ -1,12 +1,23 @@
 import type { LessonMeta } from "./lesson-types";
 
 export type DistrictStatus = "done" | "next" | "open" | "locked" | "coming-soon";
-export type DistrictView = LessonMeta & { districtStatus: DistrictStatus; started: boolean; bestScore: number | null };
+/** bestScore is the raw count of audit answers right; auditTotal is how many questions that audit has. */
+export type DistrictView = LessonMeta & {
+  districtStatus: DistrictStatus;
+  started: boolean;
+  bestScore: number | null;
+  auditTotal: number | null;
+};
 
 type ProgressMap = Record<string, { started: boolean; bestScore: number | null; completed: boolean }>;
 
 /** Where each district stands for this learner, in catalog order. */
-export function districtViews(catalog: readonly LessonMeta[], progress: ProgressMap | null, paid: boolean): DistrictView[] {
+export function districtViews(
+  catalog: readonly LessonMeta[],
+  progress: ProgressMap | null,
+  paid: boolean,
+  auditLengths: Readonly<Record<string, number>> = {}
+): DistrictView[] {
   let nextTaken = false;
   return catalog.map((meta) => {
     const p = progress?.[meta.id];
@@ -18,6 +29,6 @@ export function districtViews(catalog: readonly LessonMeta[], progress: Progress
       nextTaken = true;
       districtStatus = "next";
     } else districtStatus = "open";
-    return { ...meta, districtStatus, started: p?.started ?? false, bestScore: p?.bestScore ?? null };
+    return { ...meta, districtStatus, started: p?.started ?? false, bestScore: p?.bestScore ?? null, auditTotal: auditLengths[meta.id] ?? null };
   });
 }

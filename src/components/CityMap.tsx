@@ -77,7 +77,9 @@ export default function CityMap({ districts }: { districts: DistrictView[] }) {
                 <p className="font-sans text-sm text-sand-400 mb-2">{d.summary}</p>
                 <p className="font-sans text-xs text-sand-500">
                   <span className="capitalize">{d.level}</span> · {d.minutes} min
-                  {d.districtStatus === "done" && d.bestScore !== null ? ` · Best score ${d.bestScore}%` : ""}
+                  {d.districtStatus === "done" && d.bestScore !== null
+                    ? ` · Best score ${d.bestScore}${d.auditTotal !== null ? ` of ${d.auditTotal}` : ""}`
+                    : ""}
                   {d.districtStatus === "next" && d.started ? " · In progress" : ""}
                 </p>
               </Card>

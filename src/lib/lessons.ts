@@ -26,6 +26,11 @@ export const LESSONS: readonly Lesson[] = LESSON_CATALOG.map((meta): Lesson => {
   return { ...meta, status: "coming-soon" };
 });
 
+/** How many questions each live lesson's audit has, keyed by lesson id (the M in "Best score N of M"). */
+export function auditLengths(): Record<string, number> {
+  return Object.fromEntries(Object.entries(CONTENT).map(([id, c]) => [id, c.audit.length]));
+}
+
 export function getLesson(id: string): Lesson | undefined {
   return LESSONS.find((l) => l.id === id);
 }
