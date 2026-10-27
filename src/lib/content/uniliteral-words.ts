@@ -10,7 +10,7 @@
  * Order matters: signs are introduced roughly in frequency order, and the
  * words are chunked into short groups (see GROUP_SIZES) with a quick check after each.
  */
-import type { GlyphGroup, Hieroglyph } from "@/lib/lessons";
+import type { GlyphGroup, Hieroglyph } from "@/lib/legacy-lessons";
 
 export type Word = {
   id: string;

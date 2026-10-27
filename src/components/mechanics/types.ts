@@ -1,4 +1,4 @@
-import type { Hieroglyph } from "@/lib/lessons";
+import type { Hieroglyph } from "@/lib/legacy-lessons";
 
 /** Every lesson's signature mechanic renders with the same props. */
 export type MechanicProps = {

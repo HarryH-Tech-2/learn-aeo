@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/site";
 import { blogPosts } from "@/lib/blog-posts";
-import { lessons } from "@/lib/lessons";
+import { lessons } from "@/lib/legacy-lessons";
 
 // Static content lastmod — bump this when marketing pages (home/about/etc.)
 // are substantively edited. Using a real date beats `new Date()` because

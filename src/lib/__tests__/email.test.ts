@@ -11,7 +11,7 @@ vi.mock("resend", () => ({
 }));
 
 import { sendWelcomeEmail } from "@/lib/email";
-import { lessons } from "@/lib/lessons";
+import { lessons } from "@/lib/legacy-lessons";
 import { Resend } from "resend";
 
 describe("sendWelcomeEmail", () => {

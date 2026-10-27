@@ -9,7 +9,7 @@
  * GameState (game "expedition", see expedition-client.ts) plus a server-only
  * activity log (game "expedition-log", appended by recordXP).
  */
-import { lessons, getLessonGlyphs, type Lesson } from "@/lib/lessons";
+import { lessons, getLessonGlyphs, type Lesson } from "@/lib/legacy-lessons";
 import { generateSiteReport } from "@/lib/exercises";
 import { LEVEL_THRESHOLDS, calculateLevel } from "@/lib/gamification";
 import { modelForGlyph } from "@/lib/objects";

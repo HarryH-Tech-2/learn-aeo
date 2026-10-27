@@ -1,4 +1,4 @@
-import type { Hieroglyph, ExerciseConfig, FillInBlankConfig } from "@/lib/lessons";
+import type { Hieroglyph, ExerciseConfig, FillInBlankConfig } from "@/lib/legacy-lessons";
 import { typedAnswer } from "@/lib/transliteration";
 
 function shuffle<T>(array: T[]): T[] {

@@ -15,7 +15,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-import type { Hieroglyph } from "@/lib/lessons";
+import type { Hieroglyph } from "@/lib/legacy-lessons";
 import { modelForGlyph } from "@/lib/objects";
 import { speak, speechSupported, toSpeakable } from "@/lib/speech";
 import { trackExerciseAnswer, trackExerciseComplete, type ExerciseKind } from "@/lib/analytics";

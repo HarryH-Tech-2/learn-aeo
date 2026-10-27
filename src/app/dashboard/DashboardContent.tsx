@@ -2,7 +2,7 @@
 
 import OfferBanner, { type OfferData } from "@/components/OfferBanner";
 import UpgradePanel from "@/components/lesson/UpgradePanel";
-import { lessons, getLessonGlyphs } from "@/lib/lessons";
+import { lessons, getLessonGlyphs } from "@/lib/legacy-lessons";
 
 import { setAnalyticsUserProperty, trackEvent } from "@/lib/analytics";
 

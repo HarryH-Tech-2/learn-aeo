@@ -15,7 +15,7 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
     level: "beginner",
     minutes: 25,
     isFree: true,
-    status: "coming-soon",
+    status: "live",
   },
   {
     id: "make-your-site-reachable-by-ai",

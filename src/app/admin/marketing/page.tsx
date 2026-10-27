@@ -6,7 +6,7 @@ import { prisma } from "@/lib/db";
 import { summariseCheckoutLog, type CheckoutLogOutcome, type PurchaseRow } from "@/lib/checkout-recovery-log";
 import { ACCESS_TEST_GAME, accessTestPercent, armOf, summariseAccessTest, type AccessTestPerson } from "@/lib/access-test";
 import { SITE } from "@/lib/site";
-import { lessons } from "@/lib/lessons";
+import { lessons } from "@/lib/legacy-lessons";
 
 /**
  * Visitors, sign-ups and paying customers per marketing post (src/lib/campaign.ts records them). Only the

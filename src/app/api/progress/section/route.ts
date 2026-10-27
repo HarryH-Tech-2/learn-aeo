@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { lessons } from "@/lib/lessons";
+import { lessons } from "@/lib/legacy-lessons";
 import { sectionPlan } from "@/lib/content/lesson-sections";
 import { checkSubscription } from "@/lib/subscription";
 import { OFFER_PERCENT_OFF, grantOffer } from "@/lib/offers";

@@ -40,7 +40,7 @@ import {
   cartoucheTier,
   clearedCount,
 } from "@/lib/expedition";
-import { lessons, getLessonGlyphs } from "@/lib/lessons";
+import { lessons, getLessonGlyphs } from "@/lib/legacy-lessons";
 
 const done = { started: true, bestScore: 5, completed: true };
 const ids = [...lessons].sort((a, b) => a.order - b.order).map((l) => l.id);

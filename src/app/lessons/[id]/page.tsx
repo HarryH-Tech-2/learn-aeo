@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { SITE, absoluteUrl } from "@/lib/site";
 import { Suspense } from "react";
-import { lessons } from "@/lib/lessons";
+import { lessons } from "@/lib/legacy-lessons";
 import LessonContent from "./LessonContent";
 
 export async function generateStaticParams() {

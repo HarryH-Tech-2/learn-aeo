@@ -7,7 +7,7 @@
  */
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import type { Hieroglyph } from "@/lib/lessons";
+import type { Hieroglyph } from "@/lib/legacy-lessons";
 import { letterCorrect, renderLetter, type Letter } from "@/lib/expedition";
 import { trackExerciseAnswer, trackExerciseComplete } from "@/lib/analytics";
 

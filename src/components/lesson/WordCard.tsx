@@ -9,7 +9,7 @@
  */
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import type { Hieroglyph } from "@/lib/lessons";
+import type { Hieroglyph } from "@/lib/legacy-lessons";
 import type { Word } from "@/lib/content/uniliteral-words";
 import { speak, toSpeakable } from "@/lib/speech";
 import { trackExerciseAnswer } from "@/lib/analytics";

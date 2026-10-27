@@ -5,7 +5,7 @@ import {
   generateDecodeQuestion,
   generateSiteReport,
 } from "@/lib/exercises";
-import { lessons, type Hieroglyph } from "@/lib/lessons";
+import { lessons, type Hieroglyph } from "@/lib/legacy-lessons";
 
 const testGlyphs: Hieroglyph[] = [
   { symbol: "𓄿", transliteration: "3 (aleph)", meaning: "Egyptian vulture", pronunciation: "ah", history: "", culture: "", examples: [] },

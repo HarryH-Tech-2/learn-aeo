@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { isLessonComplete, recordQuizScore } from "@/lib/progress";
-import { lessons } from "@/lib/lessons";
+import { lessons } from "@/lib/legacy-lessons";
 import { OFFER_PERCENT_OFF, grantOffer, getActiveOffer } from "@/lib/offers";
 import { sendNextChamberEmail } from "@/lib/email";
 import { prisma } from "@/lib/db";

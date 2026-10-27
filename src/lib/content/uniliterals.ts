@@ -6,7 +6,7 @@
  * comment. Examples use attested spellings; where a word is more often
  * written with a different sign we say so.
  */
-import type { GlyphGroup } from "@/lib/lessons";
+import type { GlyphGroup } from "@/lib/legacy-lessons";
 
 const G = (s: string) => s; // readability marker for glyph strings
 

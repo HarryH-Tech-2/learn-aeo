@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { firstGroupOfSection, resumableSection, sectionEndingAtGroup, sectionOfGroup, sectionPlan } from "@/lib/content/lesson-sections";
 import { buildWordGroups } from "@/lib/content/uniliteral-words";
-import { getLessonGlyphs, lessons } from "@/lib/lessons";
+import { getLessonGlyphs, lessons } from "@/lib/legacy-lessons";
 
 const L1 = "expedition-begins";
 

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { checkSubscription } from "@/lib/subscription";
-import { lessons, getLessonGlyphs, type Lesson, type Hieroglyph } from "@/lib/lessons";
+import { lessons, getLessonGlyphs, type Lesson, type Hieroglyph } from "@/lib/legacy-lessons";
 import { devBypassAuth } from "@/lib/dev-bypass";
 
 const REVIEW_COUNT = 6;

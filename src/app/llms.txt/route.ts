@@ -1,7 +1,7 @@
 import { blogPosts } from "@/lib/blog-posts";
 import { SITE } from "@/lib/site";
 import { PLANS, formatPlanPrice } from "@/lib/plans";
-import { lessons } from "@/lib/lessons";
+import { lessons } from "@/lib/legacy-lessons";
 import { stripMarkdown } from "@/app/blog/blog-text";
 
 /**

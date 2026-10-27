@@ -4,7 +4,7 @@
  * door only opens once the name reads. The signs of the name then become the
  * first sign group, so the alphabet arrives in the order the learner needs it.
  */
-import type { GlyphGroup, Hieroglyph } from "@/lib/lessons";
+import type { GlyphGroup, Hieroglyph } from "@/lib/legacy-lessons";
 import { transliterateName } from "@/lib/hieroglyph-translator";
 
 export type DoorCell = {
