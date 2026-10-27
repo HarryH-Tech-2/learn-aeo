@@ -68,6 +68,10 @@ describe("page copy", () => {
     expect(css).not.toMatch(/\.hero-cta-seal/);
   });
 
+  it.each([...FILES, ...MONEY_COPY])("%s never lowercases a whole lesson title (it would turn AEO into aeo)", (rel) => {
+    expect(read(rel)).not.toMatch(/title\.toLowerCase\(\)/);
+  });
+
   it("no plan promises tools that do not exist", async () => {
     const { PLANS } = await import("@/lib/plans");
     for (const f of [...PLANS.lifetime.features, ...PLANS.monthly.features]) expect(f).not.toMatch(/\btools?\b/i);

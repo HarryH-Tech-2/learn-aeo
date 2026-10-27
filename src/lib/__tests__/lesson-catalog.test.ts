@@ -10,6 +10,7 @@ import {
   lessonPath,
   nextLessonMeta,
   publicLessonPaths,
+  titleMidSentence,
 } from "../lesson-catalog";
 
 const EXPECTED = [
@@ -49,6 +50,12 @@ describe("lesson catalog", () => {
     expect(nextLessonMeta("running-an-aeo-programme")).toBeUndefined();
     expect(nextLessonMeta(FIRST_LESSON_ID)?.order).toBe(2);
     expect(nextLessonMeta("nope")).toBeUndefined();
+  });
+
+  it("lowercases only the first letter of a title used mid-sentence, keeping AEO", () => {
+    expect(titleMidSentence("Running an AEO programme")).toBe("running an AEO programme");
+    expect(titleMidSentence("Make your site reachable by AI")).toBe("make your site reachable by AI");
+    expect(titleMidSentence(LESSON_CATALOG[LESSON_CATALOG.length - 1].title)).toContain("AEO");
   });
 
   it("imports only lesson-types (middleware imports it)", () => {

@@ -38,7 +38,6 @@ describe("sendWelcomeEmail", () => {
     expect(callArgs.subject).toMatch(/^Thank you: /);
     expect(callArgs.html).toContain("Hi there,");
     expect(callArgs.text).toContain("Hi there,");
-    for (const part of [callArgs.subject, callArgs.html, callArgs.text]) expect(part).not.toMatch(/scholar/i);
   });
 
   it("opens with a thank-you from the team and invites a reply to the owner inbox", async () => {
@@ -66,6 +65,21 @@ describe("sendWelcomeEmail", () => {
     expect(html).toContain("lifetime access is active");
     expect(html).toContain("One-time payment");
     expect(html).toContain(`All ${LESSON_CATALOG.length} lessons`);
+  });
+
+  it("purchase welcome counts lessons honestly and keeps AEO in the last title", async () => {
+    const { lessonsIncludedLine } = await import("@/lib/plans");
+    for (const plan of ["lifetime", "monthly"] as const) {
+      mockSend.mockClear();
+      await sendWelcomeEmail("Ana", "a@example.com", plan);
+      const { html } = mockSend.mock.calls[0][0];
+      expect(html).toContain(lessonsIncludedLine());
+      expect(html).toContain("running an AEO programme");
+      if (LESSON_CATALOG.some((l) => l.status !== "live")) {
+        expect(html).not.toContain(`All ${LESSON_CATALOG.length} lessons, from`);
+        expect(html).toContain("live now");
+      }
+    }
   });
 
   it("defaults to the lifetime wording when no plan is given", async () => {
@@ -122,7 +136,8 @@ describe("emails on the shared layout", () => {
 
   it("purchase welcome, lesson-complete and recovery emails use no old-course words", async () => {
     const { sendLessonCompleteEmail, sendCheckoutRecoveryEmail } = await import("@/lib/email");
-    const OLD = /scholar|academy|inscription|frieze/i;
+    // Old-theme words such as the old learner title are caught by the site-wide word ban test.
+    const OLD = /academy|inscription|frieze/i;
     const offer = { name: "Ana", email: "a@example.com", code: "AEO-TEST20", expiresAt: new Date("2026-10-22T12:00:00Z"), percentOff: 20 };
     await sendWelcomeEmail("Ana", "a@example.com", "lifetime");
     await sendWelcomeEmail(null, "a@example.com", "monthly");

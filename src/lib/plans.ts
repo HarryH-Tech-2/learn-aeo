@@ -19,6 +19,13 @@ import { LESSON_CATALOG } from "@/lib/lesson-catalog";
 const LESSON_TOTAL = LESSON_CATALOG.length;
 const LESSONS_LIVE = LESSON_CATALOG.filter((l) => l.status === "live").length;
 
+/** What every paid plan unlocks, counted from the catalog: "All 8 lessons as they open (3 live now)". */
+export function lessonsIncludedLine(): string {
+  return LESSONS_LIVE === LESSON_TOTAL
+    ? `All ${LESSON_TOTAL} lessons`
+    : `All ${LESSON_TOTAL} lessons as they open (${LESSONS_LIVE} live now)`;
+}
+
 export type PlanId = "lifetime" | "monthly";
 
 export type Plan = {
@@ -50,9 +57,7 @@ export const PLANS: Record<PlanId, Plan> = {
     gbp: 80,
     audience: "For marketers who want the whole course, for good",
     features: [
-      LESSONS_LIVE === LESSON_TOTAL
-        ? `All ${LESSON_TOTAL} lessons`
-        : `All ${LESSON_TOTAL} lessons as they open (${LESSONS_LIVE} live now)`,
+      lessonsIncludedLine(),
       "Every new lesson we add, at no extra cost",
       "Certificate to share on LinkedIn",
       "14-day money-back guarantee",

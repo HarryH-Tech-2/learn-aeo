@@ -1,9 +1,13 @@
 import { describe, it, expect } from "vitest";
-import { PLANS, PLAN_IDS, isPlanId, planById, planAmount, planMinor, formatPlanPrice, planPeriodLabel } from "@/lib/plans";
+import { PLANS, PLAN_IDS, isPlanId, planById, planAmount, planMinor, formatPlanPrice, planPeriodLabel, lessonsIncludedLine } from "@/lib/plans";
 import { PRICES, discounted, formatPrice } from "@/lib/pricing";
 import { monthlyActive, MONTHLY_GRACE_DAYS } from "@/lib/subscription";
 
 describe("plans", () => {
+  it("the lessons line is the Lifetime plan's first feature and says how many are live", () => {
+    expect(PLANS.lifetime.features[0]).toBe(lessonsIncludedLine());
+  });
+
   it("two plans: $100 / £80 lifetime and $10 / £8 monthly", () => {
     expect(PLAN_IDS).toEqual(["lifetime", "monthly"]);
     expect(PLANS.lifetime.usd).toBe(100);

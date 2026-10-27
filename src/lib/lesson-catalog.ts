@@ -133,4 +133,9 @@ export function publicLessonPaths(): string[] {
   return LESSON_CATALOG.filter((l) => l.isFree).map((l) => lessonPath(l.id));
 }
 
+/** A lesson title inside a sentence: only the first letter lowercased, so "AEO" and "AI" keep their capitals. */
+export function titleMidSentence(title: string): string {
+  return title.charAt(0).toLowerCase() + title.slice(1);
+}
+
 export const TOTAL_MINUTES: number = LESSON_CATALOG.reduce((sum, l) => sum + l.minutes, 0);

@@ -1,8 +1,7 @@
 import { Resend } from "resend";
 import { SITE } from "@/lib/site";
-import type { Plan } from "@/lib/plans";
-import { LESSONS } from "@/lib/lessons";
-import { FIRST_LESSON_ID, LESSON_CATALOG, lessonMeta, lessonPath, nextLessonMeta } from "@/lib/lesson-catalog";
+import { lessonsIncludedLine, type Plan } from "@/lib/plans";
+import { FIRST_LESSON_ID, LESSON_CATALOG, lessonMeta, lessonPath, nextLessonMeta, titleMidSentence } from "@/lib/lesson-catalog";
 import { ownerEmail } from "@/lib/notify";
 import {
   BODY_FONT as FONT,
@@ -77,9 +76,8 @@ export async function sendWelcomeEmail(
   const greetingName = displayName?.split(/\s+/)[0] || "there";
   const dashboardUrl = `${process.env.NEXTAUTH_URL}/dashboard`;
   const accountUrl = `${process.env.NEXTAUTH_URL}/account`;
-  const lessonCount = LESSONS.length;
-  const firstTitle = LESSON_CATALOG[0].title.toLowerCase();
-  const lastTitle = LESSON_CATALOG[LESSON_CATALOG.length - 1].title.toLowerCase().replace(/\baeo\b/, "AEO");
+  const firstTitle = titleMidSentence(LESSON_CATALOG[0].title);
+  const lastTitle = titleMidSentence(LESSON_CATALOG[LESSON_CATALOG.length - 1].title);
   const monthly = plan === "monthly";
 
   const thanks = monthly
@@ -109,7 +107,7 @@ export async function sendWelcomeEmail(
         ${panel(
           `<p style="margin:0;font-family:${FONT};font-size:15px;line-height:1.8;color:${C.sand};">
             ${strong("What you've unlocked:")}<br/>
-            ${bullet}All ${lessonCount} lessons, from ${esc(firstTitle)} to ${esc(lastTitle)}<br/>
+            ${bullet}${esc(lessonsIncludedLine())}, from ${esc(firstTitle)} to ${esc(lastTitle)}<br/>
             ${bullet}Quick checks and hands-on exercises with instant feedback<br/>
             ${bullet}A certificate when you finish
           </p>`

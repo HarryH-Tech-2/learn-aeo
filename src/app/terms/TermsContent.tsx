@@ -46,7 +46,7 @@ const sections = [
     id: "intellectual-property",
     title: "5. Intellectual Property",
     content:
-      "All lesson content, illustrations, interactive exercises, sign databases, translations, commentary, software code, and design elements on Learn AEO are the intellectual property of Learn AEO or its licensors and are protected by copyright and other intellectual property laws.\n\nYour purchase grants you a personal, non-transferable, non-exclusive licence to access and use the content for your own private, non-commercial learning purposes. You may not reproduce, distribute, modify, create derivative works from, publicly display, or commercially exploit any content without our prior written consent.",
+      "All lesson content, illustrations, interactive exercises, commentary, software code, and design elements on Learn AEO are the intellectual property of Learn AEO or its licensors and are protected by copyright and other intellectual property laws.\n\nYour purchase grants you a personal, non-transferable, non-exclusive licence to access and use the content for your own private, non-commercial learning purposes. You may not reproduce, distribute, modify, create derivative works from, publicly display, or commercially exploit any content without our prior written consent.",
   },
   {
     id: "acceptable-use",

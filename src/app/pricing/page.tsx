@@ -5,7 +5,7 @@ import PricingSection from "@/components/PricingSection";
 import PricingFAQ from "@/components/PricingFAQ";
 import Footer from "@/components/Footer";
 import { PLANS, PLAN_IDS, formatPlanPrice } from "@/lib/plans";
-import { LESSON_CATALOG } from "@/lib/lesson-catalog";
+import { LESSON_CATALOG, titleMidSentence } from "@/lib/lesson-catalog";
 
 export const metadata: Metadata = {
   title: "Pricing: Lifetime or Monthly | Learn AEO",
@@ -23,7 +23,7 @@ const LAST = LESSON_CATALOG[LESSON_CATALOG.length - 1];
 const INCLUDED = [
   {
     title: `${LESSON_CATALOG.length} lessons, ${LIVE.length} live now`,
-    body: `One lesson for each district of the City of Answers, from ${FIRST.district} (${FIRST.title.toLowerCase()}) to ${LAST.district} (${LAST.title.toLowerCase()}). The rest open as they are finished, at no extra cost.`,
+    body: `One lesson for each district of the City of Answers, from ${FIRST.district} (${titleMidSentence(FIRST.title)}) to ${LAST.district} (${titleMidSentence(LAST.title)}). The rest open as they are finished, at no extra cost.`,
   },
   {
     title: "Checks and hands-on exercises",

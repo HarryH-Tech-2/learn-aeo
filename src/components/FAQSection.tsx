@@ -5,7 +5,7 @@ import InView from "@/components/InView";
 import { reveal } from "@/components/reveal";
 import { useFreeCourseGuest } from "@/components/useFreeCourseGuest";
 import { PLANS, formatPlanPrice } from "@/lib/plans";
-import { LESSON_CATALOG } from "@/lib/lesson-catalog";
+import { LESSON_CATALOG, titleMidSentence } from "@/lib/lesson-catalog";
 
 // What the free-unlock test's free group reads instead (src/lib/access-test.ts); the FAQ schema keeps the real answer.
 const FREE_PRICING_ANSWER =
@@ -50,7 +50,7 @@ const faqs = [
   {
     question: "What is in the course?",
     answer: `${TOTAL} lessons, one for each district of the City of Answers: ${LESSON_CATALOG.map(
-      (l) => `${l.district} (${l.title.charAt(0).toLowerCase()}${l.title.slice(1)})`,
+      (l) => `${l.district} (${titleMidSentence(l.title)})`,
     ).join(", ")}. Each lesson mixes short explanations with checks, hands-on exercises and an audit at the end.`,
   },
   {
