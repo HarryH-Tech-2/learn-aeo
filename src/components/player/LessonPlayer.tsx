@@ -17,11 +17,13 @@ import QuestionCard from "./QuestionCard";
 import ExampleDissect from "./ExampleDissect";
 import AuditResult, { passMark } from "./AuditResult";
 import { BTN_PRIMARY, BTN_SECONDARY, EYEBROW, FOCUS, HEADING, PROSE } from "./ui";
-import { claimExerciseAnswer, claimXp, cleanKey } from "./xp";
+import { auditGain, claimExerciseAnswer, claimXp, cleanKey } from "./xp";
+import { AUDIT_KEY, auditXp, checkKey, conceptKey, exerciseKey, type XpClaim } from "@/lib/xp-claims";
 
 export type LessonPlayerProps = {
   lesson: LiveLesson;
-  onXP: (xp: number) => void;
+  /** A step that earned XP in this sitting; the server prices it and pays each key once. */
+  onXP: (claim: XpClaim) => void;
   onAuditComplete: (score: number, total: number) => void;
   upgrade: { paid: boolean | null; offer: OfferData | null };
   /** For the outro's "next district" link. */
@@ -125,6 +127,8 @@ export default function LessonPlayer({ lesson, onXP, onAuditComplete, upgrade, n
   const [auditRun, setAuditRun] = useState(0);
   const [sessionXp, setSessionXp] = useState(0);
   const awarded = useRef(new Set<string>());
+  // best audit value this sitting: a retake shows (and sends) only an improvement
+  const auditBest = useRef(0);
   const topRef = useRef<HTMLDivElement>(null);
   const firstRender = useRef(true);
 
@@ -137,7 +141,7 @@ export default function LessonPlayer({ lesson, onXP, onAuditComplete, upgrade, n
       const paid = claimXp(awarded.current, key, xp);
       if (paid <= 0) return;
       setSessionXp((x) => x + paid);
-      onXP(paid);
+      onXP({ key });
     },
     [onXP],
   );
@@ -147,7 +151,7 @@ export default function LessonPlayer({ lesson, onXP, onAuditComplete, upgrade, n
     const paid = claimExerciseAnswer(awarded.current, exerciseId, questionId, right, XP_REWARDS.exerciseCorrect);
     if (paid <= 0) return;
     setSessionXp((x) => x + paid);
-    onXP(paid);
+    onXP({ key: exerciseKey(exerciseId, questionId) });
   };
 
   useEffect(() => {
@@ -190,7 +194,9 @@ export default function LessonPlayer({ lesson, onXP, onAuditComplete, upgrade, n
   const step = steps[index] ?? steps[0];
 
   const goNext = () => {
-    if (step.kind === "concept") award(`concept:${step.group}:${step.concept}`, XP_REWARDS.conceptRead);
+    if (step.kind === "concept") {
+      award(conceptKey(content.groups[step.group].concepts[step.concept].id), XP_REWARDS.conceptRead);
+    }
     setIndex((i) => Math.min(i + 1, steps.length - 1));
   };
   const goBack = () => setIndex((i) => Math.max(i - 1, 0));
@@ -202,8 +208,14 @@ export default function LessonPlayer({ lesson, onXP, onAuditComplete, upgrade, n
     setAuditAnswers(answers);
     onAuditComplete(score, total);
     trackEvent("lesson_audit_complete", { score, total, passed: passed ? 1 : 0 });
-    // the first audit of the sitting earns XP; a retake improves the score, not the XP
-    award("audit", score * XP_REWARDS.auditCorrect + (total > 0 && score === total ? XP_REWARDS.perfectAudit : 0));
+    // a retake earns only what it adds over the best run (the server keeps the best across sittings)
+    const value = auditXp(score, total);
+    const gain = auditGain(auditBest.current, value);
+    if (gain > 0) {
+      auditBest.current = value;
+      setSessionXp((x) => x + gain);
+      onXP({ key: AUDIT_KEY, auditScore: score });
+    }
   };
 
   const retakeAudit = () => {
@@ -252,7 +264,7 @@ export default function LessonPlayer({ lesson, onXP, onAuditComplete, upgrade, n
             <PracticeSet
               key={`check-${s.group}`}
               questions={group.check}
-              onAnswered={(q, right) => award(`q:${q.id}`, right ? XP_REWARDS.checkCorrect : 0)}
+              onAnswered={(q, right) => award(checkKey(q.id), right ? XP_REWARDS.checkCorrect : 0)}
               done={<p className={`${PROSE} text-sand-200`}>Check done. Press Next to carry on.</p>}
             />
           </section>

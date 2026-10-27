@@ -2,27 +2,46 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { recordXP } from "@/lib/progress";
-import { lessonMeta } from "@/lib/lesson-catalog";
-import { MAX_XP_AWARD } from "@/lib/gamification";
+import { getLesson, isLive } from "@/lib/lessons";
+import { checkSubscription } from "@/lib/subscription";
+import { xpForClaim } from "@/lib/xp-claims";
 
-/** Largest XP award a single call may carry: a perfect audit of the longest allowed length. */
-const MAX_XP = MAX_XP_AWARD;
-
+/**
+ * POST /api/progress/xp { lessonId, key, auditScore? } → { awarded, totalXP, newLevel }
+ * The client names the step it finished (a claim key from src/lib/xp-claims.ts); the
+ * server prices it and pays it once. 401 signed out; 400 for an unknown or coming-soon
+ * lesson or a key that is not in the lesson; 403 for a paid lesson without access.
+ */
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
-  const user = session?.user as { id?: string } | undefined;
+  const user = session?.user as { id?: string; email?: string | null } | undefined;
   if (!user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const body = (await request.json().catch(() => null)) as { lessonId?: unknown; xp?: unknown } | null;
+
+  const body = (await request.json().catch(() => null)) as
+    | { lessonId?: unknown; key?: unknown; auditScore?: unknown }
+    | null;
   const lessonId = typeof body?.lessonId === "string" ? body.lessonId : "";
-  const xp = body?.xp;
-  if (!lessonMeta(lessonId) || typeof xp !== "number" || !Number.isInteger(xp) || xp < 1 || xp > MAX_XP) {
-    return NextResponse.json(
-      { error: `lessonId must be a course lesson and xp a whole number from 1 to ${MAX_XP}` },
-      { status: 400 }
-    );
+  const key = typeof body?.key === "string" ? body.key : "";
+  const auditScore = typeof body?.auditScore === "number" ? body.auditScore : undefined;
+  const lesson = getLesson(lessonId);
+
+  if (!isLive(lesson)) {
+    return NextResponse.json({ error: "Unknown or unreleased lesson" }, { status: 400 });
   }
-  const result = await recordXP(user.id, lessonId, xp);
+  const xp = xpForClaim(lesson.content, key, auditScore);
+  if (xp === null) {
+    return NextResponse.json({ error: "key is not an XP step of this lesson" }, { status: 400 });
+  }
+
+  if (!lesson.isFree) {
+    const access = user.email ? await checkSubscription(user.email) : null;
+    if (!access?.active) {
+      return NextResponse.json({ error: "This lesson needs full access" }, { status: 403 });
+    }
+  }
+
+  const result = await recordXP(user.id, lesson.id, key, xp);
   return NextResponse.json(result);
 }

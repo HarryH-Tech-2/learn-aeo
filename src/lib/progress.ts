@@ -1,5 +1,8 @@
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isLessonComplete } from "@/lib/pass-mark";
+import { calculateLevel } from "@/lib/gamification";
+import { AUDIT_KEY } from "@/lib/xp-claims";
 
 // (defined in pass-mark.ts so the client-side lesson player can import it without Prisma)
 export { isLessonComplete };
@@ -154,36 +157,94 @@ export async function getUserProgress(userId: string) {
   return { lessons: progressMap, streak: currentStreak, xp: userData?.xp ?? 0, level: userData?.level ?? 1 };
 }
 
+function isUniqueViolation(err: unknown): boolean {
+  return typeof err === "object" && err !== null && (err as { code?: unknown }).code === "P2002";
+}
+
+/**
+ * Record one XP claim (src/lib/xp-claims.ts) and pay only what it newly earns:
+ *   new key                → `xp`
+ *   existing non-audit key → 0
+ *   `audit`                → max(0, xp − stored best), and the higher value is stored
+ * The claim write and the LessonProgress.xpEarned, User.xp and level updates run in one
+ * transaction, by the awarded amount only. Two requests racing to create the same claim
+ * hit the unique constraint; the loser retries once (finding the claim) and otherwise
+ * counts as already claimed, awarding 0.
+ */
 export async function recordXP(
   userId: string,
   lessonId: string,
+  key: string,
   xp: number
-): Promise<{ totalXP: number; newLevel: number }> {
-  await prisma.lessonProgress.upsert({
+): Promise<{ awarded: number; totalXP: number; newLevel: number }> {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      return await prisma.$transaction((tx) => claimInTransaction(tx, userId, lessonId, key, xp));
+    } catch (err) {
+      if (!isUniqueViolation(err)) throw err;
+    }
+  }
+  const user = await prisma.user.findUnique({ where: { id: userId }, select: { xp: true, level: true } });
+  return { awarded: 0, totalXP: user?.xp ?? 0, newLevel: user?.level ?? 1 };
+}
+
+type Tx = Prisma.TransactionClient;
+
+async function claimInTransaction(
+  tx: Tx,
+  userId: string,
+  lessonId: string,
+  key: string,
+  xp: number
+): Promise<{ awarded: number; totalXP: number; newLevel: number }> {
+  const where = { userId_lessonId_key: { userId, lessonId, key } };
+  let awarded = 0;
+  // A few rounds of compare-and-set on the stored audit best, so two retakes saved at
+  // once cannot both be paid against the same old best.
+  for (let round = 0; round < 3; round++) {
+    const existing = await tx.xpClaim.findUnique({ where });
+    if (!existing) {
+      await tx.xpClaim.create({ data: { userId, lessonId, key, xp } });
+      awarded = xp;
+      break;
+    }
+    if (key !== AUDIT_KEY || xp <= existing.xp) break;
+    const { count } = await tx.xpClaim.updateMany({
+      where: { id: existing.id, xp: existing.xp },
+      data: { xp },
+    });
+    if (count === 1) {
+      awarded = xp - existing.xp;
+      break;
+    }
+  }
+
+  if (awarded <= 0) {
+    const user = await tx.user.findUnique({ where: { id: userId }, select: { xp: true, level: true } });
+    return { awarded: 0, totalXP: user?.xp ?? 0, newLevel: user?.level ?? 1 };
+  }
+
+  await tx.lessonProgress.upsert({
     where: { userId_lessonId: { userId, lessonId } },
-    update: { xpEarned: { increment: xp } },
+    update: { xpEarned: { increment: awarded } },
     create: {
       userId,
       lessonId,
       started: true,
-      xpEarned: xp,
+      xpEarned: awarded,
       lastActivityAt: new Date(),
     },
   });
 
-  const user = await prisma.user.update({
+  const user = await tx.user.update({
     where: { id: userId },
-    data: { xp: { increment: xp } },
+    data: { xp: { increment: awarded } },
   });
 
-  const { calculateLevel } = await import("@/lib/gamification");
   const newLevel = calculateLevel(user.xp);
   if (newLevel !== user.level) {
-    await prisma.user.update({
-      where: { id: userId },
-      data: { level: newLevel },
-    });
+    await tx.user.update({ where: { id: userId }, data: { level: newLevel } });
   }
 
-  return { totalXP: user.xp, newLevel };
+  return { awarded, totalXP: user.xp, newLevel };
 }

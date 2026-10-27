@@ -3,6 +3,7 @@ import { CONTENT, LESSONS, getLesson, isLive } from "@/lib/lessons";
 import { LESSON_CATALOG } from "@/lib/lesson-catalog";
 import { blankCount } from "@/lib/questions";
 import { AUDIT_LENGTH } from "@/lib/gamification";
+import { checkKey, conceptKey, exerciseCleanKey, exerciseKey, xpForClaim } from "@/lib/xp-claims";
 import type { LessonContent, Question, Source } from "@/lib/lesson-types";
 
 const BANNED = /\b(hieroglyph\w*|egypt\w*|pharaoh\w*|papyr\w*|scribes?|glyphs?|tombs?|cartouches?|expeditions?|chambers?|dig|digs|digging|ankhs?)\b/i;
@@ -136,6 +137,19 @@ describe.each(live.map((l) => [l.id, l] as const))("lesson content: %s", (_id, l
       c.exercise.id,
     ];
     expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it("prices every XP step it offers (claim keys from src/lib/xp-claims.ts)", () => {
+    const keys = [
+      ...c.groups.flatMap((g) => g.concepts.map((k) => conceptKey(k.id))),
+      ...c.groups.flatMap((g) => g.check.map((q) => checkKey(q.id))),
+      ...c.exercise.steps.map((q) => exerciseKey(c.exercise.id, q.id)),
+      exerciseCleanKey(c.exercise.id),
+    ];
+    for (const key of keys) expect(xpForClaim(c, key), key).not.toBeNull();
+    // a step called "clean" would collide with the clean-run key
+    expect(c.exercise.steps.map((q) => q.id)).not.toContain("clean");
+    expect(xpForClaim(c, "audit", c.audit.length)).not.toBeNull();
   });
 
   it("has no leftover wording from the old course", () => {

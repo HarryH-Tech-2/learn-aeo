@@ -1,4 +1,8 @@
 // XP bookkeeping for one sitting of the lesson player. Pure, so it can be tested.
+// The server pays each claim key once (src/lib/xp-claims.ts, /api/progress/xp); this
+// in-sitting record only stops the player re-sending or re-counting a key.
+
+import { exerciseCleanKey, exerciseKey } from "@/lib/xp-claims";
 
 /**
  * Claim an XP key. The first claim of a key pays `xp` (0 when the answer was
@@ -12,7 +16,7 @@ export function claimXp(claimed: Set<string>, key: string, xp: number): number {
   return Math.max(0, xp);
 }
 
-export const cleanKey = (exerciseId: string) => `exercise-clean:${exerciseId}`;
+export const cleanKey = exerciseCleanKey;
 
 /**
  * Claim one exercise answer. A wrong first answer also claims the exercise's
@@ -27,5 +31,10 @@ export function claimExerciseAnswer(
   xp: number,
 ): number {
   if (!right) claimXp(claimed, cleanKey(exerciseId), 0);
-  return claimXp(claimed, `q:${questionId}`, right ? xp : 0);
+  return claimXp(claimed, exerciseKey(exerciseId, questionId), right ? xp : 0);
+}
+
+/** What an audit run adds over the sitting's best audit value: retakes pay only an improvement. */
+export function auditGain(best: number, value: number): number {
+  return Math.max(0, value - best);
 }

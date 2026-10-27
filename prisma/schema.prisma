@@ -45,6 +45,7 @@ model User {
   nurtureStartedAt    DateTime?
   emailUnsubscribedAt DateTime?
   emailSends          EmailSend[]
+  xpClaims            XpClaim[]
 }
 
 model Account {
@@ -196,4 +197,20 @@ model EmailSend {
   user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, key])
+}
+
+/// One row per XP-earning step a user has been paid for (src/lib/xp-claims.ts), so a
+/// replayed claim (reload, second tab) pays nothing. `xp` is what the key paid; for
+/// the `audit` key it is the best audit value so far, and a retake pays only the gain.
+model XpClaim {
+  id        String   @id @default(cuid())
+  userId    String
+  lessonId  String
+  key       String
+  xp        Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId, key])
 }

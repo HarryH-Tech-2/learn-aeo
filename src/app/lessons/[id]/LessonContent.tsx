@@ -17,6 +17,7 @@ import { HttpError, fetchJson } from "@/lib/fetch-json";
 import { nextLessonMeta } from "@/lib/lesson-catalog";
 import type { LessonMeta } from "@/lib/lesson-types";
 import type { LiveLesson } from "@/lib/lessons";
+import type { XpClaim } from "@/lib/xp-claims";
 
 /** What GET /api/lessons/[id] returns (see that route). */
 type LessonResponse =
@@ -104,14 +105,15 @@ export default function LessonContent() {
     }
   }, [playable, id, session]);
 
-  function handleXP(xp: number) {
+  function handleXP(claim: XpClaim) {
     if (!session) return; // local preview without an account: nothing to save
-    // fetchJson rejects on a non-2xx response, so a refused award is logged, not silently treated as saved.
+    // The server prices the claim and pays each key once (a replay after a reload pays 0).
+    // fetchJson rejects on a non-2xx response, so a refused claim is logged, not silently treated as saved.
     fetchJson("/api/progress/xp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ lessonId: id, xp }),
-    }).catch((err) => console.error("XP award not saved", { lessonId: id, xp, err }));
+      body: JSON.stringify({ lessonId: id, ...claim }),
+    }).catch((err) => console.error("XP claim not saved", { lessonId: id, ...claim, err }));
   }
 
   function handleAuditComplete(score: number, total: number) {
