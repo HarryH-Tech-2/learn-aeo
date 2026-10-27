@@ -635,7 +635,7 @@ export const LESSON_2: LessonContent = {
         id: "x-step-fill",
         prompt:
           "One problem is left: PerplexityBot has its own group, so it ignores the * rule for /checkout/. Fill in the fixed file.",
-        text: "User-agent: * · Disallow: /checkout/ · User-agent: GPTBot · User-agent: ___ · Disallow: / · User-agent: PerplexityBot · Disallow: ___",
+        text: "User-agent: *\nDisallow: /checkout/\n\nUser-agent: GPTBot\nUser-agent: ___\nDisallow: /\n\nUser-agent: PerplexityBot\nDisallow: ___",
         answers: ["ClaudeBot", "/checkout/"],
         distractors: ["Claude-SearchBot", "OAI-SearchBot", "/"],
         explanation:

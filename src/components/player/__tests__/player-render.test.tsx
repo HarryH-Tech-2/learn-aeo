@@ -136,6 +136,22 @@ describe("QuestionCard", () => {
     }
   });
 
+  it("blank: a newline in the text starts a new line", () => {
+    const BLANK: Question = {
+      kind: "blank",
+      id: "q-blank",
+      prompt: "Fill the file.",
+      text: "User-agent: *\nDisallow: ___\nSitemap: ___",
+      answers: ["/checkout/", "https://example.com/sitemap.xml"],
+      distractors: ["/"],
+      explanation: "Because.",
+    };
+    const html = renderToStaticMarkup(<QuestionCard question={BLANK} mode="practice" onAnswered={noop} />);
+    expect(html).toMatch(/User-agent: \*<br\/>Disallow: /);
+    expect(html).toMatch(/<br\/>Sitemap: /);
+    expect(html).not.toContain("User-agent: *\nDisallow");
+  });
+
   it("spot: one button per line", () => {
     const html = renderToStaticMarkup(<QuestionCard question={SPOT} mode="audit" onAnswered={noop} />);
     if (SPOT.kind !== "spot") throw new Error("fixture");

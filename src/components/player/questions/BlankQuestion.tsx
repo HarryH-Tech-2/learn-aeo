@@ -4,6 +4,16 @@ import { Fragment, useMemo, useState } from "react";
 import { blankCount, seedFrom, shuffled } from "@/lib/questions";
 import { FOCUS, type QuestionInputProps } from "../ui";
 
+/** Text with each newline rendered as a line break. */
+function withBreaks(text: string) {
+  return text.split("\n").map((line, i) => (
+    <Fragment key={i}>
+      {i > 0 && <br />}
+      {line}
+    </Fragment>
+  ));
+}
+
 /** Word-bank chips fill the gaps in order; tapping a filled gap empties it. */
 export default function BlankQuestion({ question, locked, onChange }: QuestionInputProps<"blank">) {
   const gaps = blankCount(question.text);
@@ -41,7 +51,7 @@ export default function BlankQuestion({ question, locked, onChange }: QuestionIn
       <p className="max-w-[68ch] font-sans text-lg leading-[2.4] text-sand-200">
         {parts.map((part, i) => (
           <Fragment key={i}>
-            {part}
+            {withBreaks(part)}
             {i < gaps &&
               (fills[i] === null ? (
                 <span className="mx-1 inline-block min-w-[6rem] rounded-md border border-dashed border-sand-500/60 px-2 align-middle leading-8 text-sand-500">
