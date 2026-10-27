@@ -39,7 +39,7 @@ export function stripMarkdown(md: string): string {
     .trim();
 }
 
-/** Deterministic, ASCII-only anchor id for a heading. Glyphs and punctuation are dropped. */
+/** Deterministic, ASCII-only anchor id for a heading. Punctuation is dropped. */
 export function slugifyHeading(text: string): string {
   return stripInlineMarkdown(text)
     .toLowerCase()
@@ -114,7 +114,7 @@ export function toInternalPath(href: string): string {
  * a post with a single section gets it at the end.
  */
 export const IN_BODY_LINKS_MD =
-  `**Try it as you read:** [take the free first lesson](${FIRST_LESSON_PATH}) and learn all 25 alphabet signs on a sealed door.`;
+  `**Try it as you read:** [take the free first lesson](${FIRST_LESSON_PATH}) and see how answer engines choose their sources.`;
 
 export function withInBodyLinks(md: string, links = IN_BODY_LINKS_MD): string {
   if (md.includes(links)) return md;

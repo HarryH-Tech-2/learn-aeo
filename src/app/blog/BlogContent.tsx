@@ -4,11 +4,30 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 import Link from "next/link";
+import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
 import { reveal } from "@/components/reveal";
 import type { BlogPost } from "@/lib/blog-posts";
 
 /** What the index needs: never the article bodies (they were 200 KB of HTML). */
-export type BlogSummary = Pick<BlogPost, "slug" | "title" | "excerpt" | "date" | "publishedAt" | "updatedAt" | "category" | "glyph" | "image" | "imageAlt">;
+export type BlogSummary = Pick<BlogPost, "slug" | "title" | "excerpt" | "date" | "publishedAt" | "updatedAt" | "category" | "image" | "imageAlt">;
+
+/** Shown while there are no posts. */
+export function BlogComingSoon() {
+  return (
+    <section aria-labelledby="coming-soon-heading" className="reveal max-w-2xl" style={reveal(0.1, { y: 20 })}>
+      <h2 id="coming-soon-heading" className="font-display text-2xl text-sand-100 mb-3">
+        Articles are on their way
+      </h2>
+      <p className="font-body text-base text-sand-400 font-light leading-relaxed mb-6">
+        We are writing the first posts now. In the meantime, the first lesson is free with a Google
+        or email sign-in, and shows how answer engines choose their sources.
+      </p>
+      <Link href={FIRST_LESSON_PATH} className="btn-primary inline-flex justify-center text-base py-4 px-8">
+        Start Lesson 1 Free
+      </Link>
+    </section>
+  );
+}
 
 export default function BlogContent({ posts }: { posts: BlogSummary[] }) {
   return (
@@ -38,18 +57,20 @@ export default function BlogContent({ posts }: { posts: BlogSummary[] }) {
             <h1 className="font-display text-5xl md:text-6xl font-light text-sand-100 mb-4">
               The{" "}
               <span className="text-gradient-gold font-medium">
-                Scribe&apos;s Journal
+                Learn AEO Blog
               </span>
             </h1>
             <p className="font-body text-lg text-sand-400 font-light max-w-2xl">
-              Articles on hieroglyphics, ancient Egyptian culture, and the art of
-              deciphering the world&apos;s oldest writing system. Every article
-              opens with a short quick answer and ends with an FAQ.
+              Answer engine optimisation for marketers: how AI answer engines
+              choose their sources, and how to get your brand cited.
             </p>
           </div>
 
           {/* Posts Grid — server-rendered list; the CSS reveal only animates opacity/offset,
               so the links, titles and excerpts are all in the initial HTML for crawlers. */}
+          {posts.length === 0 ? (
+            <BlogComingSoon />
+          ) : (
           <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 list-none p-0 m-0">
             {posts.map((post, i) => (
               <li key={post.slug} className="reveal" style={reveal(0.1 + i * 0.08, { y: 30, dur: 0.6 })}>
@@ -106,6 +127,7 @@ export default function BlogContent({ posts }: { posts: BlogSummary[] }) {
               </li>
             ))}
           </ul>
+          )}
         </div>
       </div>
 

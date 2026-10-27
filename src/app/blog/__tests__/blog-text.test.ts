@@ -1,7 +1,6 @@
 import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
 import { describe, it, expect } from "vitest";
 import { withInBodyLinks, IN_BODY_LINKS_MD, extractH2s } from "@/app/blog/blog-text";
-import { blogPosts } from "@/lib/blog-posts";
 
 describe("withInBodyLinks", () => {
   it("inserts the links paragraph after the first section", () => {
@@ -22,16 +21,12 @@ describe("withInBodyLinks", () => {
   });
 
   it("does not change the headings, so the table of contents is unaffected", () => {
-    for (const p of blogPosts) {
-      expect(extractH2s(withInBodyLinks(p.content))).toEqual(extractH2s(p.content));
-    }
+    const md = ["## One", "", "Intro.", "", "## Two", "", "More."].join("\n");
+    expect(extractH2s(withInBodyLinks(md))).toEqual(extractH2s(md));
   });
 
-  it("every published post ends up linking to the free lesson in its body, and the added link names no removed tool", () => {
-    expect(IN_BODY_LINKS_MD).not.toContain("/translate-name-to-hieroglyphics");
-    for (const p of blogPosts) {
-      const out = withInBodyLinks(p.content);
-      expect(out, p.slug).toContain(`](${FIRST_LESSON_PATH})`);
-    }
+  it("the in-body paragraph links to the free first lesson and is free of removed-tool and Egypt wording", () => {
+    expect(IN_BODY_LINKS_MD).toContain(`](${FIRST_LESSON_PATH})`);
+    expect(IN_BODY_LINKS_MD).not.toMatch(/hieroglyph|egypt|alphabet|translate/i);
   });
 });

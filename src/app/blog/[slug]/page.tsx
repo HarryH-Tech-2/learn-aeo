@@ -109,7 +109,7 @@ export default async function BlogPostPage({
   const post = getPostBySlug(slug);
   if (!post) notFound();
   const canonical = `${SITE}/blog/${slug}`;
-  // The rendered body carries the in-body links to the translator and the free lesson.
+  // The rendered body carries the in-body link to the free lesson.
   const content = post ? withInBodyLinks(post.content) : "";
   const imageUrl = post ? `${SITE}${post.image}` : undefined;
 
@@ -143,15 +143,15 @@ export default async function BlogPostPage({
         isPartOf: {
           "@type": "Blog",
           "@id": `${SITE}/blog#blog`,
-          name: "The Scribe's Journal",
+          name: "The Learn AEO Blog",
           url: `${SITE}/blog`,
         },
         articleSection: post.category,
         keywords: [
           post.category,
-          "Egyptian hieroglyphics",
-          "ancient Egypt",
-          "learn hieroglyphics",
+          "answer engine optimisation",
+          "AEO",
+          "AI search",
         ].join(", "),
         wordCount: countWords(content),
         timeRequired: `PT${readingMinutes(content)}M`,

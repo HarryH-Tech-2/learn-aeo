@@ -13,15 +13,6 @@ const HOME_LASTMOD = new Date("2026-08-24");
 // When the lesson catalogue was last revised. Bump on structural changes.
 const LESSONS_LASTMOD = new Date("2026-04-18");
 
-// The blog index changes whenever any post is published or revised, so its
-// lastmod is the newest post date rather than a hand-maintained constant.
-const BLOG_INDEX_LASTMOD = new Date(
-  blogPosts.reduce<string>((max, post) => {
-    const d = post.updatedAt ?? post.publishedAt;
-    return d > max ? d : max;
-  }, "2026-04-18")
-);
-
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = SITE.url;
 
@@ -37,12 +28,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: SITE_LASTMOD,
       changeFrequency: "monthly",
       priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/blog`,
-      lastModified: BLOG_INDEX_LASTMOD,
-      changeFrequency: "weekly",
-      priority: 0.9,
     },
     {
       url: `${baseUrl}/contact`,
@@ -82,13 +67,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // The sibling site's blog posts stay until the AEO content replaces them, but a slug that reads like one of the
-  // removed tools (/hieroglyph..., cuneiform, keyboard) is kept out of the sitemap meanwhile.
-  const blogPages: MetadataRoute.Sitemap = blogPosts.filter((post) => !/^hieroglyph|cuneiform|keyboard/.test(post.slug)).map((post) => ({
+  // /blog is noindex while there are no posts, so it stays out until the first post exists. Its lastmod is then
+  // the newest post date.
+  const newestPost = blogPosts.reduce<string | null>((max, post) => {
+    const d = post.updatedAt ?? post.publishedAt;
+    return max === null || d > max ? d : max;
+  }, null);
+  const blogIndexPages: MetadataRoute.Sitemap =
+    newestPost === null
+      ? []
+      : [{ url: `${baseUrl}/blog`, lastModified: new Date(newestPost), changeFrequency: "weekly", priority: 0.9 }];
+
+  const blogPages: MetadataRoute.Sitemap = blogPosts.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: new Date(post.updatedAt ?? post.publishedAt),
     changeFrequency: "monthly" as const,
-    priority: post.slug === "reading-your-first-cartouche" ? 0.9 : 0.7,
+    priority: 0.7,
   }));
 
   // Only live lessons a signed-out visitor (i.e. Googlebot) can actually open.
@@ -104,5 +98,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     }));
 
-  return [...staticPages, ...blogPages, ...lessonPages];
+  return [...staticPages, ...blogIndexPages, ...blogPages, ...lessonPages];
 }

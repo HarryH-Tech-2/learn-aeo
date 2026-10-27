@@ -31,3 +31,10 @@ describe("llms.txt lessons", () => {
     expect(body).not.toMatch(/hieroglyph|egypt/i);
   });
 });
+
+describe("sitemap blog", () => {
+  it("builds with no posts: no /blog URLs at all", async () => {
+    const urls = (await sitemap()).map((e) => e.url);
+    expect(urls.filter((u) => u.includes("/blog"))).toEqual([]);
+  });
+});

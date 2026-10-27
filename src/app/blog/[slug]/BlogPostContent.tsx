@@ -89,7 +89,6 @@ export default function BlogPostContent({
         <Navbar />
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
-            <span className="text-5xl block mb-4">𓂀</span>
             <h1 className="font-display text-3xl text-sand-100 mb-4">
               Post Not Found
             </h1>
@@ -200,13 +199,13 @@ export default function BlogPostContent({
             <p className="font-body text-sm text-sand-500 mt-4">
               Want to read this for yourself?{" "}
               <Link
-                href="/get-started"
+                href={FIRST_LESSON_PATH}
                 className="text-gold-400 hover:text-gold-300 underline underline-offset-2 transition-colors"
               >
                 Start the free first lesson
               </Link>
-              : the 25-sign hieroglyphic alphabet in about 25 minutes. Free with
-              a Google or email sign-in.
+              : how answer engines choose their sources, in about 25 minutes. Free
+              with a Google or email sign-in.
             </p>
           </section>
 
@@ -362,15 +361,15 @@ export default function BlogPostContent({
               <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-gold-500/30" />
               <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-gold-500/30" />
               <h3 className="font-display text-2xl md:text-3xl font-light text-sand-100 mb-3">
-                Ready to read hieroglyphics{" "}
+                Ready to get cited by{" "}
                 <span className="text-gradient-gold font-medium">
-                  yourself?
+                  AI answers?
                 </span>
               </h3>
               <p className="font-body text-sand-400 font-light mb-6 max-w-lg mx-auto">
-                Your first lesson starts with your own name: brush the sand off
-                a sealed door and read it in hieroglyphs, then learn the rest of
-                the alphabet through real Egyptian words.
+                Lesson 1 follows a question from the prompt to the finished
+                answer, so you can see how answer engines choose their sources
+                and what that means for your pages.
               </p>
               <Link
                 href={FIRST_LESSON_PATH}
@@ -382,7 +381,7 @@ export default function BlogPostContent({
                 Start Lesson 1 Free
               </Link>
               <p className="font-body text-xs text-sand-500 mt-4">
-                No sign-up to start, no payment. Lifetime access to all eight lessons is
+                Lesson 1 is free with a Google or email sign-in. Lifetime access to all eight lessons is
                 one payment later, if you want it.
               </p>
             </div>
@@ -402,8 +401,8 @@ export default function BlogPostContent({
 
       {prompt.visible && (
         <AuthPromptCard
-          title="Carve your own name in hieroglyphs"
-          body="Lesson 1: uncover your name on a sealed door, then the rest of the alphabet through real words. Free, and no sign-up to start."
+          title="See how AI answers pick their sources"
+          body="Lesson 1 follows a question from the prompt to the finished answer. It is free with a Google or email sign-in."
           ctaLabel="Start Lesson 1"
           next={FIRST_LESSON_PATH}
           onAccept={prompt.accept}

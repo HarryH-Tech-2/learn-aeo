@@ -6,9 +6,9 @@ import { countWords, stripMarkdown } from "./blog-text";
 
 const SITE = SITE_CONFIG.url;
 const BLOG_URL = `${SITE}/blog`;
-const BLOG_NAME = "The Scribe's Journal";
+const BLOG_NAME = "The Learn AEO Blog";
 const BLOG_DESCRIPTION =
-  "Articles on ancient Egyptian hieroglyphics: how to learn them, the hieroglyphic alphabet, the Rosetta Stone, royal cartouches, scribal culture and the Book of the Dead.";
+  "Articles on answer engine optimisation for marketers: how AI answer engines choose their sources, and how to get your brand cited by them.";
 
 /** Newest first, by publish date; the index card grid uses the same order. */
 const sortedPosts = [...blogPosts].sort((a, b) =>
@@ -16,35 +16,40 @@ const sortedPosts = [...blogPosts].sort((a, b) =>
 );
 
 /** Only what the cards render; the markdown bodies stay on the server. */
-const summaries = sortedPosts.map(({ slug, title, excerpt, date, publishedAt, updatedAt, category, glyph, image, imageAlt }) => ({
-  slug, title, excerpt, date, publishedAt, updatedAt, category, glyph, image, imageAlt,
+const summaries = sortedPosts.map(({ slug, title, excerpt, date, publishedAt, updatedAt, category, image, imageAlt }) => ({
+  slug, title, excerpt, date, publishedAt, updatedAt, category, image, imageAlt,
 }));
 
-const latestModified = blogPosts.reduce<string>((max, post) => {
+const latestModified = blogPosts.reduce<string | undefined>((max, post) => {
   const d = post.updatedAt ?? post.publishedAt;
-  return d > max ? d : max;
-}, "");
+  return max === undefined || d > max ? d : max;
+}, undefined);
+
+/** With no posts the index is a coming-soon page, which should not be indexed. */
+const hasPosts = blogPosts.length > 0;
 
 export const metadata: Metadata = {
-  title: "Hieroglyphics Articles & Guides | Learn AEO",
+  title: "Answer Engine Optimisation Articles | Learn AEO",
   description: BLOG_DESCRIPTION,
   alternates: {
     canonical: BLOG_URL,
   },
-  robots: {
-    index: true,
-    follow: true,
-    "max-image-preview": "large",
-    "max-snippet": -1,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
+  robots: hasPosts
+    ? {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        googleBot: {
+          index: true,
+          follow: true,
+          "max-image-preview": "large",
+          "max-snippet": -1,
+        },
+      }
+    : { index: false, follow: true },
   openGraph: {
-    title: `${BLOG_NAME}: Hieroglyphics Articles & Guides`,
+    title: `${BLOG_NAME}: Answer Engine Optimisation Articles`,
     description: BLOG_DESCRIPTION,
     type: "website",
     url: BLOG_URL,
@@ -55,13 +60,13 @@ export const metadata: Metadata = {
         url: `${SITE}/og-default.png`,
         width: 1200,
         height: 630,
-        alt: "Learn AEO - The Scribe's Journal",
+        alt: "The Learn AEO Blog",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${BLOG_NAME}: Hieroglyphics Articles & Guides`,
+    title: `${BLOG_NAME}: Answer Engine Optimisation Articles`,
     description: BLOG_DESCRIPTION,
     images: [`${SITE}/og-default.png`],
   },
@@ -93,7 +98,7 @@ export default function BlogPage() {
     "@type": "CollectionPage",
     "@id": BLOG_URL,
     url: BLOG_URL,
-    name: `${BLOG_NAME}: Hieroglyphics Articles & Guides`,
+    name: `${BLOG_NAME}: Answer Engine Optimisation Articles`,
     description: BLOG_DESCRIPTION,
     inLanguage: "en",
     isPartOf: { "@type": "WebSite", "@id": `${SITE}/#website`, url: SITE, name: SITE_CONFIG.name },
