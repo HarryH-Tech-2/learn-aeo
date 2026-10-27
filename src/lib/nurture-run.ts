@@ -6,6 +6,7 @@
  * run that reports what would go out, so the sequence can be deployed,
  * previewed and backfilled before it goes live.
  */
+import { FIRST_LESSON_ID } from "@/lib/lesson-catalog";
 import { Resend } from "resend";
 import { SITE } from "@/lib/site";
 import { prisma } from "@/lib/db";
@@ -24,7 +25,7 @@ import {
 } from "@/lib/nurture";
 import { renderNurtureEmail, type NurtureEmailContext } from "@/lib/nurture-emails";
 
-const LESSON_ONE = "expedition-begins";
+const LESSON_ONE = FIRST_LESSON_ID;
 const DAY_MS = 86_400_000;
 
 export function nurtureEnabled(): boolean {

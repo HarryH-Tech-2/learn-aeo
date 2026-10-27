@@ -3,7 +3,7 @@ import DashboardContent from "./DashboardContent";
 
 export const metadata: Metadata = {
   title: "Dashboard - Learn AEO",
-  description: "Track your progress learning ancient Egyptian hieroglyphics.",
+  description: "Track your progress through the Learn AEO course.",
 };
 
 export default function DashboardPage() {

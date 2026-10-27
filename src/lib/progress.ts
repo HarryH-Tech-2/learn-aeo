@@ -176,10 +176,6 @@ export async function recordXP(
     data: { xp: { increment: xp } },
   });
 
-  // Expedition log: the calendar of days dug (dashboard heatmap, rival team).
-  // Server-owned so every XP source counts, whichever page earned it.
-  await recordActivityDay(userId).catch((err) => console.error("[recordXP] activity log failed:", err));
-
   const { calculateLevel } = await import("@/lib/gamification");
   const newLevel = calculateLevel(user.xp);
   if (newLevel !== user.level) {
@@ -190,22 +186,4 @@ export async function recordXP(
   }
 
   return { totalXP: user.xp, newLevel };
-}
-
-/**
- * Append today to the user's expedition log (GameState game "expedition-log",
- * { days: ["YYYY-MM-DD", …] }). Read by the dashboard's Journey tab.
- */
-export async function recordActivityDay(userId: string, today = new Date()): Promise<void> {
-  const { addLogDay, dayKey, isExpeditionLog } = await import("@/lib/expedition");
-  const key = dayKey(today);
-  const row = await prisma.gameState.findUnique({ where: { userId_game: { userId, game: "expedition-log" } } });
-  const current = isExpeditionLog(row?.state) ? row!.state : { days: [] };
-  if (current.days.includes(key)) return;
-  const next = addLogDay(current, key);
-  await prisma.gameState.upsert({
-    where: { userId_game: { userId, game: "expedition-log" } },
-    update: { state: next },
-    create: { userId, game: "expedition-log", state: next },
-  });
 }

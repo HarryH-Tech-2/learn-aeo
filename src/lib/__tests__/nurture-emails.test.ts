@@ -1,3 +1,4 @@
+import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
 import { describe, it, expect } from "vitest";
 import { renderNurtureEmail, sampleContext } from "@/lib/nurture-emails";
 import { NURTURE_STEPS } from "@/lib/nurture";
@@ -16,7 +17,7 @@ describe("renderNurtureEmail", () => {
   });
 
   it("links the welcome to the free lesson and the offer to checkout with the code", () => {
-    expect(renderNurtureEmail("welcome", sampleContext(base)).html).toContain(`${base}/lessons/expedition-begins`);
+    expect(renderNurtureEmail("welcome", sampleContext(base)).html).toContain(`${base}${FIRST_LESSON_PATH}`);
     const offer = renderNurtureEmail("offer", sampleContext(base));
     expect(offer.html).toContain("AEO-PREVIEW");
     expect(offer.html).toContain(`${base}/get-started?next=checkout`);
@@ -49,7 +50,7 @@ describe("renderNurtureEmail", () => {
     const partWay = renderNurtureEmail("door-sealed", sampleContext(base, { lesson1Started: true }));
     expect(partWay.subject).toMatch(/place .*saved/i);
     expect(partWay.text).not.toContain("haven't opened");
-    for (const email of [fresh, partWay]) expect(email.html).toContain(`${base}/lessons/expedition-begins?utm_source=nurture`);
+    for (const email of [fresh, partWay]) expect(email.html).toContain(`${base}${FIRST_LESSON_PATH}?utm_source=nurture`);
   });
 
   it("refuses to render the offer emails without an offer", () => {

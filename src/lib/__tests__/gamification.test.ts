@@ -44,11 +44,13 @@ describe("getLevelTitle", () => {
 
 describe("XP_REWARDS", () => {
   it("has expected reward values", () => {
-    expect(XP_REWARDS.glyphStudy).toBe(10);
-    expect(XP_REWARDS.miniExerciseCorrect).toBe(15);
-    expect(XP_REWARDS.matchingPairFound).toBe(20);
-    expect(XP_REWARDS.siteReportCorrect).toBe(25);
-    expect(XP_REWARDS.perfectReport).toBe(100);
-    expect(XP_REWARDS.firstTryBonus).toBe(10);
+    expect(XP_REWARDS).toEqual({
+      conceptRead: 5,
+      checkCorrect: 10,
+      exerciseCorrect: 20,
+      exerciseClean: 50,
+      auditCorrect: 25,
+      perfectAudit: 100,
+    });
   });
 });

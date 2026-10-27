@@ -33,9 +33,9 @@ type Props = {
   lazy?: boolean;
 };
 
-const SCENE_SRC = "/lessons/expedition-begins/scene.webp";
+const SCENE_SRC = "/og-default.png";
 const SCENE_ALT =
-  "The dig site of Lesson 1: a sealed temple door carved with hieroglyphs at the foot of a cliff, with expedition tents and a hot-air balloon";
+  "Learn AEO: Lesson 1 is free";
 
 /** Hieroglyphs that drift up through the picture: eye of Horus, ankh, owl, scarab. */
 const DRIFTING_GLYPHS: {

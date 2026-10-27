@@ -1,3 +1,4 @@
+import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
 import type { ReactNode } from "react";
 import { SITE } from "@/lib/site";
 import { isValidElement } from "react";
@@ -113,7 +114,7 @@ export function toInternalPath(href: string): string {
  * a post with a single section gets it at the end.
  */
 export const IN_BODY_LINKS_MD =
-  "**Try it as you read:** [take the free first lesson](/lessons/expedition-begins) and learn all 25 alphabet signs on a sealed door.";
+  `**Try it as you read:** [take the free first lesson](${FIRST_LESSON_PATH}) and learn all 25 alphabet signs on a sealed door.`;
 
 export function withInBodyLinks(md: string, links = IN_BODY_LINKS_MD): string {
   if (md.includes(links)) return md;

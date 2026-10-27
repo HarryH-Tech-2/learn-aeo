@@ -1,3 +1,5 @@
+import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
+
 export type BlogFAQ = {
   question: string;
   answer: string;
@@ -149,7 +151,7 @@ Babylonian proved so complicated, one sign with many readings, that many doubted
 
 For most people, hieroglyphs. The 25 single-consonant signs let you spell names and read short words in your first hour, the signs are pictures you can remember, and museums everywhere are full of them. Cuneiform asks for more up front: you need a hundred or more syllable signs, and the habit of choosing between their readings, before a Babylonian sentence opens up.
 
-If you want to try both, start with your own name: in [cuneiform](/write-your-name-in-cuneiform) and in [hieroglyphs](/translate-name-to-hieroglyphics). Then the [free first lesson](/lessons/expedition-begins) teaches you the Egyptian alphabet sign by sign, starting with the signs of that name.`,
+If you want to try both, start with your own name: in [cuneiform](/write-your-name-in-cuneiform) and in [hieroglyphs](/translate-name-to-hieroglyphics). Then the [free first lesson](${FIRST_LESSON_PATH}) teaches you the Egyptian alphabet sign by sign, starting with the signs of that name.`,
   },
   {
     slug: "tutankhamun-tomb-discovery-anniversary",
@@ -256,7 +258,7 @@ You do not need years of study to read what Carter read on that door. A royal na
 
 - **Read his names.** [Tutankhamun's Cartouche Explained](/blog/tutankhamun-cartouche-explained) takes both rings apart sign by sign.
 - **See your own name in a cartouche.** The [free name translator](/translate-name-to-hieroglyphics) spells any name with the alphabet signs Tutankhamun's scribes used.
-- **Learn the signs.** The [free first lesson](/lessons/expedition-begins) starts with your own name on a sealed door, fittingly, and teaches all 25 alphabet signs through real Egyptian words.`,
+- **Learn the signs.** The [free first lesson](${FIRST_LESSON_PATH}) starts with your own name on a sealed door, fittingly, and teaches all 25 alphabet signs through real Egyptian words.`,
   },
   {
     slug: "is-it-hard-to-learn-hieroglyphics",
@@ -482,7 +484,7 @@ Tutankhamun's two cartouches use one god's name, one scarab and four of the alph
 
 - **Read more cartouches.** [Reading your first cartouche](/blog/reading-your-first-cartouche) covers Cleopatra, Ramesses II, Khufu and Akhenaten with the same sign-by-sign method.
 - **Write your own.** The [free name translator](/translate-name-to-hieroglyphics) spells your name with the alphabet signs Tutankhamun's scribes used for *twt*, and lets you forge it into a cartouche of your own.
-- **Learn the alphabet properly.** The [free first lesson](/lessons/expedition-begins) starts with your name on a sealed door and teaches all 25 signs through real Egyptian words in three sections of about ten minutes, saving your place after each.`,
+- **Learn the alphabet properly.** The [free first lesson](${FIRST_LESSON_PATH}) starts with your name on a sealed door and teaches all 25 signs through real Egyptian words in three sections of about ten minutes, saving your place after each.`,
   },
   {
     slug: "best-courses-to-learn-hieroglyphics",

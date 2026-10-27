@@ -9,75 +9,7 @@ import { useFreeCourseGuest } from "@/components/useFreeCourseGuest";
 import InView from "@/components/InView";
 import { reveal } from "@/components/reveal";
 import { useAuthModal } from "@/components/AuthModal";
-
-const previewLessons = [
-  {
-    id: "expedition-begins",
-    title: "The Expedition Begins",
-    subtitle: "Uniliteral Signs",
-    category: "Fundamentals",
-    difficulty: "beginner",
-    duration: "15 min",
-    glyphs: ["𓄿", "𓇋", "𓅱", "𓂝", "𓃀", "𓊪"],
-    description: "Begin your journey with the 24 uniliteral signs, the single-consonant building blocks that act as the Egyptian alphabet. You'll learn each glyph's shape, sound value, and how scribes combined them to spell out names, titles, and prayers on temple walls.",
-    isFree: true,
-  },
-  {
-    id: "outer-courtyard",
-    title: "The Outer Courtyard",
-    subtitle: "Flora & Fauna",
-    category: "Fundamentals",
-    difficulty: "beginner",
-    duration: "20 min",
-    glyphs: ["𓃭", "𓆣", "𓅓", "𓆭", "𓈗"],
-    description: "Step into the garden of signs the Egyptians drew from the world around them: lions, owls, vipers, reeds, lotus blossoms, and the rippling waters of the Nile. You'll learn how each creature and plant carried both a sound and a symbolic meaning scribes leaned on daily.",
-    isFree: false,
-  },
-  {
-    id: "pilgrims-gallery",
-    title: "The Pilgrim's Gallery",
-    subtitle: "Determinatives",
-    category: "Fundamentals",
-    difficulty: "beginner",
-    duration: "20 min",
-    glyphs: ["𓀀", "𓁀", "𓂻", "𓁐", "𓂧"],
-    description: "Meet the silent signs that quietly decide meaning. Determinatives sit at the end of words to tell you whether you're reading about a man, a woman, a god, a motion, or an abstract idea. They are the secret to telling apart words that share identical spellings.",
-    isFree: false,
-  },
-  {
-    id: "the-treasury",
-    title: "The Treasury",
-    subtitle: "Egyptian Numerals",
-    category: "Applied",
-    difficulty: "intermediate",
-    duration: "20 min",
-    glyphs: ["𓏤", "𓏥", "𓍯", "𓆣", "𓂋"],
-    description: "Master the base-10 numeral system that surveyed the pyramids, tallied grain harvests, and measured the annual flood of the Nile. You'll read inventories, regnal years, and offering counts the way a Middle Kingdom accountant would have seen them.",
-    isFree: false,
-  },
-  {
-    id: "royal-hall",
-    title: "The Royal Hall",
-    subtitle: "Pharaoh Names",
-    category: "Applied",
-    difficulty: "intermediate",
-    duration: "25 min",
-    glyphs: ["𓇳", "𓈖", "𓏏", "𓋴", "𓊃"],
-    description: "Decode the oval cartouches that ring every pharaoh's name. You'll sound out Tutankhamun, Ramesses, Hatshepsut, and Cleopatra glyph by glyph, and learn the throne-name conventions (\"Son of Ra,\" \"Beloved of Amun\") that declared a king's divine lineage.",
-    isFree: false,
-  },
-  {
-    id: "sacred-chapel",
-    title: "The Sacred Chapel",
-    subtitle: "Funerary Formulas",
-    category: "Advanced",
-    difficulty: "advanced",
-    duration: "30 min",
-    glyphs: ["𓂀", "𓁑", "𓎛", "𓐍", "𓌳"],
-    description: "Read the offering formulas, hymns, and spells scribes chiselled into tomb walls to carry a soul safely through the Duat. You'll parse the classic \"hetep di nesu\" invocation, name the gods of the afterlife, and recognise the recurring phrases of the Book of the Dead.",
-    isFree: false,
-  },
-];
+import { LESSON_CATALOG, lessonPath } from "@/lib/lesson-catalog";
 
 const difficultyColors: Record<string, string> = {
   beginner: "text-turquoise border-turquoise/30",
@@ -117,7 +49,7 @@ export default function LessonsPreview() {
 
         {/* Lessons Accordion */}
         <div className="flex flex-col gap-3">
-          {previewLessons.map((lesson, i) => {
+          {LESSON_CATALOG.map((lesson, i) => {
             const isOpen = openId === lesson.id;
             return (
               <div
@@ -134,13 +66,13 @@ export default function LessonsPreview() {
                 >
                   <div className="min-w-0">
                     <span className="font-body text-[10px] tracking-[0.2em] uppercase text-sand-500 block">
-                      {lesson.category}
+                      {lesson.order} · {lesson.district}
                     </span>
                     <h3 className="font-display text-base md:text-lg font-semibold text-sand-100 mt-0.5 truncate">
                       {lesson.title}
                     </h3>
                     <p className="font-body text-xs text-sand-500 mt-0.5 truncate">
-                      {lesson.subtitle}
+                      {lesson.summary}
                     </p>
                   </div>
 
@@ -175,20 +107,31 @@ export default function LessonsPreview() {
                           <div className="flex items-center gap-3">
                             <span
                               className={`font-body text-[10px] tracking-[0.15em] uppercase px-2 py-0.5 border ${
-                                difficultyColors[lesson.difficulty]
+                                difficultyColors[lesson.level]
                               }`}
                             >
-                              {lesson.difficulty}
+                              {lesson.level}
                             </span>
-                            {(lesson.isFree || freeGuest) && (
-                              <span className="font-body text-[10px] tracking-[0.15em] uppercase px-2 py-0.5 border border-turquoise/30 text-turquoise">
-                                Free
+                            <span className="font-body text-[10px] tracking-[0.15em] uppercase text-sand-500">
+                              {lesson.minutes} min
+                            </span>
+                            {lesson.status === "coming-soon" ? (
+                              <span className="font-body text-[10px] tracking-[0.15em] uppercase px-2 py-0.5 border border-sand-500/30 text-sand-500">
+                                Coming soon
                               </span>
+                            ) : (
+                              (lesson.isFree || freeGuest) && (
+                                <span className="font-body text-[10px] tracking-[0.15em] uppercase px-2 py-0.5 border border-turquoise/30 text-turquoise">
+                                  Free
+                                </span>
+                              )
                             )}
                           </div>
+                          {lesson.status === "live" && (
+                            <>
                           {!session && !lesson.isFree ? (
                             <button
-                              onClick={() => openAuthModal({ next: `/lessons/${lesson.id}` })}
+                              onClick={() => openAuthModal({ next: lessonPath(lesson.id) })}
                               className="font-body text-xs text-gold-400 hover:text-gold-300 transition-colors flex items-center gap-1"
                             >
                               Start lesson
@@ -207,7 +150,7 @@ export default function LessonsPreview() {
                             </button>
                           ) : (
                             <Link
-                              href={`/lessons/${lesson.id}`}
+                              href={lessonPath(lesson.id)}
                               className="font-body text-xs text-gold-400 hover:text-gold-300 transition-colors flex items-center gap-1"
                             >
                               Start lesson
@@ -224,6 +167,8 @@ export default function LessonsPreview() {
                                 />
                               </svg>
                             </Link>
+                          )}
+                            </>
                           )}
                         </div>
                     </div>

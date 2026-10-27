@@ -1,5 +1,6 @@
 "use client";
 
+import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
 import { getImageProps } from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -297,7 +298,7 @@ export default function HeroSection() {
               type="button"
               onClick={() => {
                 trackEvent("free_lesson_cta", { location: "hero" });
-                openAuthModal({ next: "/lessons/expedition-begins" });
+                openAuthModal({ next: FIRST_LESSON_PATH });
               }}
               className="hero-cta"
             >

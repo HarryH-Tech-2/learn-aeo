@@ -126,7 +126,7 @@ describe("POST /api/progress/complete", () => {
   });
 
   it("rejects an unknown lesson", async () => {
-    const res = await post({ lessonId: "expedition-begins", score: 6, totalQuestions: 10 });
+    const res = await post({ lessonId: "not-a-lesson", score: 6, totalQuestions: 10 });
     expect(res.status).toBe(400);
     expect(mockedRecord).not.toHaveBeenCalled();
   });

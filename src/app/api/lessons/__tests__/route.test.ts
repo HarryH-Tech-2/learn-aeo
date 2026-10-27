@@ -107,7 +107,7 @@ describe("GET /api/lessons/[id]", () => {
   });
 
   it("returns 404 for an unknown lesson", async () => {
-    const { response, body } = await get("expedition-begins");
+    const { response, body } = await get("not-a-lesson");
     expect(response.status).toBe(404);
     expect(body.error).toBeDefined();
   });

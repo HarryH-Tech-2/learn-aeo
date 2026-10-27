@@ -11,7 +11,7 @@ vi.mock("resend", () => ({
 }));
 
 import { sendWelcomeEmail } from "@/lib/email";
-import { lessons } from "@/lib/legacy-lessons";
+import { LESSON_CATALOG } from "@/lib/lesson-catalog";
 import { Resend } from "resend";
 
 describe("sendWelcomeEmail", () => {
@@ -63,7 +63,7 @@ describe("sendWelcomeEmail", () => {
     const { html } = mockSend.mock.calls[0][0];
     expect(html).toContain("lifetime access is active");
     expect(html).toContain("One-time payment");
-    expect(html).toContain(`All ${lessons.length} lessons`);
+    expect(html).toContain(`All ${LESSON_CATALOG.length} lessons`);
   });
 
   it("defaults to the lifetime wording when no plan is given", async () => {

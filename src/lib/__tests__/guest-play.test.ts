@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
 import { guestPlayAllowed, guestPlayHref } from "@/lib/guest-play";
 
 function params(search: string) {
@@ -19,7 +20,7 @@ afterEach(() => vi.unstubAllGlobals());
 
 describe("guestPlayHref", () => {
   it("opens Lesson 1 in guest play", () => {
-    expect(guestPlayHref()).toBe("/lessons/expedition-begins?play=1");
+    expect(guestPlayHref()).toBe(`${FIRST_LESSON_PATH}?play=1`);
   });
 
   it("carries a typed name, in a form the sign-up modal's return-path check accepts", () => {

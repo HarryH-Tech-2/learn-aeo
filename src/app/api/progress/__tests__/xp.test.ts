@@ -42,7 +42,7 @@ describe("POST /api/progress/xp", () => {
   });
 
   it.each([
-    ["an unknown lesson", { lessonId: "expedition-begins", xp: 10 }],
+    ["an unknown lesson", { lessonId: "not-a-lesson", xp: 10 }],
     ["zero XP", { lessonId: "how-answer-engines-choose-sources", xp: 0 }],
     ["more than 200 XP", { lessonId: "how-answer-engines-choose-sources", xp: 201 }],
     ["fractional XP", { lessonId: "how-answer-engines-choose-sources", xp: 2.5 }],

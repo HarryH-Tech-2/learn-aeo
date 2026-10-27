@@ -1,18 +1,4 @@
 export const XP_REWARDS = {
-  glyphStudy: 10,
-  miniExerciseCorrect: 15,
-  matchingPairFound: 20,
-  siteReportCorrect: 25,
-  perfectReport: 100,
-  firstTryBonus: 10,
-  /** Field Notes review at the start of lessons 2–8 */
-  reviewCorrect: 10,
-  /** Each correct answer inside a lesson's signature mechanic */
-  mechanicCorrect: 20,
-  /** Finishing the mechanic with no mistakes */
-  mechanicPerfect: 50,
-  /** Reading the lesson's real inscription */
-  readingComplete: 40,
   // The AEO lesson player (src/components/player)
   /** Moving on from a concept card */
   conceptRead: 5,

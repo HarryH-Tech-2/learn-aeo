@@ -92,16 +92,6 @@ export default function RootLayout({
         <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
-        {/* Plan 2: remove (the lesson player still renders hieroglyphs). The 10 KB hieroglyph subset used above the fold — fetched alongside
-            the CSS so the first layout shapes glyphs with it instead of doing
-            slow OS font fallback and re-laying out when it lands. */}
-        <link
-          rel="preload"
-          href="/fonts/noto-egyptian-core.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

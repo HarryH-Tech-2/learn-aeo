@@ -1,3 +1,4 @@
+import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
 import { describe, it, expect } from "vitest";
 import { withInBodyLinks, IN_BODY_LINKS_MD, extractH2s } from "@/app/blog/blog-text";
 import { blogPosts } from "@/lib/blog-posts";
@@ -30,7 +31,7 @@ describe("withInBodyLinks", () => {
     expect(IN_BODY_LINKS_MD).not.toContain("/translate-name-to-hieroglyphics");
     for (const p of blogPosts) {
       const out = withInBodyLinks(p.content);
-      expect(out, p.slug).toContain("](/lessons/expedition-begins)");
+      expect(out, p.slug).toContain(`](${FIRST_LESSON_PATH})`);
     }
   });
 });

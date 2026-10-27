@@ -12,7 +12,9 @@
  * Returning users never pass through here: NextAuth only uses pages.newUser
  * on the sign-in that created the account.
  */
-export const LESSON_ONE_PATH = "/lessons/expedition-begins";
+import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
+
+export const LESSON_ONE_PATH = FIRST_LESSON_PATH;
 
 /** Destinations that only mean "nowhere in particular": the defaults of AuthModal, /get-started and /login. */
 const GENERIC_PATHS = new Set(["/", "/dashboard", "/login", "/get-started"]);

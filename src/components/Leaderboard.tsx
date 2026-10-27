@@ -1,5 +1,6 @@
 "use client";
 
+import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -153,7 +154,7 @@ export default function Leaderboard({ limit = 10, showFullLink = false, heading 
 
       {data && data.you && data.you.xp === 0 && (
         <p className="font-body text-xs text-sand-500 mt-4">
-          Earn your first XP in <Link href="/lessons/expedition-begins" className="text-gold-500 hover:text-gold-400">The Expedition Begins</Link> to take a place on the wall.
+          Earn your first XP in <Link href={FIRST_LESSON_PATH} className="text-gold-500 hover:text-gold-400">The Expedition Begins</Link> to take a place on the wall.
         </p>
       )}
 

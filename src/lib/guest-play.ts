@@ -9,9 +9,7 @@
  * was level 1 of the Causeway game (account asked for on its finish card);
  * since then it is the written lesson: the door with their name and its
  * quick check, then a sign-up modal that cannot be closed, and back to the
- * first word afterwards (?at=words&name=). The game is still
- * open to them through ?mode=game or the switch above the lesson.
- *
+ * first word afterwards (?at=words&name=). *
  * The homepage keeps the wall, which makes it the comparison. Nothing here is
  * a secret: anyone with the link can play level 1, which is free anyway; going
  * past it still needs an account (and levels 2+ the paid course).
@@ -20,10 +18,11 @@
  * → guest_level_complete → guest_signup_prompt → sign_up.
  */
 import { COOKIE_PREFIX } from "@/lib/site";
+import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
 
 export const GUEST_PLAY_PARAM = "play";
 const KEY = `${COOKIE_PREFIX}guest_play`;
-const LESSON = "/lessons/expedition-begins";
+const LESSON = FIRST_LESSON_PATH;
 
 /** Where the banner points. A name typed into the translator rides along and is offered in the game's name box. */
 export function guestPlayHref(name?: string): string {

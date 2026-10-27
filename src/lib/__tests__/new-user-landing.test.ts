@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
 import { newUserLanding, LESSON_ONE_PATH } from "@/lib/new-user-landing";
 
 const site = "https://www.learnaeo.com";
@@ -17,8 +18,8 @@ describe("newUserLanding", () => {
       "/checkout?plan=monthly",
       "/games/scribe",
       "/join?code=ABC123",
-      "/lessons/expedition-begins?mode=game",
-      "/lessons/expedition-begins?name=Nancy",
+      `${FIRST_LESSON_PATH}?play=1`,
+      `${FIRST_LESSON_PATH}?name=Nancy`,
       "/teachers/class?trial=1",
       "/dashboard?tab=games",
       "/gift/redeem?code=X#top",

@@ -146,12 +146,9 @@ html.light {
   --color-papyrus: #e6ebf5;
 
   /* ── Typography ── */
-  /* Inter for UI/body, Instrument Serif for display. The Noto Sans Egyptian
-     Hieroglyphs face stays in the stacks (its @font-face rules are
-     unicode-range-limited to U+13000-1345F, so Latin text never touches it)
-     because the lesson player still renders glyphs. Plan 2: remove. */
-  --font-sans: var(--font-inter), "Noto Sans Egyptian Hieroglyphs", system-ui, sans-serif;
-  --font-display: var(--font-instrument-serif), "Noto Sans Egyptian Hieroglyphs", Georgia, serif;
+  /* Inter for UI/body, Instrument Serif for display. */
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-instrument-serif), Georgia, serif;
   --font-body: var(--font-sans);
 
   /* ── Spacing Scale ── */
@@ -216,33 +213,10 @@ html.theme-transitioning *::after {
     box-shadow 0.3s ease !important;
 }
 
-/* ── Hieroglyph Font (Unicode Egyptian Hieroglyphs block) ──
-   Self-hosted subsets of Noto Sans Egyptian Hieroglyphs v30 (OFL), split in
-   two faces under one family name. The fonts.gstatic.com v29 URL we used to
-   point at started returning 404 when Google rotated the file, so every glyph
-   silently fell back to the OS font (tofu on most phones, and ~600 ms of
-   fallback shaping in the first layout). The 10 KB "core" file carries the
-   signs used by the homepage, nav, footer and name translator and is
-   preloaded in layout.tsx; unicode-range means the 260 KB remainder is only
-   fetched on pages that actually use other signs. Regenerate with
-   `python -m fontTools.subset` if new signs land on the homepage. */
-@font-face {
-  font-family: "Noto Sans Egyptian Hieroglyphs";
-  src: url("/fonts/noto-egyptian-core.woff2") format("woff2");
-  font-display: swap;
-  unicode-range: U+13000, U+13040, U+13050-13051, U+13080, U+1308B, U+1309D, U+130A7, U+130BB, U+130C0, U+130ED, U+1313F, U+13153, U+13171, U+131A3, U+131AD, U+131CB, U+131F3, U+13216-13217, U+13250, U+13254, U+13283, U+13296, U+132AA, U+132F4, U+132F9, U+13333, U+1336F, U+1339B, U+133CF, U+133DB, U+133DE, U+133E4-133E5, U+1340D;
-}
-@font-face {
-  font-family: "Noto Sans Egyptian Hieroglyphs";
-  src: url("/fonts/noto-egyptian.woff2") format("woff2");
-  font-display: swap;
-  unicode-range: U+13001-1303F, U+13041-1304F, U+13052-1307F, U+13081-1308A, U+1308C-1309C, U+1309E-130A6, U+130A8-130BA, U+130BC-130BF, U+130C1-130EC, U+130EE-1313E, U+13140-13152, U+13154-13170, U+13172-131A2, U+131A4-131AC, U+131AE-131CA, U+131CC-131F2, U+131F4-13215, U+13218-1324F, U+13251-13253, U+13255-13282, U+13284-13295, U+13297-132A9, U+132AB-132F3, U+132F5-132F8, U+132FA-13332, U+13334-1336E, U+13370-1339A, U+1339C-133CE, U+133D0-133DA, U+133DC-133DD, U+133DF-133E3, U+133E6-1340C, U+1340E-1345F;
-}
-
-/* Utility for inline hieroglyphs in prose/tables: webfont first, then the
+/* Utility for inline hieroglyphs in prose/tables: the
    Windows system font that ships the block, then whatever serif has it. */
 .hieroglyph-font {
-  font-family: "Noto Sans Egyptian Hieroglyphs", "Segoe UI Historic", serif;
+  font-family: "Segoe UI Historic", serif;
 }
 
 /* ── Flip cards (name-sign bridge on the translator) ── */
@@ -611,7 +585,7 @@ html.light .translator-wall {
     inset 0 0 0 1.5px rgba(246, 210, 120, 0.7),
     0 2px 6px rgba(80, 50, 5, 0.45);
   color: #f6d27a;
-  font-family: "Noto Sans Egyptian Hieroglyphs", "Segoe UI Historic", serif;
+  font-family: "Segoe UI Historic", serif;
   font-size: 1.55rem;
   line-height: 1;
 }
@@ -745,7 +719,7 @@ html.light .translator-wall {
   color: #f6e4b0;
 }
 .nav-cta-glyph {
-  font-family: "Noto Sans Egyptian Hieroglyphs", "Segoe UI Historic", serif;
+  font-family: "Segoe UI Historic", serif;
   font-size: 0.95rem;
   letter-spacing: 0;
   line-height: 1;
@@ -1026,7 +1000,7 @@ html.light .grain-overlay::before {
 
 .floating-hieroglyph {
   position: absolute;
-  font-family: "Noto Sans Egyptian Hieroglyphs", serif;
+  font-family: serif;
   font-size: 2rem;
   color: var(--rt-gold-500);
   opacity: 0;
@@ -1259,7 +1233,7 @@ html.light footer {
 
 /* ── Classroom worksheet (/teachers/worksheet) — print-first, A4 ── */
 .glyph-font {
-  font-family: "Noto Sans Egyptian Hieroglyphs", "Segoe UI Historic", serif;
+  font-family: "Segoe UI Historic", serif;
 }
 
 .worksheet {
@@ -1725,7 +1699,7 @@ html.light footer {
   height: 3px;
 }
 .glyph-cell {
-  font-family: "Noto Sans Egyptian Hieroglyphs", "Segoe UI Historic", serif;
+  font-family: "Segoe UI Historic", serif;
   line-height: 1;
   color: var(--rt-gold-400);
   text-align: center;
@@ -2691,11 +2665,11 @@ input[name^="glyph-"]::-webkit-search-decoration {
   animation-delay: 0.75s;
 }
 .cookie-loaf {
-  font-family: "Noto Sans Egyptian Hieroglyphs", "Segoe UI Historic", serif;
+  font-family: "Segoe UI Historic", serif;
   color: var(--rubric);
 }
 .cookie-glyph-row {
-  font-family: "Noto Sans Egyptian Hieroglyphs", "Segoe UI Historic", serif;
+  font-family: "Segoe UI Historic", serif;
   color: rgba(42, 30, 16, 0.5);
   letter-spacing: 0.35em;
 }
@@ -2734,7 +2708,7 @@ input[name^="glyph-"]::-webkit-search-decoration {
   border-radius: 999px;
   background: linear-gradient(140deg, #f3cf72, #c8952a);
   color: #2a1a04;
-  font-family: "Noto Sans Egyptian Hieroglyphs", "Segoe UI Historic", serif;
+  font-family: "Segoe UI Historic", serif;
   font-size: 1.1rem;
 }
 .cookie-decline {
@@ -2965,7 +2939,7 @@ html:not(.light) .faq-a {
     background-size: 56px 56px;
   }
   .lesson-inlay-glyph {
-    font-family: "Noto Sans Egyptian Hieroglyphs", serif;
+    font-family: serif;
     color: #f5d890;
     line-height: 1;
     text-shadow: 0 2px 0 rgba(90, 62, 10, 0.55), 0 0 42px rgba(232, 196, 96, 0.28);
@@ -3123,7 +3097,7 @@ html:not(.light) .faq-a {
 
   /* the walking legs take a step the way they face */
   .lesson-btn-glyph {
-    font-family: "Noto Sans Egyptian Hieroglyphs", "Segoe UI Historic", serif;
+    font-family: "Segoe UI Historic", serif;
     font-size: 1.65em;
     font-weight: 400;
     line-height: 1;
@@ -3218,7 +3192,7 @@ html:not(.light) .faq-a {
   width: 2.6rem;
   height: 2.6rem;
   border-radius: 999px;
-  font-family: "Noto Sans Egyptian Hieroglyphs", "Segoe UI Historic", serif;
+  font-family: "Segoe UI Historic", serif;
   font-size: 1.55rem;
   font-weight: 400;
   letter-spacing: 0;
@@ -3370,7 +3344,7 @@ html.light .lesson-backdrop::after {
   width: 1.75rem;
   height: 1.75rem;
   border-radius: 999px;
-  font-family: "Noto Sans Egyptian Hieroglyphs", "Segoe UI Historic", serif;
+  font-family: "Segoe UI Historic", serif;
   font-size: 1.6rem;
   line-height: 1;
   color: currentColor;
@@ -3760,7 +3734,7 @@ html.light .part-step[data-state="done"] {
   height: 3.25rem;
   margin-bottom: 0.9rem;
   border-radius: 999px;
-  font-family: "Noto Sans Egyptian Hieroglyphs", "Segoe UI Historic", serif;
+  font-family: "Segoe UI Historic", serif;
   font-size: 1.7rem;
   line-height: 1;
   color: #f5d890;

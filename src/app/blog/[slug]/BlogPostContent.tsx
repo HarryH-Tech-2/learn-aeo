@@ -1,5 +1,6 @@
 "use client";
 
+import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
 import { reveal } from "@/components/reveal";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
@@ -416,7 +417,7 @@ export default function BlogPostContent({
           title="Carve your own name in hieroglyphs"
           body="Lesson 1: uncover your name on a sealed door, then the rest of the alphabet through real words. Free, and no sign-up to start."
           ctaLabel="Start Lesson 1"
-          next="/lessons/expedition-begins"
+          next={FIRST_LESSON_PATH}
           playHref={guestPlayHref()}
           onAccept={prompt.accept}
           onDismiss={prompt.dismiss}

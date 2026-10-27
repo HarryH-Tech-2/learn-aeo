@@ -12,6 +12,7 @@
  * the UK, purchasing-power prices elsewhere), so emails link to /pricing or
  * checkout, which show the visitor's own price. Discounts are a percentage.
  */
+import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
 import type { NurtureStepKey } from "@/lib/nurture";
 import {
   BODY_FONT as FONT,
@@ -143,8 +144,7 @@ export function renderNurtureEmail(key: NurtureStepKey, ctx: NurtureEmailContext
   // shown on /admin/marketing) and GA4 files the visit under nurture / email / <step>.
   const tagged = (path: string) =>
     `${ctx.baseUrl}${path}${path.includes("?") ? "&" : "?"}utm_source=${NURTURE_UTM_SOURCE}&utm_medium=email&utm_campaign=${key}`;
-  const lessonUrl = tagged("/lessons/expedition-begins");
-  const gameUrl = tagged("/lessons/expedition-begins?mode=game");
+  const lessonUrl = tagged(FIRST_LESSON_PATH);
   const pricingUrl = tagged("/pricing");
   const checkoutUrl = tagged("/get-started?next=checkout");
   const translatorUrl = tagged("/translate-name-to-hieroglyphics");
@@ -167,7 +167,6 @@ export function renderNurtureEmail(key: NurtureStepKey, ctx: NurtureEmailContext
         ),
         p("It comes in three short parts. The first starts with your name on a sealed door, and your place is saved after each part, so stop whenever you like."),
         button(lessonUrl, "Open the sealed door"),
-        p(`Prefer to play? The same lesson is also a 3D game: ${link(gameUrl, "walk the Causeway of Thoth")}.`),
       ].join("");
       return {
         subject: ownName ? `${ctx.firstName}, here is your name in hieroglyphs` : "Your expedition has begun",
@@ -180,7 +179,6 @@ export function renderNurtureEmail(key: NurtureStepKey, ctx: NurtureEmailContext
               : "Your account is ready. Lesson 1 teaches the 25 signs of the hieroglyphic alphabet, and by the end you can spell your own name.",
             "It comes in three short parts, and your place is saved after each one.",
             `Open the sealed door: ${lessonUrl}`,
-            `Prefer to play? The same lesson as a 3D game: ${gameUrl}`,
           ],
           ctx
         ),
@@ -197,7 +195,6 @@ export function renderNurtureEmail(key: NurtureStepKey, ctx: NurtureEmailContext
           p("You made an account, but you haven't opened the door at Base Camp yet. Behind it is the first part of the free lesson: the signs of your own name, brushed clear one at a time."),
           p("Part 1 is short. Your name on the door, then your first three real Egyptian words, read by you. No payment, nothing to install."),
           button(lessonUrl, "Open the door"),
-          p(`Not in the mood for reading? ${link(gameUrl, "Play the 3D version")}: the same signs, but you cross the Nile on stepping stones.`),
         ].join("");
         return {
           subject: "Your door is waiting",
@@ -213,7 +210,6 @@ export function renderNurtureEmail(key: NurtureStepKey, ctx: NurtureEmailContext
               "You made an account, but you haven't opened the door at Base Camp yet. Behind it is the first part of the free lesson: the signs of your own name.",
               "Part 1 is short: your name on the door, then your first three real Egyptian words.",
               `Open the door: ${lessonUrl}`,
-              `Or play the 3D version: ${gameUrl}`,
             ],
             ctx
           ),
@@ -225,7 +221,6 @@ export function renderNurtureEmail(key: NurtureStepKey, ctx: NurtureEmailContext
         p("You have made a start on Lesson 1, and the expedition kept your place. Pick up where you stopped and the rest of the alphabet comes in short parts, with your place saved after each one."),
         p("By the end of the lesson you can read all 25 alphabet signs, and spell any name the way a scribe would."),
         button(lessonUrl, "Carry on with Lesson 1"),
-        p(`Prefer to play? ${link(gameUrl, "Try the 3D version")}: the same signs, but you cross the Nile on stepping stones.`),
       ].join("");
       return {
         subject: "Your place in Lesson 1 is saved",
@@ -241,7 +236,6 @@ export function renderNurtureEmail(key: NurtureStepKey, ctx: NurtureEmailContext
             "You have made a start on Lesson 1, and the expedition kept your place. Pick up where you stopped; the rest comes in short parts.",
             "By the end you can read all 25 alphabet signs and spell any name the way a scribe would.",
             `Carry on: ${lessonUrl}`,
-            `Or play the 3D version: ${gameUrl}`,
           ],
           ctx
         ),
@@ -307,7 +301,7 @@ ${chamberText()}`,
         featureRow(
           `${ctx.baseUrl}/email/causeway.jpg`,
           "The Causeway of Thoth, a 3D level on the Nile",
-          gameUrl,
+          lessonUrl,
           "The Causeway of Thoth",
           "A 3D level on the Nile. Cross the stepping stones by choosing the right sign.",
           "Play it"
@@ -338,7 +332,7 @@ ${chamberText()}`,
         text: textOf(
           [
             `Hi ${ctx.firstName}, three free things to try this week:`,
-            `1. The Causeway of Thoth, a 3D level on the Nile: ${gameUrl}`,
+            `1. The Causeway of Thoth, a 3D level on the Nile: ${lessonUrl}`,
             `2. Any name in a cartouche: ${translatorUrl}`,
             `3. Cartouche of the Day, a daily puzzle: ${dailyUrl}`,
             ctx.lesson1Completed ? "Your Lesson 1 progress is saved." : `Lesson 1 is still waiting, with your place saved: ${lessonUrl}`,
