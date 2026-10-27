@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { SITE, absoluteUrl } from "@/lib/site";
 import { Suspense } from "react";
-import { lessons } from "@/lib/legacy-lessons";
+import { LESSON_CATALOG, lessonMeta, lessonPath } from "@/lib/lesson-catalog";
 import LessonContent from "./LessonContent";
 
 export async function generateStaticParams() {
-  return lessons.map((l) => ({ id: l.id }));
+  return LESSON_CATALOG.map((l) => ({ id: l.id }));
 }
 
 export async function generateMetadata({
@@ -14,31 +14,34 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const lesson = lessons.find((l) => l.id === id);
+  const lesson = lessonMeta(id);
 
   if (!lesson) {
-    return { title: "Lesson Not Found - Learn AEO" };
+    return { title: "Lesson not found | Learn AEO" };
   }
 
-  const canonical = absoluteUrl(`/lessons/${id}`);
-  const title = `${lesson.title}: ${lesson.subtitle} | Learn AEO`;
+  const canonical = absoluteUrl(lessonPath(id));
+  const title = `${lesson.title} | Learn AEO`;
+  const image = "/og-default.png";
 
   return {
     title,
     description: lesson.description,
     alternates: { canonical },
+    // A coming-soon page has nothing to learn from yet: keep it out of the index until it opens.
+    ...(lesson.status === "coming-soon" ? { robots: { index: false } } : {}),
     openGraph: {
       title,
       description: lesson.description,
       type: "article",
       url: canonical,
-      images: [{ url: lesson.sceneImage }],
+      images: [{ url: image }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description: lesson.description,
-      images: [lesson.sceneImage],
+      images: [image],
     },
   };
 }
@@ -49,11 +52,11 @@ export default async function LessonPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const lesson = lessons.find((l) => l.id === id);
+  const lesson = lessonMeta(id);
 
   return (
     <>
-      {lesson && (
+      {lesson?.status === "live" && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -62,10 +65,10 @@ export default async function LessonPage({
               "@type": "LearningResource",
               name: lesson.title,
               description: lesson.description,
-              url: absoluteUrl(`/lessons/${lesson.id}`),
-              educationalLevel: lesson.difficulty,
+              url: absoluteUrl(lessonPath(lesson.id)),
+              educationalLevel: lesson.level,
               learningResourceType: "Lesson",
-              timeRequired: `PT${lesson.duration.replace(/\D/g, "")}M`,
+              timeRequired: `PT${lesson.minutes}M`,
               inLanguage: "en",
               isAccessibleForFree: lesson.isFree,
               provider: {

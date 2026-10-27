@@ -3,14 +3,16 @@ import type { NextRequest } from "next/server";
 import { devBypassAuth } from "@/lib/dev-bypass";
 import { COUNTRY_COOKIE } from "@/lib/pricing";
 import { ACCESS_COOKIE, ACCESS_COOKIE_MAX_AGE, accessTestPercent, pickVisitorArm } from "@/lib/access-test";
+// (edge runtime: the catalog only, never @/lib/lessons, which pulls in lesson content)
+import { publicLessonPaths } from "@/lib/lesson-catalog";
 
 // Protected routes that require authentication
 const PROTECTED_PATHS = ["/dashboard", "/account", "/certificate", "/checkout", "/lessons"];
 
-// Lessons anyone can open without an account. The lesson itself asks for a
-// sign-in at the first quick check (to keep XP and progress) — see
-// LessonStage's guest wall. Keep in sync with `isFree` in src/lib/lessons.ts.
-const PUBLIC_LESSONS = ["/lessons/expedition-begins"];
+// Free lessons pass the middleware without a session cookie, so a signed-out visitor (and a
+// crawler) gets the page. The page itself then asks a guest to sign in before the lesson starts.
+// Derived from `isFree` in the catalog (src/lib/lesson-catalog.ts).
+const PUBLIC_LESSONS = publicLessonPaths();
 
 /** The free-unlock test (src/lib/access-test.ts): a new visitor's group, kept in a cookie the pages read. */
 function withAccessCookie(request: NextRequest, response: NextResponse): void {

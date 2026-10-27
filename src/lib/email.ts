@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 import { SITE } from "@/lib/site";
 import type { Plan } from "@/lib/plans";
-import { lessons } from "@/lib/legacy-lessons";
+import { LESSONS } from "@/lib/lessons";
 import { ownerEmail } from "@/lib/notify";
 import {
   BODY_FONT as FONT,
@@ -76,7 +76,7 @@ export async function sendWelcomeEmail(
   const greetingName = name?.trim().split(/\s+/)[0] || "there";
   const dashboardUrl = `${process.env.NEXTAUTH_URL}/dashboard`;
   const accountUrl = `${process.env.NEXTAUTH_URL}/account`;
-  const lessonCount = lessons.length;
+  const lessonCount = LESSONS.length;
   const monthly = plan === "monthly";
 
   const thanks = monthly

@@ -6,7 +6,7 @@ import { prisma } from "@/lib/db";
 import { summariseCheckoutLog, type CheckoutLogOutcome, type PurchaseRow } from "@/lib/checkout-recovery-log";
 import { ACCESS_TEST_GAME, accessTestPercent, armOf, summariseAccessTest, type AccessTestPerson } from "@/lib/access-test";
 import { SITE } from "@/lib/site";
-import { lessons } from "@/lib/legacy-lessons";
+import { LESSON_CATALOG } from "@/lib/lesson-catalog";
 
 /**
  * Visitors, sign-ups and paying customers per marketing post (src/lib/campaign.ts records them). Only the
@@ -44,7 +44,7 @@ async function checkoutRecovery() {
 /** The free-unlock test (src/lib/access-test.ts): both groups side by side, and the free group's emails to match
  *  against Buy Me a Coffee supporters (donations are not recorded here). */
 async function accessTest() {
-  const freeLessons = new Set(lessons.filter((l) => l.isFree).map((l) => l.id));
+  const freeLessons = new Set(LESSON_CATALOG.filter((l) => l.isFree).map((l) => l.id));
   const rows = await prisma.gameState.findMany({
     where: { game: ACCESS_TEST_GAME },
     select: {

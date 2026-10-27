@@ -1,12 +1,11 @@
 "use client";
 
 /**
- * The upgrade screen shown straight after Lesson 1's door, at the end of
- * every section of the free lesson, on its outro and on the dashboard. Most free learners never reached the old pitch, which
- * only appeared after the whole lesson; this one meets them at each win.
+ * The upgrade pitch for learners on the free plan: on the free lesson's outro
+ * (once the subscription check has answered) and on the dashboard.
  *
  * With a live offer it is the countdown banner; without one, the Lifetime
- * price with the monthly pass as the way in. Paying learners never see it.
+ * price with the Monthly plan as the way in. Paying learners never see it.
  * The free-unlock group (src/lib/access-test.ts) sees nothing here: the course is already open to them.
  */
 import Link from "next/link";
@@ -16,6 +15,8 @@ import { usePpp } from "@/components/PppBanner";
 import Price from "@/components/Price";
 import GuaranteeNote from "@/components/GuaranteeNote";
 import { PLANS } from "@/lib/plans";
+import { LESSON_CATALOG } from "@/lib/lesson-catalog";
+import { BTN_PRIMARY, FOCUS } from "@/components/player/ui";
 import { trackEvent } from "@/lib/analytics";
 import FreeCourseCta from "@/components/FreeCourseCta";
 import { useFreeCourseGuest } from "@/components/useFreeCourseGuest";
@@ -29,19 +30,27 @@ export type UpgradeInfo = {
 };
 
 type Props = UpgradeInfo & {
-  /** Analytics: after_door | section_1 | section_2 | lesson_outro | dashboard */
+  /** Analytics: lesson_outro | dashboard */
   location: string;
-  /** What the learner just did, e.g. "9 signs and 5 words in" */
+  /** What the learner just did, e.g. "Audit passed" */
   progressLine?: string;
 };
+
+const SHEET = "rounded-2xl border border-cyan-500/30 bg-obsidian-light p-6 text-left md:p-8";
+
+const NUMBER_WORDS = ["No", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"];
+const PAID_LESSONS = LESSON_CATALOG.filter((l) => !l.isFree);
+const REMAINING = NUMBER_WORDS[PAID_LESSONS.length] ?? String(PAID_LESSONS.length);
+const FIRST_PAID = PAID_LESSONS[0]?.district;
+const LAST_PAID = PAID_LESSONS[PAID_LESSONS.length - 1]?.district;
 
 export default function UpgradePanel({ paid, offer: given, location, progressLine, freeUnlock }: Props) {
   const freeGuest = useFreeCourseGuest();
   if (freeUnlock) return null;
   if (freeGuest && paid === false) {
     return (
-      <section aria-label="The whole course is free for you" className="lesson-sheet p-6 md:p-8 text-left border border-gold-500/30">
-        {progressLine && <p className="font-body text-sm text-sand-300 mb-4">{progressLine}. Your place is saved.</p>}
+      <section aria-label="The whole course is free for you" className={SHEET}>
+        {progressLine && <p className="font-sans text-sm text-sand-300 mb-4">{progressLine}. Your place is saved.</p>}
         <FreeCourseCta location={location} />
       </section>
     );
@@ -64,20 +73,25 @@ function PaidPitch({ paid, offer: given, location, progressLine }: Props) {
 
   const lifetime = PLANS.lifetime;
   return (
-    <section aria-label="Unlock the full course" className="lesson-sheet p-6 md:p-8 text-left border border-gold-500/30">
-      <p className="font-body text-sm text-gold-500 mb-2 font-semibold">Beyond Base Camp</p>
-      <h3 className="font-display text-2xl md:text-3xl text-sand-100 font-light mb-2">
-        Seven more chambers are <span className="text-gradient-gold font-medium">sealed</span>
+    <section aria-label="Unlock the full course" className={SHEET}>
+      <p className="font-sans text-xs font-semibold uppercase tracking-[0.14em] text-cyan-400 mb-2">The rest of the City of Answers</p>
+      <h3 className="font-display text-2xl md:text-3xl text-sand-100 mb-2">
+        {REMAINING} more districts are waiting
       </h3>
-      <p className="font-body text-sm text-sand-300 font-light leading-relaxed mb-5 max-w-2xl">
+      <p className="font-sans text-sm text-sand-300 leading-relaxed mb-5 max-w-2xl">
         {progressLine ? `${progressLine}. ` : ""}
-        {location === "dashboard" ? "Lesson 1 stays free to the end." : "This lesson stays free to the end."} The rest of the dig, from the Outer Courtyard to the Inner Sanctum, opens with one payment.
+        {location === "dashboard" ? "Lesson 1 stays free to the end." : "This lesson stays free to the end."}{" "}
+        {FIRST_PAID && LAST_PAID ? `From ${FIRST_PAID} to ${LAST_PAID}, the rest of the course` : "The rest of the course"} opens
+        with Lifetime access or the {PLANS.monthly.name} plan. New lessons are being released in turn, and Lifetime
+        includes every future lesson.
       </p>
 
       <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2 mb-6">
         {lifetime.features.map((f) => (
-          <li key={f} className="font-body text-sm text-sand-300 flex gap-2">
-            <span className="text-gold-500" aria-hidden="true">𓋹</span>
+          <li key={f} className="font-sans text-sm text-sand-300 flex gap-2">
+            <svg className="mt-0.5 h-4 w-4 flex-shrink-0 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+            </svg>
             {f}
           </li>
         ))}
@@ -86,20 +100,20 @@ function PaidPitch({ paid, offer: given, location, progressLine }: Props) {
       {offer ? (
         <OfferBanner offer={offer} location={location} />
       ) : (
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4 border border-gold-700/25 bg-obsidian-lighter p-5 rounded-xl">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 rounded-xl border border-sand-500/30 bg-obsidian-lighter p-5">
           <div className="flex-1">
             <p className="font-display text-2xl text-sand-100">
-              <Price /> <span className="font-body text-sm text-sand-400">once, yours for good</span>
+              <Price /> <span className="font-sans text-sm text-sand-400">once, yours for good</span>
             </p>
-            <p className="font-body text-xs text-sand-500 mt-1">
-              Or <Price plan={PLANS.monthly} /> a month with the {PLANS.monthly.name}. Cancel any time.
+            <p className="font-sans text-xs text-sand-400 mt-1">
+              Or <Price plan={PLANS.monthly} /> a month with the {PLANS.monthly.name} plan. Cancel any time.
             </p>
           </div>
           <div className="flex flex-col">
             <Link
               href="/checkout"
               onClick={() => trackEvent("upgrade_panel_click", { location, target: "checkout" })}
-              className="lesson-btn text-sm py-3 px-6 justify-center"
+              className={BTN_PRIMARY}
             >
               Get Lifetime Access
             </Link>
@@ -108,11 +122,11 @@ function PaidPitch({ paid, offer: given, location, progressLine }: Props) {
         </div>
       )}
 
-      <p className="font-body text-xs text-sand-500 mt-4">
+      <p className="font-sans text-xs text-sand-400 mt-4">
         <Link
           href="/pricing"
           onClick={() => trackEvent("upgrade_panel_click", { location, target: "pricing" })}
-          className="underline underline-offset-4 hover:text-gold-400"
+          className={`underline underline-offset-4 hover:text-cyan-400 ${FOCUS}`}
         >
           See every plan
         </Link>{" "}

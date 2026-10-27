@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/site";
 import { blogPosts } from "@/lib/blog-posts";
-import { lessons } from "@/lib/legacy-lessons";
+import { LESSONS } from "@/lib/lessons";
 
 // Static content lastmod — bump this when marketing pages (home/about/etc.)
 // are substantively edited. Using a real date beats `new Date()` because
@@ -91,12 +91,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: post.slug === "reading-your-first-cartouche" ? 0.9 : 0.7,
   }));
 
-  // Only lessons a signed-out visitor (i.e. Googlebot) can actually open.
+  // Only live lessons a signed-out visitor (i.e. Googlebot) can actually open.
   // Paid lessons 307 to /get-started via middleware, and a sitemap full of
-  // redirecting URLs is a quality signal against the whole file. Add a public
-  // lesson preview before listing them again.
-  const lessonPages: MetadataRoute.Sitemap = lessons
-    .filter((lesson) => lesson.isFree)
+  // redirecting URLs is a quality signal against the whole file. Coming-soon
+  // pages are noindex, so they stay out too.
+  const lessonPages: MetadataRoute.Sitemap = LESSONS
+    .filter((lesson) => lesson.isFree && lesson.status === "live")
     .map((lesson) => ({
       url: `${baseUrl}/lessons/${lesson.id}`,
       lastModified: LESSONS_LASTMOD,

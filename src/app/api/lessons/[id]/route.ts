@@ -2,68 +2,50 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { checkSubscription } from "@/lib/subscription";
-import { lessons, getLessonGlyphs, type Lesson, type Hieroglyph } from "@/lib/legacy-lessons";
+import { getLesson, isLive, type LiveLesson } from "@/lib/lessons";
+import type { LessonMeta } from "@/lib/lesson-types";
 import { devBypassAuth } from "@/lib/dev-bypass";
 
-const REVIEW_COUNT = 6;
+/** The catalog entry alone: what a locked or coming-soon lesson shows, never its content. */
+function metaOf(lesson: LessonMeta & { content?: unknown }): LessonMeta {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { content, ...meta } = lesson;
+  return meta;
+}
 
 /**
- * "Field Notes" — a handful of signs from *earlier* lessons to re-test at the
- * start of this one (spaced review). Random per request; none for lesson 1.
+ * GET /api/lessons/[id]
+ *   unknown id                         → 404 { error }
+ *   coming soon                        → LessonMeta (status "coming-soon", no content)
+ *   live, free / dev bypass / access   → LiveLesson (+ preview: true under dev bypass only)
+ *   live, paid, no session or access   → LessonMeta & { locked: true }, no content key
  */
-function reviewGlyphs(lesson: Lesson): Hieroglyph[] {
-  const earlier = lessons
-    .filter((l) => l.order < lesson.order)
-    .flatMap((l) => getLessonGlyphs(l));
-  // de-duplicate by symbol (the owl turns up in several lessons)
-  const seen = new Set<string>();
-  const pool = earlier.filter((g) => (seen.has(g.symbol) ? false : (seen.add(g.symbol), true)));
-  for (let i = pool.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [pool[i], pool[j]] = [pool[j], pool[i]];
-  }
-  return pool.slice(0, REVIEW_COUNT);
-}
-
-function unlockedPayload(lesson: Lesson) {
-  return {
-    ...lesson,
-    hieroglyphs: getLessonGlyphs(lesson),
-    review: reviewGlyphs(lesson),
-  };
-}
-
-export async function GET(
-  _request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const lesson = lessons.find((l) => l.id === id);
+  const lesson = getLesson(id);
 
   if (!lesson) {
     return NextResponse.json({ error: "Lesson not found" }, { status: 404 });
   }
 
-  // Free lessons are always fully accessible (and everything is, in local preview mode)
-  if (lesson.isFree || devBypassAuth()) {
-    // preview: local-only switch so the lesson flow can be walked without a session.
-    return NextResponse.json({ ...unlockedPayload(lesson), preview: devBypassAuth() });
+  if (!isLive(lesson)) {
+    return NextResponse.json(metaOf(lesson));
   }
 
-  // Paid lesson — check auth and subscription
+  // Local preview: everything opens without a session (never in production).
+  if (devBypassAuth()) {
+    return NextResponse.json({ ...lesson, preview: true } satisfies LiveLesson & { preview: true });
+  }
+
+  if (lesson.isFree) {
+    return NextResponse.json(lesson);
+  }
+
   const session = await getServerSession(authOptions);
-
-  if (!session?.user?.email) {
-    const { glyphGroups, ...metadata } = lesson;
-    return NextResponse.json({ ...metadata, locked: true });
+  const email = session?.user?.email;
+  if (!email || !(await checkSubscription(email)).active) {
+    return NextResponse.json({ ...metaOf(lesson), locked: true });
   }
 
-  const sub = await checkSubscription(session.user.email);
-
-  if (!sub.active) {
-    const { glyphGroups, ...metadata } = lesson;
-    return NextResponse.json({ ...metadata, locked: true });
-  }
-
-  return NextResponse.json(unlockedPayload(lesson));
+  return NextResponse.json(lesson);
 }
