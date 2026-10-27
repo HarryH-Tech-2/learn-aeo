@@ -44,7 +44,7 @@ export default function AuditResult({ questions, answers, onRetake, onContinue }
           const right = answers[i] === true;
           return (
             <li
-              key={q.id}
+              key={`${i}:${q.id}`}
               className={`rounded-xl border-l-2 bg-obsidian-lighter py-3 pl-4 pr-4 ${right ? "border-cyan-500" : "border-gold-500"}`}
             >
               <p className={`font-sans text-xs font-semibold uppercase tracking-[0.12em] ${right ? "text-cyan-400" : "text-gold-400"}`}>

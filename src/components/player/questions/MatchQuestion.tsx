@@ -47,8 +47,8 @@ export default function MatchQuestion({ question, locked, onChange }: QuestionIn
         <div>
           <p className="mb-2 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-sand-400">Terms</p>
           <ul className="space-y-2.5" role="list">
-            {terms.map((t) => (
-              <li key={t}>
+            {terms.map((t, i) => (
+              <li key={`${i}:${t}`}>
                 <button
                   type="button"
                   aria-pressed={selected === t}
@@ -71,7 +71,7 @@ export default function MatchQuestion({ question, locked, onChange }: QuestionIn
             {definitions.map((d, i) => {
               const owner = termFor(d);
               return (
-                <li key={d}>
+                <li key={`${i}:${d}`}>
                   <button
                     type="button"
                     disabled={locked}

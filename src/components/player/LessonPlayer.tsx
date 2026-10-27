@@ -17,6 +17,7 @@ import QuestionCard from "./QuestionCard";
 import ExampleDissect from "./ExampleDissect";
 import AuditResult, { passMark } from "./AuditResult";
 import { BTN_PRIMARY, BTN_SECONDARY, EYEBROW, FOCUS, HEADING, PROSE } from "./ui";
+import { claimXp } from "./xp";
 
 export type LessonPlayerProps = {
   lesson: LiveLesson;
@@ -63,7 +64,7 @@ function PracticeSet({
         </p>
       )}
       <QuestionCard
-        key={q.id}
+        key={`${at}:${q.id}`}
         question={q}
         mode="practice"
         onAnswered={(right) => {
@@ -95,9 +96,10 @@ function AuditRunner({ questions, onFinish }: { questions: Question[]; onFinish:
             {questions.length}.
           </p>
         )}
+        <p className="font-sans text-sm text-sand-400">Leaving the audit restarts it.</p>
       </header>
       <QuestionCard
-        key={q.id}
+        key={`${answers.length}:${q.id}`}
         question={q}
         mode="audit"
         onAnswered={(right) => {
@@ -126,14 +128,16 @@ export default function LessonPlayer({ lesson, onXP, onAuditComplete, upgrade, n
   const topRef = useRef<HTMLDivElement>(null);
   const firstRender = useRef(true);
 
-  /** Award XP once per key per sitting, so going Back and answering again earns nothing. */
+  /**
+   * Claim an XP key once per sitting, paid or not (claimXp), so going Back and
+   * answering again earns nothing, and a wrong first try stays unpaid.
+   */
   const award = useCallback(
     (key: string, xp: number) => {
-      if (awarded.current.has(key)) return;
-      awarded.current.add(key);
-      if (xp <= 0) return;
-      setSessionXp((x) => x + xp);
-      onXP(xp);
+      const paid = claimXp(awarded.current, key, xp);
+      if (paid <= 0) return;
+      setSessionXp((x) => x + paid);
+      onXP(paid);
     },
     [onXP],
   );
@@ -240,7 +244,7 @@ export default function LessonPlayer({ lesson, onXP, onAuditComplete, upgrade, n
             <PracticeSet
               key={`check-${s.group}`}
               questions={group.check}
-              onAnswered={(q, right) => right && award(`q:${q.id}`, XP_REWARDS.checkCorrect)}
+              onAnswered={(q, right) => award(`q:${q.id}`, right ? XP_REWARDS.checkCorrect : 0)}
               done={<p className={`${PROSE} text-sand-200`}>Check done. Press Next to carry on.</p>}
             />
           </section>
@@ -258,8 +262,8 @@ export default function LessonPlayer({ lesson, onXP, onAuditComplete, upgrade, n
             <PracticeSet
               key="exercise"
               questions={x.steps}
-              onAnswered={(q, right) => right && award(`q:${q.id}`, XP_REWARDS.exerciseCorrect)}
-              onFinish={(clean) => clean && award(`exercise-clean:${x.id}`, XP_REWARDS.exerciseClean)}
+              onAnswered={(q, right) => award(`q:${q.id}`, right ? XP_REWARDS.exerciseCorrect : 0)}
+              onFinish={(clean) => award(`exercise-clean:${x.id}`, clean ? XP_REWARDS.exerciseClean : 0)}
               done={
                 <div className="max-w-[68ch] rounded-xl border-l-2 border-cyan-500 bg-cyan-500/5 py-3 pl-4 pr-4">
                   <h3 className="mb-1.5 font-sans text-sm font-semibold text-cyan-400">Debrief</h3>
@@ -398,6 +402,16 @@ function Outro({
         <button type="button" className={BTN_PRIMARY} onClick={onRetake}>
           Retake the audit
         </button>
+      )}
+      {!auditAnswers && (
+        <div className="space-y-3">
+          <p className={`${PROSE} text-lg text-sand-200`}>
+            You have not taken the audit in this sitting. Take it to finish the lesson.
+          </p>
+          <button type="button" className={BTN_PRIMARY} onClick={onRetake}>
+            Take the audit
+          </button>
+        </div>
       )}
 
       <p className={PROSE}>{lesson.content.outro}</p>

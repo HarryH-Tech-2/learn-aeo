@@ -14,6 +14,7 @@ const MD_COMPONENTS: Components = {
   a: ({ href, children }) => (
     <a href={href} target="_blank" rel="noopener" className={`text-cyan-400 underline underline-offset-4 ${FOCUS}`}>
       {children}
+      <span className="sr-only"> (opens in a new tab)</span>
     </a>
   ),
 };
@@ -104,8 +105,8 @@ export default function ConceptCard({ concept, eyebrow }: Props) {
       {sources.length > 0 && (
         <Section title="Sources">
           <ul className="space-y-2 font-sans text-sm leading-relaxed">
-            {sources.map((s) => (
-              <li key={s.url}>
+            {sources.map((s, i) => (
+              <li key={`${i}:${s.url}`}>
                 <SourceLink source={s} />
               </li>
             ))}

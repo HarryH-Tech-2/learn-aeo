@@ -45,16 +45,16 @@ function correctAnswer(q: Question): ReactNode {
     case "order":
       return (
         <ol className="mt-1 list-decimal space-y-0.5 pl-5">
-          {q.items.map((it) => (
-            <li key={it}>{it}</li>
+          {q.items.map((it, i) => (
+            <li key={`${i}:${it}`}>{it}</li>
           ))}
         </ol>
       );
     case "match":
       return (
         <ul className="mt-1 space-y-0.5">
-          {q.pairs.map((p) => (
-            <li key={p.term}>
+          {q.pairs.map((p, i) => (
+            <li key={`${i}:${p.term}`}>
               <span className="font-semibold">{p.term}</span>: {p.definition}
             </li>
           ))}

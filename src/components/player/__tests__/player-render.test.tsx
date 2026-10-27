@@ -181,3 +181,20 @@ describe("Lesson 1 content", () => {
     expect(renderToStaticMarkup(<ExampleDissect example={LESSON_1.example} />)).toContain(LESSON_1.example.source.url);
   });
 });
+
+describe("claimXp", () => {
+  it("pays a key once, and a wrong first try (0 XP) still uses the key up", async () => {
+    const { claimXp } = await import("@/components/player/xp");
+    const claimed = new Set<string>();
+    // wrong first try: nothing paid, but the key is taken
+    expect(claimXp(claimed, "q:a", 0)).toBe(0);
+    // Back, Next, answer right on the remounted card: still nothing
+    expect(claimXp(claimed, "q:a", 10)).toBe(0);
+    // a right first try pays once
+    expect(claimXp(claimed, "q:b", 10)).toBe(10);
+    expect(claimXp(claimed, "q:b", 10)).toBe(0);
+    // an unclean exercise cannot be redone for the clean bonus
+    expect(claimXp(claimed, "exercise-clean:x", 0)).toBe(0);
+    expect(claimXp(claimed, "exercise-clean:x", 50)).toBe(0);
+  });
+});

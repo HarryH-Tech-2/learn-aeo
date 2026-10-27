@@ -67,10 +67,10 @@ export function displayOrder(n: number, id: string): number[] {
   );
 }
 
-/** The starting order for an order question: shuffled, and never already correct. */
-export function startingOrder(items: readonly string[], id: string): string[] {
-  const out = shuffled(items, seedFrom(id));
-  if (out.length > 1 && out.every((it, i) => it === items[i])) out.push(out.shift() as string);
+/** The starting order for an order question, as original item indices: shuffled, and never already correct. */
+export function startingOrder(n: number, id: string): number[] {
+  const out = displayOrder(n, id);
+  if (out.length > 1 && out.every((orig, i) => orig === i)) out.push(out.shift() as number);
   return out;
 }
 

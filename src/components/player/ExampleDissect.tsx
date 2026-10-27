@@ -27,7 +27,7 @@ export default function ExampleDissect({ example }: { example: DissectExample })
         <h3 className="mb-3 font-sans text-sm font-semibold text-sand-100">What to notice</h3>
         <ol className="space-y-4">
           {points.map((p, i) => (
-            <li key={p.label} className="flex gap-4">
+            <li key={`${i}:${p.label}`} className="flex gap-4">
               <span
                 className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-cyan-500/60 font-sans text-sm font-semibold text-cyan-400"
                 aria-hidden="true"
