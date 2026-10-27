@@ -153,8 +153,9 @@ describe("renderNurtureEmail", () => {
     }
   });
 
-  it("uses no words from the old course and never says 'Scholar'", () => {
-    const OLD = /base camp|scholar|academy|causeway|door\.jpg/i;
+  it("uses no words from the old course", () => {
+    // The old learner title is caught by the site-wide word ban test.
+    const OLD = /base camp|academy|causeway|door\.jpg/i;
     for (const email of allRenders()) {
       for (const part of [email.subject, email.html, email.text]) expect(part, email.key).not.toMatch(OLD);
     }

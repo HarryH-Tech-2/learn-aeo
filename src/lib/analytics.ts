@@ -9,7 +9,7 @@
  * Conversion events (mark these as Key events in GA4 → Admin → Events):
  *   sign_up          — account creation started on /get-started (method: google | email)
  *   login            — returning sign-in on /login (method)
- *   lesson_complete  — Site Report submitted at the end of a lesson (lesson_id, score, total)
+ *   lesson_complete  — audit submitted at the end of a lesson (lesson_id, score, total)
  *   begin_checkout   — Stripe Checkout session requested (value, currency)
  *   purchase         — landed on /dashboard?checkout=success (transaction_id, value, currency)
  *

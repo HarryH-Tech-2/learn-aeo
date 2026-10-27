@@ -100,7 +100,7 @@ describe("POST /api/stripe/create-checkout (authenticated)", () => {
 
   it("creates a checkout session with user email for signed-in users", async () => {
     mockedGetServerSession.mockResolvedValue({
-      user: { email: "scholar@example.com" },
+      user: { email: "learner@example.com" },
     });
 
     const response = await POST(new NextRequest("http://localhost/api/stripe/create-checkout", { method: "POST" }));
@@ -112,7 +112,7 @@ describe("POST /api/stripe/create-checkout (authenticated)", () => {
 
     const args = mockCreate.mock.calls[0][0];
     expect(args.mode).toBe("payment");
-    expect(args.customer_email).toBe("scholar@example.com");
+    expect(args.customer_email).toBe("learner@example.com");
     expect(args.line_items[0].price).toBe("price_test123");
     expect(args.line_items[0].quantity).toBe(1);
     expect(args.success_url).toContain("/dashboard?checkout=success");
@@ -124,7 +124,7 @@ describe("POST /api/stripe/create-checkout (authenticated)", () => {
 
   it("builds return links without a double slash when NEXTAUTH_URL ends in /", async () => {
     process.env.NEXTAUTH_URL = "https://test.example.com/";
-    mockedGetServerSession.mockResolvedValue({ user: { email: "scholar@example.com" } } as any);
+    mockedGetServerSession.mockResolvedValue({ user: { email: "learner@example.com" } } as any);
 
     await POST(new NextRequest("http://localhost/api/stripe/create-checkout", { method: "POST" }));
 
@@ -135,7 +135,7 @@ describe("POST /api/stripe/create-checkout (authenticated)", () => {
 
   it("returns 500 when Stripe throws an error", async () => {
     mockedGetServerSession.mockResolvedValue({
-      user: { email: "scholar@example.com" },
+      user: { email: "learner@example.com" },
     });
     mockCreate.mockRejectedValueOnce(new Error("Stripe API down"));
 

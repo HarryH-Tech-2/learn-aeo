@@ -189,7 +189,7 @@ export const LESSON_3: LessonContent = {
         },
         {
           kind: "choice",
-          id: "q-g1-pyramid",
+          id: "q-g1-inverted-pyramid",
           prompt: "According to Nielsen Norman Group, what goes first in an inverted-pyramid piece of writing?",
           options: [
             "The most important information, which might even be the conclusion",
@@ -631,7 +631,7 @@ export const LESSON_3: LessonContent = {
     },
     {
       kind: "order",
-      id: "a-order-pyramid",
+      id: "a-order-inverted-pyramid",
       prompt: "Put the parts of an answer-first section in inverted-pyramid order, most important first.",
       items: [
         "A one- or two-sentence direct answer to the question",

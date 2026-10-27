@@ -16,7 +16,7 @@ export default function ThemeToggle() {
       {/* key={theme} remounts the icon so the CSS spin-in replays on toggle */}
       <div key={theme} className="icon-spin-in">
         {isLight ? (
-          /* Sun — Ra's disc */
+          /* Sun icon: shown in light mode */
           <svg
             className="w-[18px] h-[18px] text-gold-500 group-hover:text-gold-400 transition-colors"
             viewBox="0 0 24 24"

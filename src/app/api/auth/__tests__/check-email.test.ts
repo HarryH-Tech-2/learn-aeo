@@ -52,12 +52,12 @@ describe("POST /api/auth/check-email", () => {
   it("returns provider: 'google' for existing Google users", async () => {
     mockFindUnique.mockResolvedValue({
       id: "u1",
-      email: "scholar@example.com",
+      email: "learner@example.com",
       accounts: [{ provider: "google" }],
     });
 
     const res = await POST(
-      makeRequest({ email: "scholar@example.com" }) as never
+      makeRequest({ email: "learner@example.com" }) as never
     );
     const data = await res.json();
 
@@ -67,12 +67,12 @@ describe("POST /api/auth/check-email", () => {
   it("returns provider: 'email' for existing email-only users", async () => {
     mockFindUnique.mockResolvedValue({
       id: "u2",
-      email: "scholar@example.com",
+      email: "learner@example.com",
       accounts: [],
     });
 
     const res = await POST(
-      makeRequest({ email: "scholar@example.com" }) as never
+      makeRequest({ email: "learner@example.com" }) as never
     );
     const data = await res.json();
 
@@ -82,10 +82,10 @@ describe("POST /api/auth/check-email", () => {
   it("normalizes email to lowercase and trims", async () => {
     mockFindUnique.mockResolvedValue(null);
 
-    await POST(makeRequest({ email: "  Scholar@Example.COM  " }) as never);
+    await POST(makeRequest({ email: "  Learner@Example.COM  " }) as never);
 
     expect(mockFindUnique).toHaveBeenCalledWith({
-      where: { email: "scholar@example.com" },
+      where: { email: "learner@example.com" },
       include: { accounts: true },
     });
   });

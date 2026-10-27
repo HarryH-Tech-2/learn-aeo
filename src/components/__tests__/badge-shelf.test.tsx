@@ -3,7 +3,8 @@ import { renderToStaticMarkup } from "react-dom/server";
 import BadgeShelf, { getHowToEarn } from "@/components/BadgeShelf";
 import { BADGE_DEFINITIONS } from "@/lib/gamification";
 
-const OLD = /temple|site report|matching game/i;
+// Old-theme place words are caught by the site-wide word ban test.
+const OLD = /site report|matching game/i;
 
 describe("BadgeShelf", () => {
   it.each(BADGE_DEFINITIONS.map((b) => [b.criteria] as const))("has a specific hint for %s", (criteria) => {

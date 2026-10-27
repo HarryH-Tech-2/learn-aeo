@@ -4,9 +4,8 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
 /**
- * GET  /api/game-state?game=decipher   → { state } (null when nothing saved)
- * PUT  /api/game-state  { game, state } → { state }   (replaces; the client
- *      merges local + remote before sending, see src/lib/decipher.ts)
+ * GET  /api/game-state?game=<slug>     → { state } (null when nothing saved)
+ * PUT  /api/game-state  { game, state } → { state }   (replaces what was saved)
  *
  * Signed-in users only. `game` is a short slug; `state` is an arbitrary
  * JSON object capped at 16 KB so a bug can't fill the table.

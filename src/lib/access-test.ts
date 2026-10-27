@@ -8,7 +8,7 @@
  *
  * Visitors, not accounts, are split (2026-10-23): the middleware gives each new visitor a group in the aeo_access cookie
  * (90 days; crawlers get none), so the free group sees the course as free BEFORE signing up: pricing, lesson and game
- * paywalls, the translator and the sign-up card say "free with an account" (useFreeCourseGuest), and anyone in it who
+ * paywalls and the sign-up card say "free with an account" (useFreeCourseGuest), and anyone in it who
  * reaches checkout is sent to the dashboard. Signing up copies the cookie's group onto the account (no cookie: a fresh
  * draw while the test is on). The cookie's group is honoured even after the test is switched off.
  * GA4: the gtag set-up in layout.tsx sends the cookie as the user property access_test, so sign-up rates split too.
