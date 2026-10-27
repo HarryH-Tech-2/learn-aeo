@@ -21,6 +21,7 @@ import Leaderboard from "@/components/Leaderboard";
 import { planById, PLANS } from "@/lib/plans";
 import HeardAboutCard from "@/components/HeardAboutCard";
 import { fetchJson } from "@/lib/fetch-json";
+import { CERTIFICATE } from "@/lib/certificate";
 
 type Progress = {
   lessons: Record<string, { started: boolean; bestScore: number | null; completed: boolean }>;
@@ -351,7 +352,7 @@ function DashboardInner() {
           <div className="relative">
             {/* Preview thumbnail — A4 landscape aspect so the whole cert fits */}
             <div
-              className={`relative mx-auto w-full max-w-2xl aspect-[1.414/1] border overflow-hidden bg-sand-100 transition-all duration-500 ${
+              className={`relative mx-auto w-full max-w-2xl aspect-[1.414/1] border overflow-hidden bg-obsidian transition-all duration-500 ${
                 allCompleted
                   ? "border-gold-700/40 shadow-[0_0_40px_rgba(212,168,50,0.15)]"
                   : "border-gold-700/20"
@@ -359,7 +360,7 @@ function DashboardInner() {
               style={{ containerType: "inline-size" }}
             >
               <img
-                src="/certificate-template.webp"
+                src={CERTIFICATE.src}
                 alt="Certificate of completion preview"
                 loading="lazy"
                 decoding="async"
@@ -369,21 +370,20 @@ function DashboardInner() {
                 style={{ imageRendering: "auto" }}
               />
 
-              {/* Recipient name — centred on the template's blank line (61.5% across,
-                  baseline at 57% down). Keep in sync with the canvas render on /certificate.
-                  Sized with container-query units so it scales with the thumbnail. */}
+              {/* Recipient name on the template's name line (CERTIFICATE, shared with the canvas
+                  render on /certificate). Sized with container-query units so it scales. */}
               <span
                 aria-hidden="true"
-                className={`absolute whitespace-nowrap font-bold pointer-events-none select-none transition-opacity duration-500 ${
+                className={`absolute whitespace-nowrap pointer-events-none select-none transition-opacity duration-500 ${
                   allCompleted ? "opacity-100" : "opacity-60"
                 }`}
                 style={{
-                  left: "61.5%",
-                  top: "57%",
+                  left: `${CERTIFICATE.nameX * 100}%`,
+                  top: `${CERTIFICATE.nameY * 100}%`,
                   transform: "translate(-50%, -100%)",
-                  fontFamily: "Georgia, serif",
-                  fontSize: "4.6cqw",
-                  color: "#1a1a1a",
+                  fontFamily: CERTIFICATE.nameFont,
+                  fontSize: `${CERTIFICATE.nameSize * 100}cqw`,
+                  color: CERTIFICATE.nameColour,
                 }}
               >
                 {session.user?.name || "Learner"}
@@ -398,7 +398,7 @@ function DashboardInner() {
                     </p>
                     <p className="font-body text-sm text-sand-100 max-w-sm mx-auto">
                       Complete all {LESSON_CATALOG.length} lessons to unlock your
-                      personalized certificate.
+                      personalised certificate.
                     </p>
                   </div>
                 </div>

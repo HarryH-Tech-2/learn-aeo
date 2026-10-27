@@ -12,9 +12,9 @@ describe("toDisplayName", () => {
   it("keeps a single name as-is", () => {
     expect(toDisplayName("Cleopatra")).toBe("Cleopatra");
   });
-  it("falls back to Scholar for empty/null", () => {
-    expect(toDisplayName(null)).toBe("Scholar");
-    expect(toDisplayName("   ")).toBe("Scholar");
+  it("falls back to Learner for empty/null", () => {
+    expect(toDisplayName(null)).toBe("Learner");
+    expect(toDisplayName("   ")).toBe("Learner");
   });
 });
 

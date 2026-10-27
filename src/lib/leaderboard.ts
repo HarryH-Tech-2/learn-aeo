@@ -22,11 +22,11 @@ export type Leaderboard = {
 
 /**
  * Public-safe display name: first name + last initial ("Harry H."), never the
- * email. Falls back to "Scholar" so unnamed OAuth accounts still appear.
+ * email. Falls back to "Learner" so unnamed OAuth accounts still appear.
  */
 export function toDisplayName(name: string | null | undefined): string {
   const parts = (name ?? "").trim().split(/\s+/).filter(Boolean);
-  if (parts.length === 0) return "Scholar";
+  if (parts.length === 0) return "Learner";
   if (parts.length === 1) return parts[0];
   return `${parts[0]} ${parts[parts.length - 1][0].toUpperCase()}.`;
 }

@@ -15,30 +15,27 @@ type Props = { badges: Badge[] };
 
 type BadgeDef = (typeof BADGE_DEFINITIONS)[number];
 
-function getHowToEarn(criteria: string): string {
+export function getHowToEarn(criteria: string): string {
   if (criteria.startsWith("complete:")) {
-    return "Complete this lesson in the Temple of Thoth to earn this badge.";
+    return "Finish this district's lesson and pass its audit to earn this badge.";
   }
-  if (criteria === "perfect-report") {
-    return "Score 100% on any Site Report at the end of a lesson.";
-  }
-  if (criteria === "sharp-memory") {
-    return "Clear a matching game inside a lesson without a single miss.";
+  if (criteria === "perfect-audit") {
+    return "Answer every question right in the audit at the end of a lesson.";
   }
   if (criteria.startsWith("streak:")) {
     const days = criteria.split(":")[1];
-    return `Complete at least one lesson each day for ${days} days in a row.`;
+    return `Pass a lesson audit on ${days} days in a row.`;
   }
-  if (criteria === "milestone:first-glyph") {
-    return "Study your very first hieroglyph. It unlocks after your first lesson.";
+  if (criteria === "milestone:first-lesson") {
+    return "Start your first lesson and take the audit at its end.";
   }
-  if (criteria === "milestone:30-glyphs") {
-    return "Study at least 30 different hieroglyphs across your lessons.";
+  if (criteria === "milestone:half-city") {
+    return "Complete 4 of the 8 districts.";
   }
-  if (criteria === "milestone:all-glyphs") {
-    return "Complete every lesson in the Temple of Thoth.";
+  if (criteria === "milestone:all-districts") {
+    return "Complete every district in the City of Answers.";
   }
-  return "Keep exploring lessons to unlock this badge.";
+  return "Keep working through the lessons to unlock this badge.";
 }
 
 export default function BadgeShelf({ badges }: Props) {

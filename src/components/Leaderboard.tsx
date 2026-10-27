@@ -15,8 +15,6 @@ type Props = {
   heading?: string;
 };
 
-const MEDALS = ["𓋹", "𓆣", "𓅓"]; // ankh, scarab, owl — 1st/2nd/3rd
-
 /** Gold, silver, bronze for the podium. */
 // Mid-tone metals so they read on both the dark and the parchment theme.
 const PODIUM: { row: string; rank: string; xp: string }[] = [
@@ -27,7 +25,6 @@ const PODIUM: { row: string; rank: string; xp: string }[] = [
 
 function Row({ e, index }: { e: LeaderboardEntry; index: number }) {
   const podium = e.rank <= 3 ? PODIUM[e.rank - 1] : null;
-  const medal = podium ? MEDALS[e.rank - 1] : null;
   return (
     <motion.li
       initial={{ opacity: 0, y: 8 }}
@@ -43,9 +40,12 @@ function Row({ e, index }: { e: LeaderboardEntry; index: number }) {
       aria-current={e.isYou ? "true" : undefined}
     >
       <span className={`font-display text-lg tabular-nums flex items-center gap-1 ${podium ? podium.rank : "text-gold-400"}`}>
-        {medal ? (
-          <span className="text-xl" style={{ fontFamily: "'Noto Sans Egyptian Hieroglyphs', serif" }} title={`Rank ${e.rank}`}>
-            {medal}
+        {podium ? (
+          <span
+            className="w-7 h-7 rounded-full border border-current flex items-center justify-center text-base"
+            title={`Rank ${e.rank}`}
+          >
+            {e.rank}
           </span>
         ) : (
           <span className="text-sand-400 text-base">{e.rank}</span>
@@ -132,7 +132,7 @@ export default function Leaderboard({ limit = 10, showFullLink = false, heading 
 
       {data && data.entries.length === 0 && (
         <p className="font-body text-sm text-sand-400">
-          No one has earned XP yet. Finish a sign group and you&apos;ll be first on the wall.
+          No one has earned XP yet. Read your first concept card and you&apos;ll be top of the board.
         </p>
       )}
 
@@ -154,7 +154,7 @@ export default function Leaderboard({ limit = 10, showFullLink = false, heading 
 
       {data && data.you && data.you.xp === 0 && (
         <p className="font-body text-xs text-sand-500 mt-4">
-          Earn your first XP in <Link href={FIRST_LESSON_PATH} className="text-gold-500 hover:text-gold-400">How answer engines choose sources</Link> to take a place on the wall.
+          Earn your first XP in <Link href={FIRST_LESSON_PATH} className="text-gold-500 hover:text-gold-400">How answer engines choose sources</Link> to take a place on the board.
         </p>
       )}
 

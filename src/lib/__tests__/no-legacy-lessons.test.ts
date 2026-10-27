@@ -78,8 +78,7 @@ describe("legacy lesson system is gone", () => {
       .filter((f) => ids.test(fs.readFileSync(f, "utf8")))
       .map(rel)
       .filter((f) => f !== self && !generic.includes(f));
-    // Plan 3 renames the badge criteria; this is the one allowed exception.
-    expect(hits).toEqual(["src/lib/gamification.ts"]);
+    expect(hits).toEqual([]);
   });
 
   it("new lesson system has no hieroglyph wording", () => {

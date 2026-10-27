@@ -26,9 +26,9 @@ export async function POST(request: Request) {
     }
   }
 
-  // Perfect report badge
+  // Perfect audit badge
   if (score === total) {
-    const perfectBadge = await prisma.badge.findFirst({ where: { criteria: "perfect-report" } });
+    const perfectBadge = await prisma.badge.findFirst({ where: { criteria: "perfect-audit" } });
     if (perfectBadge) {
       const existing = await prisma.userBadge.findUnique({
         where: { userId_badgeId: { userId: user.id, badgeId: perfectBadge.id } },
@@ -65,9 +65,9 @@ export async function POST(request: Request) {
   const completedCount = allProgress.filter((p) => p.completed).length;
 
   const milestones = [
-    { criteria: "milestone:first-glyph", check: startedCount >= 1 },
-    { criteria: "milestone:30-glyphs", check: completedCount >= 4 },
-    { criteria: "milestone:all-glyphs", check: completedCount >= 8 },
+    { criteria: "milestone:first-lesson", check: startedCount >= 1 },
+    { criteria: "milestone:half-city", check: completedCount >= 4 },
+    { criteria: "milestone:all-districts", check: completedCount >= 8 },
   ];
 
   for (const m of milestones) {

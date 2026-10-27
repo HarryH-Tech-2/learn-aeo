@@ -7,7 +7,7 @@ import Leaderboard from "@/components/Leaderboard";
 export const metadata: Metadata = {
   title: "Leaderboard | Learn AEO",
   description:
-    "See how your hieroglyphics study compares. The leaderboard ranks every scholar by XP earned across lessons, quick checks and the 3D games.",
+    "See how your answer engine optimisation study compares. The leaderboard ranks learners by XP earned from concept cards, quick checks, exercises and lesson audits.",
   alternates: {
     canonical: absoluteUrl("/leaderboard"),
   },
@@ -20,18 +20,17 @@ export default function LeaderboardPage() {
       <div className="max-w-3xl mx-auto px-6 lg:px-8 pt-28 pb-20 flex-1 w-full">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <span className="text-2xl">𓏞</span>
             <span className="font-body text-xs tracking-[0.2em] uppercase text-gold-500">Leaderboard</span>
           </div>
           <h1 className="font-display text-4xl md:text-5xl font-light text-sand-100 mb-2">
-            Who reads the <span className="text-gradient-gold font-medium">most</span>?
+            Who knows the <span className="text-gradient-gold font-medium">city</span> best?
           </h1>
           <p className="font-body text-sand-500 font-light">
-            XP comes from every sign studied, every quick check passed, every Site Report and every game played.
+            XP comes from every concept card you read, every quick check and exercise you get right, and every audit answer.
             Names are shown as first name and last initial.
           </p>
         </div>
-        <Leaderboard limit={50} heading="Top 50 scholars" />
+        <Leaderboard limit={50} heading="Top 50 learners" />
       </div>
       <Footer />
     </div>

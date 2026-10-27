@@ -8,6 +8,7 @@ import { useAuthModal } from "@/components/AuthModal";
 import Navbar from "@/components/Navbar";
 import { LESSON_CATALOG } from "@/lib/lesson-catalog";
 import { fetchJson } from "@/lib/fetch-json";
+import { CERTIFICATE } from "@/lib/certificate";
 
 export default function CertificateContent() {
   const { data: session, status, update } = useSession();
@@ -64,21 +65,21 @@ export default function CertificateContent() {
         canvas.height = img.height;
         ctx.drawImage(img, 0, 0);
 
-        // Draw the user's name centred on the template's blank "awarded to" line.
-        // Keep these coordinates in sync with the dashboard certificate preview.
+        // Draw the user's name centred on the template's gold name line (CERTIFICATE, shared
+        // with the dashboard preview).
         ctx.textAlign = "center";
-        ctx.fillStyle = "#1a1a1a";
+        ctx.fillStyle = CERTIFICATE.nameColour;
         // (a long name is set smaller until it fits the line)
-        let size = Math.round(img.width * 0.046);
-        const maxWidth = img.width * 0.5;
+        let size = Math.round(img.width * CERTIFICATE.nameSize);
+        const maxWidth = img.width * CERTIFICATE.nameMaxWidth;
         do {
-          ctx.font = `bold ${size}px Georgia, serif`;
+          ctx.font = `${size}px ${CERTIFICATE.nameFont}`;
         } while (ctx.measureText(userName).width > maxWidth && --size > 12);
-        ctx.fillText(userName, img.width * 0.615, img.height * 0.57);
+        ctx.fillText(userName, img.width * CERTIFICATE.nameX, img.height * CERTIFICATE.nameY);
 
         setImageDataUrl(canvas.toDataURL("image/png"));
       };
-      img.src = "/certificate-template.webp";
+      img.src = CERTIFICATE.src;
     }
   }, [allCompleted, userName]);
 
