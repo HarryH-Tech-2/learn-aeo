@@ -16,17 +16,8 @@ vi.mock("@/lib/dev-bypass", () => ({
   devBypassAuth: vi.fn(() => false),
 }));
 
-// Lessons 2-8 are coming soon for now, so a paid *live* lesson is made here: lesson 2's
-// catalog entry with lesson 1's content attached.
-const { PAID_ID } = vi.hoisted(() => ({ PAID_ID: "make-your-site-reachable-by-ai" }));
-vi.mock("@/lib/lessons", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@/lib/lessons")>();
-  const lesson1 = actual.LESSONS[0] as import("@/lib/lessons").LiveLesson;
-  const paidMeta = actual.LESSONS.find((l) => l.id === PAID_ID)!;
-  const paid = { ...paidMeta, status: "live" as const, content: lesson1.content };
-  const lessons = actual.LESSONS.map((l) => (l.id === PAID_ID ? paid : l));
-  return { ...actual, LESSONS: lessons, getLesson: (id: string) => lessons.find((l) => l.id === id) };
-});
+// Lesson 2 is a live paid lesson, so the paid cases use it directly.
+const PAID_ID = "make-your-site-reachable-by-ai";
 
 import { GET } from "@/app/api/lessons/[id]/route";
 import { getServerSession } from "next-auth";

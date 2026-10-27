@@ -113,7 +113,7 @@ export default function Leaderboard({ limit = 10, showFullLink = false, heading 
               </>
             ) : (
               <>
-                {data.totalRanked} scholar{data.totalRanked === 1 ? "" : "s"} ranked
+                {data.totalRanked} learner{data.totalRanked === 1 ? "" : "s"} ranked
               </>
             )}
           </p>
@@ -154,7 +154,7 @@ export default function Leaderboard({ limit = 10, showFullLink = false, heading 
 
       {data && data.you && data.you.xp === 0 && (
         <p className="font-body text-xs text-sand-500 mt-4">
-          Earn your first XP in <Link href={FIRST_LESSON_PATH} className="text-gold-500 hover:text-gold-400">The Expedition Begins</Link> to take a place on the wall.
+          Earn your first XP in <Link href={FIRST_LESSON_PATH} className="text-gold-500 hover:text-gold-400">How answer engines choose sources</Link> to take a place on the wall.
         </p>
       )}
 

@@ -5,7 +5,7 @@ import { blankCount } from "@/lib/questions";
 import { AUDIT_LENGTH } from "@/lib/gamification";
 import type { LessonContent, Question, Source } from "@/lib/lesson-types";
 
-const BANNED = /\b(hieroglyph\w*|egypt\w*|pharaoh\w*|papyr\w*|scribes?|glyphs?|tombs?|cartouches?|expeditions?)\b/i;
+const BANNED = /\b(hieroglyph\w*|egypt\w*|pharaoh\w*|papyr\w*|scribes?|glyphs?|tombs?|cartouches?|expeditions?|chambers?|dig|digs|digging|ankhs?)\b/i;
 
 function allQuestions(c: LessonContent): Question[] {
   return [...c.groups.flatMap((g) => g.check), ...c.exercise.steps, ...c.audit];
@@ -63,6 +63,10 @@ describe("banned-word pattern", () => {
     expect("describe the subscribe button").not.toMatch(BANNED);
     expect("an Egyptian scribe").toMatch(BANNED);
     expect("Hieroglyphs").toMatch(BANNED);
+    expect("a digital digest of the indigo prodigy").not.toMatch(BANNED);
+    expect("the dig site").toMatch(BANNED);
+    expect("the burial chamber").toMatch(BANNED);
+    expect("an ankh").toMatch(BANNED);
   });
 });
 
