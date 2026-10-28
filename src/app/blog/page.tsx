@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { blogPosts } from "@/lib/blog-posts";
 import { SITE as SITE_CONFIG } from "@/lib/site";
 import BlogContent from "./BlogContent";
+import JsonLd from "@/components/JsonLd";
+import { blogCollectionSchema, breadcrumbSchema } from "@/lib/schema";
 import { countWords, stripMarkdown } from "./blog-text";
 
 const SITE = SITE_CONFIG.url;
@@ -73,74 +75,27 @@ export const metadata: Metadata = {
 };
 
 export default function BlogPage() {
-  const publisher = {
-    "@type": "Organization",
-    "@id": `${SITE}/#organization`,
-    name: "Learn AEO",
-    url: SITE,
-    logo: { "@type": "ImageObject", url: `${SITE}/favicon.png` },
-  };
-
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: SITE },
-      { "@type": "ListItem", position: 2, name: "Blog", item: BLOG_URL },
-    ],
-  };
-
-  // CollectionPage (the URL) whose main entity is the Blog (the publication).
-  // Each BlogPosting here is a summary; the full node lives on the post page
-  // and shares the same @id so the graph links up.
-  const collectionJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "@id": BLOG_URL,
-    url: BLOG_URL,
-    name: `${BLOG_NAME}: Answer Engine Optimization Articles`,
+  // CollectionPage (the URL) whose main entity is the Blog (the publication). Each BlogPosting here
+  // is a summary; the full node lives on the post page and shares the same @id so the graph links up.
+  const collection = blogCollectionSchema({
     description: BLOG_DESCRIPTION,
-    inLanguage: "en",
-    isPartOf: { "@type": "WebSite", "@id": `${SITE}/#website`, url: SITE, name: SITE_CONFIG.name },
-    dateModified: latestModified,
-    publisher,
-    mainEntity: {
-      "@type": "Blog",
-      "@id": `${BLOG_URL}#blog`,
-      name: BLOG_NAME,
-      url: BLOG_URL,
-      description: BLOG_DESCRIPTION,
-      inLanguage: "en",
-      publisher,
-      blogPost: sortedPosts.map((post) => ({
-        "@type": "BlogPosting",
-        "@id": `${SITE}/blog/${post.slug}#article`,
-        url: `${SITE}/blog/${post.slug}`,
-        mainEntityOfPage: `${SITE}/blog/${post.slug}`,
-        headline: post.title,
-        description: post.excerpt,
-        abstract: stripMarkdown(post.quickAnswer),
-        articleSection: post.category,
-        wordCount: countWords(post.content),
-        datePublished: post.publishedAt,
-        dateModified: post.updatedAt ?? post.publishedAt,
-        image: `${SITE}${post.image}`,
-        publisher,
-        isAccessibleForFree: true,
-      })),
-    },
-  };
+    dateModified: latestModified ?? null,
+    posts: sortedPosts.map((post) => ({
+      url: `${SITE}/blog/${post.slug}`,
+      title: post.title,
+      description: post.excerpt,
+      abstract: stripMarkdown(post.quickAnswer),
+      section: post.category,
+      wordCount: countWords(post.content),
+      datePublished: post.publishedAt,
+      dateModified: post.updatedAt ?? post.publishedAt,
+      image: `${SITE}${post.image}`,
+    })),
+  });
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
-      />
+      <JsonLd data={[breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Blog", path: "/blog" }]), collection]} />
       <BlogContent posts={summaries} />
     </>
   );

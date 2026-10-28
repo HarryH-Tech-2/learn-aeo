@@ -6,6 +6,8 @@ import { reveal } from "@/components/reveal";
 import { useFreeCourseGuest } from "@/components/useFreeCourseGuest";
 import { PLANS, formatPlanPrice } from "@/lib/plans";
 import { LESSON_CATALOG, titleMidSentence } from "@/lib/lesson-catalog";
+import JsonLd from "@/components/JsonLd";
+import { faqSchema } from "@/lib/schema";
 
 // What the free-unlock test's free group reads instead (src/lib/access-test.ts); the FAQ schema keeps the real answer.
 const FREE_PRICING_ANSWER =
@@ -163,24 +165,7 @@ export default function FAQSection() {
           })}
         </div>
 
-        {/* JSON-LD structured data for SEO */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              mainEntity: faqs.map((faq) => ({
-                "@type": "Question",
-                name: faq.question,
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: faq.answer,
-                },
-              })),
-            }),
-          }}
-        />
+        <JsonLd data={faqSchema(faqs)} />
       </InView>
     </section>
   );

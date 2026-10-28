@@ -1,10 +1,11 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
-import { SITE } from "@/lib/site";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import JsonLd from "@/components/JsonLd";
+import { breadcrumbSchema } from "@/lib/schema";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -122,28 +123,7 @@ const sections: { id: string; title: string; content: ContentBlock[] }[] = [
 export default function PrivacyContent() {
   return (
     <main className="grain-overlay">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              {
-                "@type": "ListItem",
-                position: 1,
-                name: "Home",
-                item: SITE.url,
-              },
-              {
-                "@type": "ListItem",
-                position: 2,
-                name: "Privacy Policy",
-              },
-            ],
-          }),
-        }}
-      />
+      <JsonLd data={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Privacy Policy", path: "/privacy" }])} />
       <Navbar />
 
       {/* Header */}

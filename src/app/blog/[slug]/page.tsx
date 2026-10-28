@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { getPostBySlug, blogPosts } from "@/lib/blog-posts";
 import { SITE as SITE_CONFIG } from "@/lib/site";
 import BlogPostContent from "./BlogPostContent";
+import JsonLd from "@/components/JsonLd";
+import { blogPostingSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { ArticleBody, QuickAnswer } from "./PostBody";
 import { extractH2s, withInBodyLinks } from "../blog-text";
 import { countWords, readingMinutes, stripMarkdown } from "../blog-text";
@@ -12,16 +14,6 @@ const BRAND_SUFFIX = " | Learn AEO";
 /** Google shows roughly 60 characters of a title; only brand it when it still fits. */
 const MAX_TITLE_LENGTH = 60;
 
-const PUBLISHER = {
-  "@type": "Organization",
-  "@id": `${SITE}/#organization`,
-  name: "Learn AEO",
-  url: SITE,
-  logo: {
-    "@type": "ImageObject",
-    url: `${SITE}/favicon.png`,
-  },
-} as const;
 
 function seoTitle(title: string): string {
   return title.length + BRAND_SUFFIX.length <= MAX_TITLE_LENGTH
@@ -113,98 +105,34 @@ export default async function BlogPostPage({
   const content = withInBodyLinks(post.content);
   const imageUrl = `${SITE}${post.image}`;
 
-  const articleJsonLd = {
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "@id": `${canonical}#article`,
-        url: canonical,
-        headline: post.title,
-        name: post.title,
-        description: post.excerpt,
-        // Answer-first summary — the passage AI assistants and featured snippets can lift verbatim.
-        abstract: stripMarkdown(post.quickAnswer),
-        image: {
-          "@type": "ImageObject",
-          url: imageUrl,
-          width: 1024,
-          height: 1024,
-          caption: post.imageAlt,
-        },
-        datePublished: post.publishedAt,
-        dateModified: post.updatedAt ?? post.publishedAt,
-        mainEntityOfPage: {
-          "@type": "WebPage",
-          "@id": canonical,
-        },
-        publisher: PUBLISHER,
-        isPartOf: {
-          "@type": "Blog",
-          "@id": `${SITE}/blog#blog`,
-          name: "The Learn AEO Blog",
-          url: `${SITE}/blog`,
-        },
-        articleSection: post.category,
-        keywords: [
-          post.category,
-          "answer engine optimization",
-          "AEO",
-          "AI search",
-        ].join(", "),
-        wordCount: countWords(content),
-        timeRequired: `PT${readingMinutes(content)}M`,
-        inLanguage: "en",
-        isAccessibleForFree: true,
-        // The quick-answer block is the passage a voice assistant should read aloud.
-        // Both selectors exist in BlogPostContent.tsx.
-        speakable: {
-          "@type": "SpeakableSpecification",
-          cssSelector: ["#quick-answer-text", "h1"],
-        },
-      };
-
-  const faqJsonLd =
+  const article = blogPostingSchema({
+    url: canonical,
+    title: post.title,
+    description: post.excerpt,
+    abstract: stripMarkdown(post.quickAnswer),
+    image: { url: imageUrl, width: 1024, height: 1024, caption: post.imageAlt },
+    datePublished: post.publishedAt,
+    dateModified: post.updatedAt ?? post.publishedAt,
+    section: post.category,
+    wordCount: countWords(content),
+    minutes: readingMinutes(content),
+  });
+  const faq =
     post.faqs.length > 0
-      ? {
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          "@id": `${canonical}#faq`,
-          mainEntity: post.faqs.map((f) => ({
-            "@type": "Question",
-            name: stripMarkdown(f.question),
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: stripMarkdown(f.answer),
-            },
-          })),
-        }
+      ? faqSchema(
+          post.faqs.map((f) => ({ question: stripMarkdown(f.question), answer: stripMarkdown(f.answer) })),
+          `${canonical}#faq`
+        )
       : null;
-
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: SITE },
-      { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE}/blog` },
-      { "@type": "ListItem", position: 3, name: post.title, item: canonical },
-    ],
-  };
+  const breadcrumbs = breadcrumbSchema([
+    { name: "Home", path: "/" },
+    { name: "Blog", path: "/blog" },
+    { name: post.title, path: `/blog/${slug}` },
+  ]);
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
-      />
-      {faqJsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
-      )}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
+      <JsonLd data={faq ? [article, faq, breadcrumbs] : [article, breadcrumbs]} />
       <BlogPostContent
         post={{
           slug: post.slug,

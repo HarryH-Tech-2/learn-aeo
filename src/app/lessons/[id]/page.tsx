@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import { SITE, absoluteUrl } from "@/lib/site";
+import { absoluteUrl } from "@/lib/site";
 import { Suspense } from "react";
 import { LESSON_CATALOG, lessonMeta, lessonPath } from "@/lib/lesson-catalog";
 import LessonContent from "./LessonContent";
+import JsonLd from "@/components/JsonLd";
+import { learningResourceSchema } from "@/lib/schema";
 
 // Only the catalog's lessons exist: any other id is a real 404, not an empty shell.
 export const dynamicParams = false;
@@ -60,38 +62,7 @@ export default async function LessonPage({
   return (
     <>
       {lesson?.status === "live" && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "LearningResource",
-              name: lesson.title,
-              description: lesson.description,
-              url: absoluteUrl(lessonPath(lesson.id)),
-              educationalLevel: lesson.level,
-              learningResourceType: "Lesson",
-              timeRequired: `PT${lesson.minutes}M`,
-              inLanguage: "en",
-              isAccessibleForFree: lesson.isFree,
-              provider: {
-                "@type": "Organization",
-                name: "Learn AEO",
-                url: SITE.url,
-              },
-              isPartOf: {
-                "@type": "Course",
-                name: "Learn AEO",
-                url: SITE.url,
-                provider: {
-                  "@type": "Organization",
-                  name: "Learn AEO",
-                  url: SITE.url,
-                },
-              },
-            }),
-          }}
-        />
+        <JsonLd data={learningResourceSchema(lesson)} />
       )}
       <Suspense>
         <LessonContent />

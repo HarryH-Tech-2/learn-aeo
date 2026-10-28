@@ -31,6 +31,8 @@ vi.mock("next/navigation", () => ({
 import BlogPostPage, { generateStaticParams } from "@/app/blog/[slug]/page";
 import { ArticleBody, QuickAnswer } from "@/app/blog/[slug]/PostBody";
 import { extractH2s, withInBodyLinks, IN_BODY_LINKS_MD } from "@/app/blog/blog-text";
+import JsonLd from "@/components/JsonLd";
+import { ORG_ID } from "@/lib/schema";
 
 describe("blog post page", () => {
   it("calls notFound() for an unknown slug", async () => {
@@ -46,13 +48,13 @@ describe("blog post page", () => {
       children: ReactElement<Record<string, unknown>>[];
     }>;
     const kids = el.props.children.flat().filter(Boolean);
-    const ld = kids
-      .filter((k) => k.type === "script")
-      .map((k) => JSON.parse((k.props as { dangerouslySetInnerHTML: { __html: string } }).dangerouslySetInnerHTML.__html));
-    expect(ld.map((x) => x["@type"])).toEqual(["BlogPosting", "FAQPage", "BreadcrumbList"]);
+    const ldEl = kids.find((k) => k.type === JsonLd)!;
+    const ld = JSON.parse(renderToStaticMarkup(ldEl).replace(/^<script[^>]*>|<\/script>$/g, ""))["@graph"];
+    expect(ld.map((x: { "@type": string }) => x["@type"])).toEqual(["BlogPosting", "FAQPage", "BreadcrumbList"]);
     expect(ld[0].headline).toBe(fixture.title);
+    expect(ld[0].author).toEqual({ "@id": ORG_ID });
     expect(ld[0].keywords).not.toMatch(/alphabet|translate/i);
-    const content = kids.find((k) => k.type !== "script")!;
+    const content = kids.find((k) => k.type !== JsonLd)!;
     expect((content.props.headings as { text: string }[]).map((h) => h.text)).toEqual(["The idea", "Why it matters"]);
   });
 

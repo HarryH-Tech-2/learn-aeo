@@ -9,6 +9,8 @@ import { reveal } from "@/components/reveal";
 import { useFreeCourseGuest } from "@/components/useFreeCourseGuest";
 import { PLANS, formatPlanPrice } from "@/lib/plans";
 import { LESSON_CATALOG } from "@/lib/lesson-catalog";
+import JsonLd from "@/components/JsonLd";
+import { faqSchema } from "@/lib/schema";
 
 const both = (plan: (typeof PLANS)[keyof typeof PLANS]) => `${formatPlanPrice(plan, "USD")} (${formatPlanPrice(plan, "GBP")})`;
 const MONTHS_TO_LIFETIME = Math.round(PLANS.lifetime.usd / PLANS.monthly.usd);
@@ -94,23 +96,7 @@ export default function PricingFAQ() {
           </div>
         ))}
       </div>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: faqs.map((faq) => ({
-              "@type": "Question",
-              name: faq.question,
-              acceptedAnswer: {
-                "@type": "Answer",
-                text: faq.answer,
-              },
-            })),
-          }),
-        }}
-      />
+      <JsonLd data={faqSchema(faqs)} />
     </div>
   );
 }

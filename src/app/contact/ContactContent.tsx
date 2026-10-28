@@ -5,6 +5,8 @@ import { SITE } from "@/lib/site";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ContactForm from "@/components/ContactForm";
+import JsonLd from "@/components/JsonLd";
+import { breadcrumbSchema } from "@/lib/schema";
 
 /** Where to go for the common questions, so people with a quick answer don't wait for a reply. */
 const ROUTES = [
@@ -36,19 +38,7 @@ const ROUTES = [
 export default function ContactContent() {
   return (
     <div className="min-h-screen bg-obsidian grain-overlay">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Home", item: SITE.url },
-              { "@type": "ListItem", position: 2, name: "Contact" },
-            ],
-          }),
-        }}
-      />
+      <JsonLd data={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Contact", path: "/contact" }])} />
       <Navbar />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-20">

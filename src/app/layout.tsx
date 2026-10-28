@@ -11,6 +11,8 @@ import { analyticsAllowedScript } from "@/lib/consent";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import AuthModalProvider from "@/components/AuthModal";
 import { SITE, absoluteUrl } from "@/lib/site";
+import JsonLd from "@/components/JsonLd";
+import { organizationSchema, websiteSchema } from "@/lib/schema";
 import "@/styles/globals.css";
 
 const GA_MEASUREMENT_ID = SITE.gaId ?? "";
@@ -92,20 +94,7 @@ export default function RootLayout({
         <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              name: SITE.name,
-              url: SITE.url,
-              logo: absoluteUrl("/icon-512.png"),
-              description: SITE.description,
-              sameAs: SITE.sameAs,
-            }),
-          }}
-        />
+        <JsonLd data={[organizationSchema(), websiteSchema()]} />
         {/* Inline script to prevent flash of wrong theme */}
         <script
           dangerouslySetInnerHTML={{

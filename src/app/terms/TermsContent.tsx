@@ -1,11 +1,12 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
-import { SITE } from "@/lib/site";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { PLANS, formatPlanPrice } from "@/lib/plans";
+import JsonLd from "@/components/JsonLd";
+import { breadcrumbSchema } from "@/lib/schema";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -89,28 +90,7 @@ const sections = [
 export default function TermsContent() {
   return (
     <main className="grain-overlay">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              {
-                "@type": "ListItem",
-                position: 1,
-                name: "Home",
-                item: SITE.url,
-              },
-              {
-                "@type": "ListItem",
-                position: 2,
-                name: "Terms of Service",
-              },
-            ],
-          }),
-        }}
-      />
+      <JsonLd data={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Terms of Service", path: "/terms" }])} />
       <Navbar />
 
       {/* Header */}

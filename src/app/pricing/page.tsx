@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import { SITE, absoluteUrl } from "@/lib/site";
+import { absoluteUrl } from "@/lib/site";
 import Navbar from "@/components/Navbar";
+import JsonLd from "@/components/JsonLd";
+import { courseSchema } from "@/lib/schema";
 import PricingSection from "@/components/PricingSection";
 import PricingFAQ from "@/components/PricingFAQ";
 import Footer from "@/components/Footer";
-import { PLANS, PLAN_IDS, formatPlanPrice } from "@/lib/plans";
+import { PLANS, formatPlanPrice } from "@/lib/plans";
 import { LESSON_CATALOG, titleMidSentence } from "@/lib/lesson-catalog";
 
 export const metadata: Metadata = {
@@ -42,36 +44,7 @@ const INCLUDED = [
 export default function PricingPage() {
   return (
     <main className="grain-overlay">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Course",
-            name: "Learn AEO",
-            description:
-              "Online course for marketers on answer engine optimization (AEO): how to get your brand cited by ChatGPT, Perplexity, Google AI Overviews and other answer engines.",
-            provider: {
-              "@type": "Organization",
-              name: "Learn AEO",
-              url: SITE.url,
-            },
-            offers: PLAN_IDS.map((id) => ({
-              "@type": "Offer",
-              name: PLANS[id].name,
-              price: String(PLANS[id].usd),
-              priceCurrency: "USD",
-              availability: "https://schema.org/InStock",
-              url: absoluteUrl("/pricing"),
-            })),
-            hasCourseInstance: {
-              "@type": "CourseInstance",
-              courseMode: "online",
-              courseWorkload: "self-paced",
-            },
-          }),
-        }}
-      />
+      <JsonLd data={courseSchema()} />
       <Navbar />
       <div className="pt-16" />
       <PricingSection headingAs="h1" />
