@@ -14,6 +14,8 @@
 
 **Next plan:** 7 deploy checklist (launch).
 
+**Progress (paused 2026-10-28):** Tasks 1–5 done (`0b8b5ba..e26571d`): crawler catalog + RFC 9309 evaluator, SSRF-guarded fetch + rate limit, AI Crawler Checker, llms.txt Generator, tools hub. Task 6 half done (`077fdad`): 30 reviewed glossary terms, schema builders, sitemap and llms.txt entries; **the /glossary pages are not built yet, so the sitemap lists 31 URLs that 404 until they are — do not deploy in this state.** Task 7: 8 blog drafts committed unreviewed (`588e703`), not wired into `blogPosts`. Resume at Task 6 Step 2 (pages), then Task 7 review, Task 8, final review.
+
 ## Global Constraints
 
 - **No made-up statistics or claims.** Every number or factual claim about engines, crawlers, standards or vendors comes from a named, linkable source with a date, opened live while writing (WebFetch), or is cut. No "X% of searches" claims without a primary source. Quotes are verbatim and short (≤ 25 words) and keep the source's spelling.
