@@ -132,9 +132,9 @@ describe("one place for JSON-LD", () => {
   };
   walk(path.join(root, "src"));
 
-  it("only JsonLd writes ld+json script tags", () => {
+  it("only JsonLd writes ld+json script tags (content data may show the tag as example text)", () => {
     const offenders = files.filter(
-      (f) => f !== "src/components/JsonLd.tsx" && fs.readFileSync(path.join(root, f), "utf8").includes("application/ld+json")
+      (f) => f !== "src/components/JsonLd.tsx" && !f.startsWith("src/lib/content/") && fs.readFileSync(path.join(root, f), "utf8").includes("application/ld+json")
     );
     expect(offenders).toEqual([]);
   });
