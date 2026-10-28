@@ -2,7 +2,7 @@
 
 Learn AEO is a course for marketers on answer engine optimization: how to get a brand cited and recommended by ChatGPT, Perplexity, Google AI Overviews and other answer engines. It is a Next.js app (App Router, Prisma, NextAuth, Stripe, Resend) forked from an earlier course codebase, with the old subject-specific features removed. Pricing is $100 lifetime or $10 a month (GBP options at £80 and £8).
 
-Status: Plan 1 (fork, strip, rebrand, pricing) and Plan 2 (lesson model, lesson player, lessons 1-3) are done. Plan 3 (removal of the old theme, server-side XP, levels and badges, certificate, rewritten emails, site-wide ban test) is done. Plan 4 (US spelling, verifiable certificate with /verify/<code>, the City of Answers 3D hero, the tools section) is done. Next: Plan 5, SEO plumbing.
+Status: Plan 1 (fork, strip, rebrand, pricing) and Plan 2 (lesson model, lesson player, lessons 1-3) are done. Plan 3 (removal of the old theme, server-side XP, levels and badges, certificate, rewritten emails, site-wide ban test) is done. Plan 4 (US spelling, verifiable certificate with /verify/<code>, the City of Answers 3D hero, the tools section) is done. Plan 5 (schema helper, page metadata and Open Graph on every page, lesson share images, llms.txt and sitemap from the catalogs) is done. Next: Plan 6, tools, glossary and blog.
 
 ## Setup
 
@@ -48,6 +48,13 @@ node scripts/indexnow-ping.mjs /pricing        # or just these paths
 ```
 
 The key is in `scripts/indexnow.config.json` and served from `public/<key>.txt`; `src/lib/__tests__/indexnow.test.ts` checks the two match.
+
+Before deploying, check the head of every sitemap page against a production build (canonical, og:url and og:image, no noindex, JSON-LD parses, the Organization and Course @ids):
+
+```bash
+npm run build && npx next start -p 3200   # in one terminal
+node scripts/dev/check-seo.mjs http://localhost:3200
+```
 
 ### Dev auth bypass
 
