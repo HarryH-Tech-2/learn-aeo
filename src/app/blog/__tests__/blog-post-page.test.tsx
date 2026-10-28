@@ -16,6 +16,7 @@ const fixture: BlogPost = vi.hoisted(() => ({
   relatedSlugs: [],
   faqs: [{ question: "Is it the same as keyword research?", answer: "No." }],
   content: "## The idea\n\nOne prompt, many searches.\n\n## Why it matters\n\nYour page may match only one of them.",
+  sources: [],
 }));
 
 vi.mock("@/lib/blog-posts", () => ({

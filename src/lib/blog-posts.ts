@@ -1,3 +1,5 @@
+import type { Source } from "./lesson-types";
+
 export type BlogFAQ = {
   question: string;
   answer: string;
@@ -32,6 +34,8 @@ export type BlogPost = {
   relatedSlugs: string[];
   faqs: BlogFAQ[];
   content: string;
+  /** Every factual claim in the post traces to one of these (listed under the post as "Sources"). */
+  sources: Source[];
 };
 
 /** No posts yet: the first AEO articles are still to be written. /blog shows a coming-soon page meanwhile. */
