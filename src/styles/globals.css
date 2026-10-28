@@ -39,7 +39,7 @@
   --rt-cyan-700: #0e7490;
 }
 
-/* Colour the media hero fades into at its bottom edge (the page background). */
+/* Color the media hero fades into at its bottom edge (the page background). */
 :root {
   --hero-fade: #04060d;
 }
@@ -49,10 +49,10 @@ html.light {
 
 /* The homepage hero is a dark media hero in BOTH themes: video + light text.
    Re-declaring the runtime tokens here means every child keeps its dark-theme
-   colours even when html.light is active.
+   colors even when html.light is active.
    A Tailwind utility (not a plain class) so it takes variants: the navbar only
    floats over the hero from `lg` up, and uses `lg:hero-media`; below that it
-   sits on the page's own background and must keep the page's own colours. */
+   sits on the page's own background and must keep the page's own colors. */
 @utility hero-media {
   /* Tailwind's --color-* vars are resolved once at :root, so they must be
      re-declared here as literals (overriding --rt-* alone has no effect). */
@@ -196,7 +196,7 @@ html.light ::selection {
 
 /* ── Theme switch: cross-fade instead of a hard cut ──
    ThemeProvider adds .theme-transitioning for the duration of the switch,
-   which transitions colour properties on every element. (Deliberately NOT
+   which transitions color properties on every element. (Deliberately NOT
    document.startViewTransition(): its full-page snapshot freezes the hero
    video mid-fade and the frame jumps when it ends — that reads as jank.) */
 html.theme-transitioning,
@@ -978,7 +978,7 @@ html.light footer {
   justify-content: space-between;
   align-items: center;
   gap: 8mm;
-  /* a tinted band, the same in both site themes (the light theme's own `footer` rule would otherwise recolour it) */
+  /* a tinted band, the same in both site themes (the light theme's own `footer` rule would otherwise recolor it) */
   background: #efe7d6;
   border-top: 1.5px solid var(--ws-ink);
   padding: 3mm 5mm;

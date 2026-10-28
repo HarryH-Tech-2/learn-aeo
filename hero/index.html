@@ -353,9 +353,9 @@ const beacons = [];  // antenna tip lights
         bool xFace = abs(vN.x) > .5;
         float faceId = xFace ? (vN.x > 0. ? 1. : 2.) : (vN.z > 0. ? 3. : 4.);
         float faceW = xFace ? vSize.z : vSize.x;
-        float across = (xFace ? vL.z : vL.x) * faceW;            // metres from the face centre
-        float edge = faceW * .5 - abs(across);                    // metres to the vertical corner
-        float fromTop = (.5 - vL.y) * vSize.y;                    // metres below the roofline
+        float across = (xFace ? vL.z : vL.x) * faceW;            // meters from the face center
+        float edge = faceW * .5 - abs(across);                    // meters to the vertical corner
+        float fromTop = (.5 - vL.y) * vSize.y;                    // meters below the roofline
         float hNorm = clamp((vW.y - uGround) / 34., 0., 1.);
 
         // dark glass that lifts slightly with height, plus faint vertical mullions

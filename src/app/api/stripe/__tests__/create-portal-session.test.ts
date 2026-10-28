@@ -66,7 +66,7 @@ describe("POST /api/stripe/create-portal-session", () => {
     expect(mockPortalCreate).toHaveBeenCalledWith(expect.objectContaining({ customer: "cus_test123", return_url: "http://localhost:3000/account" }));
   });
 
-  it("honours a safe returnTo", async () => {
+  it("honors a safe returnTo", async () => {
     mockedGetServerSession.mockResolvedValue({ user: { email: "t@example.com" } });
     mockedFindUnique.mockResolvedValue({ subscription: { stripeCustomerId: "cus_y" } } as never);
     const response = await POST(req({ returnTo: "/dashboard" }));

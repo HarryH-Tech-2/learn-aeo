@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Create the plan catalogue in the Learn AEO Stripe account (src/lib/plans.ts): one Product and one Price per
+ * Create the plan catalog in the Learn AEO Stripe account (src/lib/plans.ts): one Product and one Price per
  * plan, USD default with a GBP currency option, statement descriptor LEARNAEO. Prints the environment
  * variables to set. Run once per Stripe mode:
  *
@@ -20,8 +20,8 @@ const STATEMENT_DESCRIPTOR = "LEARNAEO";
 
 // Keep in sync with src/lib/plans.ts (amounts in minor units).
 const PLANS = [
-  { id: "lifetime", name: "Learn AEO — Lifetime", description: "The full answer engine optimisation course: every lesson as it's released, tools, templates and certificate. One payment.", usd: 10000, gbp: 8000, recurring: null, envKey: "STRIPE_PRICE_ID" },
-  { id: "monthly", name: "Learn AEO — Monthly", description: "The full answer engine optimisation course, month by month. Cancel any time.", usd: 1000, gbp: 800, recurring: { interval: "month" }, envKey: "STRIPE_PRICE_MONTHLY" },
+  { id: "lifetime", name: "Learn AEO — Lifetime", description: "The full answer engine optimization course: every lesson as it's released, tools, templates and certificate. One payment.", usd: 10000, gbp: 8000, recurring: null, envKey: "STRIPE_PRICE_ID" },
+  { id: "monthly", name: "Learn AEO — Monthly", description: "The full answer engine optimization course, month by month. Cancel any time.", usd: 1000, gbp: 800, recurring: { interval: "month" }, envKey: "STRIPE_PRICE_MONTHLY" },
 ];
 
 async function findProduct(planId) {

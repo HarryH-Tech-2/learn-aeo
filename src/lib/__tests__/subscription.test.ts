@@ -66,11 +66,11 @@ describe("checkSubscription — who counts as paid", () => {
     expect((await checkSubscription("a@example.com", now)).active).toBe(false);
   });
 
-  it("has no licence branch: only lifetime, monthly and free-unlock grant access", async () => {
+  it("has no license branch: only lifetime, monthly and free-unlock grant access", async () => {
     findUnique.mockResolvedValue({ status: "PENDING", subscription: null } as never);
     const r = await checkSubscription("t@example.com", now);
     expect(r.active).toBe(false);
-    expect(r).not.toHaveProperty("licence");
+    expect(r).not.toHaveProperty("license");
     const call = findUnique.mock.calls.at(-1)?.[0] as { include: Record<string, unknown> };
     expect(Object.keys(call.include).sort()).toEqual(["gameStates", "subscription"]);
   });

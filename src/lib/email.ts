@@ -50,7 +50,7 @@ function contactLine(label = "Reply to this email with any question"): string {
   return `Learn AEO &middot; ${footLink(`${process.env.NEXTAUTH_URL}/contact`, label)}`;
 }
 
-/** A dashed, centred box holding a code: small label, the code, a muted line under it. */
+/** A dashed, centered box holding a code: small label, the code, a muted line under it. */
 function codePanel(label: string | null, code: string, under: string): string {
   return panel(
     `${label ? `<p style="margin:0 0 6px;font-family:${FONT};font-size:12px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:${C.muted};">${label}</p>` : ""}

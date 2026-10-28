@@ -27,13 +27,13 @@ const sections = [
     id: "account-registration",
     title: "2. Account Registration",
     content:
-      "To access personalised features and track your learning progress, you must create an account using Google OAuth. You are responsible for maintaining the security of your Google account credentials and for all activity that occurs under your account. You must provide accurate information and promptly update any changes. You must be at least 13 years of age to create an account. By registering, you represent that you meet this age requirement.",
+      "To access personalized features and track your learning progress, you must create an account using Google OAuth. You are responsible for maintaining the security of your Google account credentials and for all activity that occurs under your account. You must provide accurate information and promptly update any changes. You must be at least 13 years of age to create an account. By registering, you represent that you meet this age requirement.",
   },
   {
     id: "purchase-and-billing",
     title: "3. Purchase & Billing",
     content:
-      `Learn AEO offers lifetime access to the full course for a single one-time payment of ${formatPlanPrice(PLANS.lifetime, "USD")} (${formatPlanPrice(PLANS.lifetime, "GBP")}). After payment, your account is granted permanent access to all current and future course content at no additional cost.\n\nWe also offer a Monthly plan (${formatPlanPrice(PLANS.monthly, "USD")} / ${formatPlanPrice(PLANS.monthly, "GBP")} per month). It renews automatically until cancelled from your account page or the billing portal; access continues to the end of the paid period.\n\n` +
+      `Learn AEO offers lifetime access to the full course for a single one-time payment of ${formatPlanPrice(PLANS.lifetime, "USD")} (${formatPlanPrice(PLANS.lifetime, "GBP")}). After payment, your account is granted permanent access to all current and future course content at no additional cost.\n\nWe also offer a Monthly plan (${formatPlanPrice(PLANS.monthly, "USD")} / ${formatPlanPrice(PLANS.monthly, "GBP")} per month). It renews automatically until canceled from your account page or the billing portal; access continues to the end of the paid period.\n\n` +
       "Purchasing-power parity: visitors from countries with lower purchasing power are offered a percentage discount, applied automatically at checkout based on the country they browse from. We do not verify residence and we do not revoke access when a discount was claimed from elsewhere; we ask that you pay the full price if you can.\n\nWe offer a 14-day money-back guarantee. If you are unhappy with the course within 14 days of purchase, contact hello@learnaeo.com and we will issue a full refund.\n\nAll payments are processed securely by Stripe. By purchasing, you also agree to Stripe\u2019s terms of service.",
   },
   {
@@ -46,7 +46,7 @@ const sections = [
     id: "intellectual-property",
     title: "5. Intellectual Property",
     content:
-      "All lesson content, illustrations, interactive exercises, commentary, software code, and design elements on Learn AEO are the intellectual property of Learn AEO or its licensors and are protected by copyright and other intellectual property laws.\n\nYour purchase grants you a personal, non-transferable, non-exclusive licence to access and use the content for your own private, non-commercial learning purposes. You may not reproduce, distribute, modify, create derivative works from, publicly display, or commercially exploit any content without our prior written consent.",
+      "All lesson content, illustrations, interactive exercises, commentary, software code, and design elements on Learn AEO are the intellectual property of Learn AEO or its licensors and are protected by copyright and other intellectual property laws.\n\nYour purchase grants you a personal, non-transferable, non-exclusive license to access and use the content for your own private, non-commercial learning purposes. You may not reproduce, distribute, modify, create derivative works from, publicly display, or commercially exploit any content without our prior written consent.",
   },
   {
     id: "acceptable-use",

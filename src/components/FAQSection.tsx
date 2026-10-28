@@ -28,7 +28,7 @@ function orderRange(lessons: readonly { order: number }[]): string {
 
 const faqs = [
   {
-    question: "What is answer engine optimisation (AEO)?",
+    question: "What is answer engine optimization (AEO)?",
     answer:
       "AEO is the work of making your pages easy for AI answer engines (ChatGPT search, Perplexity, Google AI Overviews and AI Mode, Copilot, Claude) to reach, understand and cite when they answer a question. It builds on SEO rather than replacing it: a page an engine cannot crawl or index is a page it cannot cite.",
   },
@@ -79,7 +79,7 @@ const faqs = [
   {
     question: "Can I get a refund?",
     answer:
-      "Yes. There is a 14-day money-back guarantee: if you are unhappy with the course within 14 days of buying it, email us and we will refund you in full. A Monthly plan can be cancelled at any time, and your access runs to the end of the period you have paid for.",
+      "Yes. There is a 14-day money-back guarantee: if you are unhappy with the course within 14 days of buying it, email us and we will refund you in full. A Monthly plan can be canceled at any time, and your access runs to the end of the period you have paid for.",
   },
   {
     question: "Is there a discount?",

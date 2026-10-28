@@ -20,7 +20,7 @@ export default function HomePage() {
             "@type": "Course",
             name: "Learn AEO",
             description:
-              "Online course for marketers who know SEO on answer engine optimisation (AEO): how ChatGPT, Perplexity, Google AI Overviews and other answer engines choose sources, how to let AI crawlers reach your site, and how to write passages they can cite.",
+              "Online course for marketers who know SEO on answer engine optimization (AEO): how ChatGPT, Perplexity, Google AI Overviews and other answer engines choose sources, how to let AI crawlers reach your site, and how to write passages they can cite.",
             provider: {
               "@type": "Organization",
               name: "Learn AEO",

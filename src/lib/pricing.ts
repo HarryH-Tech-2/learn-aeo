@@ -1,5 +1,5 @@
 /**
- * Lifetime-access price by currency (the anchor plan; the full catalogue is
+ * Lifetime-access price by currency (the anchor plan; the full catalog is
  * in src/lib/plans.ts). USD is the Stripe Price's default currency; GBP is a
  * `currency_options.gbp` entry on the same Price (scripts/stripe-create-plans.mjs).
  * Keep these in sync with Stripe.

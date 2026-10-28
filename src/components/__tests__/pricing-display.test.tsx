@@ -25,16 +25,16 @@ describe("pricing cards", () => {
 
   it("show only the two plans, with the marketer feature copy", () => {
     for (const f of [...PLANS.lifetime.features, ...PLANS.monthly.features]) expect(html).toContain(f.replace("'", "&#x27;"));
-    expect(html).not.toMatch(/classroom|school|licence/i);
+    expect(html).not.toMatch(/classroom|school|license/i);
     expect(html).not.toContain("/teachers");
   });
 
-  it("FAQ prices come from the plans, with no decimals and no licences", () => {
+  it("FAQ prices come from the plans, with no decimals and no licenses", () => {
     const faq = renderToStaticMarkup(<PricingFAQ />);
     expect(faq).toContain("$100 (£80)");
     expect(faq).toContain("$10 (£8)");
     expect(faq).not.toMatch(DECIMAL_WHOLE);
-    expect(faq).not.toMatch(/classroom|school|licence/i);
+    expect(faq).not.toMatch(/classroom|school|license/i);
   });
 });
 

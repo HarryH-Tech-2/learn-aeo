@@ -42,7 +42,7 @@ async function recordSignupCampaign(userId: string) {
     console.error("[auth:campaign]", e);
   }
 }
-import { enrolInNurture } from "@/lib/nurture-run";
+import { enrollInNurture } from "@/lib/nurture-run";
 import { ACCESS_COOKIE, assignAccessTest } from "@/lib/access-test";
 
 let _resend: Resend | null = null;
@@ -92,7 +92,7 @@ export const authOptions: NextAuthOptions = {
   },
   events: {
     // Every new account: record the marketing post that brought them, then
-    // enrol in the nurture sequence, which sends the day-0 welcome only when
+    // enroll in the nurture sequence, which sends the day-0 welcome only when
     // NURTURE_ENABLED=true (src/lib/nurture-run.ts).
     async createUser({ user }) {
       if (!user.id) return;
@@ -100,9 +100,9 @@ export const authOptions: NextAuthOptions = {
       // (the free-unlock test's group, while ACCESS_TEST_FREE_PERCENT is on: src/lib/access-test.ts)
       await assignAccessTest(user.id, await accessCookie());
       try {
-        await enrolInNurture(user.id);
+        await enrollInNurture(user.id);
       } catch (err) {
-        console.error("[auth:createUser] nurture enrolment failed:", err);
+        console.error("[auth:createUser] nurture enrollment failed:", err);
       }
     },
     // Google verifies email ownership during OAuth, but the Prisma adapter

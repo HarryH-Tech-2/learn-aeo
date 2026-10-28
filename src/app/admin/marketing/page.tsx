@@ -3,8 +3,8 @@ import { notFound } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { summariseCheckoutLog, type CheckoutLogOutcome, type PurchaseRow } from "@/lib/checkout-recovery-log";
-import { ACCESS_TEST_GAME, accessTestPercent, armOf, summariseAccessTest, type AccessTestPerson } from "@/lib/access-test";
+import { summarizeCheckoutLog, type CheckoutLogOutcome, type PurchaseRow } from "@/lib/checkout-recovery-log";
+import { ACCESS_TEST_GAME, accessTestPercent, armOf, summarizeAccessTest, type AccessTestPerson } from "@/lib/access-test";
 import { SITE } from "@/lib/site";
 import { LESSON_CATALOG } from "@/lib/lesson-catalog";
 
@@ -38,7 +38,7 @@ async function checkoutRecovery() {
     ? await prisma.subscription.findMany({ where: { active: true, user: { email: { in: emails } } }, select: { activatedAt: true, createdAt: true, user: { select: { email: true } } } })
     : [];
   const purchases: PurchaseRow[] = subs.flatMap((s) => (s.user.email ? [{ email: s.user.email, at: s.activatedAt ?? s.createdAt }] : []));
-  return summariseCheckoutLog(rows, purchases);
+  return summarizeCheckoutLog(rows, purchases);
 }
 
 /** The free-unlock test (src/lib/access-test.ts): both groups side by side, and the free group's emails to match
@@ -76,7 +76,7 @@ async function accessTest() {
       },
     ];
   });
-  return { summary: summariseAccessTest(people), freeEmails: people.filter((p) => p.arm === "free" && p.email).map((p) => p.email!), since: rows[0]?.createdAt ?? null };
+  return { summary: summarizeAccessTest(people), freeEmails: people.filter((p) => p.arm === "free" && p.email).map((p) => p.email!), since: rows[0]?.createdAt ?? null };
 }
 
 export default async function MarketingPage() {

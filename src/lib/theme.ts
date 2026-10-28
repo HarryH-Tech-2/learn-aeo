@@ -2,7 +2,7 @@ import { COOKIE_PREFIX } from "@/lib/site";
 
 export type Theme = "dark" | "light";
 
-/** Browser-chrome colour (the <meta name="theme-color">): the brand navy, matching site.webmanifest. */
+/** Browser-chrome color (the <meta name="theme-color">): the brand navy, matching site.webmanifest. */
 export const THEME_COLOR = "#04060d";
 
 /** localStorage key for the toggle's saved choice. */

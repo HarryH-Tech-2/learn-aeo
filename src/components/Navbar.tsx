@@ -57,7 +57,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Nav - Center */}
-          {/* Centred between the logo and the right-hand controls (flex, not
+          {/* Centered between the logo and the right-hand controls (flex, not
               absolute, so it can never collide with either at narrow widths). */}
           <div className="hidden lg:flex flex-1 min-w-0 items-center justify-center gap-4 2xl:gap-6 px-3 whitespace-nowrap">
             <NavLink href={isHome ? "#curriculum" : "/#curriculum"}>Course</NavLink>

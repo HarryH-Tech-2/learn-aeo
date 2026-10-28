@@ -10,7 +10,7 @@ const SITE_LASTMOD = new Date("2026-04-18");
 // Pages substantively edited on 2026-08-24 (hero/nav).
 const HOME_LASTMOD = new Date("2026-08-24");
 
-// When the lesson catalogue was last revised. Bump on structural changes.
+// When the lesson catalog was last revised. Bump on structural changes.
 const LESSONS_LASTMOD = new Date("2026-04-18");
 
 export default function sitemap(): MetadataRoute.Sitemap {

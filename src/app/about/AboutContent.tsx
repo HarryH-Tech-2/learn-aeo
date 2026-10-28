@@ -43,7 +43,7 @@ export default function AboutContent() {
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
           <p className="enter-up font-body text-xs uppercase tracking-[0.3em] text-cyan-500 mb-6">About {SITE.name}</p>
           <h1 className="enter-up font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-gradient-gold mb-6">
-            A course in answer engine optimisation
+            A course in answer engine optimization
           </h1>
           <p className="enter-up font-body text-lg md:text-xl text-sand-300 leading-relaxed max-w-2xl mx-auto">
             {SITE.name} teaches marketers who already know SEO how AI answer engines pick their sources, and what to
@@ -65,7 +65,7 @@ export default function AboutContent() {
             The course is laid out as a City of Answers with {LESSON_CATALOG.length} districts, one lesson each. You
             start at {LESSON_CATALOG[0].district}, where you see how an answer gets built, and work through crawling,
             writing, structured data, authority, the individual platforms and measurement, to{" "}
-            {LESSON_CATALOG[LESSON_CATALOG.length - 1].district}, where you plan an AEO programme of your own.
+            {LESSON_CATALOG[LESSON_CATALOG.length - 1].district}, where you plan an AEO program of your own.
           </p>
           <p>
             {live.length} of the {LESSON_CATALOG.length} lessons are live now:{" "}

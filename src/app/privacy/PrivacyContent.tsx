@@ -31,7 +31,7 @@ const sections: { id: string; title: string; content: ContentBlock[] }[] = [
       },
       {
         subtitle: "Usage Data",
-        text: "We automatically collect information about how you interact with the platform, including lessons viewed, quiz scores, progress milestones, and session duration. This data is associated with your account and used to personalise your learning experience.",
+        text: "We automatically collect information about how you interact with the platform, including lessons viewed, quiz scores, progress milestones, and session duration. This data is associated with your account and used to personalize your learning experience.",
       },
       {
         subtitle: "Device & Browser Information",
@@ -47,7 +47,7 @@ const sections: { id: string; title: string; content: ContentBlock[] }[] = [
         text: "We use the information we collect to:",
       },
       {
-        text: "\u2022 Authenticate your identity and maintain your account session\n\u2022 Track your lesson progress and provide personalised recommendations\n\u2022 Process payments securely through Stripe\n\u2022 Improve our lesson content, user interface, and overall platform quality\n\u2022 Send transactional emails related to your account or purchase (you may opt out of non-essential communications at any time)",
+        text: "\u2022 Authenticate your identity and maintain your account session\n\u2022 Track your lesson progress and provide personalized recommendations\n\u2022 Process payments securely through Stripe\n\u2022 Improve our lesson content, user interface, and overall platform quality\n\u2022 Send transactional emails related to your account or purchase (you may opt out of non-essential communications at any time)",
       },
     ],
   },

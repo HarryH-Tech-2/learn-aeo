@@ -54,7 +54,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    // Transition colour properties on everything for the duration of the
+    // Transition color properties on everything for the duration of the
     // switch, then remove the class so it never taxes normal renders. (Not
     // startViewTransition — its snapshot freezes the hero video, see CSS.)
     if (fadeTimeout.current !== null) window.clearTimeout(fadeTimeout.current);

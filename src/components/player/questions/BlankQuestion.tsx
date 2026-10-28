@@ -101,7 +101,7 @@ export default function BlankQuestion({ question, locked, onChange }: QuestionIn
         <p className="mb-2 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-sand-400" id={`${question.id}-bank`}>
           Word bank
         </p>
-        <ul className="flex flex-wrap gap-2" role="list" aria-labelledby={`${question.id}-bank`}>
+        <ul className="flex flex-wrap gap-2" role="list" aria-labeledby={`${question.id}-bank`}>
           {bank.map((word, j) => (
             <li key={j}>
               <button

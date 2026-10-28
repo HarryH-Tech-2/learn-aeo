@@ -24,7 +24,7 @@ export function GET() {
   const lines: string[] = [
     `# ${SITE.name}`,
     "",
-    `> An online course for marketers on answer engine optimisation (AEO): how AI answer engines such as Google AI Overviews, ChatGPT search and Perplexity choose the sources they cite, and what you can do so your pages are among them. The first lesson is free with a sign-in; the rest is a one-time ${formatPlanPrice(PLANS.lifetime, "USD")} lifetime purchase, or ${formatPlanPrice(PLANS.monthly, "USD")} a month.`,
+    `> An online course for marketers on answer engine optimization (AEO): how AI answer engines such as Google AI Overviews, ChatGPT search and Perplexity choose the sources they cite, and what you can do so your pages are among them. The first lesson is free with a sign-in; the rest is a one-time ${formatPlanPrice(PLANS.lifetime, "USD")} lifetime purchase, or ${formatPlanPrice(PLANS.monthly, "USD")} a month.`,
     "",
     "## Quick facts",
     "",

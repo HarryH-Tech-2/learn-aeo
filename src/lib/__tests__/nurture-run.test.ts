@@ -19,7 +19,7 @@ vi.mock("@/lib/subscription", () => ({
 vi.mock("@/lib/offers", () => ({ grantOffer: vi.fn(async () => null), OFFER_PERCENT_OFF: 33 }));
 vi.mock("@/lib/unsubscribe", () => ({ unsubscribeUrl: (id: string) => `https://x.test/api/email/unsubscribe?u=${id}&t=t` }));
 
-import { enrolInNurture } from "@/lib/nurture-run";
+import { enrollInNurture } from "@/lib/nurture-run";
 
 function newUserRow() {
   return {
@@ -36,7 +36,7 @@ function newUserRow() {
   };
 }
 
-describe("enrolInNurture (sign-up hook)", () => {
+describe("enrollInNurture (sign-up hook)", () => {
   const prev = process.env.NURTURE_ENABLED;
   beforeEach(() => {
     vi.clearAllMocks();
@@ -47,9 +47,9 @@ describe("enrolInNurture (sign-up hook)", () => {
     else process.env.NURTURE_ENABLED = prev;
   });
 
-  it("records the enrolment but sends no welcome while NURTURE_ENABLED is unset", async () => {
+  it("records the enrollment but sends no welcome while NURTURE_ENABLED is unset", async () => {
     delete process.env.NURTURE_ENABLED;
-    await enrolInNurture("u1");
+    await enrollInNurture("u1");
     expect(db.user.update).toHaveBeenCalledOnce();
     expect(db.user.update.mock.calls[0][0].data.nurtureStartedAt).toBeInstanceOf(Date);
     expect(mockSend).not.toHaveBeenCalled();
@@ -59,14 +59,14 @@ describe("enrolInNurture (sign-up hook)", () => {
   it("sends no welcome for any value other than \"true\"", async () => {
     for (const v of ["false", "1", "TRUE", ""]) {
       process.env.NURTURE_ENABLED = v;
-      await enrolInNurture("u1");
+      await enrollInNurture("u1");
     }
     expect(mockSend).not.toHaveBeenCalled();
   });
 
   it("sends the day-0 welcome when NURTURE_ENABLED is \"true\"", async () => {
     process.env.NURTURE_ENABLED = "true";
-    await enrolInNurture("u1");
+    await enrollInNurture("u1");
     expect(mockSend).toHaveBeenCalledOnce();
     const args = mockSend.mock.calls[0][0];
     expect(args.to).toBe("new@example.com");

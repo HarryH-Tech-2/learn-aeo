@@ -10,7 +10,7 @@ describe("resolveInitialTheme", () => {
     expect(resolveInitialTheme(null, MOBILE_MAX_WIDTH + 1)).toBe("dark");
     expect(resolveInitialTheme(null, 1440)).toBe("dark");
   });
-  it("always honours a saved choice", () => {
+  it("always honors a saved choice", () => {
     expect(resolveInitialTheme("dark", 375)).toBe("dark");
     expect(resolveInitialTheme("light", 1440)).toBe("light");
   });

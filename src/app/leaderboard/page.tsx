@@ -7,7 +7,7 @@ import Leaderboard from "@/components/Leaderboard";
 export const metadata: Metadata = {
   title: "Leaderboard | Learn AEO",
   description:
-    "See how your answer engine optimisation study compares. The leaderboard ranks learners by XP earned from concept cards, quick checks, exercises and lesson audits.",
+    "See how your answer engine optimization study compares. The leaderboard ranks learners by XP earned from concept cards, quick checks, exercises and lesson audits.",
   alternates: {
     canonical: absoluteUrl("/leaderboard"),
   },

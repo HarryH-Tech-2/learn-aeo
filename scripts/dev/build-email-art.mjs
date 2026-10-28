@@ -6,7 +6,7 @@
  *   public/email/rule.png         1200 x 24   (shown 600 x 12)   a cyan rule with a gold diamond, foot of every email
  *   public/email/mark-aeo.png     72 x 72     (shown 36 x 36)    the Learn AEO mark, from public/favicon.svg
  *
- * Brand colours: navy #04060d, cyan #6fe3ff, gold #ffc76b. No text in any image (librsvg cannot load the
+ * Brand colors: navy #04060d, cyan #6fe3ff, gold #ffc76b. No text in any image (librsvg cannot load the
  * brand fonts, and the wordmark is set in live text beside the mark). Run once, commit the output:
  *
  *   node scripts/dev/build-email-art.mjs

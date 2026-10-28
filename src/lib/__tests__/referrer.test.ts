@@ -5,7 +5,7 @@ const OWN = "www.learnaeo.com";
 
 describe("referrerHost", () => {
   it("keeps only the referring host, without www", () => {
-    expect(referrerHost("https://www.google.com/search?q=answer+engine+optimisation", OWN)).toBe("google.com");
+    expect(referrerHost("https://www.google.com/search?q=answer+engine+optimization", OWN)).toBe("google.com");
     expect(referrerHost("https://chatgpt.com/c/abc123", OWN)).toBe("chatgpt.com");
     expect(referrerHost("https://old.reddit.com/r/seo/comments/x", OWN)).toBe("old.reddit.com");
   });

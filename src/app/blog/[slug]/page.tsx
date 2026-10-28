@@ -146,7 +146,7 @@ export default async function BlogPostPage({
         articleSection: post.category,
         keywords: [
           post.category,
-          "answer engine optimisation",
+          "answer engine optimization",
           "AEO",
           "AI search",
         ].join(", "),

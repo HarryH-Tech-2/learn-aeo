@@ -76,7 +76,7 @@ export function shouldShowAuthPrompt(input: PromptGuardInput): boolean {
 }
 
 /**
- * How far the bottom edge of the viewport has travelled through an element,
+ * How far the bottom edge of the viewport has traveled through an element,
  * as a fraction 0..1. `top` is the element's offset from the document top.
  */
 export function readingProgress(

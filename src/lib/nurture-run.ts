@@ -1,5 +1,5 @@
 /**
- * Runs the nurture sequence against the database: enrolment on sign-up, and
+ * Runs the nurture sequence against the database: enrollment on sign-up, and
  * the daily pass that the cron route calls.
  *
  * Nothing is sent unless NURTURE_ENABLED=true, the day-0 welcome included. Without it sign-ups are
@@ -130,8 +130,8 @@ async function deliver(u: NurtureSnapshot, step: NurtureStep, offer: NurtureEmai
   console.log(`[nurture] sent ${step.key} to ${u.email}`);
 }
 
-/** Sign-up hook: mark the enrolment time and, when NURTURE_ENABLED=true, send the day-0 welcome. */
-export async function enrolInNurture(userId: string): Promise<void> {
+/** Sign-up hook: mark the enrollment time and, when NURTURE_ENABLED=true, send the day-0 welcome. */
+export async function enrollInNurture(userId: string): Promise<void> {
   const row = await prisma.user.update({
     where: { id: userId },
     data: { nurtureStartedAt: new Date() },

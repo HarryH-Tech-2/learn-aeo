@@ -37,7 +37,7 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
     title: "Writing citable content",
     summary: "Write pages with passages an answer engine can lift and trust.",
     description:
-      "Lead with the answer, then support it. You will practise passage-level clarity, question headings, lists and tables, clean definitions, and keeping dates and freshness honest, so each section still makes sense when it is pulled out on its own.",
+      "Lead with the answer, then support it. You will practice passage-level clarity, question headings, lists and tables, clean definitions, and keeping dates and freshness honest, so each section still makes sense when it is pulled out on its own.",
     level: "beginner",
     minutes: 30,
     isFree: false,
@@ -74,9 +74,9 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
     order: 6,
     district: "The Embassies",
     title: "Platform playbooks",
-    summary: "What each major answer engine favours, and how to test it.",
+    summary: "What each major answer engine favors, and how to test it.",
     description:
-      "Work through Google AI Overviews and AI Mode, ChatGPT search, Perplexity, Copilot and Claude one at a time. For each you will see what it tends to favour and how to run a simple test on your own pages.",
+      "Work through Google AI Overviews and AI Mode, ChatGPT search, Perplexity, Copilot and Claude one at a time. For each you will see what it tends to favor and how to run a simple test on your own pages.",
     level: "intermediate",
     minutes: 25,
     isFree: false,
@@ -96,13 +96,13 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
     status: "coming-soon",
   },
   {
-    id: "running-an-aeo-programme",
+    id: "running-an-aeo-program",
     order: 8,
     district: "The Citadel",
-    title: "Running an AEO programme",
+    title: "Running an AEO program",
     summary: "Turn everything you have learned into a plan the business will back.",
     description:
-      "Run an audit, prioritise what you find, and build a roadmap. You will practise reporting to stakeholders or clients and finish with a 90-day plan you can start on Monday.",
+      "Run an audit, prioritize what you find, and build a roadmap. You will practice reporting to stakeholders or clients and finish with a 90-day plan you can start on Monday.",
     level: "advanced",
     minutes: 20,
     isFree: false,

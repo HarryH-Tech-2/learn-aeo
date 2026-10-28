@@ -14,7 +14,7 @@ export type BlogSummary = Pick<BlogPost, "slug" | "title" | "excerpt" | "date" |
 /** Shown while there are no posts. */
 export function BlogComingSoon() {
   return (
-    <section aria-labelledby="coming-soon-heading" className="reveal max-w-2xl" style={reveal(0.1, { y: 20 })}>
+    <section aria-labeledby="coming-soon-heading" className="reveal max-w-2xl" style={reveal(0.1, { y: 20 })}>
       <h2 id="coming-soon-heading" className="font-display text-2xl text-sand-100 mb-3">
         Articles are on their way
       </h2>
@@ -61,7 +61,7 @@ export default function BlogContent({ posts }: { posts: BlogSummary[] }) {
               </span>
             </h1>
             <p className="font-body text-lg text-sand-400 font-light max-w-2xl">
-              Answer engine optimisation for marketers: how AI answer engines
+              Answer engine optimization for marketers: how AI answer engines
               choose their sources, and how to get your brand cited.
             </p>
           </div>

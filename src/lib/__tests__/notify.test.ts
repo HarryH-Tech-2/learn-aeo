@@ -17,7 +17,7 @@ describe("ownerEmail", () => {
     expect(ownerEmail()).toBe("hello@learnaeo.com");
     expect(DEFAULT_OWNER_EMAIL).toBe("hello@learnaeo.com");
   });
-  it("honours CONTACT_TO_EMAIL when set", () => {
+  it("honors CONTACT_TO_EMAIL when set", () => {
     process.env.CONTACT_TO_EMAIL = " other@example.com ";
     expect(ownerEmail()).toBe("other@example.com");
   });

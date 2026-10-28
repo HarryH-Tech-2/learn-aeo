@@ -216,7 +216,7 @@ export const LESSON_2: LessonContent = {
           term: "Three jobs, three kinds of bot",
           summary: "Training crawlers, search crawlers and user-triggered fetchers each get their own user-agent token.",
           explanation:
-            "The Gate introduced these bots. Here is the full set you will write rules for, grouped by the job each vendor says it does:\n\n- **Training.** OpenAI's `GPTBot` crawls content \"that may be used in training our generative AI foundation models\". Anthropic's `ClaudeBot` collects content \"that could potentially contribute to their training\".\n- **Search.** `OAI-SearchBot` surfaces sites in ChatGPT's search features. `Claude-SearchBot` analyses content \"to enhance the relevance and accuracy of search responses\". `PerplexityBot` surfaces and links sites in Perplexity's results, and Perplexity says \"It is not used to crawl content for AI foundation models.\"\n- **User-triggered.** `ChatGPT-User`, `Claude-User` and `Perplexity-User` visit a page because someone asked a question that needs it.\n\nOpenAI also runs `OAI-AdsBot`, which \"only visits pages submitted as ads\" on ChatGPT.",
+            "The Gate introduced these bots. Here is the full set you will write rules for, grouped by the job each vendor says it does:\n\n- **Training.** OpenAI's `GPTBot` crawls content \"that may be used in training our generative AI foundation models\". Anthropic's `ClaudeBot` collects content \"that could potentially contribute to their training\".\n- **Search.** `OAI-SearchBot` surfaces sites in ChatGPT's search features. `Claude-SearchBot` analyzes content \"to enhance the relevance and accuracy of search responses\". `PerplexityBot` surfaces and links sites in Perplexity's results, and Perplexity says \"It is not used to crawl content for AI foundation models.\"\n- **User-triggered.** `ChatGPT-User`, `Claude-User` and `Perplexity-User` visit a page because someone asked a question that needs it.\n\nOpenAI also runs `OAI-AdsBot`, which \"only visits pages submitted as ads\" on ChatGPT.",
           whyItMatters:
             "Each token is a separate switch. OpenAI says \"Each setting is independent of the others\", and Perplexity says \"Each setting works independently\". You can say no to training and yes to search in the same file, but only if you name the right tokens.",
           example: {
@@ -236,7 +236,7 @@ export const LESSON_2: LessonContent = {
           explanation:
             "Read each vendor's wording, because it differs:\n\n- **OpenAI** on ChatGPT-User: \"Because these actions are initiated by a user, robots.txt rules may not apply.\"\n- **Perplexity** on Perplexity-User: \"Since a user requested the fetch, this fetcher generally ignores robots.txt rules.\"\n- **Anthropic** covers all three of its bots, Claude-User included: \"Anthropic's Bots respect “do not crawl” signals by honoring industry standard directives in robots.txt.\"\n\nOpenAI adds that ChatGPT-User \"is not used to determine whether content may appear in Search\" and points you to OAI-SearchBot for that.",
           whyItMatters:
-            "A Disallow for ChatGPT-User or Perplexity-User is not a dependable way to stop those visits, and it is the wrong switch for search visibility anyway. A Disallow for Claude-User is honoured, and Anthropic warns it \"may reduce your site's visibility for user-directed web search\".",
+            "A Disallow for ChatGPT-User or Perplexity-User is not a dependable way to stop those visits, and it is the wrong switch for search visibility anyway. A Disallow for Claude-User is honored, and Anthropic warns it \"may reduce your site's visibility for user-directed web search\".",
           pitfall:
             "Blocking ChatGPT-User to leave ChatGPT search, or allowing it to get in. OpenAI says to use OAI-SearchBot in robots.txt \"for managing Search opt outs and automatic crawl\".",
           sources: [OPENAI_CRAWLERS, PERPLEXITY_CRAWLERS, ANTHROPIC_CRAWLERS],
@@ -301,7 +301,7 @@ export const LESSON_2: LessonContent = {
           pairs: [
             { term: "ChatGPT-User", definition: "Because a user started the action, robots.txt rules may not apply" },
             { term: "Perplexity-User", definition: "Generally ignores robots.txt rules, since a user requested the fetch" },
-            { term: "Claude-User", definition: "Honours robots.txt directives, like its vendor's other bots" },
+            { term: "Claude-User", definition: "Honors robots.txt directives, like its vendor's other bots" },
             { term: "Google-Extended", definition: "A control token only: crawling uses Google's existing user agents" },
           ],
           explanation:
@@ -426,7 +426,7 @@ export const LESSON_2: LessonContent = {
           term: "Content that needs JavaScript to appear",
           summary: "Google renders JavaScript. A 2024 study found that the major AI crawlers it measured did not.",
           explanation:
-            "Google documents its own process: it handles JavaScript pages in \"three main phases\", crawling, rendering and indexing. It still adds that \"server-side or pre-rendering is still a great idea because it makes your website faster for users and crawlers, and not all bots can run JavaScript.\"\n\nFor AI crawlers, there are two kinds of evidence:\n\n- **A vendor statement.** Common Crawl says of CCBot: \"Currently, JavaScript is not executed\".\n- **A published study.** In December 2024, Vercel and MERJ analysed crawler traffic on nextjs.org and the Vercel network. They reported that \"none of the major AI crawlers currently render JavaScript\", naming OpenAI's OAI-SearchBot, ChatGPT-User and GPTBot, Anthropic's ClaudeBot and PerplexityBot among others. They found Gemini uses Googlebot's infrastructure and renders fully.\n\nOpenAI, Anthropic and Perplexity's crawler pages do not say whether their bots render JavaScript. Claude-SearchBot and Claude-User were not in the study's list.",
+            "Google documents its own process: it handles JavaScript pages in \"three main phases\", crawling, rendering and indexing. It still adds that \"server-side or pre-rendering is still a great idea because it makes your website faster for users and crawlers, and not all bots can run JavaScript.\"\n\nFor AI crawlers, there are two kinds of evidence:\n\n- **A vendor statement.** Common Crawl says of CCBot: \"Currently, JavaScript is not executed\".\n- **A published study.** In December 2024, Vercel and MERJ analyzed crawler traffic on nextjs.org and the Vercel network. They reported that \"none of the major AI crawlers currently render JavaScript\", naming OpenAI's OAI-SearchBot, ChatGPT-User and GPTBot, Anthropic's ClaudeBot and PerplexityBot among others. They found Gemini uses Googlebot's infrastructure and renders fully.\n\nOpenAI, Anthropic and Perplexity's crawler pages do not say whether their bots render JavaScript. Claude-SearchBot and Claude-User were not in the study's list.",
           whyItMatters:
             "If your prices, product details or answers only appear after JavaScript runs, some bots that are allowed in may still see an empty page. Server-rendered HTML is the safe default, because a crawler does not need to run JavaScript to read it.",
           example: {
@@ -434,7 +434,7 @@ export const LESSON_2: LessonContent = {
             before:
               "<div id=\"app\"></div>\n<script src=\"/bundle.js\"></script>",
             after:
-              "<h1>Fernhill compost bin, 330 litres</h1>\n<p>£45. Free UK delivery on orders over £50.</p>\n<script src=\"/bundle.js\"></script>",
+              "<h1>Fernhill compost bin, 330 liters</h1>\n<p>£45. Free UK delivery on orders over £50.</p>\n<script src=\"/bundle.js\"></script>",
             note: "The HTML each page sends before any JavaScript runs (Fernhill is made up). A crawler that does not execute JavaScript sees nothing in the first version, and the product, price and delivery terms in the second.",
           },
           pitfall:
@@ -547,7 +547,7 @@ export const LESSON_2: LessonContent = {
           term: "CDN and firewall bot rules",
           summary: "Your CDN can turn a bot away before robots.txt ever matters.",
           explanation:
-            "robots.txt is a request that well-behaved bots honour. A CDN or web application firewall (WAF) is different: it decides whether the request is served at all. If the CDN blocks a bot, an `Allow` in robots.txt does not help.\n\nCloudflare is one example, and it has changed its settings several times:\n\n- In July 2024 it added a one-click block for AI bots and said: \"It's available for all customers, including those on the free tier.\"\n- In July 2025 it said it was \"changing the default to block AI crawlers unless they pay creators for their content.\"\n- Its docs (updated July 2026) describe separate policies for **Search**, **Agent** (\"such as chat fetch bots and browser-use agents\") and **Training**. Training includes \"mixed-purpose crawlers that are used both for Training and for Search\". From 15 September 2026, Cloudflare said new domains would block Training and Agent bots on pages that display ads, with Search left allowed.",
+            "robots.txt is a request that well-behaved bots honor. A CDN or web application firewall (WAF) is different: it decides whether the request is served at all. If the CDN blocks a bot, an `Allow` in robots.txt does not help.\n\nCloudflare is one example, and it has changed its settings several times:\n\n- In July 2024 it added a one-click block for AI bots and said: \"It's available for all customers, including those on the free tier.\"\n- In July 2025 it said it was \"changing the default to block AI crawlers unless they pay creators for their content.\"\n- Its docs (updated July 2026) describe separate policies for **Search**, **Agent** (\"such as chat fetch bots and browser-use agents\") and **Training**. Training includes \"mixed-purpose crawlers that are used both for Training and for Search\". From 15 September 2026, Cloudflare said new domains would block Training and Agent bots on pages that display ads, with Search left allowed.",
           whyItMatters:
             "If someone else runs your CDN, such as IT, a developer or an agency, ask them what its AI bot settings are. On Cloudflare, a Training block also catches mixed-purpose crawlers, and an Agent block catches chat fetch bots. Your robots.txt will not show either.",
           pitfall:
@@ -561,7 +561,7 @@ export const LESSON_2: LessonContent = {
           explanation:
             "Your server or CDN logs record each request's user-agent string and status code. Search them for the tokens in this lesson (`GPTBot`, `OAI-SearchBot`, `ClaudeBot`, `PerplexityBot` and so on) to see who arrives, which pages they fetch and whether they get a 200.\n\nA user-agent string is only a claim. Cloudflare notes that \"user agents are trivial for bot operators to change\". So verify the important ones:\n\n- **Published IP lists.** OpenAI publishes one per bot (for example `openai.com/gptbot.json`), Perplexity does the same, and Anthropic publishes `claude.com/crawling/bots.json`.\n- **Reverse DNS.** Google's method: look up the IP's hostname, check it is on googlebot.com, google.com or googleusercontent.com, then look that hostname up again and confirm it returns the same IP.\n\nOpenAI also says it may add a `robots.txt` marker to the user-agent string when fetching your robots.txt file, which helps you spot those requests.",
           whyItMatters:
-            "Logs are the only place you can see whether a robots.txt change or a CDN rule actually changed bot behaviour. Lesson 7 builds on this for reporting.",
+            "Logs are the only place you can see whether a robots.txt change or a CDN rule actually changed bot behavior. Lesson 7 builds on this for reporting.",
           example: {
             kind: "code",
             language: "text",
@@ -784,7 +784,7 @@ export const LESSON_2: LessonContent = {
         "These are the raw HTML responses from two product pages, before any JavaScript runs. Which one can a crawler that does not execute JavaScript read the price from?",
       passages: [
         "<div id=\"root\"></div><script src=\"/static/app.js\"></script>",
-        "<h1>Fernhill rain butt, 200 litres</h1><p>£39. In stock for next-day delivery.</p><script src=\"/static/app.js\"></script>",
+        "<h1>Fernhill rain butt, 200 liters</h1><p>£39. In stock for next-day delivery.</p><script src=\"/static/app.js\"></script>",
       ],
       answer: 1,
       explanation:

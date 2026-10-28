@@ -48,6 +48,8 @@ GBP prices: £80 lifetime, £8/month (builder's call; mirrors the USD/GBP ratio 
 
 Discounts and refunds carry over from the sibling unchanged (decided by Harry): regional pricing tiers at 30/50/65% off, the 33%-off lesson-completion offer valid for 60 hours (lifetime only), and the 14-day money-back guarantee. Coupon and promo-code ids are renamed for this site.
 
+**Amended 2026-10-28 (Harry):** the lesson-complete offer lasts **24 hours**, not 60. Site copy uses **US spelling** (optimization, program, behavior); the British spelling elsewhere in this spec is historic.
+
 **Stripe account (decided by Harry):** a new, separate Stripe account for Learn AEO. No shared webhooks, coupons or products with learnhieroglyphics.com, and no changes to the sibling's live code.
 
 **Certificate access (builder's call):** monthly subscribers can earn the certificate, as on the sibling site.

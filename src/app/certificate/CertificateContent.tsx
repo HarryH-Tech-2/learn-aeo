@@ -65,10 +65,10 @@ export default function CertificateContent() {
         canvas.height = img.height;
         ctx.drawImage(img, 0, 0);
 
-        // Draw the user's name centred on the template's gold name line (CERTIFICATE, shared
+        // Draw the user's name centered on the template's gold name line (CERTIFICATE, shared
         // with the dashboard preview).
         ctx.textAlign = "center";
-        ctx.fillStyle = CERTIFICATE.nameColour;
+        ctx.fillStyle = CERTIFICATE.nameColor;
         // (a long name is set smaller until it fits the line)
         let size = Math.round(img.width * CERTIFICATE.nameSize);
         const maxWidth = img.width * CERTIFICATE.nameMaxWidth;

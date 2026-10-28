@@ -43,11 +43,11 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: `${SITE.name} | ${SITE.tagline}`,
   description:
-    "An online course in answer engine optimisation for marketers who know SEO. Learn how ChatGPT, Perplexity and Google AI Overviews pick their sources, and how to get your pages cited. Lesson 1 is free.",
+    "An online course in answer engine optimization for marketers who know SEO. Learn how ChatGPT, Perplexity and Google AI Overviews pick their sources, and how to get your pages cited. Lesson 1 is free.",
   openGraph: {
     title: `${SITE.name} | ${SITE.tagline}`,
     description:
-      "A hands-on answer engine optimisation course for marketers who know SEO: how AI answers choose sources, how to let AI crawlers in, and how to write passages they can cite.",
+      "A hands-on answer engine optimization course for marketers who know SEO: how AI answers choose sources, how to let AI crawlers in, and how to write passages they can cite.",
     type: "website",
     locale: "en_US",
     siteName: SITE.name,
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${SITE.name} | ${SITE.tagline}`,
     description:
-      "Hands-on answer engine optimisation lessons for marketers who know SEO. Lesson 1 is free.",
+      "Hands-on answer engine optimization lessons for marketers who know SEO. Lesson 1 is free.",
     images: [absoluteUrl("/og-default.png")],
   },
   robots: {

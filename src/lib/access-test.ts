@@ -10,7 +10,7 @@
  * (90 days; crawlers get none), so the free group sees the course as free BEFORE signing up: pricing, lesson and game
  * paywalls and the sign-up card say "free with an account" (useFreeCourseGuest), and anyone in it who
  * reaches checkout is sent to the dashboard. Signing up copies the cookie's group onto the account (no cookie: a fresh
- * draw while the test is on). The cookie's group is honoured even after the test is switched off.
+ * draw while the test is on). The cookie's group is honored even after the test is switched off.
  * GA4: the gtag set-up in layout.tsx sends the cookie as the user property access_test, so sign-up rates split too.
  *
  * The account's group is a GameState row (game "access-test", state { arm, at }), written once at sign-up from the
@@ -20,7 +20,7 @@
  *
  * What the free group sees: every lesson, game and the community open; no upgrade screens, offers or offer emails;
  * a coffee ask instead (lesson section ends + outro, the dashboard, a day-5 email). HD pictures, prints, the class
- * set, the unit pack and licences stay paid (hasPaidAccess).
+ * set, the unit pack and licenses stay paid (hasPaidAccess).
  * GA4: user property access_test (free | paid) from the dashboard, coffee_click with location.
  */
 import { prisma } from "@/lib/db";
@@ -110,7 +110,7 @@ export type AccessTestPerson = {
 export type AccessArmSummary = { arm: AccessArm; accounts: number; started: number; lesson1Done: number; pastLesson1: number; paid: number };
 
 /** Pure: the per-group counts on /admin/marketing. */
-export function summariseAccessTest(people: AccessTestPerson[]): AccessArmSummary[] {
+export function summarizeAccessTest(people: AccessTestPerson[]): AccessArmSummary[] {
   return (["free", "paid"] as const).map((arm) => {
     const g = people.filter((p) => p.arm === arm);
     return {

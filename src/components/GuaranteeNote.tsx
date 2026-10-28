@@ -9,7 +9,7 @@ export default function GuaranteeNote({
   align = "center",
   className = "",
 }: {
-  /** "monthly" leads with cancelling, the pass's own reassurance */
+  /** "monthly" leads with canceling, the pass's own reassurance */
   plan?: "lifetime" | "monthly";
   /** an optional one-line "what's included" above the guarantee */
   included?: string;

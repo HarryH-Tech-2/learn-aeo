@@ -34,7 +34,7 @@ export type NurtureSnapshot = {
   name: string | null;
   nurtureStartedAt: Date;
   emailUnsubscribedAt: Date | null;
-  /** Paid (or a licence): gets no nurture at all. The free-unlock group is not counted here. */
+  /** Paid (or a license): gets no nurture at all. The free-unlock group is not counted here. */
   hasAccess: boolean;
   /** The free-unlock test's free group: the course is open, so no offers; a coffee ask instead */
   freeUnlock: boolean;
@@ -51,7 +51,7 @@ export type NurtureSnapshot = {
 
 export type NurtureStep = {
   key: NurtureStepKey;
-  /** Whole days after enrolment */
+  /** Whole days after enrollment */
   day: number;
   /** Extra condition on top of the timing rules */
   when?: (u: NurtureSnapshot, now: Date) => boolean;

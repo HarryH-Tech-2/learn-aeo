@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 vi.mock("@/lib/db", () => ({ prisma: { gameState: { upsert: vi.fn() } } }));
 
 import { prisma } from "@/lib/db";
-import { accessTestPercent, armOf, assignAccessTest, pickArm, pickVisitorArm, summariseAccessTest } from "@/lib/access-test";
+import { accessTestPercent, armOf, assignAccessTest, pickArm, pickVisitorArm, summarizeAccessTest } from "@/lib/access-test";
 
 const upsert = vi.mocked(prisma.gameState.upsert);
 
@@ -77,10 +77,10 @@ describe("assignAccessTest", () => {
   });
 });
 
-describe("summariseAccessTest", () => {
+describe("summarizeAccessTest", () => {
   it("counts each group", () => {
     const p = (arm: "free" | "paid", over = {}) => ({ arm, email: "x@example.com", started: false, lesson1Done: false, pastLesson1: false, paid: false, ...over });
-    const [free, paid] = summariseAccessTest([p("free", { started: true, pastLesson1: true }), p("free"), p("paid", { started: true, lesson1Done: true, paid: true })]);
+    const [free, paid] = summarizeAccessTest([p("free", { started: true, pastLesson1: true }), p("free"), p("paid", { started: true, lesson1Done: true, paid: true })]);
     expect(free).toEqual({ arm: "free", accounts: 2, started: 1, lesson1Done: 0, pastLesson1: 1, paid: 0 });
     expect(paid).toEqual({ arm: "paid", accounts: 1, started: 1, lesson1Done: 1, pastLesson1: 0, paid: 1 });
   });

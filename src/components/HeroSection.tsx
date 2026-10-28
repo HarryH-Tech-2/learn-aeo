@@ -21,7 +21,7 @@ export default function HeroSection() {
 
   return (
     <section className="hero-media relative pt-24 sm:pt-28 md:pt-32 min-h-[85vh] md:min-h-screen flex items-center justify-center overflow-hidden pb-12 md:pb-20 bg-[#04060d]">
-      {/* Background: navy with a cyan glow behind the headline and a faint gold one low down. Fixed colours,
+      {/* Background: navy with a cyan glow behind the headline and a faint gold one low down. Fixed colors,
           never theme-tinted, because the hero is dark in both themes. */}
       <div className="absolute inset-0" aria-hidden="true">
         <div
@@ -47,7 +47,7 @@ export default function HeroSection() {
         </p>
         {/* Visible at first paint (no opacity fade): Chrome ignores opacity-0 text for LCP. */}
         <h1 className="hero-title font-display text-4xl sm:text-6xl md:text-7xl font-light leading-[1.02] mb-6 sm:mb-8 tracking-tight">
-          <span className="text-sand-100">Learn answer engine</span> <span className="text-gradient-gold font-medium">optimisation</span>
+          <span className="text-sand-100">Learn answer engine</span> <span className="text-gradient-gold font-medium">optimization</span>
         </h1>
 
         <p

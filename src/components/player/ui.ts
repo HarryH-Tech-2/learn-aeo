@@ -1,4 +1,4 @@
-// Shared class strings and small helpers for the lesson player. Colours use the
+// Shared class strings and small helpers for the lesson player. Colors use the
 // theme tokens (remapped under html.light), so every state reads in both themes.
 
 import type { CodeLanguage, Question } from "@/lib/lesson-types";

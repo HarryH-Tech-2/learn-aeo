@@ -41,7 +41,7 @@ model User {
   signupLanding  String?
   heardAbout     String?
   createdAt      DateTime  @default(now())
-  // Nurture email sequence (src/lib/nurture.ts): enrolment time and opt-out
+  // Nurture email sequence (src/lib/nurture.ts): enrollment time and opt-out
   nurtureStartedAt    DateTime?
   emailUnsubscribedAt DateTime?
   emailSends          EmailSend[]

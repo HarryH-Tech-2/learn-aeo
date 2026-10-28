@@ -9,7 +9,7 @@ import { LESSON_CATALOG, titleMidSentence } from "@/lib/lesson-catalog";
 
 export const metadata: Metadata = {
   title: "Pricing: Lifetime or Monthly | Learn AEO",
-  description: `Lifetime access to the answer engine optimisation course for one payment of ${formatPlanPrice(PLANS.lifetime, "USD")}, or ${formatPlanPrice(PLANS.monthly, "USD")} a month. The first lesson is free.`,
+  description: `Lifetime access to the answer engine optimization course for one payment of ${formatPlanPrice(PLANS.lifetime, "USD")}, or ${formatPlanPrice(PLANS.monthly, "USD")} a month. The first lesson is free.`,
   alternates: {
     canonical: absoluteUrl("/pricing"),
   },
@@ -31,7 +31,7 @@ const INCLUDED = [
   },
   {
     title: "An audit to finish each lesson",
-    body: "Every lesson ends with an audit that tests what you have learned and earns XP towards your level.",
+    body: "Every lesson ends with an audit that tests what you have learned and earns XP toward your level.",
   },
   {
     title: "Certificate of completion",
@@ -50,7 +50,7 @@ export default function PricingPage() {
             "@type": "Course",
             name: "Learn AEO",
             description:
-              "Online course for marketers on answer engine optimisation (AEO): how to get your brand cited by ChatGPT, Perplexity, Google AI Overviews and other answer engines.",
+              "Online course for marketers on answer engine optimization (AEO): how to get your brand cited by ChatGPT, Perplexity, Google AI Overviews and other answer engines.",
             provider: {
               "@type": "Organization",
               name: "Learn AEO",

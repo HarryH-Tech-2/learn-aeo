@@ -86,7 +86,7 @@ export const BADGE_DEFINITIONS = [
   { name: "Voice of the Agora", criteria: "complete:authority-beyond-your-site", description: "Completed The Agora", icon: "/badges/district-the-agora.webp" },
   { name: "Ambassador", criteria: "complete:platform-playbooks", description: "Completed The Embassies", icon: "/badges/district-the-embassies.webp" },
   { name: "Stargazer", criteria: "complete:measuring-ai-visibility", description: "Completed The Observatory", icon: "/badges/district-the-observatory.webp" },
-  { name: "Keeper of the Citadel", criteria: "complete:running-an-aeo-programme", description: "Completed The Citadel", icon: "/badges/district-the-citadel.webp" },
+  { name: "Keeper of the Citadel", criteria: "complete:running-an-aeo-program", description: "Completed The Citadel", icon: "/badges/district-the-citadel.webp" },
   { name: "Perfect Audit", criteria: "perfect-audit", description: "Scored 100% on a lesson audit", icon: "/badges/perfect-audit.webp" },
   { name: "3-Day Streak", criteria: "streak:3", description: "Kept a 3-day streak", icon: "/badges/streak-3-days.webp" },
   { name: "7-Day Streak", criteria: "streak:7", description: "Kept a 7-day streak", icon: "/badges/streak-7-days.webp" },

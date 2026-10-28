@@ -26,14 +26,14 @@ function CheckoutNotice() {
   const searchParams = useSearchParams();
   const checkout = searchParams.get("checkout");
 
-  if (checkout !== "error" && checkout !== "cancelled") return null;
+  if (checkout !== "error" && checkout !== "canceled") return null;
 
   return (
     <div className={`max-w-xl mx-auto mb-10 px-5 py-4 border text-center ${checkout === "error" ? "bg-terracotta/10 border-terracotta/30" : "bg-gold-500/5 border-gold-700/30"}`}>
       <p className={`font-body text-sm ${checkout === "error" ? "text-terracotta" : "text-sand-300"}`}>
         {checkout === "error"
           ? "Something went wrong starting checkout. You have not been charged. Please try again below."
-          : "Checkout cancelled. You have not been charged. The course is here whenever you're ready."}
+          : "Checkout canceled. You have not been charged. The course is here whenever you're ready."}
       </p>
     </div>
   );
@@ -79,18 +79,18 @@ export default function PricingSection() {
       setOwned(null);
       return;
     }
-    let cancelled = false;
+    let canceled = false;
     fetch("/api/stripe/check-subscription")
       .then((r) => (r.ok ? r.json() : null))
       .then((a: { active?: boolean; via?: string } | null) => {
-        if (cancelled || !a?.active) return;
+        if (canceled || !a?.active) return;
         if (a.via === "lifetime") setOwned("lifetime");
         else if (a.via === "monthly") setOwned("monthly");
         else if (a.via === "free-unlock") setOwned("free-unlock");
       })
       .catch(() => null);
     return () => {
-      cancelled = true;
+      canceled = true;
     };
   }, [session]);
 

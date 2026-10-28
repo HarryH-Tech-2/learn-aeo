@@ -68,7 +68,7 @@ describe("BADGE_DEFINITIONS", () => {
       ["Voice of the Agora", "complete:authority-beyond-your-site", "Completed The Agora"],
       ["Ambassador", "complete:platform-playbooks", "Completed The Embassies"],
       ["Stargazer", "complete:measuring-ai-visibility", "Completed The Observatory"],
-      ["Keeper of the Citadel", "complete:running-an-aeo-programme", "Completed The Citadel"],
+      ["Keeper of the Citadel", "complete:running-an-aeo-program", "Completed The Citadel"],
       ["Perfect Audit", "perfect-audit", "Scored 100% on a lesson audit"],
       ["3-Day Streak", "streak:3", "Kept a 3-day streak"],
       ["7-Day Streak", "streak:7", "Kept a 7-day streak"],

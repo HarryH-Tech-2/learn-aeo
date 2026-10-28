@@ -7,7 +7,7 @@ const PRIVATE = ["/dashboard", "/account", "/certificate", "/checkout", "/login"
 // AI assistants already send real visitors (ChatGPT, Copilot, Perplexity show up
 // in GA4 as the "AI Assistant" channel). Listing their crawlers explicitly — with
 // the same allow/disallow as everyone else — signals that the public content is
-// meant to be read, summarised and cited. /llms.txt gives them a map.
+// meant to be read, summarized and cited. /llms.txt gives them a map.
 const AI_CRAWLERS = [
   "GPTBot",
   "OAI-SearchBot",

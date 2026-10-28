@@ -21,7 +21,7 @@ const EXPECTED = [
   ["authority-beyond-your-site", "The Agora", "Authority beyond your site", "intermediate", 25, false],
   ["platform-playbooks", "The Embassies", "Platform playbooks", "intermediate", 25, false],
   ["measuring-ai-visibility", "The Observatory", "Measuring AI visibility", "advanced", 25, false],
-  ["running-an-aeo-programme", "The Citadel", "Running an AEO programme", "advanced", 20, false],
+  ["running-an-aeo-program", "The Citadel", "Running an AEO program", "advanced", 20, false],
 ] as const;
 
 describe("lesson catalog", () => {
@@ -47,13 +47,13 @@ describe("lesson catalog", () => {
   it("looks lessons up and walks to the next", () => {
     expect(lessonMeta("nope")).toBeUndefined();
     expect(lessonMeta(FIRST_LESSON_ID)?.order).toBe(1);
-    expect(nextLessonMeta("running-an-aeo-programme")).toBeUndefined();
+    expect(nextLessonMeta("running-an-aeo-program")).toBeUndefined();
     expect(nextLessonMeta(FIRST_LESSON_ID)?.order).toBe(2);
     expect(nextLessonMeta("nope")).toBeUndefined();
   });
 
   it("lowercases only the first letter of a title used mid-sentence, keeping AEO", () => {
-    expect(titleMidSentence("Running an AEO programme")).toBe("running an AEO programme");
+    expect(titleMidSentence("Running an AEO program")).toBe("running an AEO program");
     expect(titleMidSentence("Make your site reachable by AI")).toBe("make your site reachable by AI");
     expect(titleMidSentence(LESSON_CATALOG[LESSON_CATALOG.length - 1].title)).toContain("AEO");
   });

@@ -1,5 +1,5 @@
 /**
- * The plan catalogue. Two ways to pay, one source of truth for the pricing
+ * The plan catalog. Two ways to pay, one source of truth for the pricing
  * page, checkout, the webhook and the account page.
  *
  *   lifetime   one payment of $100 (£80), the anchor

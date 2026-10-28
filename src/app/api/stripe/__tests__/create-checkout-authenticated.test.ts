@@ -33,7 +33,7 @@ vi.mock("@/lib/offers", () => ({
 }));
 
 vi.mock("@/lib/subscription", () => ({
-  checkSubscription: vi.fn().mockResolvedValue({ active: false, trial: false, via: null, periodEnd: null, licence: null }),
+  checkSubscription: vi.fn().mockResolvedValue({ active: false, trial: false, via: null, periodEnd: null, license: null }),
 }));
 
 import { NextRequest } from "next/server";
@@ -43,7 +43,7 @@ import { checkSubscription } from "@/lib/subscription";
 
 const mockedGetServerSession = vi.mocked(getServerSession);
 const mockedCheckSubscription = vi.mocked(checkSubscription);
-const noAccess = { active: false, trial: false, via: null, periodEnd: null, licence: null } as const;
+const noAccess = { active: false, trial: false, via: null, periodEnd: null, license: null } as const;
 
 describe("POST /api/stripe/create-checkout (authenticated)", () => {
   beforeEach(() => {
@@ -116,7 +116,7 @@ describe("POST /api/stripe/create-checkout (authenticated)", () => {
     expect(args.line_items[0].price).toBe("price_test123");
     expect(args.line_items[0].quantity).toBe(1);
     expect(args.success_url).toContain("/dashboard?checkout=success");
-    expect(args.cancel_url).toContain("/pricing?checkout=cancelled");
+    expect(args.cancel_url).toContain("/pricing?checkout=canceled");
     expect(args.customer_creation).toBe("always");
     expect(args.invoice_creation).toEqual({ enabled: true });
     expect(args.custom_text.submit.message).toContain("14 days for a full refund");
@@ -130,7 +130,7 @@ describe("POST /api/stripe/create-checkout (authenticated)", () => {
 
     const args = mockCreate.mock.calls[0][0];
     expect(args.success_url).toMatch(/^https:\/\/test\.example\.com\/dashboard\?/);
-    expect(args.cancel_url).toBe("https://test.example.com/pricing?checkout=cancelled");
+    expect(args.cancel_url).toBe("https://test.example.com/pricing?checkout=canceled");
   });
 
   it("returns 500 when Stripe throws an error", async () => {
@@ -223,9 +223,9 @@ describe("POST /api/stripe/create-checkout (authenticated)", () => {
 
   it("sends Cancel back to the page the buyer came from", async () => {
     mockedGetServerSession.mockResolvedValue({ user: { email: "us@example.com" } });
-    await POST(new NextRequest("http://localhost/api/stripe/create-checkout", { method: "POST", body: JSON.stringify({ from: "/lessons/royal-hall?step=3&checkout=cancelled" }) }));
-    expect(mockCreate.mock.calls[0][0].cancel_url).toBe("https://test.example.com/lessons/royal-hall?step=3&checkout=cancelled");
+    await POST(new NextRequest("http://localhost/api/stripe/create-checkout", { method: "POST", body: JSON.stringify({ from: "/lessons/royal-hall?step=3&checkout=canceled" }) }));
+    expect(mockCreate.mock.calls[0][0].cancel_url).toBe("https://test.example.com/lessons/royal-hall?step=3&checkout=canceled");
     await POST(new NextRequest("http://localhost/api/stripe/create-checkout", { method: "POST", body: JSON.stringify({ from: "//evil.example.com/x" }) }));
-    expect(mockCreate.mock.calls[1][0].cancel_url).toBe("https://test.example.com/pricing?checkout=cancelled");
+    expect(mockCreate.mock.calls[1][0].cancel_url).toBe("https://test.example.com/pricing?checkout=canceled");
   });
 });

@@ -301,7 +301,7 @@ export const LESSON_1: LessonContent = {
           prompt:
             "Your robots.txt disallows GPTBot and allows OAI-SearchBot. According to OpenAI's crawler documentation, what happens?",
           options: [
-            "Your pages can still appear in ChatGPT search answers, and you have signalled that your content should not be used for training",
+            "Your pages can still appear in ChatGPT search answers, and you have signaled that your content should not be used for training",
             "You disappear from ChatGPT entirely",
             "Both bots stop, because OpenAI uses one crawl for both",
             "Nothing changes, because OpenAI ignores robots.txt",
@@ -373,7 +373,7 @@ export const LESSON_1: LessonContent = {
           explanation:
             "Citations are short: Claude's carry up to 150 characters of the cited text. So write key claims to stand alone. Name the subject instead of writing \"it\", put the figure or condition in the same sentence, and answer the question before you add context.\n\nGoogle's guidance for its AI experiences adds two requirements. Make \"unique, non-commodity content\", because users ask \"longer and more specific questions\". And meet the basics: Googlebot is not blocked, the page returns HTTP 200, and it has indexable content. If you use structured data, it must match what is visible on the page.",
           whyItMatters:
-            "A sentence that is still true and complete when copied out on its own can be cited safely. A sentence that leans on its neighbours cannot.",
+            "A sentence that is still true and complete when copied out on its own can be cited safely. A sentence that leans on its neighbors cannot.",
           example: {
             kind: "before-after",
             before: "As mentioned above, it depends. For most people it's about a week, though there are some exceptions, which we cover below.",
@@ -506,7 +506,7 @@ export const LESSON_1: LessonContent = {
       },
       {
         label: "What the page does not ask for",
-        text: "Elsewhere on the same page, Google says there are no additional requirements or special optimisations for AI features: be indexed and snippet-eligible. It also says AI feature traffic is counted in Search Console's Performance report under the \"Web\" search type.",
+        text: "Elsewhere on the same page, Google says there are no additional requirements or special optimizations for AI features: be indexed and snippet-eligible. It also says AI feature traffic is counted in Search Console's Performance report under the \"Web\" search type.",
       },
     ],
     source: GOOGLE_AI_FEATURES,

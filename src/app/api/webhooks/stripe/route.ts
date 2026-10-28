@@ -45,7 +45,7 @@ function periodEnd(sub: Stripe.Subscription): Date | null {
  * checkout.session.async_payment_succeeded when a delayed method clears). Plans unlock. Payment is
  * checked below, so an unpaid session that completes does nothing until its payment succeeds.
  */
-async function fulfilCheckout(session: Stripe.Checkout.Session) {
+async function fulfillCheckout(session: Stripe.Checkout.Session) {
     const email = session.customer_email ?? session.customer_details?.email ?? null;
 
     const customerId = typeof session.customer === "string" ? session.customer : (session.customer?.id ?? null);
@@ -192,7 +192,7 @@ export async function POST(request: NextRequest) {
     switch (event.type) {
       case "checkout.session.completed":
       case "checkout.session.async_payment_succeeded": {
-        await fulfilCheckout(event.data.object as Stripe.Checkout.Session);
+        await fulfillCheckout(event.data.object as Stripe.Checkout.Session);
         break;
       }
 

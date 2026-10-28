@@ -20,7 +20,7 @@ vi.mock("@/lib/offers", () => ({
 }));
 
 vi.mock("@/lib/subscription", () => ({
-  checkSubscription: vi.fn().mockResolvedValue({ active: false, trial: false, via: null, periodEnd: null, licence: null }),
+  checkSubscription: vi.fn().mockResolvedValue({ active: false, trial: false, via: null, periodEnd: null, license: null }),
 }));
 
 import { NextRequest } from "next/server";

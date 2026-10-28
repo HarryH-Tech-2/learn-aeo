@@ -231,7 +231,7 @@ export const LESSON_3: LessonContent = {
             kind: "before-after",
             before: "This makes it ideal for smaller gardens, and it's easy to move once it's empty.",
             after:
-              "The Fernhill 200-litre rain butt is 60 cm wide, so it fits smaller gardens. The rain butt is light enough to move once it is empty.",
+              "The Fernhill 200-liter rain butt is 60 cm wide, so it fits smaller gardens. The rain butt is light enough to move once it is empty.",
             note: "Fernhill and its product are made up. The first sentence depends on whatever came before it. The second version names the product twice, and each sentence still works alone.",
           },
           pitfall:
@@ -249,9 +249,9 @@ export const LESSON_3: LessonContent = {
           example: {
             kind: "before-after",
             before:
-              "The bin holds 330 litres and comes with a ten-year guarantee, and delivery is free over £50, though returns must be sent back in the original packaging within 30 days.",
+              "The bin holds 330 liters and comes with a ten-year guarantee, and delivery is free over £50, though returns must be sent back in the original packaging within 30 days.",
             after:
-              "The Fernhill compost bin holds 330 litres and comes with a ten-year guarantee.\n\nYou can return the Fernhill compost bin within 30 days, in its original packaging.",
+              "The Fernhill compost bin holds 330 liters and comes with a ten-year guarantee.\n\nYou can return the Fernhill compost bin within 30 days, in its original packaging.",
             note: "Made-up product facts. The first version packs four claims into one sentence. The second gives the product facts and the returns policy a paragraph each. Delivery belongs in a section of its own.",
           },
           pitfall:
@@ -266,7 +266,7 @@ export const LESSON_3: LessonContent = {
           prompt: "Which sentence cannot be understood if an engine lifts it out on its own?",
           language: "text",
           lines: [
-            "The Fernhill rain butt holds 200 litres of water.",
+            "The Fernhill rain butt holds 200 liters of water.",
             "The rain butt comes with a brass tap and a childproof lid.",
             "This makes it a good choice for families.",
             "Delivery for the Fernhill rain butt is free on orders over £50.",
@@ -338,7 +338,7 @@ export const LESSON_3: LessonContent = {
             kind: "code",
             language: "html",
             caption: "A comparison as a real table (made-up products)",
-            code: "<table>\n  <tr><th>Bin</th><th>Capacity</th><th>Price</th></tr>\n  <tr><td>Fernhill Compact</td><td>220 litres</td><td>£35</td></tr>\n  <tr><td>Fernhill Standard</td><td>330 litres</td><td>£45</td></tr>\n</table>",
+            code: "<table>\n  <tr><th>Bin</th><th>Capacity</th><th>Price</th></tr>\n  <tr><td>Fernhill Compact</td><td>220 liters</td><td>£35</td></tr>\n  <tr><td>Fernhill Standard</td><td>330 liters</td><td>£45</td></tr>\n</table>",
           },
           pitfall:
             "Bullet points for everything. Microsoft says bullets work best \"for key steps, comparisons, or highlights. Not for every line of content.\" An explanation with reasons and conditions usually reads better as a paragraph.",
@@ -406,7 +406,7 @@ export const LESSON_3: LessonContent = {
         {
           id: "c-visible-dates",
           term: "Visible published and updated dates",
-          summary: "Show a clearly labelled date on the page, keep it consistent with your markup, and change it only when the content changes.",
+          summary: "Show a clearly labeled date on the page, keep it consistent with your markup, and change it only when the content changes.",
           explanation:
             "Google's steps for byline dates are to \"Add a user-visible date to the page and feature it prominently\", label it with text like \"Publish\" or \"Last updated\", and also give the date in structured data (`datePublished` and `dateModified`).\n\nIts best practices:\n\n- **Be consistent.** The visible date and the structured data should match.\n- **No future dates.** \"Don't specify future dates, or the date of the action described on the page.\"\n- **Keep other dates down.** If Google picks the wrong one, consider \"removing some or all other dates that appear on the page\".\n\nGoogle also says it \"doesn't guarantee that a byline date, whether visible or in structured data, will be shown in search results\". Microsoft Bing lists \"fresh\" content first among the qualities that help in AI search.",
           whyItMatters:
@@ -414,7 +414,7 @@ export const LESSON_3: LessonContent = {
           example: {
             kind: "code",
             language: "html",
-            caption: "A labelled, visible update date (made-up page)",
+            caption: "A labeled, visible update date (made-up page)",
             code: "<h1>Fernhill delivery and returns</h1>\n<p>Last updated: 12 October 2026</p>",
           },
           pitfall:
@@ -426,7 +426,7 @@ export const LESSON_3: LessonContent = {
           term: "Cite sources and publish original data",
           summary: "Show where your facts come from, and add something other pages do not have.",
           explanation:
-            "Google's self-assessment questions ask whether content provides \"original information, reporting, research, or analysis\", and whether it presents information \"in a way that makes you want to trust it, such as clear sourcing\". Google also says \"Attribution or giving credit to other sources doesn't replace the need for original effort.\" Its ranking systems guide describes original content systems that show original reporting \"ahead of those who merely cite it\".\n\nOne research study points the same way. In the GEO paper (Aggarwal et al., KDD 2024), the authors rewrote web pages and measured how visible they were in answers generated by GPT-3.5 Turbo on their GEO-bench benchmark. Their top methods were adding citations (Cite Sources), quotations (Quotation Addition) and statistics (Statistics Addition). Keyword stuffing gave \"little to no improvement\".\n\nThe authors also ran a smaller follow-up on Perplexity.ai, \"a commercially deployed generative engine\", using 200 test queries. Because Perplexity does not let users specify source URLs, they uploaded the source text as files instead. They report that the methods which worked on their test engine also improved visibility there, and that keyword stuffing did worse than the unoptimised pages on one of their two visibility measures (a word count weighted by position in the answer), though it scored higher on the other (a subjective impression score).",
+            "Google's self-assessment questions ask whether content provides \"original information, reporting, research, or analysis\", and whether it presents information \"in a way that makes you want to trust it, such as clear sourcing\". Google also says \"Attribution or giving credit to other sources doesn't replace the need for original effort.\" Its ranking systems guide describes original content systems that show original reporting \"ahead of those who merely cite it\".\n\nOne research study points the same way. In the GEO paper (Aggarwal et al., KDD 2024), the authors rewrote web pages and measured how visible they were in answers generated by GPT-3.5 Turbo on their GEO-bench benchmark. Their top methods were adding citations (Cite Sources), quotations (Quotation Addition) and statistics (Statistics Addition). Keyword stuffing gave \"little to no improvement\".\n\nThe authors also ran a smaller follow-up on Perplexity.ai, \"a commercially deployed generative engine\", using 200 test queries. Because Perplexity does not let users specify source URLs, they uploaded the source text as files instead. They report that the methods which worked on their test engine also improved visibility there, and that keyword stuffing did worse than the unoptimized pages on one of their two visibility measures (a word count weighted by position in the answer), though it scored higher on the other (a subjective impression score).",
           whyItMatters:
             "A claim with a named source is easier for readers to check, and Google says its original content systems aim to show original reporting ahead of pages that merely cite it. The GEO study's main results come from a test engine built on GPT-3.5 Turbo, with a smaller follow-up on Perplexity.ai. Treat it as one research study, not a rule for any particular engine.",
           example: {
@@ -449,7 +449,7 @@ export const LESSON_3: LessonContent = {
           whyItMatters:
             "Everything in this lesson serves readers first. Answer-first passages, clear structure and honest proof help people who visit directly. Google says that is the kind of content its systems seek to reward.",
           pitfall:
-            "Writing \"for AI\": thin pages of rephrased answers that add nothing new. That is exactly the summarising-without-value pattern Google warns about.",
+            "Writing \"for AI\": thin pages of rephrased answers that add nothing new. That is exactly the summarizing-without-value pattern Google warns about.",
           sources: [GOOGLE_HELPFUL, GOOGLE_AI_FEATURES],
         },
       ],
@@ -509,7 +509,7 @@ export const LESSON_3: LessonContent = {
         prompt: "Which opening should replace the first three sentences?",
         passages: [
           "Thanks for choosing Fernhill! We hope you enjoy your new bin as much as we enjoyed designing it.",
-          "The Fernhill 330-litre compost bin takes about 20 minutes to assemble and needs no tools.",
+          "The Fernhill 330-liter compost bin takes about 20 minutes to assemble and needs no tools.",
         ],
         answer: 1,
         explanation:
@@ -583,7 +583,7 @@ export const LESSON_3: LessonContent = {
       },
       {
         label: "What it does not show",
-        text: "On the day it was fetched, the page showed no published or last updated date. Its dates sat only in the code, and they disagreed: the JSON-LD gave a dateModified of 17 November 2014, matching the govuk:public-updated-at meta tag, while the govuk:updated-at tag said 16 October 2026. Facts like these can change, so for your own pages, follow Google's advice: show a labelled date that changes when the content does, and keep the dates in your markup in step with it.",
+        text: "On the day it was fetched, the page showed no published or last updated date. Its dates sat only in the code, and they disagreed: the JSON-LD gave a dateModified of 17 November 2014, matching the govuk:public-updated-at meta tag, while the govuk:updated-at tag said 16 October 2026. Facts like these can change, so for your own pages, follow Google's advice: show a labeled date that changes when the content does, and keep the dates in your markup in step with it.",
       },
     ],
     source: GOVUK_HOLIDAY,
@@ -620,8 +620,8 @@ export const LESSON_3: LessonContent = {
       prompt: "Which line should be a real heading element instead?",
       language: "html",
       lines: [
-        "<h1>Fernhill compost bin, 330 litres</h1>",
-        "<p>The Fernhill compost bin holds 330 litres and costs £45.</p>",
+        "<h1>Fernhill compost bin, 330 liters</h1>",
+        "<p>The Fernhill compost bin holds 330 liters and costs £45.</p>",
         "<div class=\"text-xl font-bold\">How do you assemble the bin?</div>",
         "<p>Assembling the Fernhill compost bin takes about 20 minutes and needs no tools.</p>",
       ],
@@ -662,7 +662,7 @@ export const LESSON_3: LessonContent = {
       answers: ["user-visible", "structured"],
       distractors: ["future", "hidden", "estimated"],
       explanation:
-        "Google asks for a prominent, labelled date that matches datePublished or dateModified in structured data. It says not to use future dates.",
+        "Google asks for a prominent, labeled date that matches datePublished or dateModified in structured data. It says not to use future dates.",
     },
     {
       kind: "choice",

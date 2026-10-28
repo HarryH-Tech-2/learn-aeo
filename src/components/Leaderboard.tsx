@@ -74,17 +74,17 @@ export default function Leaderboard({ limit = 10, showFullLink = false, heading 
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    let cancelled = false;
+    let canceled = false;
     fetch(`/api/leaderboard?limit=${limit}`)
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
       .then((d: LeaderboardData) => {
-        if (!cancelled) setData(d);
+        if (!canceled) setData(d);
       })
       .catch(() => {
-        if (!cancelled) setError(true);
+        if (!canceled) setError(true);
       });
     return () => {
-      cancelled = true;
+      canceled = true;
     };
   }, [limit]);
 
@@ -96,7 +96,7 @@ export default function Leaderboard({ limit = 10, showFullLink = false, heading 
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.25 }}
       className="card-ancient p-6 md:p-8"
-      aria-labelledby="leaderboard-heading"
+      aria-labeledby="leaderboard-heading"
     >
       <div className="flex items-baseline justify-between gap-4 mb-5">
         <div>

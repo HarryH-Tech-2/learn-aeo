@@ -29,7 +29,7 @@ function GetStartedInner() {
   const nextParam = searchParams.get("next");
   // "checkout" or any /checkout path (the pricing cards send /checkout?plan=…) means they are on their way to pay.
   const buyIntent = isBuyIntent(nextParam);
-  // A relative path (e.g. the lesson a guest was in) is honoured; anything
+  // A relative path (e.g. the lesson a guest was in) is honored; anything
   // else falls back to the dashboard. Never an absolute URL — no open redirect.
   const safeNext = nextParam && /^\/(?!\/)[\w\-./?=&%]*$/.test(nextParam) ? nextParam : null;
   const destination = buyIntent ? (safeNext ?? "/checkout") : safeNext ?? "/dashboard";

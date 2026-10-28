@@ -124,7 +124,7 @@ describe("trackEventWhenReady", () => {
     expect(gtag).toHaveBeenCalledWith("event", "class_strip_view", { question_type: "schoology.com" });
   });
 
-  it("gives up after 20 s and can be cancelled", () => {
+  it("gives up after 20 s and can be canceled", () => {
     const cancel = trackEventWhenReady("coffee_view");
     cancel();
     win.gtag = vi.fn();

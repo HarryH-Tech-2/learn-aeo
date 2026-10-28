@@ -66,7 +66,7 @@ export async function recordCheckoutLog(input: {
 /* ── Summary for /admin/marketing ─────────────────────────────────── */
 
 export type CheckoutLogRow = { email: string; source: string; createdAt: Date };
-/** A purchase of the course or a paid licence: who and when. */
+/** A purchase of the course or a paid license: who and when. */
 export type PurchaseRow = { email: string; at: Date };
 
 export type CheckoutOutcomeSummary = {
@@ -85,7 +85,7 @@ export type CheckoutRecoverySummary = {
 };
 
 /** Pure, so it is tested without a database. "Later purchased" = any purchase at or after the row's time. */
-export function summariseCheckoutLog(rows: CheckoutLogRow[], purchases: PurchaseRow[]): CheckoutRecoverySummary {
+export function summarizeCheckoutLog(rows: CheckoutLogRow[], purchases: PurchaseRow[]): CheckoutRecoverySummary {
   const bought = new Map<string, number[]>();
   for (const p of purchases) {
     const e = normaliseEmail(p.email);

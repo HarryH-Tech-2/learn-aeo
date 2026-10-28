@@ -134,7 +134,7 @@ export default function BadgeShelf({ badges }: Props) {
             onClick={() => setSelected(null)}
             role="dialog"
             aria-modal="true"
-            aria-labelledby="badge-modal-title"
+            aria-labeledby="badge-modal-title"
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.92, y: 10 }}

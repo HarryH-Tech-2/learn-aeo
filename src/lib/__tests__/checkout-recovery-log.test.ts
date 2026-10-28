@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 const mockRecordLead = vi.hoisted(() => vi.fn().mockResolvedValue(undefined));
 vi.mock("@/lib/leads", () => ({ recordLead: mockRecordLead, normaliseEmail: (e: string) => e.trim().toLowerCase() }));
 
-import { checkoutLogSource, parseCheckoutLogSource, recordCheckoutLog, summariseCheckoutLog } from "../checkout-recovery-log";
+import { checkoutLogSource, parseCheckoutLogSource, recordCheckoutLog, summarizeCheckoutLog } from "../checkout-recovery-log";
 
 describe("checkout recovery log", () => {
   beforeEach(() => vi.clearAllMocks());
@@ -40,7 +40,7 @@ describe("checkout recovery log", () => {
       { email: "A@x.com", at: d(2) },
       { email: "b@x.com", at: d(1) },
     ];
-    const s = summariseCheckoutLog(rows, purchases);
+    const s = summarizeCheckoutLog(rows, purchases);
     const o = Object.fromEntries(s.outcomes.map((x) => [x.outcome, x]));
     expect(o.expired).toEqual({ outcome: "expired", sessions: 3, people: 2, laterPurchased: 1 });
     expect(o["recovery-sent"].laterPurchased).toBe(1);

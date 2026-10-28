@@ -1,5 +1,5 @@
 /**
- * Where a buyer goes back to when they leave Stripe Checkout, and how the sign-up card recognises someone on their
+ * Where a buyer goes back to when they leave Stripe Checkout, and how the sign-up card recognizes someone on their
  * way to pay.
  *
  * Cancel used to always land on /pricing, which most buyers had never seen: they came from the dashboard, a lesson
@@ -29,13 +29,13 @@ export function safeReturnPath(raw: string | null | undefined): string {
   return url.pathname + url.search + url.hash;
 }
 
-/** The Stripe cancel_url: the return path with checkout=cancelled added before any #hash. */
+/** The Stripe cancel_url: the return path with checkout=canceled added before any #hash. */
 export function cancelUrlFor(base: string, from: string | null | undefined): string {
   const path = safeReturnPath(from);
   const hashAt = path.indexOf("#");
   const beforeHash = hashAt === -1 ? path : path.slice(0, hashAt);
   const hash = hashAt === -1 ? "" : path.slice(hashAt);
-  return `${base}${beforeHash}${beforeHash.includes("?") ? "&" : "?"}checkout=cancelled${hash}`;
+  return `${base}${beforeHash}${beforeHash.includes("?") ? "&" : "?"}checkout=canceled${hash}`;
 }
 
 /** True for the sign-up card's "next" when it leads to payment: "checkout" or any /checkout path. */

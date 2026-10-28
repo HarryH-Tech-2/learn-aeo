@@ -20,7 +20,7 @@ export function useLocalCurrency(): Currency {
 }
 
 /**
- * Lifetime price by default; pass `plan` for any plan in the catalogue, or `amount` for an arbitrary lifetime-currency figure.
+ * Lifetime price by default; pass `plan` for any plan in the catalog, or `amount` for an arbitrary lifetime-currency figure.
  * A plan price is the one this visitor will be charged: checkout applies the purchasing-power discount for their country
  * (src/lib/ppp.ts) to every plan, so it is shown here too. An explicit `amount` (an offer price) is shown as given.
  */

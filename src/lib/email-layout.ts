@@ -107,7 +107,7 @@ export function signature(line = "Learn AEO &middot; just reply, we read every e
 export type EmailLayoutOptions = {
   /** Absolute site origin, for the header image, the rule, the mark and the header link. */
   baseUrl: string;
-  /** The grey line inboxes show after the subject. */
+  /** The gray line inboxes show after the subject. */
   preheader: string;
   /** Rows from heroImage(), shown between the header and the framed body. */
   hero?: string;

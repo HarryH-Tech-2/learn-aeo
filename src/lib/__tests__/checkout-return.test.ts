@@ -9,7 +9,7 @@ describe("safeReturnPath", () => {
   });
 
   it("drops an old checkout= flag", () => {
-    expect(safeReturnPath("/pricing?checkout=cancelled")).toBe("/pricing");
+    expect(safeReturnPath("/pricing?checkout=canceled")).toBe("/pricing");
     expect(safeReturnPath("/dashboard?tab=journey&checkout=error")).toBe("/dashboard?tab=journey");
   });
 
@@ -28,16 +28,16 @@ describe("safeReturnPath", () => {
 });
 
 describe("cancelUrlFor", () => {
-  it("adds checkout=cancelled before any hash", () => {
-    expect(cancelUrlFor("https://x.com", "/dashboard")).toBe("https://x.com/dashboard?checkout=cancelled");
-    expect(cancelUrlFor("https://x.com", "/dashboard?tab=journey")).toBe("https://x.com/dashboard?tab=journey&checkout=cancelled");
-    expect(cancelUrlFor("https://x.com", "/#pricing")).toBe("https://x.com/?checkout=cancelled#pricing");
-    expect(cancelUrlFor("https://x.com", null)).toBe("https://x.com/pricing?checkout=cancelled");
+  it("adds checkout=canceled before any hash", () => {
+    expect(cancelUrlFor("https://x.com", "/dashboard")).toBe("https://x.com/dashboard?checkout=canceled");
+    expect(cancelUrlFor("https://x.com", "/dashboard?tab=journey")).toBe("https://x.com/dashboard?tab=journey&checkout=canceled");
+    expect(cancelUrlFor("https://x.com", "/#pricing")).toBe("https://x.com/?checkout=canceled#pricing");
+    expect(cancelUrlFor("https://x.com", null)).toBe("https://x.com/pricing?checkout=canceled");
   });
 });
 
 describe("isBuyIntent", () => {
-  it("recognises every way of saying checkout", () => {
+  it("recognizes every way of saying checkout", () => {
     expect(isBuyIntent("checkout")).toBe(true);
     expect(isBuyIntent("/checkout")).toBe(true);
     expect(isBuyIntent("/checkout?plan=monthly&from=%2Fpricing")).toBe(true);

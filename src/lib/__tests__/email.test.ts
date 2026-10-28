@@ -74,7 +74,7 @@ describe("sendWelcomeEmail", () => {
       await sendWelcomeEmail("Ana", "a@example.com", plan);
       const { html } = mockSend.mock.calls[0][0];
       expect(html).toContain(lessonsIncludedLine());
-      expect(html).toContain("running an AEO programme");
+      expect(html).toContain("running an AEO program");
       if (LESSON_CATALOG.some((l) => l.status !== "live")) {
         expect(html).not.toContain(`All ${LESSON_CATALOG.length} lessons, from`);
         expect(html).toContain("live now");

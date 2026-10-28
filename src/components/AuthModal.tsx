@@ -41,7 +41,7 @@ function destinationFor(next: string | null): { destination: string; buyIntent: 
   // "checkout" or any /checkout path: the pricing cards send /checkout?plan=…, which used to get the free-lesson
   // copy ("No payment needed") right after the visitor clicked Buy.
   const buyIntent = isBuyIntent(next);
-  // Same rules as /get-started: honour a relative path, never an absolute URL.
+  // Same rules as /get-started: honor a relative path, never an absolute URL.
   const safeNext = next && /^\/(?!\/)[\w\-./?=&%]*$/.test(next) ? next : null;
   return { destination: buyIntent ? (safeNext ?? "/checkout") : safeNext ?? "/dashboard", buyIntent };
 }

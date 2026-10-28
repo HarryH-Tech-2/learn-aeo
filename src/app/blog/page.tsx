@@ -8,7 +8,7 @@ const SITE = SITE_CONFIG.url;
 const BLOG_URL = `${SITE}/blog`;
 const BLOG_NAME = "The Learn AEO Blog";
 const BLOG_DESCRIPTION =
-  "Articles on answer engine optimisation for marketers: how AI answer engines choose their sources, and how to get your brand cited by them.";
+  "Articles on answer engine optimization for marketers: how AI answer engines choose their sources, and how to get your brand cited by them.";
 
 /** Newest first, by publish date; the index card grid uses the same order. */
 const sortedPosts = [...blogPosts].sort((a, b) =>
@@ -29,7 +29,7 @@ const latestModified = blogPosts.reduce<string | undefined>((max, post) => {
 const hasPosts = blogPosts.length > 0;
 
 export const metadata: Metadata = {
-  title: "Answer Engine Optimisation Articles | Learn AEO",
+  title: "Answer Engine Optimization Articles | Learn AEO",
   description: BLOG_DESCRIPTION,
   alternates: {
     canonical: BLOG_URL,
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
       }
     : { index: false, follow: true },
   openGraph: {
-    title: `${BLOG_NAME}: Answer Engine Optimisation Articles`,
+    title: `${BLOG_NAME}: Answer Engine Optimization Articles`,
     description: BLOG_DESCRIPTION,
     type: "website",
     url: BLOG_URL,
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${BLOG_NAME}: Answer Engine Optimisation Articles`,
+    title: `${BLOG_NAME}: Answer Engine Optimization Articles`,
     description: BLOG_DESCRIPTION,
     images: [`${SITE}/og-default.png`],
   },
@@ -98,7 +98,7 @@ export default function BlogPage() {
     "@type": "CollectionPage",
     "@id": BLOG_URL,
     url: BLOG_URL,
-    name: `${BLOG_NAME}: Answer Engine Optimisation Articles`,
+    name: `${BLOG_NAME}: Answer Engine Optimization Articles`,
     description: BLOG_DESCRIPTION,
     inLanguage: "en",
     isPartOf: { "@type": "WebSite", "@id": `${SITE}/#website`, url: SITE, name: SITE_CONFIG.name },

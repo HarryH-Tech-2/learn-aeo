@@ -1,7 +1,7 @@
 /**
  * Draws the Learn AEO badge set and the certificate template as SVG and renders them with sharp:
  *   public/badges/<name>.webp   one per entry in BADGE_DEFINITIONS (src/lib/gamification.ts), 512 x 512
- *   public/certificate-aeo.webp the certificate background, 2000 x 1414 (A4 landscape ratio)
+ *   public/certificate-aeo-us.webp the certificate background, 2000 x 1414 (A4 landscape ratio)
  *
  * The family: a navy disc with a gold outer ring and a cyan inner ring around a simple geometric
  * emblem. District badges carry their district's emblem; the audit, streak and milestone badges
@@ -32,7 +32,7 @@ const line = (width = 14) =>
 const goldLine = (width = 14) =>
   `fill="none" stroke="${GOLD}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"`;
 
-// ── Emblems, drawn in a 512 box centred on (256, 256), kept inside a radius of about 130 ──
+// ── Emblems, drawn in a 512 box centered on (256, 256), kept inside a radius of about 130 ──
 
 const EMBLEMS = {
   // The Gate: an arched gateway with a gold keystone
@@ -181,7 +181,7 @@ for (const [name, emblem] of Object.entries(BADGES)) {
 }
 
 // ── Certificate template, 2000 x 1414 ──
-// The name is drawn at runtime, centred at x = 50%, baseline at y = 57% (806px), within 50% of the
+// The name is drawn at runtime, centered at x = 50%, baseline at y = 57% (806px), within 50% of the
 // width (500..1500); the gold rule sits just under that baseline.
 const W = 2000;
 const H = 1414;
@@ -218,11 +218,11 @@ const certificate = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height
   <rect x="520" y="${nameBaseline + 34}" width="960" height="3" fill="${GOLD}"/>
 
   <text x="${W / 2}" y="${nameBaseline + 140}" text-anchor="middle" font-family="${SANS}" font-size="34" fill="${MUTED}">has completed the course</text>
-  <text x="${W / 2}" y="${nameBaseline + 260}" text-anchor="middle" font-family="${SERIF}" font-size="92" fill="${SAND}">Answer Engine <tspan fill="${GOLD}" font-style="italic">Optimisation</tspan></text>
+  <text x="${W / 2}" y="${nameBaseline + 260}" text-anchor="middle" font-family="${SERIF}" font-size="92" fill="${SAND}">Answer Engine <tspan fill="${GOLD}" font-style="italic">Optimization</tspan></text>
   <text x="${W / 2}" y="${nameBaseline + 336}" text-anchor="middle" font-family="${SANS}" font-size="30" fill="${MUTED}">All eight districts of the City of Answers</text>
 
   <text x="${W / 2}" y="${H - 130}" text-anchor="middle" font-family="${SANS}" font-size="28" letter-spacing="8" fill="${CYAN}">LEARNAEO.COM</text>
 </svg>`;
 
-await sharp(Buffer.from(certificate)).webp({ quality: 92 }).toFile("public/certificate-aeo.webp");
-console.log(`public/certificate-aeo.webp ${W}x${H}`);
+await sharp(Buffer.from(certificate)).webp({ quality: 92 }).toFile("public/certificate-aeo-us.webp");
+console.log(`public/certificate-aeo-us.webp ${W}x${H}`);

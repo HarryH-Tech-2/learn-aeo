@@ -57,7 +57,7 @@ describe("feedbackDue", () => {
     expect(feedbackDue(buyer({ lifetimeStatus: false }, { plan: "monthly", active: false }), NOW)).toBeNull();
   });
 
-  it("skips trials, licence-only buyers (no subscription row) and rows with no purchase date", () => {
+  it("skips trials, license-only buyers (no subscription row) and rows with no purchase date", () => {
     expect(feedbackDue(buyer({}, { trial: true }), NOW)).toBeNull();
     expect(feedbackDue(buyer({ subscription: null, lifetimeStatus: false }), NOW)).toBeNull();
     expect(feedbackDue(buyer({}, { activatedAt: null }), NOW)).toBeNull();

@@ -286,7 +286,7 @@ function DashboardInner() {
           key={tab}
           role="tabpanel"
           id={`dashboard-panel-${tab}`}
-          aria-labelledby={`dashboard-tab-${tab}`}
+          aria-labeledby={`dashboard-tab-${tab}`}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, ease: "easeOut" }}
@@ -383,7 +383,7 @@ function DashboardInner() {
                   transform: "translate(-50%, -100%)",
                   fontFamily: CERTIFICATE.nameFont,
                   fontSize: `${CERTIFICATE.nameSize * 100}cqw`,
-                  color: CERTIFICATE.nameColour,
+                  color: CERTIFICATE.nameColor,
                 }}
               >
                 {session.user?.name || "Learner"}
@@ -398,7 +398,7 @@ function DashboardInner() {
                     </p>
                     <p className="font-body text-sm text-sand-100 max-w-sm mx-auto">
                       Complete all {LESSON_CATALOG.length} lessons to unlock your
-                      personalised certificate.
+                      personalized certificate.
                     </p>
                   </div>
                 </div>

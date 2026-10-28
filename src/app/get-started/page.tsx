@@ -11,7 +11,7 @@ const FIRST = LESSON_CATALOG[0];
 export const metadata: Metadata = {
   title: "Start Learning AEO | Lesson 1 Free",
   description:
-    `Sign in free and start lesson 1 of the Learn AEO answer engine optimisation course. Unlock the rest for a one-time ${formatPlanPrice(PLANS.lifetime, "USD")} payment or ${formatPlanPrice(PLANS.monthly, "USD")} a month.`,
+    `Sign in free and start lesson 1 of the Learn AEO answer engine optimization course. Unlock the rest for a one-time ${formatPlanPrice(PLANS.lifetime, "USD")} payment or ${formatPlanPrice(PLANS.monthly, "USD")} a month.`,
   alternates: {
     canonical: absoluteUrl("/get-started"),
   },
@@ -23,7 +23,7 @@ export default function GetStartedPage() {
       <Navbar />
       {/* Server-rendered SEO content — visible to crawlers, visually hidden for users who see the form */}
       <section className="sr-only" aria-hidden="false">
-        <h1>Start learning answer engine optimisation: lesson 1 free</h1>
+        <h1>Start learning answer engine optimization: lesson 1 free</h1>
         <p>
           Sign in with Google or your email address and start lesson 1, {FIRST.title}, straight away. When you&apos;re
           ready, unlock the rest of the course for a single payment of {formatPlanPrice(PLANS.lifetime, "USD")}, or learn
