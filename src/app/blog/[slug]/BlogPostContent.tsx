@@ -180,7 +180,7 @@ export default function BlogPostContent({
           <section
             id="quick-answer"
             className="reveal mb-10 border border-gold-500/25 bg-gold-500/5 p-6 md:p-7"
-            aria-labeledby="quick-answer-heading"
+            aria-labelledby="quick-answer-heading"
             style={reveal(0.15, { y: 0, dur: 0.6 })}
           >
             <p
@@ -234,7 +234,7 @@ export default function BlogPostContent({
           {/* Table of contents — anchors match the ids the h2 renderer emits */}
           {headings.length >= 3 && (
             <nav
-              aria-labeledby="toc-heading"
+              aria-labelledby="toc-heading"
               className="reveal mb-12 border border-gold-700/20 bg-obsidian-light/40 p-6 md:p-7"
               style={reveal(0.25, { y: 0, dur: 0.6 })}
             >

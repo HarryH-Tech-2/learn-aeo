@@ -7,6 +7,8 @@ import {
   formatIssued,
   isCertificateCode,
   linkedInAddUrl,
+  canExportCertificate,
+  printedName,
   newCertificateCode,
   verifyUrl,
 } from "@/lib/certificate-issue";
@@ -72,5 +74,23 @@ describe("linkedInAddUrl", () => {
     expect(u.searchParams.get("issueMonth")).toBe("10");
     expect(u.searchParams.get("certId")).toBe("ABCDEFGH23");
     expect(u.searchParams.get("certUrl")).toMatch(/\/verify\/ABCDEFGH23$/);
+  });
+});
+
+describe("what the certificate prints (it must match /verify)", () => {
+  it("prints the issued record's name once it exists, never an unsaved typed name", () => {
+    expect(printedName({ name: "Learner" }, "Jane Smith")).toBe("Learner");
+    expect(printedName({ name: "Jane Smith" }, "Jane Smith")).toBe("Jane Smith");
+  });
+
+  it("previews the typed name before the record arrives", () => {
+    expect(printedName(null, "Jane Smith")).toBe("Jane Smith");
+  });
+
+  it("allows download and share only with an issued record and no unsaved name", () => {
+    expect(canExportCertificate({ cert: null, unsaved: false, imageReady: true })).toBe(false);
+    expect(canExportCertificate({ cert: { name: "Jane" }, unsaved: true, imageReady: true })).toBe(false);
+    expect(canExportCertificate({ cert: { name: "Jane" }, unsaved: false, imageReady: false })).toBe(false);
+    expect(canExportCertificate({ cert: { name: "Jane" }, unsaved: false, imageReady: true })).toBe(true);
   });
 });

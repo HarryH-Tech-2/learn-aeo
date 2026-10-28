@@ -3,13 +3,15 @@
  * email footer and the List-Unsubscribe header (so Gmail's button works,
  * which POSTs). Transactional mail (sign-in links, receipts) is unaffected.
  *
- * ?u=<user id>: an account (the nurture sequence). ?e=<email>: someone known only by address (an EmailLead);
- * recorded as a "no-more" EmailLead row.
+ * ?u=<user id>: an account (the nurture sequence). ?e=<email>: someone known only by address (an EmailLead,
+ * e.g. a newsletter subscriber); recorded as a "no-more" EmailLead row and marked unsubscribed in the
+ * Resend audience the newsletter adds them to, so broadcasts stop too.
  */
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { verifyLeadUnsubscribeToken, verifyUnsubscribeToken } from "@/lib/unsubscribe";
 import { recordLead } from "@/lib/leads";
+import { Resend } from "resend";
 
 export const dynamic = "force-dynamic";
 
@@ -34,7 +36,17 @@ async function handle(req: NextRequest): Promise<NextResponse> {
         400
       );
     }
-    await recordLead({ email: email.trim().toLowerCase(), source: "no-more" });
+    const address = email.trim().toLowerCase();
+    await recordLead({ email: address, source: "no-more" });
+    const audienceId = process.env.RESEND_AUDIENCE_ID;
+    if (audienceId) {
+      try {
+        const { error } = await new Resend(process.env.RESEND_API_KEY).contacts.update({ audienceId, email: address, unsubscribed: true });
+        if (error) console.error("[unsubscribe] contacts.update failed:", error);
+      } catch (err) {
+        console.error("[unsubscribe] contacts.update failed:", err);
+      }
+    }
     return page("You are unsubscribed", "No more emails from us.");
   }
   const userId = req.nextUrl.searchParams.get("u") ?? "";

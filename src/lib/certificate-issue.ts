@@ -40,6 +40,19 @@ export function displayName(name: string): string {
   return `${parts[0]} ${parts[parts.length - 1][0].toUpperCase()}.`;
 }
 
+/**
+ * The name drawn on the certificate. Once the record is issued it is the record's name, so the
+ * PNG always matches /verify; before that, the typed name is shown as a preview.
+ */
+export function printedName(cert: { name: string } | null, typed: string): string {
+  return cert ? cert.name : typed;
+}
+
+/** Download and share only a certificate whose record exists and whose name is saved. */
+export function canExportCertificate(s: { cert: { name: string } | null; unsaved: boolean; imageReady: boolean }): boolean {
+  return !!s.cert && !s.unsaved && s.imageReady;
+}
+
 /** LinkedIn's "add license or certification" form, prefilled with this certificate. */
 export function linkedInAddUrl(code: string, issuedAt: Date): string {
   const q = new URLSearchParams({

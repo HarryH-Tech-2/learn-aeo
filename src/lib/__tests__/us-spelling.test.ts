@@ -17,7 +17,7 @@ const BINARY_EXT = new Set([
 // This file's own word list, and third-party package metadata.
 const ALLOW_FILES = new Set(["src/lib/__tests__/us-spelling.test.ts", "package-lock.json"]);
 // Text quoted verbatim from a source keeps its spelling.
-const ALLOW_PHRASES = [/driving licence/gi];
+const ALLOW_PHRASES = [/driving licence/gi, /aria-labelledby/g];
 
 // British stems, matched case-sensitively as lowercase or Capitalized: caught anywhere in a word,
 // camelCase identifiers included (summariseX, nameColour, unoptimised), without false hits across a
@@ -68,6 +68,12 @@ describe("US spelling everywhere", () => {
       });
     }
     expect(hits).toEqual([]);
+  });
+
+  it("leaves the ARIA attribute aria-labelledby alone (it is spelled that way in the spec)", () => {
+    const broken = textFiles.filter((rel) => !ALLOW_FILES.has(rel) && fs.readFileSync(path.join(ROOT, rel), "utf8").includes("aria-" + "labeledby"));
+    expect(broken).toEqual([]);
+    expect(BRITISH.test(`<div aria-labelledby="x">`.replace(ALLOW_PHRASES[1], ""))).toBe(false);
   });
 
   it("uses US slugs and query values", () => {

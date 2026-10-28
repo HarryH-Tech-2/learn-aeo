@@ -286,7 +286,7 @@ function DashboardInner() {
           key={tab}
           role="tabpanel"
           id={`dashboard-panel-${tab}`}
-          aria-labeledby={`dashboard-tab-${tab}`}
+          aria-labelledby={`dashboard-tab-${tab}`}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, ease: "easeOut" }}

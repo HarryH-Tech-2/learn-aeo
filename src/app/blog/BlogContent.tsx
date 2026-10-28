@@ -14,7 +14,7 @@ export type BlogSummary = Pick<BlogPost, "slug" | "title" | "excerpt" | "date" |
 /** Shown while there are no posts. */
 export function BlogComingSoon() {
   return (
-    <section aria-labeledby="coming-soon-heading" className="reveal max-w-2xl" style={reveal(0.1, { y: 20 })}>
+    <section aria-labelledby="coming-soon-heading" className="reveal max-w-2xl" style={reveal(0.1, { y: 20 })}>
       <h2 id="coming-soon-heading" className="font-display text-2xl text-sand-100 mb-3">
         Articles are on their way
       </h2>

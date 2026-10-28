@@ -9,7 +9,7 @@ import Navbar from "@/components/Navbar";
 import { LESSON_CATALOG } from "@/lib/lesson-catalog";
 import { fetchJson } from "@/lib/fetch-json";
 import { CERTIFICATE } from "@/lib/certificate";
-import { formatIssued, linkedInAddUrl } from "@/lib/certificate-issue";
+import { canExportCertificate, formatIssued, linkedInAddUrl, printedName } from "@/lib/certificate-issue";
 
 type IssuedCertificate = { code: string; name: string; issuedAt: string; url: string };
 
@@ -30,6 +30,7 @@ export default function CertificateContent() {
   const [saving, setSaving] = useState(false);
   const userName = (typedName ?? accountName).trim() || "Learner";
   const unsaved = typedName !== null && typedName.trim() !== "" && typedName.trim() !== accountName;
+  const [saveError, setSaveError] = useState(false);
 
   async function saveName() {
     if (!unsaved || typedName === null) return;
@@ -38,11 +39,14 @@ export default function CertificateContent() {
       const name = typedName.trim().slice(0, 60);
       const res = await fetch("/api/account", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name }) });
       if (res.ok) {
+        setSaveError(false);
         await update({ name });
         issue();
+      } else {
+        setSaveError(true);
       }
     } catch {
-      /* the certificate still carries the typed name; only the account copy failed */
+      setSaveError(true);
     } finally {
       setSaving(false);
     }
@@ -74,6 +78,11 @@ export default function CertificateContent() {
     if (allCompleted) issue();
   }, [allCompleted]);
 
+  // What the canvas draws: the issued record's name (so the PNG matches /verify), or the typed
+  // name as a preview while it is unsaved (export is blocked until it is saved).
+  const drawnName = printedName(unsaved ? null : cert, userName);
+  const exportable = canExportCertificate({ cert, unsaved, imageReady: !!imageDataUrl });
+
   useEffect(() => {
     if (allCompleted && canvasRef.current) {
       const canvas = canvasRef.current;
@@ -95,8 +104,8 @@ export default function CertificateContent() {
         const maxWidth = img.width * CERTIFICATE.nameMaxWidth;
         do {
           ctx.font = `${size}px ${CERTIFICATE.nameFont}`;
-        } while (ctx.measureText(userName).width > maxWidth && --size > 12);
-        ctx.fillText(userName, img.width * CERTIFICATE.nameX, img.height * CERTIFICATE.nameY);
+        } while (ctx.measureText(drawnName).width > maxWidth && --size > 12);
+        ctx.fillText(drawnName, img.width * CERTIFICATE.nameX, img.height * CERTIFICATE.nameY);
 
         // The issue date and verification URL, once the record exists.
         if (cert) {
@@ -111,7 +120,7 @@ export default function CertificateContent() {
       };
       img.src = CERTIFICATE.src;
     }
-  }, [allCompleted, userName, cert]);
+  }, [allCompleted, drawnName, cert]);
 
   if (status === "loading" || allCompleted === null) {
     return (
@@ -169,7 +178,7 @@ export default function CertificateContent() {
   }
 
   function handleDownload() {
-    if (!imageDataUrl) return;
+    if (!exportable || !imageDataUrl) return;
     const link = document.createElement("a");
     link.download = "learn-aeo-certificate.png";
     link.href = imageDataUrl;
@@ -177,7 +186,7 @@ export default function CertificateContent() {
   }
 
   async function handleShare() {
-    if (!imageDataUrl) return;
+    if (!exportable || !imageDataUrl) return;
     const blob = await (await fetch(imageDataUrl)).blob();
     const file = new File([blob], "learn-aeo-certificate.png", {
       type: "image/png",
@@ -261,6 +270,16 @@ export default function CertificateContent() {
             {saving ? "Saving…" : "Save to my account"}
           </button>
         </form>
+        {unsaved && (
+          <p className="mt-3 text-center font-body text-xs text-sand-400">
+            Save the name to your account to download it: the verification page shows the saved name.
+          </p>
+        )}
+        {saveError && (
+          <p role="alert" className="mt-3 text-center font-body text-xs text-gold-400">
+            Could not save the name. Please try again.
+          </p>
+        )}
 
         <motion.div
           initial={{ opacity: 0 }}
@@ -270,14 +289,14 @@ export default function CertificateContent() {
         >
           <button
             onClick={handleDownload}
-            disabled={!imageDataUrl}
+            disabled={!exportable}
             className="btn-primary py-3 px-8 text-sm disabled:opacity-50"
           >
             Download
           </button>
           <button
             onClick={handleShare}
-            disabled={!imageDataUrl}
+            disabled={!exportable}
             className="btn-secondary py-3 px-8 text-sm disabled:opacity-50"
           >
             Share

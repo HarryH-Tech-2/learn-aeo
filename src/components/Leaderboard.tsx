@@ -96,7 +96,7 @@ export default function Leaderboard({ limit = 10, showFullLink = false, heading 
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.25 }}
       className="card-ancient p-6 md:p-8"
-      aria-labeledby="leaderboard-heading"
+      aria-labelledby="leaderboard-heading"
     >
       <div className="flex items-baseline justify-between gap-4 mb-5">
         <div>
