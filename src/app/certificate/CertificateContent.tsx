@@ -9,6 +9,9 @@ import Navbar from "@/components/Navbar";
 import { LESSON_CATALOG } from "@/lib/lesson-catalog";
 import { fetchJson } from "@/lib/fetch-json";
 import { CERTIFICATE } from "@/lib/certificate";
+import { formatIssued, linkedInAddUrl } from "@/lib/certificate-issue";
+
+type IssuedCertificate = { code: string; name: string; issuedAt: string; url: string };
 
 export default function CertificateContent() {
   const { data: session, status, update } = useSession();
@@ -16,6 +19,9 @@ export default function CertificateContent() {
   const [allCompleted, setAllCompleted] = useState<boolean | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
+  // The issued record (code, date, verification URL), from POST /api/certificate.
+  const [cert, setCert] = useState<IssuedCertificate | null>(null);
+  const [copied, setCopied] = useState(false);
 
   // The name printed is the account name. Accounts made by email link have none, so the
   // learner can type it here (saved to the account); until they do, it reads "Learner".
@@ -31,7 +37,10 @@ export default function CertificateContent() {
     try {
       const name = typedName.trim().slice(0, 60);
       const res = await fetch("/api/account", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name }) });
-      if (res.ok) await update({ name });
+      if (res.ok) {
+        await update({ name });
+        issue();
+      }
     } catch {
       /* the certificate still carries the typed name; only the account copy failed */
     } finally {
@@ -52,6 +61,18 @@ export default function CertificateContent() {
         .catch(() => setAllCompleted(false));
     }
   }, [session]);
+
+  // Issue (or fetch) the certificate record. The server checks every lesson is complete; the
+  // name on the record follows the account, so this runs again after a name save.
+  function issue() {
+    fetchJson<IssuedCertificate>("/api/certificate", { method: "POST" })
+      .then(setCert)
+      .catch(() => setCert(null));
+  }
+
+  useEffect(() => {
+    if (allCompleted) issue();
+  }, [allCompleted]);
 
   useEffect(() => {
     if (allCompleted && canvasRef.current) {
@@ -77,11 +98,20 @@ export default function CertificateContent() {
         } while (ctx.measureText(userName).width > maxWidth && --size > 12);
         ctx.fillText(userName, img.width * CERTIFICATE.nameX, img.height * CERTIFICATE.nameY);
 
+        // The issue date and verification URL, once the record exists.
+        if (cert) {
+          ctx.font = `${Math.round(img.width * CERTIFICATE.metaSize)}px ${CERTIFICATE.metaFont}`;
+          ctx.fillStyle = CERTIFICATE.metaColor;
+          ctx.fillText(`Issued ${formatIssued(new Date(cert.issuedAt))}`, img.width / 2, img.height * CERTIFICATE.dateY);
+          ctx.fillStyle = CERTIFICATE.urlColor;
+          ctx.fillText(`Verify: ${cert.url.replace(/^https?:\/\//, "")}`, img.width / 2, img.height * CERTIFICATE.urlY);
+        }
+
         setImageDataUrl(canvas.toDataURL("image/png"));
       };
       img.src = CERTIFICATE.src;
     }
-  }, [allCompleted, userName]);
+  }, [allCompleted, userName, cert]);
 
   if (status === "loading" || allCompleted === null) {
     return (
@@ -253,6 +283,34 @@ export default function CertificateContent() {
             Share
           </button>
         </motion.div>
+
+        {cert && (
+          <div className="mt-8 text-center">
+            <p className="font-body text-xs tracking-[0.15em] uppercase text-sand-400 mb-2">Verification link</p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <a href={cert.url} className="font-body text-sm text-cyan-400 hover:text-gold-400 break-all">
+                {cert.url}
+              </a>
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard?.writeText(cert.url).then(() => setCopied(true), () => {});
+                }}
+                className="btn-secondary py-2 px-5 text-xs"
+              >
+                {copied ? "Copied" : "Copy link"}
+              </button>
+            </div>
+            <a
+              href={linkedInAddUrl(cert.code, new Date(cert.issuedAt))}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block mt-4 font-body text-sm text-sand-300 hover:text-gold-400 underline underline-offset-4"
+            >
+              Add to LinkedIn
+            </a>
+          </div>
+        )}
       </div>
     </div>
   );

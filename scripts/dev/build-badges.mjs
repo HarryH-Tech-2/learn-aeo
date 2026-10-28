@@ -1,7 +1,7 @@
 /**
  * Draws the Learn AEO badge set and the certificate template as SVG and renders them with sharp:
  *   public/badges/<name>.webp   one per entry in BADGE_DEFINITIONS (src/lib/gamification.ts), 512 x 512
- *   public/certificate-aeo-us.webp the certificate background, 2000 x 1414 (A4 landscape ratio)
+ *   public/certificate-aeo-v2.webp the certificate background, 2000 x 1414 (A4 landscape ratio)
  *
  * The family: a navy disc with a gold outer ring and a cyan inner ring around a simple geometric
  * emblem. District badges carry their district's emblem; the audit, streak and milestone badges
@@ -221,8 +221,9 @@ const certificate = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height
   <text x="${W / 2}" y="${nameBaseline + 260}" text-anchor="middle" font-family="${SERIF}" font-size="92" fill="${SAND}">Answer Engine <tspan fill="${GOLD}" font-style="italic">Optimization</tspan></text>
   <text x="${W / 2}" y="${nameBaseline + 336}" text-anchor="middle" font-family="${SANS}" font-size="30" fill="${MUTED}">All eight districts of the City of Answers</text>
 
-  <text x="${W / 2}" y="${H - 130}" text-anchor="middle" font-family="${SANS}" font-size="28" letter-spacing="8" fill="${CYAN}">LEARNAEO.COM</text>
+  <!-- y 1222 and 1278 stay blank: the issue date and verification URL are drawn at runtime
+       (CERTIFICATE.dateY / urlY in src/lib/certificate.ts). -->
 </svg>`;
 
-await sharp(Buffer.from(certificate)).webp({ quality: 92 }).toFile("public/certificate-aeo-us.webp");
-console.log(`public/certificate-aeo-us.webp ${W}x${H}`);
+await sharp(Buffer.from(certificate)).webp({ quality: 92 }).toFile("public/certificate-aeo-v2.webp");
+console.log(`public/certificate-aeo-v2.webp ${W}x${H}`);
