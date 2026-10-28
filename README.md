@@ -40,6 +40,15 @@ npx tsx scripts/seed-badges.ts   # writes the badge definitions from src/lib/gam
 - The badge seed deletes any badge row that is no longer defined, and the user badges that point at it go with it (cascade). It then upserts the current definitions, so it is safe to run again.
 - There is no XP backfill: XP is earned only through the new XP claims from launch onwards (the site has not launched, so no one has XP to carry over).
 
+After a deploy that adds or substantively changes pages, tell Bing and the other IndexNow engines:
+
+```bash
+node scripts/indexnow-ping.mjs                 # every URL in the live sitemap
+node scripts/indexnow-ping.mjs /pricing        # or just these paths
+```
+
+The key is in `scripts/indexnow.config.json` and served from `public/<key>.txt`; `src/lib/__tests__/indexnow.test.ts` checks the two match.
+
 ### Dev auth bypass
 
 With `AEO_DEV_BYPASS_AUTH=1` sign-in is skipped locally. It is ignored when `NODE_ENV` is `production` (src/lib/dev-bypass.ts); never set it on Vercel. The dashboard still redirects without a real session, so under the bypass open a lesson by its URL, e.g. `/lessons/make-your-site-reachable-by-ai`.

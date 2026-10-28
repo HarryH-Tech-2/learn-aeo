@@ -2,25 +2,31 @@ import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/site";
 import { blogPosts, type BlogPost } from "@/lib/blog-posts";
 import { LESSONS } from "@/lib/lessons";
+import { TOOLS, toolPath, type ToolMeta } from "@/lib/tools";
 
-// Static content lastmod — bump this when marketing pages (home/about/etc.)
-// are substantively edited. Using a real date beats `new Date()` because
-// Google treats per-request timestamps as a weak freshness signal.
-const SITE_LASTMOD = new Date("2026-04-18");
-// Pages substantively edited on 2026-08-24 (hero/nav).
-const HOME_LASTMOD = new Date("2026-08-24");
-
-// When the lesson catalog was last revised. Bump on structural changes.
-const LESSONS_LASTMOD = new Date("2026-04-18");
+// Real edit dates, not `new Date()`: Google treats per-request timestamps as a weak freshness
+// signal. Bump a date when those pages are substantively edited.
+// Marketing and legal pages: Learn AEO copy (Plans 3–5).
+const SITE_LASTMOD = new Date("2026-10-28");
+// The home page: the City of Answers hero and the tools section (Plan 4).
+const HOME_LASTMOD = new Date("2026-10-28");
+// The lesson catalog and lessons 1–3.
+const LESSONS_LASTMOD = new Date("2026-10-27");
+// Tool pages go live in Plan 6; bump when one changes.
+const TOOLS_LASTMOD = new Date("2026-10-28");
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return buildSitemap(blogPosts);
+  return buildSitemap({ posts: blogPosts, tools: TOOLS });
 }
 
-/** Parameterised on the posts so the with-posts path can be tested while the real list is empty. */
-export function buildSitemap(
-  posts: Pick<BlogPost, "slug" | "publishedAt" | "updatedAt">[]
-): MetadataRoute.Sitemap {
+/** Parameterized on the posts and tools so the with-posts and live-tool paths can be tested before they exist. */
+export function buildSitemap({
+  posts,
+  tools,
+}: {
+  posts: Pick<BlogPost, "slug" | "publishedAt" | "updatedAt">[];
+  tools: readonly ToolMeta[];
+}): MetadataRoute.Sitemap {
   const baseUrl = SITE.url;
 
   const staticPages: MetadataRoute.Sitemap = [
@@ -56,7 +62,7 @@ export function buildSitemap(
     },
     {
       url: `${baseUrl}/leaderboard`,
-      lastModified: new Date("2026-08-23"),
+      lastModified: SITE_LASTMOD,
       changeFrequency: "daily",
       priority: 0.5,
     },
@@ -105,5 +111,15 @@ export function buildSitemap(
       priority: 0.8,
     }));
 
-  return [...staticPages, ...blogIndexPages, ...blogPages, ...lessonPages];
+  // Only tools whose page exists (status "live" in src/lib/tools.ts).
+  const toolPages: MetadataRoute.Sitemap = tools
+    .filter((t) => t.status === "live")
+    .map((t) => ({
+      url: `${baseUrl}${toolPath(t.slug)}`,
+      lastModified: TOOLS_LASTMOD,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    }));
+
+  return [...staticPages, ...blogIndexPages, ...blogPages, ...lessonPages, ...toolPages];
 }

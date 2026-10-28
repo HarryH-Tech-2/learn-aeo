@@ -34,6 +34,9 @@ const PRIVATE: [string, () => Promise<PageModule>][] = [
   ["verify", () => import("@/app/verify/[code]/page")],
 ];
 
+// Importing a page pulls in its whole component tree; under a full parallel run that can take seconds.
+const IMPORT_TIMEOUT = 30_000;
+
 const titleOf = (m: Metadata) => (typeof m.title === "string" ? m.title : (m.title as { absolute: string }).absolute);
 
 function expectPublic(m: Metadata, path: string, absoluteAllowed = false) {
@@ -53,7 +56,7 @@ describe("public page metadata", () => {
       const m = (await load()).metadata!;
       expect(m, `${name} exports metadata`).toBeDefined();
       expectPublic(m, path, path === "/");
-    });
+    }, IMPORT_TIMEOUT);
   }
 
   it("each lesson", async () => {
@@ -63,7 +66,7 @@ describe("public page metadata", () => {
       expectPublic(m, lessonPath(l.id));
       if (l.status === "coming-soon") expect((m.robots as { index: boolean }).index).toBe(false);
     }
-  });
+  }, IMPORT_TIMEOUT);
 });
 
 describe("private page metadata", () => {
@@ -71,6 +74,6 @@ describe("private page metadata", () => {
     it(`${name} is noindex`, async () => {
       const m = (await load()).metadata!;
       expect((m.robots as { index: boolean }).index).toBe(false);
-    });
+    }, IMPORT_TIMEOUT);
   }
 });
