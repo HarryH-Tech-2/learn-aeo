@@ -2,7 +2,7 @@
 
 Learn AEO is a course for marketers on answer engine optimization: how to get a brand cited and recommended by ChatGPT, Perplexity, Google AI Overviews and other answer engines. It is a Next.js app (App Router, Prisma, NextAuth, Stripe, Resend) forked from an earlier course codebase, with the old subject-specific features removed. Pricing is $100 lifetime or $10 a month (GBP options at £80 and £8).
 
-Status: Plan 1 (fork, strip, rebrand, pricing) and Plan 2 (lesson model, lesson player, lessons 1-3) are done. Plan 3 (removal of the old theme, server-side XP, levels and badges, certificate, rewritten emails, site-wide ban test) is done.
+Status: Plan 1 (fork, strip, rebrand, pricing) and Plan 2 (lesson model, lesson player, lessons 1-3) are done. Plan 3 (removal of the old theme, server-side XP, levels and badges, certificate, rewritten emails, site-wide ban test) is done. Plan 4 (US spelling, verifiable certificate with /verify/<code>, the City of Answers 3D hero, the tools section) is done. Next: Plan 5, SEO plumbing.
 
 ## Setup
 
@@ -33,7 +33,7 @@ npx tsc --noEmit && npm test && npm run build
 Before the new code takes traffic, run these against the production database (with `POSTGRES_URL` and `DATABASE_URL` set to it):
 
 ```bash
-npx prisma migrate deploy        # applies prisma/migrations, including the XP claims table
+npx prisma migrate deploy        # applies prisma/migrations, including the XP claims and certificates tables
 npx tsx scripts/seed-badges.ts   # writes the badge definitions from src/lib/gamification.ts
 ```
 
