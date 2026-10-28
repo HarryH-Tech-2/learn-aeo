@@ -46,7 +46,7 @@ describe("JsonLd", () => {
 describe("entities", () => {
   it("links the WebSite to the Organization by @id", () => {
     expect(ORG_ID).toBe(`${SITE.url}/#organization`);
-    expect(websiteSchema().publisher).toEqual({ "@id": ORG_ID });
+    expect(websiteSchema().publisher).toMatchObject({ "@id": ORG_ID });
   });
 
   it("prices the Course from the plan catalog", () => {
@@ -54,7 +54,7 @@ describe("entities", () => {
     expect(c["@id"]).toBe(COURSE_ID);
     expect(c.offers.map((o) => o.price)).toEqual(PLAN_IDS.map((id) => String(PLANS[id].usd)));
     expect(c.offers.every((o) => o.priceCurrency === "USD")).toBe(true);
-    expect(c.provider).toEqual({ "@id": ORG_ID });
+    expect(c.provider).toMatchObject({ "@id": ORG_ID });
   });
 
   it("lists exactly the live lessons as syllabus sections", () => {
@@ -65,7 +65,7 @@ describe("entities", () => {
   it("makes each lesson part of the course", () => {
     const r = learningResourceSchema(LESSON_CATALOG[0]);
     expect(r.isPartOf).toEqual({ "@id": COURSE_ID });
-    expect(r.provider).toEqual({ "@id": ORG_ID });
+    expect(r.provider).toMatchObject({ "@id": ORG_ID });
     expect(r.timeRequired).toBe(`PT${LESSON_CATALOG[0].minutes}M`);
   });
 
@@ -99,8 +99,23 @@ describe("entities", () => {
       wordCount: 100,
       minutes: 1,
     });
-    expect(p.author).toEqual({ "@id": ORG_ID });
-    expect(p.publisher).toEqual({ "@id": ORG_ID });
+    expect(p.author).toMatchObject({ "@id": ORG_ID });
+    expect(p.publisher).toMatchObject({ "@id": ORG_ID });
+  });
+});
+
+describe("references a validator can read on its own", () => {
+  it("names the Organization wherever it is referenced (Google may not join @ids across script blocks)", () => {
+    const ref = { "@type": "Organization", "@id": ORG_ID, name: SITE.name, url: SITE.url };
+    expect(courseSchema().provider).toEqual(ref);
+    expect(learningResourceSchema(LESSON_CATALOG[0]).provider).toEqual(ref);
+    expect(websiteSchema().publisher).toEqual(ref);
+  });
+
+  it("labels each offer by how it is paid: one-time Paid, monthly Subscription", () => {
+    const byName = Object.fromEntries(courseSchema().offers.map((o) => [o.name, o.category]));
+    expect(byName[PLANS.lifetime.name]).toBe("Paid");
+    expect(byName[PLANS.monthly.name]).toBe("Subscription");
   });
 });
 

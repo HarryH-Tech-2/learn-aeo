@@ -47,4 +47,11 @@ describe("privateMetadata", () => {
     expect(p.alternates).toBeUndefined();
     expect(p.title).toBe("Dashboard");
   });
+
+  it("has its own social card, so a shared private link never shows the home card", () => {
+    const p = privateMetadata("Certificate verification", "A verified Learn AEO certificate.");
+    expect(p.openGraph?.title).toBe(`Certificate verification | ${SITE.name}`);
+    expect(p.openGraph?.description).toBe("A verified Learn AEO certificate.");
+    expect(p.twitter?.title).toBe(`Certificate verification | ${SITE.name}`);
+  });
 });

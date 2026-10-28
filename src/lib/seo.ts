@@ -47,9 +47,13 @@ export function pageMetadata(o: {
 
 /** Signed-in, transactional or one-off pages: kept out of every index, no canonical. */
 export function privateMetadata(title: string, description?: string): Metadata {
+  // Its own social card (a shared /verify link would otherwise preview as the home page).
+  const fullTitle = `${title} | ${SITE.name}`;
   return {
     title,
     ...(description ? { description } : {}),
+    openGraph: { title: fullTitle, ...(description ? { description } : {}), siteName: SITE.name, type: "website", images: [{ ...DEFAULT_IMAGE, alt: fullTitle }] },
+    twitter: { card: "summary_large_image", title: fullTitle, ...(description ? { description } : {}), images: [DEFAULT_IMAGE.url] },
     robots: { index: false, follow: false },
   };
 }

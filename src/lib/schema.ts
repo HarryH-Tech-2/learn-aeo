@@ -13,7 +13,9 @@ export const ORG_ID = `${SITE.url}/#organization`;
 export const WEBSITE_ID = `${SITE.url}/#website`;
 export const COURSE_ID = `${SITE.url}/#course`;
 
-const ORG_REF = { "@id": ORG_ID };
+// A reference that names the Organization too: validators may not join @ids across the page's
+// separate JSON-LD blocks, and Course info / Article rich results want provider.name, author.name.
+const ORG_REF = { "@type": "Organization", "@id": ORG_ID, name: SITE.name, url: SITE.url };
 const LANGUAGE = "en-US";
 
 export function organizationSchema() {
@@ -60,7 +62,8 @@ export function courseSchema() {
     offers: PLAN_IDS.map((id) => ({
       "@type": "Offer",
       name: PLANS[id].name,
-      category: "Paid",
+      // Google's Course info categories: a one-time payment is "Paid", monthly is "Subscription".
+      category: PLANS[id].mode === "subscription" ? "Subscription" : "Paid",
       price: String(PLANS[id].usd),
       priceCurrency: "USD",
       availability: "https://schema.org/InStock",

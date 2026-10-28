@@ -8,7 +8,10 @@ import { privateMetadata } from "@/lib/seo";
 
 // Public proof that a certificate is real: the link printed on every certificate and shared
 // on LinkedIn. It shows only first name and last initial, and is kept out of search.
-export const metadata: Metadata = privateMetadata("Certificate verification");
+export const metadata: Metadata = privateMetadata(
+  "Certificate verification",
+  "Check a Learn AEO certificate of completion for the answer engine optimization course."
+);
 
 export default async function VerifyPage({ params }: { params: Promise<{ code: string }> }) {
   const { code } = await params;
