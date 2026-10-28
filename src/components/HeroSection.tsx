@@ -7,20 +7,22 @@ import type { CSSProperties } from "react";
 import { trackEvent } from "@/lib/analytics";
 import { useAuthModal } from "@/components/AuthModal";
 import CtaInside from "@/components/home/HeroCta";
+import CityHero from "@/components/home/CityHero";
 
 const FIRST_LESSON_MINUTES = LESSON_CATALOG[0].minutes;
 
 /**
- * The homepage hero: a static dark band (hero-media pins the dark tokens in both themes, and the navbar floats
- * over it from `lg` up), with the headline, one line on who the course is for, the free first lesson and a
- * second way in to the curriculum. No media: the 3D hero is a later plan.
+ * The homepage hero: the City of Answers scene (CityHero) behind a dark band (hero-media pins the dark tokens
+ * in both themes, and the navbar floats over it from `lg` up). The copy sits low so the scene's cited source
+ * rises above it, and is plain server HTML: the headline, one line on who the course is for, the free first
+ * lesson and a second way in to the curriculum never wait on WebGL.
  */
 export default function HeroSection() {
   const { data: session } = useSession();
   const { openAuthModal } = useAuthModal();
 
   return (
-    <section className="hero-media relative pt-24 sm:pt-28 md:pt-32 min-h-[85vh] md:min-h-screen flex items-center justify-center overflow-hidden pb-12 md:pb-20 bg-[#04060d]">
+    <section className="city-hero hero-media relative flex flex-col justify-end overflow-hidden pt-24 pb-[9vh] bg-[#04060d]">
       {/* Background: navy with a cyan glow behind the headline and a faint gold one low down. Fixed colors,
           never theme-tinted, because the hero is dark in both themes. */}
       <div className="absolute inset-0" aria-hidden="true">
@@ -40,8 +42,10 @@ export default function HeroSection() {
         />
       </div>
 
+      <CityHero />
+
       {/* Content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="city-hero-copy relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <p className="font-body text-xs sm:text-sm uppercase tracking-[0.2em] text-cyan-400 mb-5">
           A course for marketers who know SEO
         </p>

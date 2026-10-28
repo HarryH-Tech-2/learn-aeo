@@ -87,7 +87,7 @@ describe("no Egyptian references anywhere", () => {
 
   it("walks a sensible number of files, root files included", () => {
     expect(textFiles.length).toBeGreaterThan(100);
-    for (const f of ["README.md", "package.json", "next.config.ts", "hero/index.html"]) expect(textFiles).toContain(f);
+    for (const f of ["README.md", "package.json", "next.config.ts", "src/components/home/city-scene.ts"]) expect(textFiles).toContain(f);
     expect(textFiles.some((r) => SKIP_PREFIXES.some((p) => r.startsWith(p)))).toBe(false);
   });
 
