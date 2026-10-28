@@ -31,6 +31,8 @@ export async function generateMetadata({
     description: `${lesson.summary} Lesson ${lesson.order} of the Learn AEO course: ${lesson.district}${lesson.isFree ? ", free with sign-in" : ""}.`,
     path: lessonPath(id),
     type: "article",
+    // The share image comes from ./opengraph-image.tsx.
+    image: null,
     // A coming-soon page has nothing to learn from yet: keep it out of the index until it opens.
     noindex: lesson.status === "coming-soon",
   });

@@ -14,6 +14,10 @@ const PROTECTED_PATHS = ["/dashboard", "/account", "/certificate", "/checkout", 
 // Derived from `isFree` in the catalog (src/lib/lesson-catalog.ts).
 const PUBLIC_LESSONS = publicLessonPaths();
 
+// A lesson's share image (src/app/lessons/[id]/opengraph-image.tsx; Next adds a ?hash). Social
+// crawlers have no session, and a redirect here would leave paid lessons without a link preview.
+const LESSON_OG_IMAGE = /^\/lessons\/[^/]+\/opengraph-image$/;
+
 /** The free-unlock test (src/lib/access-test.ts): a new visitor's group, kept in a cookie the pages read. */
 function withAccessCookie(request: NextRequest, response: NextResponse): void {
   const { arm, set } = pickVisitorArm({
@@ -52,7 +56,8 @@ export function middleware(request: NextRequest) {
   if (devBypassAuth()) return withCountryCookie(request, NextResponse.next());
 
   const isProtected = PROTECTED_PATHS.some((path) => pathname === path || pathname.startsWith(path + "/"));
-  const isPublicLesson = PUBLIC_LESSONS.some((path) => pathname === path || pathname.startsWith(path + "/"));
+  const isPublicLesson =
+    PUBLIC_LESSONS.some((path) => pathname === path || pathname.startsWith(path + "/")) || LESSON_OG_IMAGE.test(pathname);
 
   // Only protect known protected routes — let everything else pass through
   // so Next.js can serve the page or return a proper 404
