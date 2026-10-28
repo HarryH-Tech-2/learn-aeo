@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { SITE } from "@/lib/site";
-import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
 import { Resend } from "resend";
 import { ownerEmail } from "@/lib/notify";
-import { recordLead, isValidEmail, normaliseEmail } from "@/lib/leads";
-import { brandFrom, button, emailLayout, heading, paragraph } from "@/lib/email-layout";
+import { recordLead, isValidEmail, normalizeEmail } from "@/lib/leads";
+import { brandFrom } from "@/lib/email-layout";
+import { newsletterWelcomeHtml } from "@/lib/newsletter-email";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
       { status: 400 }
     );
   }
-  const email = normaliseEmail(rawEmail);
+  const email = normalizeEmail(rawEmail);
 
   // Our own record first — Resend's log only keeps 30 days.
   await recordLead({ email, source: "newsletter" });
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
       from: brandFrom(),
       to: email,
       subject: "Welcome to Learn AEO",
-      html: welcomeHtml((process.env.NEXTAUTH_URL || SITE.url).replace(/\/$/, "")),
+      html: newsletterWelcomeHtml((process.env.NEXTAUTH_URL || SITE.url).replace(/\/$/, ""), email),
     });
 
     return NextResponse.json({ ok: true });
@@ -68,20 +68,4 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-}
-
-/** The welcome email, in the shared email look. */
-function welcomeHtml(site: string): string {
-  return emailLayout({
-    baseUrl: site,
-    preheader: "Course news from Learn AEO, and a free first lesson to start with.",
-    body: [
-      heading("Welcome to Learn AEO"),
-      paragraph("Thanks for subscribing. We will email you when there is news about the course, such as a new lesson opening."),
-      paragraph("While you wait, Lesson 1 is free: how answer engines like Google's AI Overviews, ChatGPT search and Perplexity build an answer, and how they choose which pages to cite."),
-      button(`${site}${FIRST_LESSON_PATH}`, "Start Lesson 1"),
-    ].join(""),
-    signature: false,
-    reason: "You are getting this because you subscribed at learnaeo.com.",
-  });
 }

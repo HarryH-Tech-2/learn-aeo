@@ -14,7 +14,7 @@ export type LeadSource =
   /** asked for no more mail (one-click unsubscribe, or added by hand) */
   | "no-more";
 
-export function normaliseEmail(email: string): string {
+export function normalizeEmail(email: string): string {
   return email.trim().toLowerCase();
 }
 
@@ -35,7 +35,7 @@ export async function recordLead(input: {
   source: LeadSource;
   name?: string | null;
 }): Promise<void> {
-  const email = normaliseEmail(input.email);
+  const email = normalizeEmail(input.email);
   try {
     await prisma.emailLead.upsert({
       where: { email_source: { email, source: input.source } },

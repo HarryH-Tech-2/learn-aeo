@@ -36,7 +36,7 @@ vi.mock("@/lib/email", () => ({
   sendCheckoutRecoveryEmail: mockSendRecovery,
 }));
 
-vi.mock("@/lib/leads", () => ({ recordLead: mockRecordLead, normaliseEmail: (e: string) => e.trim().toLowerCase() }));
+vi.mock("@/lib/leads", () => ({ recordLead: mockRecordLead, normalizeEmail: (e: string) => e.trim().toLowerCase() }));
 
 vi.mock("@/lib/offers", () => ({ grantOffer: mockGrantOffer, OFFER_PERCENT_OFF: 33 }));
 const mockReminder = vi.hoisted(() => vi.fn().mockResolvedValue("sent"));

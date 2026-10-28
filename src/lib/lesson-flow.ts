@@ -1,5 +1,5 @@
 // Lesson step sequencing and resume handling: turns lesson content into a flat
-// list of steps, and sanitises a saved position so a reload never lands past
+// list of steps, and sanitizes a saved position so a reload never lands past
 // the audit or on a corrupt value.
 
 import { COOKIE_PREFIX } from "@/lib/site";

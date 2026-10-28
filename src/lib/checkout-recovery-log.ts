@@ -1,4 +1,4 @@
-import { recordLead, normaliseEmail, type LeadSource } from "@/lib/leads";
+import { recordLead, normalizeEmail, type LeadSource } from "@/lib/leads";
 
 /**
  * A durable record of what happened after each unpaid course checkout expired, so we can tell whether the "you left
@@ -88,10 +88,10 @@ export type CheckoutRecoverySummary = {
 export function summarizeCheckoutLog(rows: CheckoutLogRow[], purchases: PurchaseRow[]): CheckoutRecoverySummary {
   const bought = new Map<string, number[]>();
   for (const p of purchases) {
-    const e = normaliseEmail(p.email);
+    const e = normalizeEmail(p.email);
     bought.set(e, [...(bought.get(e) ?? []), p.at.getTime()]);
   }
-  const boughtAfter = (email: string, at: Date) => (bought.get(normaliseEmail(email)) ?? []).some((t) => t >= at.getTime());
+  const boughtAfter = (email: string, at: Date) => (bought.get(normalizeEmail(email)) ?? []).some((t) => t >= at.getTime());
 
   const by = new Map<CheckoutLogOutcome, { sessions: number; people: Set<string>; purchased: Set<string> }>();
   const reasons = new Map<string, number>();
@@ -100,7 +100,7 @@ export function summarizeCheckoutLog(rows: CheckoutLogRow[], purchases: Purchase
     const parsed = parseCheckoutLogSource(r.source);
     if (!parsed) continue;
     if (!firstAt || r.createdAt < firstAt) firstAt = r.createdAt;
-    const email = normaliseEmail(r.email);
+    const email = normalizeEmail(r.email);
     const s = by.get(parsed.outcome) ?? { sessions: 0, people: new Set<string>(), purchased: new Set<string>() };
     s.sessions += 1;
     s.people.add(email);

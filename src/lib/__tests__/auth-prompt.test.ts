@@ -4,7 +4,7 @@ import {
   PROMPT_MIN_TIME_ON_PAGE_MS,
   BLOG_SCROLL_THRESHOLD,
   parsePromptRecord,
-  serialisePromptRecord,
+  serializePromptRecord,
   shouldShowAuthPrompt,
   promptBlockReason,
   isTemporaryBlock,
@@ -88,7 +88,7 @@ describe("promptBlockReason", () => {
 
 describe("prompt record storage", () => {
   it("round-trips through JSON", () => {
-    const raw = serialisePromptRecord({ shownAt: NOW });
+    const raw = serializePromptRecord({ shownAt: NOW });
     expect(parsePromptRecord(raw)).toEqual({ shownAt: NOW });
   });
 

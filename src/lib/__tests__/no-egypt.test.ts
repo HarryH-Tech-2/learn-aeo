@@ -48,7 +48,7 @@ const WORDS = [
   "osiris", "isis", String.raw`sarcophag\w*`, "giza", "luxor", String.raw`(?<!inverted[\s-]+)pyramids?`, "scholars?",
 ];
 const ANY_CASE = new RegExp(String.raw`(?<!\w)(?:${WORDS.join("|")})(?!\w)`, "i");
-// The sun god, capitalised only: lowercase "ra" turns up in ordinary code.
+// The sun god, capitalized only: lowercase "ra" turns up in ordinary code.
 const CAPITALISED = /(?<!\w)Ra(?!\w)/;
 const BANNED = {
   exec: (s: string) => ANY_CASE.exec(s) ?? CAPITALISED.exec(s),

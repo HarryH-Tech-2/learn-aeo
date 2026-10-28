@@ -43,9 +43,9 @@ export async function PUT(request: Request) {
   if (!body.state || typeof body.state !== "object" || Array.isArray(body.state)) {
     return NextResponse.json({ error: "state must be an object" }, { status: 400 });
   }
-  const serialised = JSON.stringify(body.state);
-  if (serialised.length > MAX_BYTES) return NextResponse.json({ error: "state too large" }, { status: 413 });
-  const state = JSON.parse(serialised);
+  const serialized = JSON.stringify(body.state);
+  if (serialized.length > MAX_BYTES) return NextResponse.json({ error: "state too large" }, { status: 413 });
+  const state = JSON.parse(serialized);
   const row = await prisma.gameState.upsert({
     where: { userId_game: { userId: id, game } },
     update: { state },

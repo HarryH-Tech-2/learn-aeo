@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 const mockRecordLead = vi.hoisted(() => vi.fn().mockResolvedValue(undefined));
-vi.mock("@/lib/leads", () => ({ recordLead: mockRecordLead, normaliseEmail: (e: string) => e.trim().toLowerCase() }));
+vi.mock("@/lib/leads", () => ({ recordLead: mockRecordLead, normalizeEmail: (e: string) => e.trim().toLowerCase() }));
 
 import { checkoutLogSource, parseCheckoutLogSource, recordCheckoutLog, summarizeCheckoutLog } from "../checkout-recovery-log";
 

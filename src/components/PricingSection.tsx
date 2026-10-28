@@ -63,7 +63,8 @@ function GuaranteeLine() {
 /** How many months of Monthly cost the same as Lifetime, from the plan amounts. */
 const MONTHS_TO_LIFETIME = Math.round(PLANS.lifetime.usd / PLANS.monthly.usd);
 
-export default function PricingSection() {
+/** `headingAs` is "h1" on /pricing, where this headline is the page's; on the homepage it stays an h2. */
+export default function PricingSection({ headingAs: Heading = "h2" }: { headingAs?: "h1" | "h2" } = {}) {
   const { data: session } = useSession();
   const { openAuthModal } = useAuthModal();
   const currency = useLocalCurrency();
@@ -166,11 +167,11 @@ export default function PricingSection() {
             <span className="font-body text-xs tracking-[0.3em] uppercase text-gold-500">Pricing</span>
             <span className="h-px w-12 bg-gold-700" />
           </div>
-          <h2 className="reveal font-display text-4xl md:text-5xl lg:text-6xl font-light text-sand-100 mb-6" style={reveal(0.1, { y: 30 })}>
+          <Heading className="reveal font-display text-4xl md:text-5xl lg:text-6xl font-light text-sand-100 mb-6" style={reveal(0.1, { y: 30 })}>
             Get cited by
             <br />
             <span className="text-gradient-gold font-medium">answer engines</span>
-          </h2>
+          </Heading>
           <p className="reveal font-body text-base md:text-lg text-sand-400 max-w-xl mx-auto font-light leading-relaxed" style={reveal(0.2)}>
             {freeCourse
               ? "Every lesson is free for you: make an account and the whole course opens."

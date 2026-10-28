@@ -74,7 +74,7 @@ export default function PricingPage() {
       />
       <Navbar />
       <div className="pt-16" />
-      <PricingSection />
+      <PricingSection headingAs="h1" />
       <div className="max-w-4xl mx-auto px-6 lg:px-8 py-16">
         <h2 className="font-display text-2xl md:text-3xl font-semibold text-sand-100 mb-6 text-center">
           What&apos;s Included

@@ -10,6 +10,8 @@ const ROOT = path.resolve(__dirname, "../../..");
 const FILES = [
   "src/app/layout.tsx",
   "src/components/home/HomePage.tsx",
+  "src/components/ToolsSection.tsx",
+  "src/lib/tools.ts",
   "src/components/home/HeroCta.tsx",
   "src/components/HeroSection.tsx",
   "src/components/FeaturesSection.tsx",

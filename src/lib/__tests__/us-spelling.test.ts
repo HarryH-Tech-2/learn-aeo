@@ -30,7 +30,9 @@ const STEMS = [
   "enrol(?!l)", "fulfil(?!l)", "judgement", String.raw`grey(?![a-z])`, "whilst", "amongst", String.raw`learnt(?![a-z])`,
   "defence", "practis", ...["label", "signal", "model", "level", "fuel", "total", "counsel", "channel"].map((w) => `${w}l(?:ed|ing)`),
   "litre", "metre", "fibre", "theatre", String.raw`towards(?![a-z])`, "flavour", "humour", "rumour", "endeavour", "rigour",
-  "manoeuvr", "sceptic", "artefact", "acknowledgement", "offence", "enquir",
+  "manoeuvr", "sceptic", "artefact", "acknowledgement", "offence", "enquir", "normalis", "serialis", "capitalis",
+  "sanitis", "finalis", "initialis", "memoris", "specialis", "synchronis", "tokenis", "localis", "stabilis", "criticis",
+  "randomis", "monetis", "modernis", "privatis", "publicis", "regularis", "socialis", "trivialis",
 ];
 const BRITISH = new RegExp(
   STEMS.map((s) => `[${s[0]}${s[0].toUpperCase()}]${s.slice(1)}`).join("|")

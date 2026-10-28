@@ -9,7 +9,7 @@ import {
   PROMPT_STORAGE_KEY,
   parsePromptRecord,
   promptBlockReason,
-  serialisePromptRecord,
+  serializePromptRecord,
   type PromptBlockReason,
   type PromptTrigger,
 } from "@/lib/auth-prompt";
@@ -30,7 +30,7 @@ function readRecord() {
 
 function writeRecord(shownAt: number) {
   try {
-    window.localStorage.setItem(PROMPT_STORAGE_KEY, serialisePromptRecord({ shownAt }));
+    window.localStorage.setItem(PROMPT_STORAGE_KEY, serializePromptRecord({ shownAt }));
   } catch {
     // Private mode / blocked storage: the card may show again next visit. Acceptable.
   }

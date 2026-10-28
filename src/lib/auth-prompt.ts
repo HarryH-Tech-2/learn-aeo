@@ -33,7 +33,7 @@ export function parsePromptRecord(raw: string | null): PromptRecord | null {
   }
 }
 
-export function serialisePromptRecord(record: PromptRecord): string {
+export function serializePromptRecord(record: PromptRecord): string {
   return JSON.stringify(record);
 }
 

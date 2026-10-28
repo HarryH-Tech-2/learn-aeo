@@ -182,3 +182,17 @@ describe("renderNurtureEmail — free-unlock group", () => {
     expect(e.html).not.toContain("/pricing");
   });
 });
+
+describe("offer-expires greeting", () => {
+  it("drops the name when there isn't one", () => {
+    const ctx = sampleContext(base, { firstName: "there" });
+    const { html } = renderNurtureEmail("offer-expires", ctx);
+    expect(html).toContain("Quick one: your code ends");
+    expect(html).not.toContain("there:");
+  });
+
+  it("keeps the name when there is one", () => {
+    const ctx = sampleContext(base, { firstName: "Jane" });
+    expect(renderNurtureEmail("offer-expires", ctx).html).toContain("Quick one, Jane: your code ends");
+  });
+});

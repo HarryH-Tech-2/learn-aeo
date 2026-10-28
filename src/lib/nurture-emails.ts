@@ -13,7 +13,7 @@
  */
 import { FIRST_LESSON_PATH, LESSON_CATALOG } from "@/lib/lesson-catalog";
 import { LEVEL_THRESHOLDS } from "@/lib/gamification";
-import type { NurtureStepKey } from "@/lib/nurture";
+import { NO_NAME, type NurtureStepKey } from "@/lib/nurture";
 import {
   BODY_FONT as FONT,
   EMAIL_COLORS as C,
@@ -316,7 +316,7 @@ export function renderNurtureEmail(key: NurtureStepKey, ctx: NurtureEmailContext
       const body = [
         eyebrow("Last call"),
         heading(`Your ${offer.percentOff}% code ends soon`),
-        p(`Quick one, ${name}: your code ends ${esc(fmtExpiry(offer.expiresAt))} (UK time).`),
+        p(`Quick one${ctx.firstName === NO_NAME ? "" : `, ${name}`}: your code ends ${esc(fmtExpiry(offer.expiresAt))} (UK time).`),
         codeBox(offer.code, offer.percentOff, offer.expiresAt),
         button(checkoutUrl, "Use my code"),
         p(after),
