@@ -1,21 +1,19 @@
 import type { Metadata } from "next";
-import { absoluteUrl } from "@/lib/site";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import GetStartedContent from "./GetStartedContent";
 import { PLANS, formatPlanPrice } from "@/lib/plans";
 import { LESSON_CATALOG } from "@/lib/lesson-catalog";
+import { pageMetadata } from "@/lib/seo";
 
 const FIRST = LESSON_CATALOG[0];
 
-export const metadata: Metadata = {
-  title: "Start Learning AEO | Lesson 1 Free",
+export const metadata: Metadata = pageMetadata({
+  title: "Start learning AEO: lesson 1 is free",
   description:
     `Sign in free and start lesson 1 of the Learn AEO answer engine optimization course. Unlock the rest for a one-time ${formatPlanPrice(PLANS.lifetime, "USD")} payment or ${formatPlanPrice(PLANS.monthly, "USD")} a month.`,
-  alternates: {
-    canonical: absoluteUrl("/get-started"),
-  },
-};
+  path: "/get-started",
+});
 
 export default function GetStartedPage() {
   return (

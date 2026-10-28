@@ -1,8 +1,8 @@
+import type { Metadata } from "next";
 import AccountContent from "./AccountContent";
+import { privateMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: "Account | Learn AEO",
-};
+export const metadata: Metadata = privateMetadata("Account");
 
 export default function AccountPage() {
   return <AccountContent />;

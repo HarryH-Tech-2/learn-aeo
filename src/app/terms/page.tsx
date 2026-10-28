@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
-import { absoluteUrl } from "@/lib/site";
 import TermsContent from "./TermsContent";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Terms of Service - Learn AEO",
-  description: "Terms of service for Learn AEO. Rules and conditions for using our platform.",
-  alternates: {
-    canonical: absoluteUrl("/terms"),
-  },
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Terms of service",
+  description:
+    "Terms of service for Learn AEO: the rules for using the course, buying lifetime or monthly access, and asking for a refund.",
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return <TermsContent />;

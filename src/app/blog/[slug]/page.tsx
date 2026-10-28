@@ -4,6 +4,7 @@ import { getPostBySlug, blogPosts } from "@/lib/blog-posts";
 import { SITE as SITE_CONFIG } from "@/lib/site";
 import BlogPostContent from "./BlogPostContent";
 import JsonLd from "@/components/JsonLd";
+import { pageMetadata } from "@/lib/seo";
 import { blogPostingSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { ArticleBody, QuickAnswer } from "./PostBody";
 import { extractH2s, withInBodyLinks } from "../blog-text";
@@ -14,12 +15,6 @@ const BRAND_SUFFIX = " | Learn AEO";
 /** Google shows roughly 60 characters of a title; only brand it when it still fits. */
 const MAX_TITLE_LENGTH = 60;
 
-
-function seoTitle(title: string): string {
-  return title.length + BRAND_SUFFIX.length <= MAX_TITLE_LENGTH
-    ? `${title}${BRAND_SUFFIX}`
-    : title;
-}
 
 export async function generateMetadata({
   params,
@@ -36,54 +31,27 @@ export async function generateMetadata({
     };
   }
 
-  const canonical = `${SITE}/blog/${slug}`;
   const imageUrl = `${SITE}${post.image}`;
   const modified = post.updatedAt ?? post.publishedAt;
-
-  return {
-    title: seoTitle(post.metaTitle ?? post.title),
+  const title = post.metaTitle ?? post.title;
+  const base = pageMetadata({
+    title,
+    // Google shows roughly 60 characters of a title: only add the brand when it still fits.
+    absoluteTitle: title.length + BRAND_SUFFIX.length > MAX_TITLE_LENGTH,
     description: post.metaDescription ?? post.excerpt,
-    alternates: {
-      canonical,
-    },
-    robots: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-      "max-video-preview": -1,
-      googleBot: {
-        index: true,
-        follow: true,
-        "max-image-preview": "large",
-        "max-snippet": -1,
-        "max-video-preview": -1,
-      },
-    },
+    path: `/blog/${slug}`,
+    type: "article",
+    image: imageUrl,
+  });
+  return {
+    ...base,
     openGraph: {
-      title: post.metaTitle ?? post.title,
-      description: post.metaDescription ?? post.excerpt,
+      ...base.openGraph,
       type: "article",
-      url: canonical,
-      siteName: "Learn AEO",
-      locale: "en_GB",
       publishedTime: post.publishedAt,
       modifiedTime: modified,
       section: post.category,
-      images: [
-        {
-          url: imageUrl,
-          width: 1024,
-          height: 1024,
-          alt: post.imageAlt,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: post.metaTitle ?? post.title,
-      description: post.metaDescription ?? post.excerpt,
-      images: [imageUrl],
+      images: [{ url: imageUrl, width: 1024, height: 1024, alt: post.imageAlt }],
     },
   };
 }

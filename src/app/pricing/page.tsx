@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { absoluteUrl } from "@/lib/site";
 import Navbar from "@/components/Navbar";
 import JsonLd from "@/components/JsonLd";
 import { courseSchema } from "@/lib/schema";
@@ -8,14 +7,14 @@ import PricingFAQ from "@/components/PricingFAQ";
 import Footer from "@/components/Footer";
 import { PLANS, formatPlanPrice } from "@/lib/plans";
 import { LESSON_CATALOG, titleMidSentence } from "@/lib/lesson-catalog";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Pricing: Lifetime or Monthly | Learn AEO",
-  description: `Lifetime access to the answer engine optimization course for one payment of ${formatPlanPrice(PLANS.lifetime, "USD")}, or ${formatPlanPrice(PLANS.monthly, "USD")} a month. The first lesson is free.`,
-  alternates: {
-    canonical: absoluteUrl("/pricing"),
-  },
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Pricing: lifetime or monthly",
+  description:
+    `Lifetime access to the answer engine optimization course for one payment of ${formatPlanPrice(PLANS.lifetime, "USD")}, or ${formatPlanPrice(PLANS.monthly, "USD")} a month. The first lesson is free.`,
+  path: "/pricing",
+});
 
 const LIVE = LESSON_CATALOG.filter((l) => l.status === "live");
 const FIRST = LESSON_CATALOG[0];

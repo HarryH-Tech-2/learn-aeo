@@ -2,11 +2,9 @@ import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import LoginContent from "./LoginContent";
+import { privateMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Sign In - Learn AEO",
-  description: "Sign in to your Learn AEO account to continue your lessons.",
-};
+export const metadata: Metadata = privateMetadata("Sign in");
 
 export default function LoginPage() {
   return (

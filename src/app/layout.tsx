@@ -43,7 +43,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
-  title: `${SITE.name} | ${SITE.tagline}`,
+  title: { default: `${SITE.name} | ${SITE.tagline}`, template: `%s | ${SITE.name}` },
   description:
     "An online course in answer engine optimization for marketers who know SEO. Learn how ChatGPT, Perplexity and Google AI Overviews pick their sources, and how to get your pages cited. Lesson 1 is free.",
   openGraph: {

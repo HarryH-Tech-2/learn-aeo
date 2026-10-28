@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { absoluteUrl } from "@/lib/site";
 import { Suspense } from "react";
 import { LESSON_CATALOG, lessonMeta, lessonPath } from "@/lib/lesson-catalog";
 import LessonContent from "./LessonContent";
 import JsonLd from "@/components/JsonLd";
 import { learningResourceSchema } from "@/lib/schema";
+import { pageMetadata } from "@/lib/seo";
 
 // Only the catalog's lessons exist: any other id is a real 404, not an empty shell.
 export const dynamicParams = false;
@@ -22,33 +22,18 @@ export async function generateMetadata({
   const lesson = lessonMeta(id);
 
   if (!lesson) {
-    return { title: "Lesson not found | Learn AEO" };
+    return { title: "Lesson not found" };
   }
 
-  const canonical = absoluteUrl(lessonPath(id));
-  const title = `${lesson.title} | Learn AEO`;
-  const image = "/og-default.png";
-
-  return {
-    title,
-    description: lesson.description,
-    alternates: { canonical },
+  return pageMetadata({
+    title: lesson.title,
+    // The summary first (the line a result shows), then where it sits in the course.
+    description: `${lesson.summary} Lesson ${lesson.order} of the Learn AEO course: ${lesson.district}${lesson.isFree ? ", free with sign-in" : ""}.`,
+    path: lessonPath(id),
+    type: "article",
     // A coming-soon page has nothing to learn from yet: keep it out of the index until it opens.
-    ...(lesson.status === "coming-soon" ? { robots: { index: false } } : {}),
-    openGraph: {
-      title,
-      description: lesson.description,
-      type: "article",
-      url: canonical,
-      images: [{ url: image }],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description: lesson.description,
-      images: [image],
-    },
-  };
+    noindex: lesson.status === "coming-soon",
+  });
 }
 
 export default async function LessonPage({

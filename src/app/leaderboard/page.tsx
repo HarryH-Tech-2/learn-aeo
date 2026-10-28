@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
-import { absoluteUrl } from "@/lib/site";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Leaderboard from "@/components/Leaderboard";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Leaderboard | Learn AEO",
+export const metadata: Metadata = pageMetadata({
+  title: "Leaderboard",
   description:
-    "See how your answer engine optimization study compares. The leaderboard ranks learners by XP earned from concept cards, quick checks, exercises and lesson audits.",
-  alternates: {
-    canonical: absoluteUrl("/leaderboard"),
-  },
-};
+    "The Learn AEO leaderboard ranks learners by XP earned from concept cards, quick checks, exercises and lesson audits.",
+  path: "/leaderboard",
+});
 
 export default function LeaderboardPage() {
   return (

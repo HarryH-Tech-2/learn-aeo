@@ -3,12 +3,11 @@ import { blogPosts } from "@/lib/blog-posts";
 import { SITE as SITE_CONFIG } from "@/lib/site";
 import BlogContent from "./BlogContent";
 import JsonLd from "@/components/JsonLd";
+import { pageMetadata } from "@/lib/seo";
 import { blogCollectionSchema, breadcrumbSchema } from "@/lib/schema";
 import { countWords, stripMarkdown } from "./blog-text";
 
 const SITE = SITE_CONFIG.url;
-const BLOG_URL = `${SITE}/blog`;
-const BLOG_NAME = "The Learn AEO Blog";
 const BLOG_DESCRIPTION =
   "Articles on answer engine optimization for marketers: how AI answer engines choose their sources, and how to get your brand cited by them.";
 
@@ -30,49 +29,12 @@ const latestModified = blogPosts.reduce<string | undefined>((max, post) => {
 /** With no posts the index is a coming-soon page, which should not be indexed. */
 const hasPosts = blogPosts.length > 0;
 
-export const metadata: Metadata = {
-  title: "Answer Engine Optimization Articles | Learn AEO",
+export const metadata: Metadata = pageMetadata({
+  title: "Answer engine optimization articles",
   description: BLOG_DESCRIPTION,
-  alternates: {
-    canonical: BLOG_URL,
-  },
-  robots: hasPosts
-    ? {
-        index: true,
-        follow: true,
-        "max-image-preview": "large",
-        "max-snippet": -1,
-        googleBot: {
-          index: true,
-          follow: true,
-          "max-image-preview": "large",
-          "max-snippet": -1,
-        },
-      }
-    : { index: false, follow: true },
-  openGraph: {
-    title: `${BLOG_NAME}: Answer Engine Optimization Articles`,
-    description: BLOG_DESCRIPTION,
-    type: "website",
-    url: BLOG_URL,
-    siteName: "Learn AEO",
-    locale: "en_GB",
-    images: [
-      {
-        url: `${SITE}/og-default.png`,
-        width: 1200,
-        height: 630,
-        alt: "The Learn AEO Blog",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${BLOG_NAME}: Answer Engine Optimization Articles`,
-    description: BLOG_DESCRIPTION,
-    images: [`${SITE}/og-default.png`],
-  },
-};
+  path: "/blog",
+  noindex: !hasPosts,
+});
 
 export default function BlogPage() {
   // CollectionPage (the URL) whose main entity is the Blog (the publication). Each BlogPosting here

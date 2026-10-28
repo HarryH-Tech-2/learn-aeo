@@ -4,13 +4,11 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { SITE } from "@/lib/site";
 import { displayName, formatIssued, isCertificateCode } from "@/lib/certificate-issue";
+import { privateMetadata } from "@/lib/seo";
 
 // Public proof that a certificate is real: the link printed on every certificate and shared
 // on LinkedIn. It shows only first name and last initial, and is kept out of search.
-export const metadata: Metadata = {
-  title: `Certificate verification | ${SITE.name}`,
-  robots: { index: false, follow: false },
-};
+export const metadata: Metadata = privateMetadata("Certificate verification");
 
 export default async function VerifyPage({ params }: { params: Promise<{ code: string }> }) {
   const { code } = await params;

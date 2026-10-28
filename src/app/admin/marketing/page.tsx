@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { privateMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -13,7 +14,7 @@ import { LESSON_CATALOG } from "@/lib/lesson-catalog";
  * owner can open it: everyone else gets a 404. ADMIN_EMAILS (comma-separated) overrides the default.
  */
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = { title: "Marketing posts", robots: { index: false, follow: false } };
+export const metadata: Metadata = privateMetadata("Marketing posts");
 
 const ADMINS = (process.env.ADMIN_EMAILS ?? SITE.supportEmail).split(",").map((e) => e.trim().toLowerCase());
 
