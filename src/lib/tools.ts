@@ -24,7 +24,7 @@ export const TOOLS: readonly ToolMeta[] = [
     name: "llms.txt Generator",
     summary: "Fill in a short form to build a valid llms.txt file you can copy or download.",
     kind: "client",
-    status: "coming-soon",
+    status: "live",
   },
   {
     slug: "schema-generator",
