@@ -12,9 +12,10 @@ export type LlmsTxtInput = {
   lessons: readonly LessonMeta[];
   tools: readonly ToolMeta[];
   posts: { slug: string; title: string; excerpt: string }[];
+  glossary: { slug: string; term: string; definition: string }[];
 };
 
-export function buildLlmsTxt({ lessons, tools, posts }: LlmsTxtInput): string {
+export function buildLlmsTxt({ lessons, tools, posts, glossary }: LlmsTxtInput): string {
   const sorted = [...lessons].sort((a, b) => a.order - b.order);
   const free = sorted.find((l) => l.isFree);
   const lifetime = `${formatPlanPrice(PLANS.lifetime, "USD")} (${formatPlanPrice(PLANS.lifetime, "GBP")})`;
@@ -58,6 +59,10 @@ export function buildLlmsTxt({ lessons, tools, posts }: LlmsTxtInput): string {
 
   if (posts.length) {
     lines.push("## Articles", "", ...posts.map((p) => `- [${p.title}](${absoluteUrl(`/blog/${p.slug}`)}): ${p.excerpt}`), "");
+  }
+
+  if (glossary.length) {
+    lines.push("## Glossary", "", ...glossary.map((g) => `- [${g.term}](${absoluteUrl(`/glossary/${g.slug}`)}): ${g.definition}`), "");
   }
 
   lines.push(

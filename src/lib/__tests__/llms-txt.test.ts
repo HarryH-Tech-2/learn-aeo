@@ -4,7 +4,7 @@ import { LESSON_CATALOG, lessonPath } from "@/lib/lesson-catalog";
 import { TOOLS, toolPath } from "@/lib/tools";
 import { absoluteUrl } from "@/lib/site";
 
-const base = { lessons: LESSON_CATALOG, tools: TOOLS, posts: [] };
+const base = { lessons: LESSON_CATALOG, tools: TOOLS, posts: [], glossary: [] as { slug: string; term: string; definition: string }[] };
 
 describe("buildLlmsTxt", () => {
   const txt = buildLlmsTxt(base);
@@ -41,6 +41,13 @@ describe("buildLlmsTxt", () => {
     const withPost = buildLlmsTxt({ ...base, posts: [{ slug: "what-is-aeo", title: "What is AEO?", excerpt: "A plain answer." }] });
     expect(withPost).toContain("## Articles");
     expect(withPost).toContain(`- [What is AEO?](${absoluteUrl("/blog/what-is-aeo")}): A plain answer.`);
+  });
+
+  it("lists glossary terms only when there are some", () => {
+    expect(buildLlmsTxt(base)).not.toContain("## Glossary");
+    const g = buildLlmsTxt({ ...base, glossary: [{ slug: "query-fan-out", term: "Query fan-out", definition: "Query fan-out is a technique." }] });
+    expect(g).toContain("## Glossary");
+    expect(g).toContain(`- [Query fan-out](${absoluteUrl("/glossary/query-fan-out")}): Query fan-out is a technique.`);
   });
 
   it("keeps the sitemap under Optional", () => {

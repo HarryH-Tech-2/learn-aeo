@@ -18,9 +18,13 @@ import {
   learningResourceSchema,
   organizationSchema,
   webApplicationSchema,
+  definedTermSchema,
+  definedTermSetSchema,
+  GLOSSARY_ID,
   websiteSchema,
 } from "@/lib/schema";
 import { TOOLS } from "@/lib/tools";
+import { GLOSSARY } from "@/lib/glossary";
 
 const parse = (html: string) => {
   const m = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
@@ -130,6 +134,18 @@ describe("webApplicationSchema", () => {
     expect(w.offers).toMatchObject({ "@type": "Offer", price: "0", priceCurrency: "USD" });
     expect(w.isAccessibleForFree).toBe(true);
     expect(w.provider).toMatchObject({ "@id": ORG_ID, name: SITE.name });
+  });
+});
+
+describe("glossary schema", () => {
+  it("makes a DefinedTermSet of every term, each part of the set", () => {
+    const set = definedTermSetSchema(GLOSSARY);
+    expect(set["@type"]).toBe("DefinedTermSet");
+    expect(set["@id"]).toBe(GLOSSARY_ID);
+    expect(set.hasDefinedTerm).toHaveLength(GLOSSARY.length);
+    const t = definedTermSchema(GLOSSARY[0]);
+    expect(t).toMatchObject({ "@type": "DefinedTerm", name: GLOSSARY[0].term, description: GLOSSARY[0].definition, inDefinedTermSet: { "@id": GLOSSARY_ID } });
+    expect(t.url).toBe(`${SITE.url}/glossary/${GLOSSARY[0].slug}`);
   });
 });
 

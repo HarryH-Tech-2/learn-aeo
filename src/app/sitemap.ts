@@ -3,6 +3,8 @@ import { SITE } from "@/lib/site";
 import { blogPosts, type BlogPost } from "@/lib/blog-posts";
 import { LESSONS } from "@/lib/lessons";
 import { TOOLS, toolPath, type ToolMeta } from "@/lib/tools";
+import { GLOSSARY } from "@/lib/glossary";
+import type { GlossaryTerm } from "@/lib/glossary-types";
 
 // Real edit dates, not `new Date()`: Google treats per-request timestamps as a weak freshness
 // signal. Bump a date when those pages are substantively edited.
@@ -14,18 +16,22 @@ const HOME_LASTMOD = new Date("2026-10-28");
 const LESSONS_LASTMOD = new Date("2026-10-27");
 // Tool pages go live in Plan 6; bump when one changes.
 const TOOLS_LASTMOD = new Date("2026-10-28");
+// The glossary terms (sources checked 2026-10-28). Bump when a term is revised.
+const GLOSSARY_LASTMOD = new Date("2026-10-28");
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return buildSitemap({ posts: blogPosts, tools: TOOLS });
+  return buildSitemap({ posts: blogPosts, tools: TOOLS, glossary: GLOSSARY });
 }
 
 /** Parameterized on the posts and tools so the with-posts and live-tool paths can be tested before they exist. */
 export function buildSitemap({
   posts,
   tools,
+  glossary,
 }: {
   posts: Pick<BlogPost, "slug" | "publishedAt" | "updatedAt">[];
   tools: readonly ToolMeta[];
+  glossary: readonly Pick<GlossaryTerm, "slug">[];
 }): MetadataRoute.Sitemap {
   const baseUrl = SITE.url;
 
@@ -126,5 +132,13 @@ export function buildSitemap({
     ? [{ url: `${baseUrl}/tools`, lastModified: TOOLS_LASTMOD, changeFrequency: "monthly", priority: 0.8 }]
     : [];
 
-  return [...staticPages, ...blogIndexPages, ...blogPages, ...lessonPages, ...toolsHub, ...toolPages];
+  // The glossary index and one page per term (src/lib/glossary.ts).
+  const glossaryPages: MetadataRoute.Sitemap = glossary.length
+    ? [
+        { url: `${baseUrl}/glossary`, lastModified: GLOSSARY_LASTMOD, changeFrequency: "monthly", priority: 0.7 },
+        ...glossary.map((t) => ({ url: `${baseUrl}/glossary/${t.slug}`, lastModified: GLOSSARY_LASTMOD, changeFrequency: "monthly" as const, priority: 0.6 })),
+      ]
+    : [];
+
+  return [...staticPages, ...blogIndexPages, ...blogPages, ...lessonPages, ...toolsHub, ...toolPages, ...glossaryPages];
 }

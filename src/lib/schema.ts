@@ -9,6 +9,7 @@ import { LESSON_CATALOG, TOTAL_MINUTES, lessonPath } from "./lesson-catalog";
 import type { LessonMeta } from "./lesson-types";
 import { PLANS, PLAN_IDS } from "./plans";
 import { toolPath, type ToolMeta } from "./tools";
+import type { GlossaryTerm } from "./glossary-types";
 
 export const ORG_ID = `${SITE.url}/#organization`;
 export const WEBSITE_ID = `${SITE.url}/#website`;
@@ -233,5 +234,33 @@ export function itemListSchema(name: string, items: { name: string; path: string
     "@type": "ItemList",
     name,
     itemListElement: items.map((it, i) => ({ "@type": "ListItem", position: i + 1, name: it.name, url: absoluteUrl(it.path) })),
+  };
+}
+
+export const GLOSSARY_ID = `${SITE.url}/glossary#terms`;
+
+/** One glossary term (/glossary/<slug>). */
+export function definedTermSchema(t: GlossaryTerm) {
+  return {
+    "@type": "DefinedTerm",
+    "@id": `${absoluteUrl(`/glossary/${t.slug}`)}#term`,
+    name: t.term,
+    ...(t.aka?.length ? { alternateName: t.aka } : {}),
+    description: t.definition,
+    url: absoluteUrl(`/glossary/${t.slug}`),
+    inDefinedTermSet: { "@id": GLOSSARY_ID },
+  };
+}
+
+/** The whole glossary (/glossary). */
+export function definedTermSetSchema(terms: readonly GlossaryTerm[]) {
+  return {
+    "@type": "DefinedTermSet",
+    "@id": GLOSSARY_ID,
+    name: "AEO glossary",
+    url: absoluteUrl("/glossary"),
+    publisher: ORG_REF,
+    inLanguage: LANGUAGE,
+    hasDefinedTerm: terms.map(definedTermSchema),
   };
 }
