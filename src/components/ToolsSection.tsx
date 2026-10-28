@@ -3,7 +3,7 @@ import InView from "@/components/InView";
 import { reveal } from "@/components/reveal";
 import { TOOLS, toolPath, type ToolMeta } from "@/lib/tools";
 
-function ToolCard({ tool }: { tool: ToolMeta }) {
+export function ToolCard({ tool }: { tool: ToolMeta }) {
   const live = tool.status === "live";
   const inner = (
     <>

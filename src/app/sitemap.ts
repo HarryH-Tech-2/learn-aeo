@@ -112,8 +112,8 @@ export function buildSitemap({
     }));
 
   // Only tools whose page exists (status "live" in src/lib/tools.ts).
-  const toolPages: MetadataRoute.Sitemap = tools
-    .filter((t) => t.status === "live")
+  const liveTools = tools.filter((t) => t.status === "live");
+  const toolPages: MetadataRoute.Sitemap = liveTools
     .map((t) => ({
       url: `${baseUrl}${toolPath(t.slug)}`,
       lastModified: TOOLS_LASTMOD,
@@ -121,5 +121,10 @@ export function buildSitemap({
       priority: 0.8,
     }));
 
-  return [...staticPages, ...blogIndexPages, ...blogPages, ...lessonPages, ...toolPages];
+  // The /tools hub, once there is a tool to list.
+  const toolsHub: MetadataRoute.Sitemap = liveTools.length
+    ? [{ url: `${baseUrl}/tools`, lastModified: TOOLS_LASTMOD, changeFrequency: "monthly", priority: 0.8 }]
+    : [];
+
+  return [...staticPages, ...blogIndexPages, ...blogPages, ...lessonPages, ...toolsHub, ...toolPages];
 }

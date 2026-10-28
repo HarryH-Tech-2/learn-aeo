@@ -34,6 +34,13 @@ describe("sitemap tools and dates", () => {
     for (const t of TOOLS) expect(real.includes(`${SITE.url}/tools/${t.slug}`)).toBe(t.status === "live");
   });
 
+  it("lists the /tools hub only while a tool is live", () => {
+    const soon = TOOLS.map((t) => ({ ...t, status: "coming-soon" as const }));
+    expect(buildSitemap({ posts: [], tools: soon }).map((e) => e.url)).not.toContain(`${SITE.url}/tools`);
+    const live = TOOLS.map((t, i) => ({ ...t, status: i === 0 ? ("live" as const) : ("coming-soon" as const) }));
+    expect(buildSitemap({ posts: [], tools: live }).map((e) => e.url)).toContain(`${SITE.url}/tools`);
+  });
+
   it("has no private pages and no date before the site existed", () => {
     for (const e of sitemap()) {
       expect(e.url).not.toMatch(/\/(dashboard|account|certificate|checkout|login|admin|verify)/);

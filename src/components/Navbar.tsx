@@ -62,6 +62,7 @@ export default function Navbar() {
           <div className="hidden lg:flex flex-1 min-w-0 items-center justify-center gap-4 2xl:gap-6 px-3 whitespace-nowrap">
             <NavLink href={isHome ? "#curriculum" : "/#curriculum"}>Course</NavLink>
             <NavLink href="/pricing">Pricing</NavLink>
+            <NavLink href="/tools">Tools</NavLink>
             <NavLink href="/blog">Blog</NavLink>
           </div>
 
@@ -170,6 +171,9 @@ export default function Navbar() {
                     <MobileLink href="/pricing" onClick={() => setMenuOpen(false)}>
                       Pricing
                     </MobileLink>
+                    <MobileLink href="/tools" onClick={() => setMenuOpen(false)}>
+                      Tools
+                    </MobileLink>
                     <MobileLink href="/blog" onClick={() => setMenuOpen(false)}>
                       Blog
                     </MobileLink>
@@ -197,6 +201,9 @@ export default function Navbar() {
                     </MobileLink>
                     <MobileLink href="/pricing" onClick={() => setMenuOpen(false)}>
                       Pricing
+                    </MobileLink>
+                    <MobileLink href="/tools" onClick={() => setMenuOpen(false)}>
+                      Tools
                     </MobileLink>
                     <MobileLink href="/blog" onClick={() => setMenuOpen(false)}>
                       Blog

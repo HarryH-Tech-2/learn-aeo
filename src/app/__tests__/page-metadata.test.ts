@@ -22,6 +22,9 @@ const PUBLIC: [string, string, () => Promise<PageModule>][] = [
   ["/privacy", "privacy", () => import("@/app/privacy/page")],
   ["/terms", "terms", () => import("@/app/terms/page")],
   ["/blog", "blog", () => import("@/app/blog/page")],
+  ["/tools", "tools hub", () => import("@/app/tools/page")],
+  ["/tools/ai-crawler-checker", "AI Crawler Checker", () => import("@/app/tools/ai-crawler-checker/page")],
+  ["/tools/llms-txt-generator", "llms.txt Generator", () => import("@/app/tools/llms-txt-generator/page")],
 ];
 
 const PRIVATE: [string, () => Promise<PageModule>][] = [

@@ -33,6 +33,7 @@ describe("buildLlmsTxt", () => {
     expect(withLive).toContain("## Free tools");
     expect(withLive).toContain(`[${TOOLS[0].name}](${absoluteUrl(toolPath(TOOLS[0].slug))})`);
     expect(withLive).not.toContain(absoluteUrl(toolPath(TOOLS[1].slug)));
+    expect(withLive).toContain(`[All free tools](${absoluteUrl("/tools")})`);
   });
 
   it("lists articles only when there are posts", () => {

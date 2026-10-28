@@ -47,7 +47,13 @@ export function buildLlmsTxt({ lessons, tools, posts }: LlmsTxtInput): string {
   ];
 
   if (liveTools.length) {
-    lines.push("## Free tools", "", ...liveTools.map((t) => `- [${t.name}](${absoluteUrl(toolPath(t.slug))}): ${t.summary}`), "");
+    lines.push(
+      "## Free tools",
+      "",
+      ...liveTools.map((t) => `- [${t.name}](${absoluteUrl(toolPath(t.slug))}): ${t.summary}`),
+      `- [All free tools](${absoluteUrl("/tools")})`,
+      ""
+    );
   }
 
   if (posts.length) {

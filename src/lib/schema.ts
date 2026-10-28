@@ -226,3 +226,12 @@ export function webApplicationSchema(tool: ToolMeta) {
     inLanguage: LANGUAGE,
   };
 }
+
+/** An ordered list of pages, e.g. the tools on /tools. */
+export function itemListSchema(name: string, items: { name: string; path: string }[]) {
+  return {
+    "@type": "ItemList",
+    name,
+    itemListElement: items.map((it, i) => ({ "@type": "ListItem", position: i + 1, name: it.name, url: absoluteUrl(it.path) })),
+  };
+}

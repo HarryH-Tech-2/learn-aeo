@@ -8,6 +8,7 @@ const LINKS = [
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" },
   { href: "/blog", label: "Blog" },
+  { href: "/tools", label: "Free tools" },
   { href: "/pricing", label: "Pricing" },
 ];
 
