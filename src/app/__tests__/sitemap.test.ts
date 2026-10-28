@@ -26,11 +26,12 @@ describe("sitemap blog entries", () => {
 
 describe("sitemap tools and dates", () => {
   it("lists live tools only", () => {
-    const tools = TOOLS.map((t, i) => ({ ...t, status: i === 0 ? ("live" as const) : t.status }));
+    const tools = TOOLS.map((t, i) => ({ ...t, status: i === 0 ? ("live" as const) : ("coming-soon" as const) }));
     const urls = buildSitemap({ posts: [], tools }).map((e) => e.url);
     expect(urls).toContain(`${SITE.url}/tools/${TOOLS[0].slug}`);
     for (const t of TOOLS.slice(1)) expect(urls).not.toContain(`${SITE.url}/tools/${t.slug}`);
-    expect(sitemap().map((e) => e.url).some((u) => u.includes("/tools/"))).toBe(false);
+    const real = sitemap().map((e) => e.url);
+    for (const t of TOOLS) expect(real.includes(`${SITE.url}/tools/${t.slug}`)).toBe(t.status === "live");
   });
 
   it("has no private pages and no date before the site existed", () => {

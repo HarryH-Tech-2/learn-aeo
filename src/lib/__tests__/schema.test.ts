@@ -17,8 +17,10 @@ import {
   faqSchema,
   learningResourceSchema,
   organizationSchema,
+  webApplicationSchema,
   websiteSchema,
 } from "@/lib/schema";
+import { TOOLS } from "@/lib/tools";
 
 const parse = (html: string) => {
   const m = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
@@ -116,6 +118,18 @@ describe("references a validator can read on its own", () => {
     const byName = Object.fromEntries(courseSchema().offers.map((o) => [o.name, o.category]));
     expect(byName[PLANS.lifetime.name]).toBe("Paid");
     expect(byName[PLANS.monthly.name]).toBe("Subscription");
+  });
+});
+
+describe("webApplicationSchema", () => {
+  it("describes a free tool provided by the Organization", () => {
+    const w = webApplicationSchema(TOOLS[0]);
+    expect(w["@type"]).toBe("WebApplication");
+    expect(w.name).toBe(TOOLS[0].name);
+    expect(w.url).toBe(`${SITE.url}/tools/${TOOLS[0].slug}`);
+    expect(w.offers).toMatchObject({ "@type": "Offer", price: "0", priceCurrency: "USD" });
+    expect(w.isAccessibleForFree).toBe(true);
+    expect(w.provider).toMatchObject({ "@id": ORG_ID, name: SITE.name });
   });
 });
 

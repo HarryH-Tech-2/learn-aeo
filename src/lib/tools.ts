@@ -17,7 +17,7 @@ export const TOOLS: readonly ToolMeta[] = [
     name: "AI Crawler Checker",
     summary: "Enter a domain to see which AI crawlers and AI user agents its robots.txt allows or blocks, with the lines to fix it.",
     kind: "server",
-    status: "coming-soon",
+    status: "live",
   },
   {
     slug: "llms-txt-generator",

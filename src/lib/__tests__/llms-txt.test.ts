@@ -27,8 +27,9 @@ describe("buildLlmsTxt", () => {
   });
 
   it("has no tools section while every tool is coming soon, and links a live one", () => {
-    expect(txt).not.toContain("## Free tools");
-    const withLive = buildLlmsTxt({ ...base, tools: TOOLS.map((t, i) => ({ ...t, status: i === 0 ? ("live" as const) : t.status })) });
+    const allSoon = TOOLS.map((t) => ({ ...t, status: "coming-soon" as const }));
+    expect(buildLlmsTxt({ ...base, tools: allSoon })).not.toContain("## Free tools");
+    const withLive = buildLlmsTxt({ ...base, tools: TOOLS.map((t, i) => ({ ...t, status: i === 0 ? ("live" as const) : ("coming-soon" as const) })) });
     expect(withLive).toContain("## Free tools");
     expect(withLive).toContain(`[${TOOLS[0].name}](${absoluteUrl(toolPath(TOOLS[0].slug))})`);
     expect(withLive).not.toContain(absoluteUrl(toolPath(TOOLS[1].slug)));

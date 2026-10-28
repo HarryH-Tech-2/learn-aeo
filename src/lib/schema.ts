@@ -8,6 +8,7 @@ import { SITE, absoluteUrl } from "./site";
 import { LESSON_CATALOG, TOTAL_MINUTES, lessonPath } from "./lesson-catalog";
 import type { LessonMeta } from "./lesson-types";
 import { PLANS, PLAN_IDS } from "./plans";
+import { toolPath, type ToolMeta } from "./tools";
 
 export const ORG_ID = `${SITE.url}/#organization`;
 export const WEBSITE_ID = `${SITE.url}/#website`;
@@ -207,5 +208,21 @@ export function blogCollectionSchema(o: {
         isAccessibleForFree: true,
       })),
     },
+  };
+}
+
+/** A free tool page (/tools/<slug>). */
+export function webApplicationSchema(tool: ToolMeta) {
+  return {
+    "@type": "WebApplication",
+    name: tool.name,
+    description: tool.summary,
+    url: absoluteUrl(toolPath(tool.slug)),
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Any",
+    isAccessibleForFree: true,
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    provider: ORG_REF,
+    inLanguage: LANGUAGE,
   };
 }
