@@ -8,8 +8,10 @@
  * For each sitemap URL (fetched from baseUrl, with the production origin swapped for it):
  * status 200, one <title>, a meta description, a canonical and og:url equal to the sitemap
  * URL, an og:image, no noindex, every ld+json block parses, no Person, and the Organization
- * @id on the page. The Course @id must be the same on / and /pricing. Exits 1 on any failure.
+ * @id on the page, Twitter card tags, a 70-160 character description and no X-Robots-Tag noindex
+ * (scripts/lib/smoke-checks.mjs). The Course @id must be the same on / and /pricing. Exits 1 on any failure.
  */
+import { checkHeadTags, checkIndexable } from "../lib/smoke-checks.mjs";
 
 const base = (process.argv[2] ?? "http://localhost:3000").replace(/\/+$/, "");
 const failures = [];
@@ -17,7 +19,7 @@ const fail = (where, what) => failures.push(`${where}: ${what}`);
 
 async function get(path) {
   const res = await fetch(`${base}${path}`, { redirect: "manual" });
-  return { status: res.status, type: res.headers.get("content-type") ?? "", text: await res.text() };
+  return { status: res.status, type: res.headers.get("content-type") ?? "", headers: Object.fromEntries(res.headers), text: await res.text() };
 }
 
 const attr = (html, re) => (html.match(re) ?? [])[1];
@@ -69,6 +71,7 @@ for (const url of urls) {
     if (img.status !== 200 || !(img.headers.get("content-type") ?? "").startsWith("image/")) fail(where, `og:image ${ogImage} → ${img.status}`);
   }
   if (/<meta name="robots" content="[^"]*noindex/.test(h)) fail(where, "noindex on a sitemap URL");
+  for (const p of [...checkIndexable(r), ...checkHeadTags(h, path)]) fail(where, p);
   const nodes = ldBlocks(h, where);
   if (nodes.some((n) => n["@type"] === "Person") || /"@type":"Person"/.test(h)) fail(where, "a Person in JSON-LD");
   if (!nodes.some((n) => n["@type"] === "Organization" && n["@id"] === `${origin}/#organization`)) fail(where, "no Organization @id");
