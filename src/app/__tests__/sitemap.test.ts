@@ -3,11 +3,12 @@ import sitemap, { buildSitemap } from "@/app/sitemap";
 import { SITE } from "@/lib/site";
 import { TOOLS } from "@/lib/tools";
 import { GLOSSARY } from "@/lib/glossary";
+import { blogPosts } from "@/lib/blog-posts";
 
 describe("sitemap blog entries", () => {
-  it("with the real (empty) post list has no /blog URLs and does not crash", () => {
+  it("with the real post list has /blog plus one URL per post", () => {
     const urls = sitemap().map((e) => e.url);
-    expect(urls.filter((u) => u.includes("/blog"))).toEqual([]);
+    expect(urls.filter((u) => u.includes("/blog"))).toHaveLength(blogPosts.length + 1);
   });
 
   it("with posts lists /blog dated by the newest post, plus each post", () => {

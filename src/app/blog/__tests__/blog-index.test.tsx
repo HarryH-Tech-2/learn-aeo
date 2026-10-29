@@ -5,20 +5,17 @@ import { metadata } from "@/app/blog/page";
 import { blogPosts } from "@/lib/blog-posts";
 import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
 
-describe("blog index with no posts", () => {
-  it("ships no posts", () => {
-    expect(blogPosts).toEqual([]);
+describe("blog index", () => {
+  it("ships the launch posts and is indexable", () => {
+    expect(blogPosts.length).toBeGreaterThan(0);
+    expect(metadata.robots ?? { index: true }).toMatchObject({ index: true });
   });
 
-  it("shows the coming-soon message and a link to lesson 1, with no post cards", () => {
+  it("keeps a coming-soon message with a link to lesson 1 for an empty blog, with no post cards", () => {
     const html = renderToStaticMarkup(<BlogComingSoon />);
     expect(html).toContain("Articles are on their way");
     expect(html).toContain(`href="${FIRST_LESSON_PATH}"`);
     expect(html).not.toContain("<article");
     expect(html).not.toContain("/blog/");
-  });
-
-  it("is noindex while there are no posts", () => {
-    expect(metadata.robots).toMatchObject({ index: false });
   });
 });

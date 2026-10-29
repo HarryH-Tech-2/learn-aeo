@@ -83,7 +83,7 @@ Less than the hype suggests. Google says "There are no additional requirements t
 
 The new parts are specific and learnable:
 
-- **Crawler control.** OpenAI runs separate bots for training ([GPTBot](/glossary/gptbot)) and search ([OAI-SearchBot](/glossary/oai-searchbot)), and says "Each setting is independent of the others." You can opt out of training without leaving ChatGPT search, but a blanket block in [robots.txt](/glossary/robots-txt) removes you from both.
+- **Crawler control.** OpenAI runs separate bots for training ([GPTBot](/glossary/gptbot)) and search ([OAI-SearchBot](/glossary/oai-searchbot)), and says "Each setting is independent of the others." You can opt out of training without leaving ChatGPT search, but a blanket block in [robots.txt](/glossary/robots-txt) also keeps you out of ChatGPT search answers.
 - **Passage-level writing.** [Query fan-out](/glossary/query-fan-out) means an engine may search subtopics of a question, so clearly answered sections give you more ways in.
 - **Measurement.** Prompt tracking, citations versus [brand mentions](/glossary/brand-mention), AI referrals in analytics and bot hits in server logs.
 

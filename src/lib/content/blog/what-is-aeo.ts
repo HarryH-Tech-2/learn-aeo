@@ -35,7 +35,7 @@ export const post: BlogPost = {
     {
       question: "How do I measure AEO?",
       answer:
-        "Track whether your pages are cited, not just ranked. Bing Webmaster Tools added an AI Performance report in February 2026 that counts citations in Copilot and AI answers in Bing. Google says traffic from its AI features is included in the Web search type of the Search Console Performance report.",
+        "Track whether your pages are cited, not just ranked. Bing Webmaster Tools added an AI Performance report in February 2026 that counts citations in Microsoft Copilot, AI-generated summaries in Bing and some partner integrations. Google says traffic from its AI features is included in the Web search type of the Search Console Performance report.",
     },
   ],
   content: `## What does AEO mean?
@@ -46,9 +46,9 @@ If you already do SEO, you know most of the groundwork. The difference is the ou
 
 ## Is there an official definition of AEO?
 
-No. AEO is an industry label, not a standard, and different vendors and agencies use it in slightly different ways. You'll also see [GEO](/glossary/geo) (generative engine optimization), [LLMO](/glossary/llmo) (large language model optimization) and AIO used for overlapping ideas.
+No. AEO is an industry label, not a standard, and different vendors and agencies use it in slightly different ways. You'll also see [GEO](/glossary/geo) (generative engine optimization), [LLMO](/glossary/llmo) (large language model optimization) and AIO used for overlapping ideas; Conductor's glossary calls LLMO "essentially synonymous with Generative Engine Optimization (GEO)."
 
-The search engines mostly don't use the term at all. Google's documentation talks about "AI features" in Search. Microsoft uses several labels side by side. A Microsoft Advertising post from October 2025 says: "Whether you call it GEO, AIO, or SEO, one thing hasn't changed: visibility is everything."
+The search engines mostly don't use the term at all. Google's documentation talks about "AI features" in Search. Microsoft uses several labels side by side. A Microsoft Advertising post from October 2025 says: "Whether you call it GEO, AIO, or SEO, one thing hasn’t changed: visibility is everything."
 
 The only formal definition comes from research. The 2023 paper "GEO: Generative Engine Optimization" by Aggarwal et al. (accepted to KDD 2024) calls its method "the first novel paradigm to aid content creators in improving their content visibility in generative engine responses." That defines GEO for the paper's experiments. It isn't a definition of AEO, and nobody can claim one.
 
@@ -58,10 +58,10 @@ So when someone tells you what AEO "is," treat it as their working definition. O
 
 The main ones are AI search features that retrieve web pages and cite them:
 
-- **Google AI Overviews and AI Mode.** Google's [AI Mode](/glossary/ai-mode) announcement (May 20, 2025) says it "uses our query fan-out technique, breaking down your question into subtopics" and searches each one. Google's documentation says [AI Overviews](/glossary/ai-overviews) "are only shown when our systems determine that it is additive to classic Search."
+- **Google AI Overviews and AI Mode.** Google's [AI Mode](/glossary/ai-mode) announcement (May 20, 2025) says it "uses our query fan-out technique, breaking down your question into subtopics" and issues many searches at once. Google's documentation says [AI Overviews](/glossary/ai-overviews) "are only shown when our systems determine that it is additive to classic Search."
 - **Copilot Search in Bing.** Microsoft's April 2025 launch post says "Copilot Search cites its sources prominently, so you know exactly where the information came from."
 - **Perplexity.** Its help center says "Each answer includes numbered citations linking to the original sources."
-- **ChatGPT search.** OpenAI says its OAI-SearchBot crawler "is used to surface websites in search results in ChatGPT's search features."
+- **ChatGPT search.** OpenAI says its OAI-SearchBot crawler "is used to surface websites in search results in ChatGPT’s search features."
 - **Claude with web search.** Anthropic's documentation says the response "includes citations for sources drawn from search results."
 
 The pattern is the same across all of them: take the question (often splitting it into several searches, a step called [query fan-out](/glossary/query-fan-out)), retrieve pages, write an answer [grounded](/glossary/grounding) in a few passages, and attach [citations](/glossary/citation).
@@ -101,7 +101,7 @@ The GEO paper proposed GEO as a method and tested which content changes help, so
 
 The authors built GEO-bench, "a benchmark consisting of 10000 queries from diverse domains and sources," and tested content changes such as adding quotations, statistics and source citations. The abstract reports that "GEO can boost visibility by up to 40% in generative engine responses." When the authors tested on Perplexity.ai, they found "Quotation Addition performs best in Position-Adjusted Word Count with a 22% improvement over the baseline." For keyword stuffing, a classic SEO tactic, they report "such methods offer little to no improvement." They also found that "lower-ranked websites, which typically struggle for visibility, benefit significantly more from GEO."
 
-Read those numbers with care. They come from the paper's own benchmark and metrics, mostly in a simulated setup, in 2023 and 2024. They show that clearer, better-supported content can be cited more. They don't promise any lift on Google, ChatGPT or any engine today.
+Read those numbers with care. They come from the paper's own benchmark and metrics, mostly on a generative engine the authors built themselves (with a separate test on Perplexity.ai), in 2023 and 2024. They show that clearer, better-supported content can be cited more. They don't promise any lift on Google, ChatGPT or any engine today.
 
 ## What AEO is not
 
@@ -196,6 +196,12 @@ Then decide how far you want to go. If you're weighing the terms, our post on [A
       title: "Web search tool",
       publisher: "Anthropic (Claude Platform Docs)",
       url: "https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool",
+      accessed: ACCESSED,
+    },
+    {
+      title: "LLMO (Large Language Model Optimization) | Glossary",
+      publisher: "Conductor",
+      url: "https://www.conductor.com/academy/glossary/llmo-large-language-model-optimization/",
       accessed: ACCESSED,
     },
     {

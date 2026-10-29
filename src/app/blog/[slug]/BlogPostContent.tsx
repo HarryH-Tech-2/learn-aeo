@@ -37,6 +37,8 @@ type Props = {
   related: Related[];
   quickAnswer: ReactNode;
   body: ReactNode;
+  /** The Sources list, rendered on the server (PostSources). */
+  sources: ReactNode;
 };
 
 export default function BlogPostContent({
@@ -46,6 +48,7 @@ export default function BlogPostContent({
   related,
   quickAnswer,
   body,
+  sources,
 }: Props) {
   const prompt = useAuthPrompt("blog_scroll");
   const proseRef = useRef<HTMLDivElement>(null);
@@ -319,6 +322,8 @@ export default function BlogPostContent({
               </div>
             </div>
           )}
+
+          {sources}
 
           {/* Related Articles */}
           {related.length > 0 && (

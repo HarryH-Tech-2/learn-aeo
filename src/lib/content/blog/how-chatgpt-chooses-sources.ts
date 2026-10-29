@@ -10,7 +10,7 @@ export const post: BlogPost = {
   excerpt:
     "What OpenAI actually documents about ChatGPT search, its three crawlers and robots.txt, what it leaves out, and the steps that follow.",
   quickAnswer:
-    "OpenAI does not publish a ranking algorithm for ChatGPT search. What it does document is the gate: sites that block OAI-SearchBot in robots.txt will not be shown in ChatGPT search answers, so allowing that crawler is the one step OpenAI itself recommends.",
+    "OpenAI does not publish a ranking algorithm for ChatGPT search. What it does document is the gate: sites that block OAI-SearchBot in robots.txt will not be shown in ChatGPT search answers, so allowing that crawler, in robots.txt and at its published IP ranges, is what OpenAI itself recommends.",
   date: "October 28, 2026",
   publishedAt: "2026-10-28",
   category: "Platforms",
@@ -62,7 +62,7 @@ OpenAI describes each setting as independent. You can allow OAI-SearchBot so you
 
 ## Which crawler decides whether you can be cited?
 
-OAI-SearchBot. OpenAI's wording is direct: "Sites that are opted out of OAI-SearchBot will not be shown in ChatGPT search answers". The same page says such sites can still show up as navigational links, and it gives one recommendation for publishers: "we recommend allowing OAI-SearchBot in your site's robots.txt file".
+OAI-SearchBot. OpenAI's wording is direct: "Sites that are opted out of OAI-SearchBot will not be shown in ChatGPT search answers". The same page says such sites can still show up as navigational links, and it gives publishers one recommendation: "we recommend allowing OAI-SearchBot in your site's robots.txt file" and allowing requests from OpenAI's published IP ranges.
 
 Two common mix-ups follow from the table above:
 
@@ -111,7 +111,7 @@ Under the robots.txt standard, RFC 9309, "Crawlers MUST use case-insensitive mat
 
 ### 2. Check what sits in front of robots.txt
 
-RFC 9309 also says robots.txt rules "are not a form of access authorization." A firewall, bot-management setting or CDN rule can block a crawler that your robots.txt allows. OpenAI publishes IP ranges for each crawler (for OAI-SearchBot, \`openai.com/searchbot.json\`) and recommends allowing requests from them, so check that your security settings do. You can test the user-agent side with the [AI crawler checker](/tools/ai-crawler-checker).
+RFC 9309 also says robots.txt rules "are not a form of access authorization." A firewall, bot-management setting or CDN rule can block a crawler that your robots.txt allows. OpenAI publishes IP ranges for each crawler and recommends allowing OAI-SearchBot's (\`openai.com/searchbot.json\`), so check that your security settings do. You can test the user-agent side with the [AI crawler checker](/tools/ai-crawler-checker).
 
 ### 3. Give the change a day, then verify
 

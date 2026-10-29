@@ -6,7 +6,7 @@ export const post: BlogPost = {
   excerpt:
     "What the llms.txt proposal is, what it is not, which AI operators document using it, and how to write one for your own site.",
   quickAnswer:
-    "llms.txt is a proposed markdown file, published by Jeremy Howard in September 2024, that gives AI agents a short guide to a site and links to its key pages. It does not control crawling the way robots.txt does, and as of October 28, 2026, Google, OpenAI and Anthropic don't document reading other sites' llms.txt files for search or citations.",
+    "llms.txt is a proposed markdown file, published by Jeremy Howard in September 2024, that gives AI agents a short guide to a site and links to its key pages. It does not control crawling the way robots.txt does, and as of October 28, 2026, the Google, OpenAI and Anthropic crawler and AI-feature pages we checked don't document reading other sites' llms.txt files.",
   date: "October 28, 2026",
   publishedAt: "2026-10-28",
   category: "Technical",
@@ -86,7 +86,7 @@ There is a pattern here. Developer-focused companies publish llms.txt files for 
 
 ## Should you write one?
 
-Write one if it is cheap for you and your site has content an agent would use on demand, such as documentation, product specs or help pages. Don't write one expecting it to change whether you are crawled, indexed or cited, because no operator documents that.
+Write one if it is cheap for you and your site has content an agent would use on demand, such as documentation, product specs or help pages. Don't write one expecting it to change whether you are crawled, indexed or cited, because none of the Google, OpenAI or Anthropic pages we checked documents that.
 
 Do the basics first. A crawler blocked by your robots.txt or your CDN gains nothing from a good llms.txt. You can check what your robots.txt says to AI bots with the [AI crawler checker](/tools/ai-crawler-checker).
 

@@ -7,6 +7,8 @@
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { SourceLink } from "@/components/player/ConceptCard";
+import type { Source } from "@/lib/lesson-types";
 import { isInternalHref, slugifyHeading, textFromChildren, toInternalPath } from "../blog-text";
 
 export function QuickAnswer({ md }: { md: string }) {
@@ -99,5 +101,24 @@ export function ArticleBody({ md }: { md: string }) {
     >
       {md}
     </ReactMarkdown>
+  );
+}
+
+/** The post's sources, numbered, each with its publisher and date. Nothing when a post lists none. */
+export function PostSources({ sources }: { sources: Source[] }) {
+  if (sources.length === 0) return null;
+  return (
+    <section aria-labelledby="sources" className="mt-16 pt-8 border-t border-gold-700/20">
+      <h2 id="sources" className="font-display text-2xl md:text-3xl font-semibold text-sand-100 mb-6">
+        Sources
+      </h2>
+      <ol className="list-decimal pl-6 space-y-2 font-body text-sm">
+        {sources.map((s) => (
+          <li key={s.url}>
+            <SourceLink source={s} />
+          </li>
+        ))}
+      </ol>
+    </section>
   );
 }

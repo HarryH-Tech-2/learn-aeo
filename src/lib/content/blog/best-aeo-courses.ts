@@ -6,7 +6,7 @@ export const post: BlogPost = {
   excerpt:
     "Six checks to run on any AEO course, then five real options described from their own pages, including free ones and ours.",
   quickAnswer:
-    "The right AEO course is one whose claims are sourced, whose material is current, that makes you practice, and whose price and refund terms suit you. Free options include Ahrefs' AEO course, Semrush's AI Visibility Essentials and Google's own AI features guide. Edureka's GEO course on Coursera is included with Coursera Plus with a paid certificate, and Learn AEO, which is our course, has a free first lesson and paid plans.",
+    "The right AEO course is one whose claims are sourced, whose material is current, that makes you practice, and whose price and refund terms suit you. Free options include Ahrefs' AEO course, Semrush's AI Visibility Essentials and Google's own AI features guide. Edureka's GEO course on Coursera is included with Coursera Plus, or you buy its Certificate experience for the full materials and certificate, and Learn AEO, which is our course, has a free first lesson and paid plans.",
   date: "October 28, 2026",
   publishedAt: "2026-10-28",
   category: "Careers",
@@ -54,9 +54,9 @@ Below are five options, in no particular order. Each description uses only what 
 
 ### Ahrefs: Answer Engine Optimization (AEO) Course
 
-Ahrefs Academy's course page lists 12 video lessons in five modules, with a total length of 1h 26m. The teacher is Sam Oh, listed as "VP of Marketing at Ahrefs". The page says: "No sign-up required, and absolutely free of charge." It also offers an optional 50-question certification exam.
+Ahrefs Academy's course page lists 12 video lessons "In 5 modules", with a total length of 1h 26m. The teacher is Sam Oh, listed as "VP of Marketing at Ahrefs". The page says: "No sign-up required, and absolutely free of charge." The page also links to a 50-question exam under "Get Ahrefs certified".
 
-The modules are How AI Search Works, AEO Strategy, AEO Execution and Measuring AEO. Lesson topics include how AI search engines work, prompt research, brand mentions, YouTube, robots.txt, [GPTBot](/glossary/gptbot) and [llms.txt](/glossary/llms-txt), and tracking AI traffic in GA4 and Ahrefs Web Analytics. The page shows no course publish or update date.
+After an introductory lesson, the four named modules are How AI Search Works, AEO Strategy, AEO Execution and Measuring AEO. Lesson topics include how AI search engines work, prompt research, brand mentions, YouTube, robots.txt, [GPTBot](/glossary/gptbot) and [llms.txt](/glossary/llms-txt), and tracking AI traffic in GA4 and Ahrefs Web Analytics. The page shows no course publish or update date.
 
 ### Semrush Academy: AI Visibility Essentials with Semrush
 
@@ -68,7 +68,7 @@ The lessons mix strategy, expert and walkthrough videos. Topics include traditio
 
 This course is offered by Edureka on Coursera and is part of a Generative Engine Optimization ([GEO](/glossary/geo)) Specialization. The page lists it as self-paced, beginner level, and "8 hours to complete", in five modules with 17 assignments.
 
-The modules are Content Creation Workflow with AI, On-Page Optimization for GEO (No-Code), Off-Page Authority & Distribution, a project to build an AI-optimized content asset, and a wrap-up assessment. On price, the page shows an "Enroll for free" button and says the course is "Included with Coursera Plus". Its FAQ says that to earn a certificate "you'll need to purchase the Certificate experience when you enroll in a course." No price for that was shown on the page.
+The modules are Content Creation Workflow with AI, On-Page Optimization for GEO (No-Code), Off-Page Authority & Distribution, a project to build an AI-optimized content asset, and a wrap-up assessment. On price, the page shows an "Enroll for free" button and says the course is "Included with Coursera Plus". Its FAQ says that to access course materials and assignments and to earn a certificate, "you'll need to purchase the Certificate experience when you enroll in a course." No price for that was shown on the page.
 
 ### Google Search Central: AI features and your website
 
@@ -92,7 +92,7 @@ Every cell comes from the provider's own page on October 28, 2026, or, for Learn
 
 | Resource | Provider | Format | Length | Price shown | Certificate |
 | --- | --- | --- | --- | --- | --- |
-| Answer Engine Optimization (AEO) Course | Ahrefs Academy | 12 video lessons, 5 modules | 1h 26m | Free, no sign-up | Optional 50-question exam |
+| Answer Engine Optimization (AEO) Course | Ahrefs Academy | 12 video lessons, 5 modules | 1h 26m | Free, no sign-up | 50-question certification exam |
 | AI Visibility Essentials with Semrush | Semrush Academy | 20 video lessons | 1–8 min per lesson | "Enroll for free" | Yes, after final assessment |
 | Generative Engine Content Optimization | Edureka on Coursera | Self-paced, 5 modules, 17 assignments | 8 hours | "Enroll for free"; included with Coursera Plus; certificate bought separately | Yes, with paid Certificate experience |
 | AI features and your website | Google Search Central | Documentation page | Not shown | Free | No |

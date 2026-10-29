@@ -1,8 +1,9 @@
-// Live check that every cited source (lessons and glossary) still resolves. Network-bound, so it only
+// Live check that every cited source (lessons, glossary and blog posts) still resolves. Network-bound, so it only
 // runs when CHECK_SOURCES is set: CHECK_SOURCES=1 npx vitest run <this file>
 import { describe, expect, it } from "vitest";
 import { LESSONS, isLive } from "@/lib/lessons";
 import { GLOSSARY } from "@/lib/glossary";
+import { blogPosts } from "@/lib/blog-posts";
 
 const UA =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
@@ -14,6 +15,7 @@ function sourceUrls(): string[] {
     urls.add(l.content.example.source.url);
   }
   for (const t of GLOSSARY) for (const s of t.sources) urls.add(s.url);
+  for (const p of blogPosts) for (const s of p.sources) urls.add(s.url);
   return [...urls];
 }
 

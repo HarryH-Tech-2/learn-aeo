@@ -45,7 +45,7 @@ SEO, [AEO](/glossary/aeo) and [GEO](/glossary/geo) describe overlapping work. SE
 | | SEO | AEO | GEO |
 | --- | --- | --- | --- |
 | Stands for | Search engine optimization | Answer engine optimization | Generative engine optimization |
-| Where the term comes from | Search marketing practice | Marketing industry | A 2023 research paper (Aggarwal et al.), now also used by vendors |
+| Where the term comes from | Search marketing practice | Industry term, no single origin | A 2023 research paper (Aggarwal et al.), now also used by vendors |
 | Official definition? | No single one | No | Only the paper's, for its own experiments |
 | Target | Ranked results pages | AI-written answers | AI-written answers |
 | Win condition | A high position and a click | Being cited or mentioned in the answer | Being cited or mentioned in the answer |
@@ -79,13 +79,13 @@ What the paper found:
 - **Keyword stuffing doesn't carry over.** For that classic tactic, the authors report "such methods offer little to no improvement."
 - **Smaller sites gained more.** The paper says "lower-ranked websites, which typically struggle for visibility, benefit significantly more from GEO."
 
-Keep the scope in mind. These results use the paper's own benchmark and visibility metrics, mostly with a simulated engine. They are evidence that clear, well-supported content gets used more in generated answers. They are not a forecast for any particular engine today.
+Keep the scope in mind. These results use the paper's own benchmark and visibility metrics, mostly with an engine the authors built on gpt-3.5-turbo, plus one test on Perplexity.ai. They are evidence that clear, well-supported content gets used more in generated answers. They are not a forecast for any particular engine today.
 
 Since the paper, GEO has spread beyond research. Bing's February 2026 post introducing the AI Performance report in Bing Webmaster Tools calls it "an early step toward Generative Engine Optimization (GEO) tooling."
 
 ## Where do LLMO and AIO fit?
 
-They're more labels for the same territory. [LLMO](/glossary/llmo) (large language model optimization) and AIO have no official definitions either. Microsoft treats the names as interchangeable. Its October 2025 post on AI search answers says: "Whether you call it GEO, AIO, or SEO, one thing hasn't changed: visibility is everything."
+They're more labels for the same territory. [LLMO](/glossary/llmo) (large language model optimization) and AIO have no official definitions either. Conductor's glossary calls LLMO "essentially synonymous with Generative Engine Optimization (GEO)." Microsoft treats GEO, AIO and SEO as interchangeable labels. Its October 2025 post on AI search answers says: "Whether you call it GEO, AIO, or SEO, one thing hasn’t changed: visibility is everything."
 
 When you read a proposal, an agency pitch or a job ad that uses any of these terms, ask what work it actually describes. The label tells you less than the task list.
 
@@ -105,7 +105,7 @@ None of this is new to an SEO. Here's how the shared work splits:
 | Indexing | Pages must be indexed | Same; Google's AI features draw on its index |
 | Content | Helpful, original pages | Passages that still make sense when lifted out on their own |
 | Structured data | Markup that matches the page | Same rule: Google asks that "all the content in your markup is also visible on your web page" |
-| Snippet controls | nosnippet, max-snippet, noindex | Google says these also limit what is shown in AI features |
+| Snippet controls | nosnippet, max-snippet, noindex | Google lists these as the controls for your content in its AI features |
 | Measurement | Rankings and clicks | Citations, cited pages and brand mentions |
 
 ## What actually differs?
@@ -226,6 +226,12 @@ Call it AEO, GEO or plain SEO. The job is the same: be the clearest, most trustw
       title: "Perplexity Crawlers",
       publisher: "Perplexity",
       url: "https://docs.perplexity.ai/docs/resources/perplexity-crawlers",
+      accessed: ACCESSED,
+    },
+    {
+      title: "LLMO (Large Language Model Optimization) | Glossary",
+      publisher: "Conductor",
+      url: "https://www.conductor.com/academy/glossary/llmo-large-language-model-optimization/",
       accessed: ACCESSED,
     },
   ],

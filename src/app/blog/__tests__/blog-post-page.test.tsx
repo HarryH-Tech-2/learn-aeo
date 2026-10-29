@@ -16,7 +16,7 @@ const fixture: BlogPost = vi.hoisted(() => ({
   relatedSlugs: [],
   faqs: [{ question: "Is it the same as keyword research?", answer: "No." }],
   content: "## The idea\n\nOne prompt, many searches.\n\n## Why it matters\n\nYour page may match only one of them.",
-  sources: [],
+  sources: [{ title: "AI features and your website", publisher: "Google", url: "https://developers.google.com/search/docs/appearance/ai-features", accessed: "2026-10-28" }],
 }));
 
 vi.mock("@/lib/blog-posts", () => ({
@@ -30,7 +30,7 @@ vi.mock("next/navigation", () => ({
 }));
 
 import BlogPostPage, { generateStaticParams } from "@/app/blog/[slug]/page";
-import { ArticleBody, QuickAnswer } from "@/app/blog/[slug]/PostBody";
+import { ArticleBody, PostSources, QuickAnswer } from "@/app/blog/[slug]/PostBody";
 import { extractH2s, withInBodyLinks, IN_BODY_LINKS_MD } from "@/app/blog/blog-text";
 import JsonLd from "@/components/JsonLd";
 import { ORG_ID } from "@/lib/schema";
@@ -57,6 +57,9 @@ describe("blog post page", () => {
     expect(ld[0].keywords).not.toMatch(/alphabet|translate/i);
     const content = kids.find((k) => k.type !== JsonLd)!;
     expect((content.props.headings as { text: string }[]).map((h) => h.text)).toEqual(["The idea", "Why it matters"]);
+    const sources = renderToStaticMarkup(content.props.sources as ReactElement);
+    expect(sources).toContain('href="https://developers.google.com/search/docs/appearance/ai-features"');
+    expect(sources).toContain("Sources");
   });
 
   it("renders the quick answer and body, with the lesson link inserted after the first section", () => {
@@ -67,5 +70,9 @@ describe("blog post page", () => {
     const html = renderToStaticMarkup(<ArticleBody md={md} />);
     expect(html).toContain("Why it matters");
     expect(html).toContain("take the free first lesson");
+  });
+
+  it("lists no sources section when a post has none", () => {
+    expect(renderToStaticMarkup(<PostSources sources={[]} />)).toBe("");
   });
 });

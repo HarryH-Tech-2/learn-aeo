@@ -73,7 +73,7 @@ Google's AI features page lists its best practices. They are ordinary SEO work, 
 | [Structured data](/glossary/structured-data) matches the visible text | Schema says the same thing the page says |
 | Merchant Center and Business Profile information up to date | Product and local data is current, if you have it |
 
-Google also suggests verifying your site in Search Console so you can see how it performs.
+Google also suggests verifying your site in Search Console so you can spot and diagnose technical issues quickly.
 
 Just as useful is what you can skip. Google says: "You don't need to create new machine readable files, AI text files, or markup to appear in these features." An [llms.txt](/glossary/llms-txt) file may have other uses, but Google does not ask for one here.
 

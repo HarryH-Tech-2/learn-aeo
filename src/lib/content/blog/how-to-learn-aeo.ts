@@ -61,7 +61,7 @@ Then read Google's Search Central blog post from May 21, 2025, "Top ways to ensu
 
 Each AI company runs more than one bot, and the split matters. Read each page and sort its bots into three groups: training, search and user-triggered fetching.
 
-- **OpenAI.** Its crawler overview says "OAI-SearchBot is used to surface websites in search results in ChatGPT's search features." [GPTBot](/glossary/gptbot) is the one tied to its foundation models. The key line: "Each setting is independent of the others." You can opt out of training and stay in search.
+- **OpenAI.** Its crawler overview says "OAI-SearchBot is used to surface websites in search results in ChatGPT’s search features." [GPTBot](/glossary/gptbot) is the one tied to its foundation models. The key line: "Each setting is independent of the others." You can opt out of training and stay in search.
 - **Anthropic.** The Claude Help Center (updated April 7, 2026) separates [ClaudeBot](/glossary/claudebot), which collects content that could contribute to model training, from Claude-SearchBot and Claude-User. It says "Claude-SearchBot navigates the web to improve search result quality for users."
 - **Perplexity.** [PerplexityBot](/glossary/perplexitybot) "is designed to surface and link websites in search results on Perplexity." Perplexity-User fetches pages when a user asks, and Perplexity says "this fetcher generally ignores robots.txt rules."
 

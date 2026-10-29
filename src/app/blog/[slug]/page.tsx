@@ -6,7 +6,7 @@ import BlogPostContent from "./BlogPostContent";
 import JsonLd from "@/components/JsonLd";
 import { pageMetadata } from "@/lib/seo";
 import { blogPostingSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
-import { ArticleBody, QuickAnswer } from "./PostBody";
+import { ArticleBody, PostSources, QuickAnswer } from "./PostBody";
 import { extractH2s, withInBodyLinks } from "../blog-text";
 import { countWords, readingMinutes, stripMarkdown } from "../blog-text";
 
@@ -122,6 +122,7 @@ export default async function BlogPostPage({
           .map((p) => ({ slug: p.slug, title: p.title, excerpt: p.excerpt }))}
         quickAnswer={<QuickAnswer md={post.quickAnswer} />}
         body={<ArticleBody md={content} />}
+        sources={<PostSources sources={post.sources} />}
       />
     </>
   );

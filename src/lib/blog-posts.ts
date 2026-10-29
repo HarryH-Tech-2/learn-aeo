@@ -1,4 +1,12 @@
 import type { Source } from "./lesson-types";
+import { post as p_whatIsAeo } from "./content/blog/what-is-aeo";
+import { post as p_aeoVsSeoVsGeo } from "./content/blog/aeo-vs-seo-vs-geo";
+import { post as p_howToLearnAeo } from "./content/blog/how-to-learn-aeo";
+import { post as p_isAeoWorthLearning } from "./content/blog/is-aeo-worth-learning";
+import { post as p_bestAeoCourses } from "./content/blog/best-aeo-courses";
+import { post as p_howChatgptChoosesSources } from "./content/blog/how-chatgpt-chooses-sources";
+import { post as p_getCitedInGoogleAiOverviews } from "./content/blog/get-cited-in-google-ai-overviews";
+import { post as p_llmsTxtExplained } from "./content/blog/llms-txt-explained";
 
 export type BlogFAQ = {
   question: string;
@@ -38,8 +46,10 @@ export type BlogPost = {
   sources: Source[];
 };
 
-/** No posts yet: the first AEO articles are still to be written. /blog shows a coming-soon page meanwhile. */
-export const blogPosts: BlogPost[] = [];
+/** The launch posts, one data file each in src/lib/content/blog/ (sources checked 2026-10-28). */
+export const blogPosts: BlogPost[] = [
+  p_whatIsAeo, p_aeoVsSeoVsGeo, p_howToLearnAeo, p_isAeoWorthLearning, p_bestAeoCourses, p_howChatgptChoosesSources, p_getCitedInGoogleAiOverviews, p_llmsTxtExplained,
+];
 
 export function getPostBySlug(slug: string): BlogPost | undefined {
   return blogPosts.find((p) => p.slug === slug);
