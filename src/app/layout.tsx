@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { THEME_INIT_SCRIPT, THEME_COLOR } from "@/lib/theme";
 import { gaCountryBlockScript, trafficTypeScript } from "@/lib/traffic-type";
-import { Inter, Instrument_Serif } from "next/font/google";
+import { Hanken_Grotesk, Newsreader } from "next/font/google";
 import Script from "next/script";
 import Providers from "@/components/Providers";
 import CampaignTracker from "@/components/CampaignTracker";
@@ -23,17 +23,18 @@ const GA_MEASUREMENT_ID = SITE.gaId ?? "";
 const GA_ENABLED =
   Boolean(GA_MEASUREMENT_ID) && process.env.NODE_ENV === "production" && process.env.VERCEL_ENV !== "preview";
 
-const inter = Inter({
+const hankenGrotesk = Hanken_Grotesk({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-hanken-grotesk",
   display: "swap",
 });
 
-const instrumentSerif = Instrument_Serif({
+// variable weight and optical size: tighter, crisper letterforms at headline sizes
+const newsreader = Newsreader({
   subsets: ["latin"],
-  weight: "400",
   style: ["normal", "italic"],
-  variable: "--font-instrument-serif",
+  axes: ["opsz"],
+  variable: "--font-newsreader",
   display: "swap",
 });
 
@@ -79,6 +80,8 @@ export const metadata: Metadata = {
     "max-snippet": -1,
     "max-video-preview": -1,
   },
+  // Bing Webmaster Tools ownership (Google Search Console is verified by a DNS TXT record)
+  verification: { other: { "msvalidate.01": "0578EA2042A6AAF6820BD9761C19E082" } },
 };
 
 export default function RootLayout({
@@ -87,7 +90,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${instrumentSerif.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${hankenGrotesk.variable} ${newsreader.variable}`}>
       <head>
         <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32" />
         <link rel="icon" href="/favicon-64.png" type="image/png" sizes="64x64" />

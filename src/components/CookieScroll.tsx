@@ -56,11 +56,17 @@ export default function CookieScroll() {
       aria-label="Cookie notice"
       className="fixed inset-x-0 bottom-0 z-50 border-t border-gold-500/30 bg-obsidian-light p-4 shadow-2xl sm:inset-x-auto sm:bottom-4 sm:left-4 sm:max-w-md sm:rounded-2xl sm:border"
     >
-      <h2 className="font-display text-xl text-sand-100">Cookies</h2>
+      {/* styled as an answer engine's reply: the question, a short answer, one cited source */}
+      <p className="font-body text-xs uppercase tracking-[0.18em] text-cyan">Does this site use cookies?</p>
+      <h2 className="font-display text-xl text-sand-100 mt-1">Short answer: yes, a few.</h2>
       <p className="font-body text-sm leading-relaxed text-sand-300 mt-2">
-        Some keep you signed in. Others, from Google Analytics, show us which lessons help. Accept them all, or keep only the ones the site needs.{" "}
-        <Link href="/privacy#cookies" className="text-cyan underline underline-offset-2 hover:text-cyan-300">
-          What each one does
+        Some keep you signed in. Others, from Google Analytics, show us which lessons actually get you cited.
+        Accept them all, or keep only the ones the site needs.
+        <Link
+          href="/privacy#cookies"
+          className="ml-1 inline-flex items-center gap-1 rounded-full border border-cyan/40 px-2 py-0.5 align-middle text-xs text-cyan hover:border-cyan hover:text-cyan-300"
+        >
+          <span aria-hidden="true">[1]</span> What each one does
         </Link>
       </p>
       <div className="flex flex-wrap items-center gap-3 mt-4">

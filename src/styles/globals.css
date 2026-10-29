@@ -145,9 +145,9 @@ html.light {
   --color-terracotta: #e0674a;
 
   /* ── Typography ── */
-  /* Inter for UI/body, Instrument Serif for display. */
-  --font-sans: var(--font-inter), system-ui, sans-serif;
-  --font-display: var(--font-instrument-serif), Georgia, serif;
+  /* Hanken Grotesk for UI/body, Newsreader for display. */
+  --font-sans: var(--font-hanken-grotesk), system-ui, sans-serif;
+  --font-display: var(--font-newsreader), Georgia, serif;
   --font-body: var(--font-sans);
 
   /* ── Spacing Scale ── */
@@ -1073,7 +1073,7 @@ html:not(.light) .faq-a {
   color: #cbbd9d;
 }
 
-/* Instrument Serif ships a single 400 weight: never fake a bold. */
+/* Headings are designed at 400: never let the browser fake a bold onto them. */
 .font-display {
   font-synthesis-weight: none;
 }

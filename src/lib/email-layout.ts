@@ -4,7 +4,7 @@
  * the Learn AEO mark (public/email/mark-aeo.png) over the name, and the body inside a double frame. The images
  * are drawn by scripts/dev/build-email-art.mjs; mail clients need PNG, not SVG or WebP.
  *
- * Table layout and inline styles throughout so it holds up in Gmail and Outlook. Instrument Serif and Inter load
+ * Table layout and inline styles throughout so it holds up in Gmail and Outlook. Newsreader and Hanken Grotesk load
  * from Google Fonts where the client allows it (Apple Mail, iOS); elsewhere Georgia and Segoe UI / Helvetica
  * stand in.
  */
@@ -26,8 +26,8 @@ export const EMAIL_COLORS = {
 } as const;
 
 const C = EMAIL_COLORS;
-export const BODY_FONT = "'Inter', 'Segoe UI', Helvetica, Arial, sans-serif";
-export const DISPLAY_FONT = "'Instrument Serif', Georgia, 'Times New Roman', serif";
+export const BODY_FONT = "'Hanken Grotesk', 'Segoe UI', Helvetica, Arial, sans-serif";
+export const DISPLAY_FONT = "'Newsreader', Georgia, 'Times New Roman', serif";
 
 export function esc(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -127,7 +127,7 @@ export function emailLayout(o: EmailLayoutOptions): string {
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark">
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital@0;1&amp;family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet">
 <style>@media (max-width:620px){.wrap{width:100%!important}.pad{padding:28px 20px!important}.frame{padding:3px!important}}</style>
 </head>
 <body style="margin:0;padding:0;background:${C.page};">

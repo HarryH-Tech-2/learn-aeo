@@ -19,5 +19,5 @@ export const CERTIFICATE = {
   metaSize: 0.014,
   metaColor: "#a9b4cc",
   urlColor: "#6fe3ff",
-  metaFont: "Inter, 'Segoe UI', Helvetica, Arial, sans-serif",
+  metaFont: "'Hanken Grotesk', 'Segoe UI', Helvetica, Arial, sans-serif",
 } as const;
