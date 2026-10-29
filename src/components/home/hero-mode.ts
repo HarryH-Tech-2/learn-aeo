@@ -1,10 +1,13 @@
-// How the City of Answers hero draws: the full flight, a single still frame, or nothing (the
-// section's own gradient shows). Pure so it can be tested; CityHero reads the environment.
+// How the City of Answers hero shows: the looping video, or its still poster (the first frame). Pure so
+// it can be tested; HeroVideo reads the environment.
 
-export type HeroMode = "animate" | "still" | "none";
+export type HeroMode = "play" | "still";
 
-export function heroMode(env: { webgl: boolean; reducedMotion: boolean; saveData: boolean }): HeroMode {
-  if (!env.webgl) return "none";
-  if (env.reducedMotion || env.saveData) return "still";
-  return "animate";
+export function heroMode(env: { reducedMotion: boolean; saveData: boolean }): HeroMode {
+  return env.reducedMotion || env.saveData ? "still" : "play";
+}
+
+/** The search bar's question after `step` typing ticks: one character per tick, clamped to the question. */
+export function typedQuestion(question: string, step: number): string {
+  return question.slice(0, Math.max(0, Math.min(step, question.length)));
 }
