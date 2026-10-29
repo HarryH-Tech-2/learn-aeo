@@ -4,8 +4,9 @@
  *   public/blog/<slug>.webp  1024 x 1024  the post title on the brand's night-sky ground, with the
  *                                        search-bar-and-seam mark as the motif
  *
- * 1024 x 1024 because the post page and its og:image tags declare that size. Brand colors: navy #04060d,
- * cyan #6fe3ff, gold #ffc76b. librsvg cannot load the brand fonts, so the title is set in Georgia (a serif
+ * 1024 x 1024 because the post page and its og:image tags declare that size. The post hero (16:9) and the
+ * blog cards (about 2:1) crop it with object-cover, so everything that matters sits in the center band,
+ * y 250 to 780. Brand colors: navy #04060d, cyan #6fe3ff, gold #ffc76b. librsvg cannot load the brand fonts, so the title is set in Georgia (a serif
  * every Windows and macOS machine has; librsvg falls back to its default serif elsewhere). Run once after
  * adding or retitling a post, and commit the output:
  *
@@ -39,11 +40,11 @@ function wrap(text, max) {
 }
 
 function art(title) {
-  const lines = wrap(title, 17);
-  const fontSize = lines.length > 4 ? 70 : 80;
+  const lines = wrap(title, 22);
+  const fontSize = lines.length > 3 ? 56 : 66;
   const lineHeight = fontSize * 1.15;
-  // Centered on y=640, but the first baseline never rises into the "LEARN AEO" eyebrow (y=410).
-  const top = Math.max(510, 640 - ((lines.length - 1) * lineHeight) / 2);
+  // Centered on y=560, but the first baseline never rises into the "LEARN AEO" eyebrow (y=395).
+  const top = Math.max(465, 560 - ((lines.length - 1) * lineHeight) / 2);
   const text = lines
     .map((l, i) => `<text x="512" y="${top + i * lineHeight}" text-anchor="middle">${esc(l)}</text>`)
     .join("");
@@ -70,11 +71,11 @@ function art(title) {
     <circle cx="640" cy="120" r="1.5"/><circle cx="820" cy="70" r="2"/><circle cx="950" cy="170" r="1.5"/>
     <circle cx="140" cy="900" r="1.5"/><circle cx="880" cy="930" r="2"/>
   </g>
-  <rect x="352" y="180" width="320" height="112" rx="56" fill="none" stroke="${CYAN}" stroke-width="10"/>
-  <rect x="505" y="136" width="14" height="200" rx="7" fill="url(#seam)"/>
-  <text x="512" y="410" text-anchor="middle" font-family="Georgia, serif" font-size="30" letter-spacing="8" fill="${CYAN}">LEARN AEO</text>
+  <rect x="432" y="282" width="160" height="56" rx="28" fill="none" stroke="${CYAN}" stroke-width="6"/>
+  <rect x="508.5" y="260" width="7" height="100" rx="3.5" fill="url(#seam)"/>
+  <text x="512" y="395" text-anchor="middle" font-family="Georgia, serif" font-size="24" letter-spacing="7" fill="${CYAN}">LEARN AEO</text>
   <g font-family="Georgia, serif" font-size="${fontSize}" fill="#f2efe6">${text}</g>
-  <rect x="112" y="900" width="800" height="3" fill="url(#rule)"/>
+  <rect x="112" y="760" width="800" height="2" fill="url(#rule)"/>
 </svg>`;
 }
 

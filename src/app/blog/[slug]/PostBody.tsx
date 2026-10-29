@@ -66,6 +66,15 @@ export function ArticleBody({ md }: { md: string }) {
             <table className="w-full border-collapse font-body text-base">{children}</table>
           </div>
         ),
+        // Code examples scroll inside their own box (keyboard-focusable), never the page.
+        pre: ({ children }) => (
+          <pre
+            tabIndex={0}
+            className="overflow-x-auto max-w-full mb-6 p-4 rounded-lg border border-gold-700/20 bg-obsidian-lighter font-mono text-sm leading-relaxed text-sand-200"
+          >
+            {children}
+          </pre>
+        ),
         thead: ({ children }) => <thead className="border-b border-gold-700/30">{children}</thead>,
         th: ({ children }) => <th className="text-left p-3 text-gold-400 font-medium text-xs tracking-[0.1em] uppercase">{children}</th>,
         td: ({ children }) => <td className="p-3 text-sand-400 border-b border-gold-700/10">{children}</td>,

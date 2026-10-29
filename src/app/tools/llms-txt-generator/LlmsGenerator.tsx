@@ -127,7 +127,7 @@ export default function LlmsGenerator() {
       </div>
 
       <div className="lg:sticky lg:top-24 self-start w-full min-w-0">
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
           <span className={label}>Your llms.txt</span>
           <div className="flex gap-2">
             <button

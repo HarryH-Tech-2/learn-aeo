@@ -72,6 +72,13 @@ describe("blog post page", () => {
     expect(html).toContain("take the free first lesson");
   });
 
+  it("scrolls long code blocks inside their box, not the page", () => {
+    const md = "## Code\n\n```markdown\n# A very long heading line that is much wider than a phone screen can show\n```";
+    const html = renderToStaticMarkup(<ArticleBody md={md} />);
+    expect(html).toMatch(/<pre[^>]*class="[^"]*overflow-x-auto[^"]*max-w-full/);
+    expect(html).toMatch(/<pre[^>]*tabindex="0"/);
+  });
+
   it("lists no sources section when a post has none", () => {
     expect(renderToStaticMarkup(<PostSources sources={[]} />)).toBe("");
   });
