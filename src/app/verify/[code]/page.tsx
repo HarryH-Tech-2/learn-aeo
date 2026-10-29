@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { SITE } from "@/lib/site";
 import { displayName, formatIssued, isCertificateCode } from "@/lib/certificate-issue";
@@ -15,7 +15,10 @@ export const metadata: Metadata = privateMetadata(
 
 export default async function VerifyPage({ params }: { params: Promise<{ code: string }> }) {
   const { code } = await params;
-  if (!isCertificateCode(code)) notFound();
+  // Codes are typed from a printed certificate: accept any case, then use the canonical one.
+  const upper = code.toUpperCase();
+  if (!isCertificateCode(upper)) notFound();
+  if (upper !== code) redirect(`/verify/${upper}`);
 
   const cert = await prisma.certificate.findUnique({
     where: { code },

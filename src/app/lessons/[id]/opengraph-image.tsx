@@ -6,6 +6,7 @@ import { OG_SIZE, ogCard } from "@/lib/og-image";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 export const alt = "A Learn AEO lesson";
+export const dynamicParams = false;
 
 export function generateStaticParams() {
   return LESSON_CATALOG.map((l) => ({ id: l.id }));

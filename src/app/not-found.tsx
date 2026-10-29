@@ -1,7 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
+
+// Its own title, kept out of the index, and no share card inherited from the home page.
+export const metadata: Metadata = {
+  title: "Page not found",
+  robots: { index: false, follow: true },
+  openGraph: null,
+};
 
 export default function NotFound() {
   return (

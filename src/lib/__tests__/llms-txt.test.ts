@@ -15,13 +15,15 @@ describe("buildLlmsTxt", () => {
     expect(lines[2]).toMatch(/^> \S/);
   });
 
-  it("links every live lesson and no coming-soon lesson", () => {
+  it("links only lessons a signed-out visitor can open: free and live", () => {
     for (const l of LESSON_CATALOG) {
       const link = `](${absoluteUrl(lessonPath(l.id))})`;
-      if (l.status === "live") expect(txt).toContain(link);
+      const line = lines.find((x) => x.includes(l.title));
+      if (l.status === "live" && l.isFree) expect(txt).toContain(link);
       else {
         expect(txt).not.toContain(link);
-        expect(lines.find((x) => x.includes(l.title))).toMatch(/coming soon/i);
+        if (l.status === "coming-soon") expect(line).toMatch(/coming soon/i);
+        else expect(line).toContain(`(paid lesson; see ${absoluteUrl("/pricing")})`);
       }
     }
   });

@@ -15,6 +15,9 @@ const BRAND_SUFFIX = " | Learn AEO";
 /** Google shows roughly 60 characters of a title; only brand it when it still fits. */
 const MAX_TITLE_LENGTH = 60;
 
+// Unknown slugs go straight to the 404 page instead of rendering on demand.
+export const dynamicParams = false;
+
 
 export async function generateMetadata({
   params,
@@ -26,7 +29,7 @@ export async function generateMetadata({
 
   if (!post) {
     return {
-      title: "Post Not Found | Learn AEO",
+      title: "Post not found",
       robots: { index: false, follow: true },
     };
   }

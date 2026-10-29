@@ -79,6 +79,25 @@ describe("public page metadata", () => {
   }, IMPORT_TIMEOUT);
 });
 
+describe("404 and dynamic routes", () => {
+  it("the 404 page is noindex with its own title and no inherited share image", async () => {
+    const m = (await import("@/app/not-found")).metadata as Metadata;
+    expect(m.title).toBe("Page not found");
+    expect((m.robots as { index: boolean }).index).toBe(false);
+    expect((m.openGraph as { images?: unknown } | null | undefined)?.images).toBeUndefined();
+  }, IMPORT_TIMEOUT);
+
+  it("blog posts and lesson share images render only known params", async () => {
+    expect((await import("@/app/blog/[slug]/page")).dynamicParams).toBe(false);
+    expect((await import("@/app/lessons/[id]/opengraph-image")).dynamicParams).toBe(false);
+  }, IMPORT_TIMEOUT);
+
+  it("an unknown blog post title is not branded twice", async () => {
+    const m = await (await import("@/app/blog/[slug]/page")).generateMetadata({ params: Promise.resolve({ slug: "nope" }) });
+    expect(String(m.title)).not.toContain("Learn AEO");
+  }, IMPORT_TIMEOUT);
+});
+
 describe("private page metadata", () => {
   for (const [name, load] of PRIVATE) {
     it(`${name} is noindex`, async () => {

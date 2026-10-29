@@ -31,6 +31,8 @@ export default function CertificateContent() {
   const userName = (typedName ?? accountName).trim() || "Learner";
   const unsaved = typedName !== null && typedName.trim() !== "" && typedName.trim() !== accountName;
   const [saveError, setSaveError] = useState(false);
+  // POST /api/certificate failed: Download and Share stay disabled, so say why and offer a retry.
+  const [issueError, setIssueError] = useState(false);
 
   async function saveName() {
     if (!unsaved || typedName === null) return;
@@ -69,9 +71,13 @@ export default function CertificateContent() {
   // Issue (or fetch) the certificate record. The server checks every lesson is complete; the
   // name on the record follows the account, so this runs again after a name save.
   function issue() {
+    setIssueError(false);
     fetchJson<IssuedCertificate>("/api/certificate", { method: "POST" })
       .then(setCert)
-      .catch(() => setCert(null));
+      .catch(() => {
+        setCert(null);
+        setIssueError(true);
+      });
   }
 
   useEffect(() => {
@@ -278,6 +284,15 @@ export default function CertificateContent() {
         {saveError && (
           <p role="alert" className="mt-3 text-center font-body text-xs text-gold-400">
             Could not save the name. Please try again.
+          </p>
+        )}
+
+        {issueError && (
+          <p role="alert" className="mt-3 text-center font-body text-xs text-gold-400">
+            We couldn&rsquo;t issue your certificate just now. Try again in a minute.{" "}
+            <button type="button" onClick={issue} className="underline underline-offset-2 hover:text-gold-300">
+              Retry
+            </button>
           </p>
         )}
 
