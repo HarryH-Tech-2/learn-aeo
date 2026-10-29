@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { CANONICAL_SITE_URL, REQUIRED_PRODUCTION_ENV, checkProductionEnv } from "../../../scripts/lib/env-check.mjs";
+import { CANONICAL_SITE_URL, REQUIRED_PRODUCTION_ENV, blockingIssues, checkProductionEnv } from "../../../scripts/lib/env-check.mjs";
 import { SITE as SITE_CONFIG } from "@/lib/site";
 
 const SITE = "https://www.learnaeo.com";
@@ -68,5 +68,33 @@ describe("checkProductionEnv", () => {
 
   it("accepts a bare from address and a matching NEXT_PUBLIC_SITE_URL", () => {
     expect(check({ RESEND_FROM_EMAIL: "hello@learnaeo.com", NEXT_PUBLIC_SITE_URL: SITE }).problems).toEqual([]);
+  });
+});
+
+describe("blockingIssues (what fails a production build)", () => {
+  const only = { NEXTAUTH_URL: SITE, NEXTAUTH_SECRET: "x".repeat(40), AEO_PRELAUNCH: "1" };
+  const blocking = (env: Record<string, string | undefined>) => blockingIssues(checkProductionEnv(env, SITE), env);
+
+  it("blocks on anything missing without the pre-launch flag", () => {
+    const env = { ...full, STRIPE_SECRET_KEY: undefined };
+    expect(blocking(env)).toEqual(["missing: STRIPE_SECRET_KEY"]);
+  });
+
+  it("lets a pre-launch build through with settings still missing", () => {
+    expect(blocking(only)).toEqual([]);
+  });
+
+  it.each([
+    ["AEO_DEV_BYPASS_AUTH", { AEO_DEV_BYPASS_AUTH: "1" }],
+    ["STRIPE_SECRET_KEY", { STRIPE_SECRET_KEY: "sk_test_abc" }],
+    ["NEXTAUTH_URL", { NEXTAUTH_URL: "https://learn-aeo-gilt.vercel.app" }],
+  ])("still blocks a pre-launch build with a wrong %s", (name, over) => {
+    const issues = blocking({ ...only, ...over });
+    expect(issues).toHaveLength(1);
+    expect(issues[0]).toContain(name);
+  });
+
+  it("reports the pre-launch flag itself, so the launch check fails until it is removed", () => {
+    expect(check({ AEO_PRELAUNCH: "1" }).problems).toEqual([expect.stringContaining("AEO_PRELAUNCH")]);
   });
 });

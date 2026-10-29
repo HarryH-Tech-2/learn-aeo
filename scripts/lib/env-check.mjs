@@ -51,8 +51,24 @@ export function checkProductionEnv(env, siteUrl) {
   flag("NEXT_PUBLIC_GA_ID", (v) => !/^G-[A-Z0-9]+$/.test(v), "must be a GA4 measurement id (G-…)");
   flag("RESEND_FROM_EMAIL", (v) => !/@learnaeo\.com>?$/i.test(v), "must send from an @learnaeo.com address");
   flag("NURTURE_ENABLED", (v) => v === "true", "nurture email stays off at launch; leave it empty");
+  flag("AEO_PRELAUNCH", () => true, "pre-launch mode lets the build skip missing settings; remove it before launch");
 
   return { missing, problems };
+}
+
+/**
+ * The report lines that fail a production build. With AEO_PRELAUNCH=1 a holding site can go up before
+ * every account exists: missing settings only warn, but a wrong or unsafe value still fails.
+ * @param {{ missing: string[]; problems: string[] }} report
+ * @param {Record<string, string | undefined>} env
+ * @returns {string[]}
+ */
+export function blockingIssues(report, env) {
+  const prelaunch = (env.AEO_PRELAUNCH ?? "").trim() === "1";
+  const blocking = prelaunch
+    ? { missing: [], problems: report.problems.filter((p) => !p.startsWith("AEO_PRELAUNCH")) }
+    : report;
+  return formatEnvReport(blocking).split("\n").filter(Boolean);
 }
 
 /** One readable block for a CLI or a failed build. */

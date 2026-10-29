@@ -84,6 +84,8 @@ node --env-file=.env.production.local scripts/check-env.mjs
 
 *Worked when:* it prints "Production environment looks complete." A production build runs the same check (`next.config.ts`) and fails with the same list if anything is missing or wrong.
 
+To put a holding site up before every account exists, set `AEO_PRELAUNCH=1` in Production. The build then only warns about missing settings, though a wrong or unsafe value still fails it. Sign-in, checkout and email stay broken until their settings are in. Remove the flag before launch. This check fails while it is set.
+
 ## 7. Database
 
 ```bash
