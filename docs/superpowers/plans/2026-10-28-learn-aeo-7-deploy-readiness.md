@@ -10,7 +10,7 @@
 
 **Spec:** `docs/superpowers/specs/2026-10-26-learn-aeo-design.md` ("External setup Harry must do", "Delivery phases" step 8, "Pricing", "SEO / AEO groundwork", "Email").
 
-**Progress:** Tasks 1–5 done 2026-10-28 (`63a2dd7..`, see git log). Task 6 waits on a dev Postgres URL and Stripe test keys from Harry; its steps are DEPLOY.md 9–10.
+**Progress (paused 2026-10-28):** Tasks 1–5 done and pushed (`63a2dd7..b147620`). **Resume here:** (1) re-run the final whole-branch review (review package `63a2dd7..HEAD`, fresh reviewer on the most capable model, the Review Focus above, the ledger's rulings), then one fix pass for Critical/Important findings, each test-first; (2) Task 6 once Harry provides a dev Postgres URL and Stripe **test** keys (DEPLOY.md steps 9–10); (3) Harry's launch steps in `docs/DEPLOY.md`. The review was started and stopped before it reported, so nothing from it is known yet.
 
 **Previous plans:** 1–5 done · 6 `docs/superpowers/plans/2026-10-28-learn-aeo-6-tools-glossary-blog.md` (done, `0b8b5ba..5555928`).
 
