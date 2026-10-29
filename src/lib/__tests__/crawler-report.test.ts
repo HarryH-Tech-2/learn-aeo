@@ -23,6 +23,20 @@ describe("buildCrawlerReport", () => {
     expect(r.blockedTraining).toEqual(["GPTBot"]);
   });
 
+  it("keeps the * group's other Disallow lines in the fix, since a crawler's own group replaces *", () => {
+    const text = "User-agent: *\nDisallow: /\nDisallow: /admin/\nDisallow: /cart\nAllow: /public\n";
+    const r = buildCrawlerReport({ host: "example.com", fetched: { status: 200, text } });
+    expect(r.fixes).toContain("User-agent: OAI-SearchBot\nAllow: /\nDisallow: /admin/\nDisallow: /cart");
+    expect(r.fixes).not.toMatch(/^Disallow: \/$/m);
+  });
+
+  it("flags a 200 response that is an HTML page, not a robots.txt", () => {
+    const html = "<!DOCTYPE html>\n<html><head><title>Not found</title></head><body>Oops</body></html>";
+    expect(buildCrawlerReport({ host: "example.com", fetched: { status: 200, text: html } }).looksLikeHtml).toBe(true);
+    expect(buildCrawlerReport({ host: "example.com", fetched: { status: 200, text: "\n  <html>" } }).looksLikeHtml).toBe(true);
+    expect(buildCrawlerReport({ host: "example.com", fetched: { status: 200, text: ROBOTS } }).looksLikeHtml).toBe(false);
+  });
+
   it("has no fix when nothing that matters is blocked", () => {
     const r = buildCrawlerReport({ host: "example.com", fetched: { status: 200, text: "" } });
     expect(r.crawlers.every((c) => c.allowed)).toBe(true);

@@ -46,6 +46,17 @@ describe("generateLlmsTxt", () => {
     expect(out).toBe("# Fernhill Garden Supply\n\n> Garden tools and compost bins, delivered across the US.\n");
   });
 
+  it("percent-encodes spaces and parentheses in link URLs so the markdown link stays whole", () => {
+    const out = generateLlmsTxt({ ...form, sections: [{ title: "Docs", links: [{ title: "A", url: "https://ex.com/a b)c(d", notes: "n" }] }], optional: [] });
+    expect(out).toContain("- [A](https://ex.com/a%20b%29c%28d): n");
+  });
+
+  it("keeps the details field from adding headings or sections", () => {
+    const out = generateLlmsTxt({ ...form, details: "Intro\n## Fake\n# Also fake\n  ### Indented", sections: [], optional: [] });
+    expect(out.match(/^#{1,6} /gm)).toEqual(["# "]);
+    expect(out).toContain("\\## Fake");
+  });
+
   it("keeps single-line fields on one line and escapes brackets in link titles", () => {
     const out = generateLlmsTxt({
       ...form,

@@ -47,10 +47,11 @@ function ipv6Hextets(ip: string): number[] {
 function isPublicV6(ip: string): boolean {
   const x = ipv6Hextets(ip);
   const allZeroUpTo = (k: number) => x.slice(0, k).every((v) => v === 0);
-  // ::ffff:a.b.c.d (mapped) and ::a.b.c.d (compatible): judge the IPv4 inside.
-  if (allZeroUpTo(5) && (x[5] === 0xffff || x[5] === 0) && (x[6] !== 0 || x[7] > 1)) {
-    return isPublicV4(`${x[6] >> 8}.${x[6] & 255}.${x[7] >> 8}.${x[7] & 255}`);
-  }
+  const embeddedV4 = () => isPublicV4(`${x[6] >> 8}.${x[6] & 255}.${x[7] >> 8}.${x[7] & 255}`);
+  // ::ffff:a.b.c.d (mapped): always judge the IPv4 inside, ::ffff:0.0.0.0 included.
+  if (allZeroUpTo(5) && x[5] === 0xffff) return embeddedV4();
+  // ::a.b.c.d (compatible), but not :: and ::1, handled below.
+  if (allZeroUpTo(6) && (x[6] !== 0 || x[7] > 1)) return embeddedV4();
   if (allZeroUpTo(7) && x[7] <= 1) return false; // :: and ::1
   if ((x[0] & 0xfe00) === 0xfc00) return false; // fc00::/7 unique local
   if ((x[0] & 0xffc0) === 0xfe80) return false; // fe80::/10 link-local
@@ -189,6 +190,10 @@ export async function safeFetchText(
   const isAllowed = opts.isAllowed ?? isPublicAddress;
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), opts.timeoutMs ?? 8000);
+  const aborted = new Promise<never>((_, reject) =>
+    controller.signal.addEventListener("abort", () => reject(new Error("timeout")), { once: true })
+  );
+  aborted.catch(() => {}); // only observed when a lookup is in flight
 
   const check = async (url: URL): Promise<ResolvedAddress[]> => {
     if (url.protocol !== "http:" && url.protocol !== "https:") throw new Blocked();
@@ -200,7 +205,8 @@ export async function safeFetchText(
       if (!isAllowed(host)) throw new Blocked();
       return [{ address: host, family: net.isIP(host) }];
     }
-    const addresses = await resolver(host);
+    // getaddrinfo cannot be canceled, so race it against the deadline rather than wait it out.
+    const addresses = await Promise.race([resolver(host), aborted]);
     if (!addresses.length || addresses.some((a) => !isAllowed(a.address))) throw new Blocked();
     return addresses;
   };

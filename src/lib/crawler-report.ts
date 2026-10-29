@@ -4,7 +4,7 @@
 // business decision the tool leaves to the marketer.
 
 import { AI_CRAWLERS, type CrawlerPurpose } from "./ai-crawlers";
-import { evaluateRobots, robotsFetchVerdict } from "./robots-eval";
+import { evaluateRobots, parseRobots, robotsFetchVerdict } from "./robots-eval";
 
 export type CrawlerResult = {
   token: string;
@@ -30,6 +30,8 @@ export type CrawlerReport = {
   fixes: string;
   /** Training crawlers the file blocks (left as they are; the marketer decides). */
   blockedTraining: string[];
+  /** The 200 response was an HTML page (often a soft 404), so there were no real rules to read. */
+  looksLikeHtml: boolean;
 };
 
 export function buildCrawlerReport(input: {
@@ -47,11 +49,21 @@ export function buildCrawlerReport(input: {
   });
 
   const blocked = crawlers.filter((c) => !c.allowed);
+  // A crawler's own group replaces the * group for it, so each fix repeats the * group's
+  // path-specific Disallow lines; only the site-wide "Disallow: /" is dropped.
+  const starDisallows =
+    verdict === "use-body"
+      ? parseRobots(text)
+          .filter((g) => g.agents.includes("*"))
+          .flatMap((g) => g.rules)
+          .filter((r) => !r.allow && r.path !== "/" && r.path !== "")
+          .map((r) => `Disallow: ${r.path}`)
+      : [];
   const fixes =
     verdict === "use-body"
       ? blocked
           .filter((c) => c.purpose === "search" || c.purpose === "user")
-          .map((c) => `User-agent: ${c.token}\nAllow: /`)
+          .map((c) => [`User-agent: ${c.token}`, "Allow: /", ...new Set(starDisallows)].join("\n"))
           .join("\n\n")
       : "";
 
@@ -63,5 +75,6 @@ export function buildCrawlerReport(input: {
     crawlers,
     fixes,
     blockedTraining: blocked.filter((c) => c.purpose === "training").map((c) => c.token),
+    looksLikeHtml: verdict === "use-body" && /^\s*<(!doctype|html|head|body)\b/i.test(text),
   };
 }

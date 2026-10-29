@@ -54,12 +54,15 @@ export function validateLlmsForm(f: LlmsForm): { field: string; message: string 
 
 function linkLine(l: LlmsLink): string {
   const notes = oneLine(l.notes);
-  return `- [${escapeTitle(l.title)}](${l.url.trim()})${notes ? `: ${notes}` : ""}`;
+  // URL.href percent-encodes spaces; parentheses would end the markdown link early, so encode them too.
+  const url = new URL(l.url.trim()).href.replace(/\(/g, "%28").replace(/\)/g, "%29");
+  return `- [${escapeTitle(l.title)}](${url})${notes ? `: ${notes}` : ""}`;
 }
 
 export function generateLlmsTxt(f: LlmsForm): string {
   const out: string[] = [`# ${oneLine(f.name)}`, "", `> ${oneLine(f.summary)}`, ""];
-  const details = f.details.trim();
+  // Details are free text, but a heading there would start a new section: escape any leading "#".
+  const details = f.details.trim().replace(/^(\s*)#/gm, "$1\\#");
   if (details) out.push(details, "");
   const sections = [
     ...f.sections.map((s) => ({ title: oneLine(s.title), links: s.links.filter(isFilled) })),

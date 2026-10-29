@@ -13,7 +13,7 @@ describe("isPublicAddress", () => {
   });
 
   it("blocks the same in IPv6, including IPv4-mapped forms", () => {
-    for (const ip of ["::", "::1", "fc00::1", "fd12:3456::1", "fe80::1", "ff02::1", "2001:db8::1", "64:ff9b::a00:1", "::ffff:10.0.0.1", "::ffff:7f00:1", "::ffff:169.254.169.254"]) {
+    for (const ip of ["::", "::1", "fc00::1", "fd12:3456::1", "fe80::1", "ff02::1", "2001:db8::1", "64:ff9b::a00:1", "::ffff:10.0.0.1", "::ffff:7f00:1", "::ffff:169.254.169.254", "::ffff:0.0.0.0", "::ffff:0:0", "::ffff:0.0.0.1", "::ffff:0:1", "::127.0.0.1"]) {
       expect(isPublicAddress(ip), ip).toBe(false);
     }
   });
@@ -109,6 +109,13 @@ describe("safeFetchText", () => {
     const r = await safeFetchText(url("/big"), testOpts());
     expect(r).toMatchObject({ ok: true, truncated: true });
     if (r.ok) expect(r.text.length).toBeLessThanOrEqual(512 * 1024);
+  });
+
+  it("times out a DNS lookup that never answers, inside the deadline", async () => {
+    const hang = () => new Promise<never>(() => {});
+    const started = Date.now();
+    expect(await safeFetchText("https://slow-dns.example/robots.txt", { lookup: hang, timeoutMs: 200 })).toEqual({ ok: false, error: "timeout" });
+    expect(Date.now() - started).toBeLessThan(1500);
   });
 
   it("times out a response that never ends", async () => {

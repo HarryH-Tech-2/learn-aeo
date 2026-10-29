@@ -81,6 +81,13 @@ export default function CrawlerChecker() {
               {report.verdict === "disallow-all" && " The file couldn't be read. Under the robots.txt standard (RFC 9309), crawlers treat an unreachable file as “disallow everything” until it can be read again."}
               {report.truncated && " The file is over 500 KB, so only the first 500 KB was read."}
             </p>
+            {report.looksLikeHtml && (
+              <p role="status" className="font-body text-sm text-gold-400 mb-4">
+                This address returned a web page, not a robots.txt file. With no rules to read, crawlers treat everything as
+                allowed, which is what the table shows. If you meant to have a robots.txt, check that /robots.txt serves a plain
+                text file.
+              </p>
+            )}
 
             <div className="overflow-x-auto -mx-5 sm:mx-0">
               <table className="w-full min-w-[560px] font-body text-sm">
@@ -117,8 +124,9 @@ export default function CrawlerChecker() {
               <div className="mt-8">
                 <h3 className="font-display text-xl text-sand-100 mb-2">Let the AI search crawlers in</h3>
                 <p className="font-body text-sm text-sand-400 mb-3">
-                  These AI search and user-request crawlers are blocked. Add these groups to your robots.txt (a crawler&rsquo;s own group
-                  replaces the <code>*</code> group for it, so copy any other rules it should still follow into its group):
+                  These AI search and user-request crawlers are blocked. Add these groups to your robots.txt. A crawler&rsquo;s own group
+                  replaces the <code>*</code> group for it, so each group below repeats your <code>*</code> group&rsquo;s other
+                  Disallow lines; check them before you paste:
                 </p>
                 <pre className="bg-obsidian-lighter border border-gold-700/20 p-4 overflow-x-auto font-mono text-[13px] text-sand-200">{report.fixes}</pre>
                 <button
