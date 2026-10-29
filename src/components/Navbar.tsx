@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
 import { SITE } from "@/lib/site";
 import { useAuthModal } from "@/components/AuthModal";
+import BrandMark from "@/components/BrandMark";
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -46,11 +47,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 md:gap-3 group min-w-0 shrink-0">
             {/* The favicon motif: a search bar split by a gold seam */}
-            <svg aria-hidden="true" viewBox="0 0 64 64" className="w-8 h-8 md:w-9 md:h-9 transition-transform duration-300 group-hover:scale-110">
-              <rect width="64" height="64" rx="14" fill="#04060d" />
-              <rect x="7" y="21" width="50" height="22" rx="11" fill="none" stroke="#6fe3ff" strokeWidth="3.5" />
-              <rect x="30.25" y="14" width="3.5" height="36" rx="1.75" fill="#ffc76b" />
-            </svg>
+            <BrandMark className="w-8 h-8 md:w-9 md:h-9 transition-transform duration-300 group-hover:scale-110" />
             <span className="font-display text-2xl md:text-3xl lg:text-2xl xl:text-3xl tracking-wide text-sand-100 group-hover:text-cyan-400 transition-colors truncate">
               {SITE.name}
             </span>

@@ -1,5 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <rect width="64" height="64" rx="14" fill="#04060d"/>
-  <rect x="7" y="21" width="50" height="22" rx="11" fill="none" stroke="#6fe3ff" stroke-width="3.5"/>
-  <rect x="30.25" y="14" width="3.5" height="36" rx="1.75" fill="#ffc76b"/>
+  <defs>
+    <filter id="g" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2.4"/></filter>
+    <radialGradient id="bg" cx="40%" cy="40%" r="75%"><stop offset="0" stop-color="#0d1a33"/><stop offset="1" stop-color="#04060d"/></radialGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <circle cx="28" cy="28" r="15" fill="none" stroke="#6fe3ff" stroke-width="5" filter="url(#g)" opacity="0.85"/>
+  <circle cx="28" cy="28" r="15" fill="none" stroke="#bff3ff" stroke-width="4"/>
+  <path d="M39 39 52 52" stroke="#bff3ff" stroke-width="6.5" stroke-linecap="round"/>
+  <path d="M28 18.5c.9 5.6 3.9 8.6 9.5 9.5-5.6.9-8.6 3.9-9.5 9.5-.9-5.6-3.9-8.6-9.5-9.5 5.6-.9 8.6-3.9 9.5-9.5Z" fill="#ffc76b"/>
 </svg>

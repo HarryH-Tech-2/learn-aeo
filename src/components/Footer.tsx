@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SITE } from "@/lib/site";
+import BrandMark from "@/components/BrandMark";
 
 // Footer links: only pages that exist on the Learn AEO site.
 const LINKS = [
@@ -20,11 +21,7 @@ export default function Footer() {
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-12">
         <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <svg aria-hidden="true" viewBox="0 0 64 64" className="w-9 h-9">
-              <rect width="64" height="64" rx="14" fill="#04060d" />
-              <rect x="7" y="21" width="50" height="22" rx="11" fill="none" stroke="#6fe3ff" strokeWidth="3.5" />
-              <rect x="30.25" y="14" width="3.5" height="36" rx="1.75" fill="#ffc76b" />
-            </svg>
+            <BrandMark className="w-9 h-9" />
             <span className="font-display text-2xl text-sand-100">{SITE.name}</span>
           </Link>
           <nav aria-label="Footer">

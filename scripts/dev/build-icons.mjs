@@ -3,7 +3,8 @@
  *   public/favicon.svg (source) -> favicon.png (32), favicon-64.png, apple-touch-icon.png (180),
  *   icon-192.png, icon-512.png
  *   an SVG built here                -> public/og-default.png (1200 x 630)
- * The motif is the hero's door: a cyan search-bar outline split by a gold vertical seam, on navy.
+ * The mark (public/favicon.svg, drawn the same in src/components/BrandMark.tsx) is a magnifier with a gold AI
+ * spark in the lens, on navy. The link-preview image keeps the hero's search-bar motif.
  * Run once, commit the output:
  *
  *   node scripts/dev/build-icons.mjs

@@ -10,6 +10,7 @@ import Price from "@/components/Price";
 import { PLANS, planById, planPeriodLabel } from "@/lib/plans";
 import { planIdFromCheckoutPath } from "@/lib/checkout-return";
 import { useFreeCourseGuest } from "@/components/useFreeCourseGuest";
+import BrandMark from "@/components/BrandMark";
 
 type CardState = "initial" | "checking" | "choice" | "check-email";
 export type AuthMode = "signup" | "signin";
@@ -203,11 +204,7 @@ export default function AuthCard({
       {/* Logo */}
       <div className="text-center mb-8">
         <Link href="/" className="inline-flex items-center gap-3 mb-6">
-          <svg aria-hidden="true" viewBox="0 0 64 64" className="w-10 h-10">
-            <rect width="64" height="64" rx="14" fill="#04060d" />
-            <rect x="7" y="21" width="50" height="22" rx="11" fill="none" stroke="#6fe3ff" strokeWidth="3.5" />
-            <rect x="30.25" y="14" width="3.5" height="36" rx="1.75" fill="#ffc76b" />
-          </svg>
+          <BrandMark className="w-10 h-10" />
           <span className="font-display text-2xl font-semibold text-gold-400">
             Learn AEO
           </span>

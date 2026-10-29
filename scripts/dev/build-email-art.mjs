@@ -96,7 +96,7 @@ const rule = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="24" v
 await sharp(Buffer.from(rule)).png().toFile("public/email/rule.png");
 console.log("public/email/rule.png 1200x24");
 
-// ── Mark: the favicon (search-bar outline split by a gold seam, on navy) ──
+// ── Mark: the favicon (a magnifier with a gold AI spark in the lens, on navy) ──
 const mark = await readFile("public/favicon.svg");
 await sharp(mark, { density: 72 * 2 * (72 / 64) }).resize(72, 72).png().toFile("public/email/mark-aeo.png");
 console.log("public/email/mark-aeo.png 72x72");
