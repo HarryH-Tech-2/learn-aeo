@@ -9,6 +9,7 @@ vi.mock("@/lib/auth", () => ({ authOptions: {} }));
 
 import { absoluteUrl } from "@/lib/site";
 import { LESSON_CATALOG, lessonPath } from "@/lib/lesson-catalog";
+import { GLOSSARY } from "@/lib/glossary";
 
 type PageModule = { metadata?: Metadata; generateMetadata?: (a: { params: Promise<Record<string, string>> }) => Promise<Metadata> };
 
@@ -25,6 +26,7 @@ const PUBLIC: [string, string, () => Promise<PageModule>][] = [
   ["/tools", "tools hub", () => import("@/app/tools/page")],
   ["/tools/ai-crawler-checker", "AI Crawler Checker", () => import("@/app/tools/ai-crawler-checker/page")],
   ["/tools/llms-txt-generator", "llms.txt Generator", () => import("@/app/tools/llms-txt-generator/page")],
+  ["/glossary", "glossary", () => import("@/app/glossary/page")],
 ];
 
 const PRIVATE: [string, () => Promise<PageModule>][] = [
@@ -69,6 +71,11 @@ describe("public page metadata", () => {
       expectPublic(m, lessonPath(l.id));
       if (l.status === "coming-soon") expect((m.robots as { index: boolean }).index).toBe(false);
     }
+  }, IMPORT_TIMEOUT);
+
+  it("each glossary term", async () => {
+    const mod = (await import("@/app/glossary/[term]/page")) as unknown as PageModule;
+    for (const t of GLOSSARY) expectPublic(await mod.generateMetadata!({ params: Promise.resolve({ term: t.slug }) }), `/glossary/${t.slug}`);
   }, IMPORT_TIMEOUT);
 });
 
