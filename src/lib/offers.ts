@@ -43,16 +43,26 @@ function randomCode(): string {
   return `AEO-${s}`;
 }
 
+/**
+ * Creates the offer coupon if it is missing, limited to the Lifetime product
+ * (the product of STRIPE_PRICE_ID) so a code can never discount Monthly.
+ * Without that price id it throws rather than create an unrestricted coupon.
+ */
 async function ensureCoupon(): Promise<void> {
   const stripe = getStripe();
   try {
     await stripe.coupons.retrieve(OFFER_COUPON_ID);
   } catch {
+    const priceId = process.env.STRIPE_PRICE_ID;
+    if (!priceId) throw new Error(`STRIPE_PRICE_ID is not set: not creating ${OFFER_COUPON_ID} unrestricted`);
+    const price = await stripe.prices.retrieve(priceId);
+    const product = typeof price.product === "string" ? price.product : price.product.id;
     await stripe.coupons.create({
       id: OFFER_COUPON_ID,
       percent_off: OFFER_PERCENT_OFF,
       duration: "once",
       name: "Learn AEO offer · 33% off",
+      applies_to: { products: [product] },
     });
   }
 }
