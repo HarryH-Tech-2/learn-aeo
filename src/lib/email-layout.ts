@@ -4,8 +4,8 @@
  * the Learn AEO mark (public/email/mark-aeo.png) over the name, and the body inside a double frame. The images
  * are drawn by scripts/dev/build-email-art.mjs; mail clients need PNG, not SVG or WebP.
  *
- * Table layout and inline styles throughout so it holds up in Gmail and Outlook. Newsreader and Hanken Grotesk load
- * from Google Fonts where the client allows it (Apple Mail, iOS); elsewhere Georgia and Segoe UI / Helvetica
+ * Table layout and inline styles throughout so it holds up in Gmail and Outlook. Bricolage Grotesque and Figtree load
+ * from Google Fonts where the client allows it (Apple Mail, iOS); elsewhere Segoe UI / Helvetica
  * stand in.
  */
 
@@ -26,8 +26,8 @@ export const EMAIL_COLORS = {
 } as const;
 
 const C = EMAIL_COLORS;
-export const BODY_FONT = "'Hanken Grotesk', 'Segoe UI', Helvetica, Arial, sans-serif";
-export const DISPLAY_FONT = "'Newsreader', Georgia, 'Times New Roman', serif";
+export const BODY_FONT = "'Figtree', 'Segoe UI', Helvetica, Arial, sans-serif";
+export const DISPLAY_FONT = "'Bricolage Grotesque', 'Segoe UI', Helvetica, Arial, sans-serif";
 
 export function esc(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -49,11 +49,11 @@ export function eyebrow(text: string): string {
 }
 
 export function heading(html: string): string {
-  return `<h1 style="margin:0 0 20px;font-family:${DISPLAY_FONT};font-size:32px;line-height:1.2;font-weight:400;color:${C.sand};">${html}</h1>`;
+  return `<h1 style="margin:0 0 20px;font-family:${DISPLAY_FONT};font-size:32px;line-height:1.2;font-weight:600;color:${C.sand};">${html}</h1>`;
 }
 
 export function subheading(html: string): string {
-  return `<h2 style="margin:28px 0 12px;font-family:${DISPLAY_FONT};font-size:22px;line-height:1.3;font-weight:400;color:${C.goldLight};">${html}</h2>`;
+  return `<h2 style="margin:28px 0 12px;font-family:${DISPLAY_FONT};font-size:22px;line-height:1.3;font-weight:600;color:${C.goldLight};">${html}</h2>`;
 }
 
 /** Bulletproof button: a table cell, so Outlook draws the background; a gold gradient where the client allows it. */
@@ -96,7 +96,7 @@ export function signature(line = "Learn AEO &middot; just reply, we read every e
   return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0 0;">
   <tr>
     <td valign="middle" style="padding-right:12px;"><div style="width:40px;height:2px;background:${C.gold};font-size:0;line-height:0;">&nbsp;</div></td>
-    <td valign="middle" style="font-family:${DISPLAY_FONT};font-size:20px;font-weight:400;color:${C.sand};">The Learn AEO team</td>
+    <td valign="middle" style="font-family:${DISPLAY_FONT};font-size:20px;font-weight:600;color:${C.sand};">The Learn AEO team</td>
   </tr>
   <tr><td></td><td style="padding-top:4px;font-family:${BODY_FONT};font-size:13px;line-height:1.5;color:${C.muted};">${line}</td></tr>
   </table>`;
@@ -127,7 +127,7 @@ export function emailLayout(o: EmailLayoutOptions): string {
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark">
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital@0;1&amp;family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&amp;family=Figtree:wght@400;600;700&amp;display=swap" rel="stylesheet">
 <style>@media (max-width:620px){.wrap{width:100%!important}.pad{padding:28px 20px!important}.frame{padding:3px!important}}</style>
 </head>
 <body style="margin:0;padding:0;background:${C.page};">
@@ -139,7 +139,7 @@ export function emailLayout(o: EmailLayoutOptions): string {
     <tr><td align="center" style="padding:22px 24px 20px;">
       <a href="${o.baseUrl}" style="text-decoration:none;">
         <img src="${o.baseUrl}/email/mark-aeo.png" width="36" height="36" alt="" style="display:block;margin:0 auto 10px;border:0;">
-        <span style="font-family:${DISPLAY_FONT};font-size:22px;font-weight:400;color:${C.sand};">Learn <em style="color:${C.gold};">AEO</em></span>
+        <span style="font-family:${DISPLAY_FONT};font-size:22px;font-weight:600;color:${C.sand};">Learn <em style="color:${C.gold};font-style:normal;">AEO</em></span>
       </a>
     </td></tr>
     ${o.hero ?? ""}

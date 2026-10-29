@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { THEME_INIT_SCRIPT, THEME_COLOR } from "@/lib/theme";
 import { gaCountryBlockScript, trafficTypeScript } from "@/lib/traffic-type";
-import { Hanken_Grotesk, Newsreader } from "next/font/google";
+import { Bricolage_Grotesque, Figtree } from "next/font/google";
 import Script from "next/script";
 import Providers from "@/components/Providers";
 import CampaignTracker from "@/components/CampaignTracker";
@@ -23,18 +23,18 @@ const GA_MEASUREMENT_ID = SITE.gaId ?? "";
 const GA_ENABLED =
   Boolean(GA_MEASUREMENT_ID) && process.env.NODE_ENV === "production" && process.env.VERCEL_ENV !== "preview";
 
-const hankenGrotesk = Hanken_Grotesk({
+const figtree = Figtree({
   subsets: ["latin"],
-  variable: "--font-hanken-grotesk",
+  style: ["normal", "italic"],
+  variable: "--font-figtree",
   display: "swap",
 });
 
-// variable weight and optical size: tighter, crisper letterforms at headline sizes
-const newsreader = Newsreader({
+// variable weight and optical size: tighter, crisper letterforms at headline sizes (no italic exists)
+const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
-  style: ["normal", "italic"],
   axes: ["opsz"],
-  variable: "--font-newsreader",
+  variable: "--font-bricolage",
   display: "swap",
 });
 
@@ -90,7 +90,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${hankenGrotesk.variable} ${newsreader.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${figtree.variable} ${bricolage.variable}`}>
       <head>
         <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32" />
         <link rel="icon" href="/favicon-64.png" type="image/png" sizes="64x64" />
