@@ -8,6 +8,7 @@ import { LESSON_2 } from "./content/lesson-2-the-crawl-docks";
 import { LESSON_3 } from "./content/lesson-3-the-answer-quarter";
 import { LESSON_4 } from "./content/lesson-4-the-schema-works";
 import { LESSON_5 } from "./content/lesson-5-the-agora";
+import { LESSON_6 } from "./content/lesson-6-the-embassies";
 
 export type LiveLesson = LessonMeta & { status: "live"; content: LessonContent };
 export type Lesson = LiveLesson | (LessonMeta & { status: "coming-soon" });
@@ -19,6 +20,7 @@ export const CONTENT: Readonly<Record<string, LessonContent>> = {
   "writing-citable-content": LESSON_3,
   "structured-data-and-entities": LESSON_4,
   "authority-beyond-your-site": LESSON_5,
+  "platform-playbooks": LESSON_6,
 };
 
 export const LESSONS: readonly Lesson[] = LESSON_CATALOG.map((meta): Lesson => {
