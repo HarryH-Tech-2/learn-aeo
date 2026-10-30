@@ -5,7 +5,7 @@ import BlogContent from "./BlogContent";
 import JsonLd from "@/components/JsonLd";
 import { pageMetadata } from "@/lib/seo";
 import { blogCollectionSchema, breadcrumbSchema } from "@/lib/schema";
-import { countWords, stripMarkdown } from "./blog-text";
+import { countWords, stripMarkdown, withInBodyLinks } from "./blog-text";
 
 const SITE = SITE_CONFIG.url;
 const BLOG_DESCRIPTION =
@@ -48,7 +48,8 @@ export default function BlogPage() {
       description: post.excerpt,
       abstract: stripMarkdown(post.quickAnswer),
       section: post.category,
-      wordCount: countWords(post.content),
+      // the post page counts the rendered body, in-body links included; the two share an @id
+      wordCount: countWords(withInBodyLinks(post.content)),
       datePublished: post.publishedAt,
       dateModified: post.updatedAt ?? post.publishedAt,
       image: `${SITE}${post.image}`,

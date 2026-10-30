@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
 import { breadcrumbSchema, faqSchema, webApplicationSchema } from "@/lib/schema";
 import { toolPath, type ToolMeta } from "@/lib/tools";
+import { absoluteUrl } from "@/lib/site";
 import { FIRST_LESSON_PATH, LESSON_CATALOG } from "@/lib/lesson-catalog";
 
 export type ToolFaq = { question: string; answer: string };
@@ -33,7 +34,7 @@ export default function ToolPage({
   ];
   return (
     <main className="grain-overlay">
-      <JsonLd data={[webApplicationSchema(tool), faqSchema(faqs), breadcrumbSchema(crumbs)]} />
+      <JsonLd data={[webApplicationSchema(tool), faqSchema(faqs, absoluteUrl(toolPath(tool.slug))), breadcrumbSchema(crumbs)]} />
       <Navbar />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-20">
         <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 mb-8 font-body text-sm text-sand-500">

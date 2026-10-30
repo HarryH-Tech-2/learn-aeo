@@ -87,7 +87,7 @@ describe("entities", () => {
   });
 
   it("builds an FAQPage", () => {
-    const f = faqSchema([{ question: "Q?", answer: "A." }]);
+    const f = faqSchema([{ question: "Q?", answer: "A." }], `${SITE.url}/x`);
     expect(f["@type"]).toBe("FAQPage");
     expect(f.mainEntity[0]).toEqual({ "@type": "Question", name: "Q?", acceptedAnswer: { "@type": "Answer", text: "A." } });
   });
@@ -172,5 +172,56 @@ describe("one place for JSON-LD", () => {
   it("never names a Person", () => {
     const offenders = files.filter((f) => /"@type":\s*"Person"|@type: "Person"/.test(fs.readFileSync(path.join(root, f), "utf8")));
     expect(offenders).toEqual([]);
+  });
+});
+
+describe("SEO audit (2026-10-30)", () => {
+  it("links syllabus sections only where a signed-out crawler can follow: the free lessons", () => {
+    for (const s of courseSchema().syllabusSections) {
+      const lesson = LESSON_CATALOG.find((l) => l.title === s.name)!;
+      expect("url" in s, s.name).toBe(lesson.isFree);
+    }
+  });
+
+  it("states the monthly plan's billing period, so $10 doesn't read as a one-time price", () => {
+    const byName = Object.fromEntries(courseSchema().offers.map((o) => [o.name, o]));
+    expect(byName[PLANS.monthly.name].priceSpecification).toMatchObject({
+      "@type": "UnitPriceSpecification",
+      price: String(PLANS.monthly.usd),
+      priceCurrency: "USD",
+      billingDuration: "P1M",
+    });
+    expect("priceSpecification" in byName[PLANS.lifetime.name]).toBe(false);
+  });
+
+  it("gives the Organization a logo ImageObject and a support contact", () => {
+    const o = organizationSchema();
+    expect(o.logo).toMatchObject({ "@type": "ImageObject", url: `${SITE.url}/icon-512.png`, width: 512, height: 512 });
+    expect(o.contactPoint).toMatchObject({ "@type": "ContactPoint", email: SITE.supportEmail });
+  });
+
+  it("names the Blog a post is part of, so the reference reads on the post page alone", () => {
+    const p = blogPostingSchema({
+      url: `${SITE.url}/blog/x`, title: "T", description: "D", abstract: "A",
+      image: { url: `${SITE.url}/x.webp`, width: 1024, height: 1024, caption: "c" },
+      datePublished: "2026-10-28", dateModified: "2026-10-28", section: "Basics", wordCount: 100, minutes: 1,
+    });
+    expect(p.isPartOf).toMatchObject({ "@type": "Blog", "@id": `${SITE.url}/blog#blog`, url: `${SITE.url}/blog` });
+  });
+});
+
+describe("FAQPage identity (SEO audit 2026-10-30)", () => {
+  it("ties every FAQPage to its page with an @id and url", () => {
+    const f = faqSchema([{ question: "Q?", answer: "A." }], `${SITE.url}/pricing`);
+    expect(f["@id"]).toBe(`${SITE.url}/pricing#faq`);
+    expect(f.url).toBe(`${SITE.url}/pricing`);
+  });
+
+  it("passes a page URL at every call site", () => {
+    const files = ["src/components/FAQSection.tsx", "src/components/PricingFAQ.tsx", "src/components/tools/ToolPage.tsx", "src/app/blog/[slug]/page.tsx"];
+    for (const f of files) {
+      const src = fs.readFileSync(path.resolve(__dirname, "../../..", f), "utf8");
+      expect(src, f).not.toMatch(/faqSchema\(faqs\)/);
+    }
   });
 });

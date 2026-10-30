@@ -92,7 +92,7 @@ export default async function BlogPostPage({
     post.faqs.length > 0
       ? faqSchema(
           post.faqs.map((f) => ({ question: stripMarkdown(f.question), answer: stripMarkdown(f.answer) })),
-          `${canonical}#faq`
+          canonical
         )
       : null;
   const breadcrumbs = breadcrumbSchema([

@@ -11,6 +11,7 @@ import { PLANS, formatPlanPrice } from "@/lib/plans";
 import { LESSON_CATALOG } from "@/lib/lesson-catalog";
 import JsonLd from "@/components/JsonLd";
 import { faqSchema } from "@/lib/schema";
+import { absoluteUrl } from "@/lib/site";
 
 const both = (plan: (typeof PLANS)[keyof typeof PLANS]) => `${formatPlanPrice(plan, "USD")} (${formatPlanPrice(plan, "GBP")})`;
 const MONTHS_TO_LIFETIME = Math.round(PLANS.lifetime.usd / PLANS.monthly.usd);
@@ -99,7 +100,7 @@ export default function PricingFAQ() {
           </div>
         ))}
       </div>
-      <JsonLd data={faqSchema(faqs)} />
+      <JsonLd data={faqSchema(faqs, absoluteUrl("/pricing"))} />
     </div>
   );
 }

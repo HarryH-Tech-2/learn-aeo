@@ -26,8 +26,9 @@ export function organizationSchema() {
     "@id": ORG_ID,
     name: SITE.name,
     url: SITE.url,
-    logo: absoluteUrl("/icon-512.png"),
+    logo: { "@type": "ImageObject", url: absoluteUrl("/icon-512.png"), width: 512, height: 512 },
     description: SITE.description,
+    contactPoint: { "@type": "ContactPoint", contactType: "customer support", email: SITE.supportEmail },
     ...(SITE.sameAs.length ? { sameAs: SITE.sameAs } : {}),
   };
 }
@@ -70,12 +71,25 @@ export function courseSchema() {
       priceCurrency: "USD",
       availability: "https://schema.org/InStock",
       url: absoluteUrl("/pricing"),
+      // The monthly price is per month, not once.
+      ...(PLANS[id].mode === "subscription"
+        ? {
+            priceSpecification: {
+              "@type": "UnitPriceSpecification",
+              price: String(PLANS[id].usd),
+              priceCurrency: "USD",
+              billingDuration: "P1M",
+              unitCode: "MON",
+            },
+          }
+        : {}),
     })),
     syllabusSections: LESSON_CATALOG.filter((l) => l.status === "live").map((l) => ({
       "@type": "Syllabus",
       name: l.title,
       description: l.summary,
-      url: absoluteUrl(lessonPath(l.id)),
+      // Only free lessons are reachable signed out; paid ones redirect, so they get no URL here.
+      ...(l.isFree ? { url: absoluteUrl(lessonPath(l.id)) } : {}),
       timeRequired: `PT${l.minutes}M`,
     })),
   };
@@ -109,10 +123,12 @@ export function breadcrumbSchema(items: { name: string; path: string }[]) {
   };
 }
 
-export function faqSchema(faqs: { question: string; answer: string }[], id?: string) {
+/** An FAQPage tied to the page it is on: `pageUrl` is that page's absolute URL. */
+export function faqSchema(faqs: { question: string; answer: string }[], pageUrl: string) {
   return {
     "@type": "FAQPage",
-    ...(id ? { "@id": id } : {}),
+    "@id": `${pageUrl}#faq`,
+    url: pageUrl,
     mainEntity: faqs.map((f) => ({
       "@type": "Question",
       name: f.question,
@@ -154,7 +170,7 @@ export function blogPostingSchema(p: BlogPostingInput) {
     mainEntityOfPage: { "@type": "WebPage", "@id": p.url },
     author: ORG_REF,
     publisher: ORG_REF,
-    isPartOf: { "@id": BLOG_ID },
+    isPartOf: { "@type": "Blog", "@id": BLOG_ID, name: BLOG_NAME, url: absoluteUrl("/blog") },
     articleSection: p.section,
     keywords: [p.section, "answer engine optimization", "AEO", "AI search"].join(", "),
     wordCount: p.wordCount,

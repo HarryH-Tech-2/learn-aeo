@@ -8,6 +8,7 @@ import { PLANS, formatPlanPrice } from "@/lib/plans";
 import { LESSON_CATALOG, titleMidSentence } from "@/lib/lesson-catalog";
 import JsonLd from "@/components/JsonLd";
 import { faqSchema } from "@/lib/schema";
+import { absoluteUrl } from "@/lib/site";
 
 // What the free-unlock test's free group reads instead (src/lib/access-test.ts); the FAQ schema keeps the real answer.
 const FREE_PRICING_ANSWER =
@@ -165,7 +166,7 @@ export default function FAQSection() {
           })}
         </div>
 
-        <JsonLd data={faqSchema(faqs)} />
+        <JsonLd data={faqSchema(faqs, absoluteUrl("/"))} />
       </InView>
     </section>
   );
