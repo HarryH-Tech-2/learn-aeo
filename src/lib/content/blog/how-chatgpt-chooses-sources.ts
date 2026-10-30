@@ -15,8 +15,7 @@ export const post: BlogPost = {
   publishedAt: "2026-10-28",
   category: "Platforms",
   image: "/blog/how-chatgpt-chooses-sources.webp",
-  imageAlt:
-    "Abstract brand illustration titled \"How ChatGPT chooses which sources to cite\", with simple shapes linking a web page to a cited answer.",
+  imageAlt: "An AI core scanning a ring of web pages and drawing one gold page in along a beam of light",
   relatedSlugs: ["get-cited-in-google-ai-overviews", "llms-txt-explained", "what-is-aeo"],
   faqs: [
     {

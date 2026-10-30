@@ -13,8 +13,7 @@ export const post: BlogPost = {
   publishedAt: "2026-10-28",
   category: "Basics",
   image: "/blog/aeo-vs-seo-vs-geo.webp",
-  imageAlt:
-    "Abstract illustration on a navy background with cyan and gold shapes and the title \"AEO vs SEO vs GEO: what's the difference?\"",
+  imageAlt: "Three glowing glass pillars: a ranked list of results, a single chat answer, and a network of AI nodes, joined by a gold line",
   relatedSlugs: ["what-is-aeo", "how-to-learn-aeo", "is-aeo-worth-learning"],
   faqs: [
     {

@@ -110,6 +110,43 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
   },
 ];
 
+/** A part of the course: a run of consecutive lessons under one heading. */
+export type CoursePart = { title: string; summary: string; lessonIds: readonly string[] };
+
+// The course in four parts, in lesson order: how AI search works, your own site, everywhere else, then measuring and
+// running it. Every lesson sits in exactly one part (lesson-catalog.test.ts).
+export const COURSE_PARTS: readonly CoursePart[] = [
+  {
+    title: "How AI search works",
+    summary: "What happens between a question and a cited answer.",
+    lessonIds: ["how-answer-engines-choose-sources"],
+  },
+  {
+    title: "Your site",
+    summary: "Let AI in, write passages it can lift, and mark up who you are.",
+    lessonIds: ["make-your-site-reachable-by-ai", "writing-citable-content", "structured-data-and-entities"],
+  },
+  {
+    title: "Beyond your site",
+    summary: "The mentions, reviews and platforms that shape what AI says about you.",
+    lessonIds: ["authority-beyond-your-site", "platform-playbooks"],
+  },
+  {
+    title: "Measure and scale",
+    summary: "Track your AI visibility and run AEO as an ongoing program.",
+    lessonIds: ["measuring-ai-visibility", "running-an-aeo-program"],
+  },
+];
+
+/** Each part with its lessons, in catalog order. */
+export function courseParts(): { part: CoursePart; number: number; lessons: LessonMeta[] }[] {
+  return COURSE_PARTS.map((part, i) => ({
+    part,
+    number: i + 1,
+    lessons: part.lessonIds.map((id) => LESSON_CATALOG.find((l) => l.id === id)).filter((l): l is LessonMeta => !!l),
+  }));
+}
+
 export const FIRST_LESSON_ID = LESSON_CATALOG[0].id;
 
 export function lessonPath(id: string): string {

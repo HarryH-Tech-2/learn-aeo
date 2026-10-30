@@ -13,10 +13,9 @@
      accents     gold-400 #1d5fa6 ........  6.10:1   cyan-500 #0e7490 ...........  5.04:1
      CTA text    white on #0e7490 ........  5.36:1   white on #1d5fa6 ...........  6.48:1
      on obsidian-lighter #e1e8f3: body 15.19:1, muted 5.81:1
-   The `gold-*` tokens now hold a METALLIC BLUE (2026-10-29), matching the hero video's glass towers; the
+   The `gold-*` tokens now hold a METALLIC BLUE (2026-10-29), matching the hero video's glass gate; the
    names stayed so the ~400 class usages didn't churn. Light #3b82c4 is only 3.82:1 on #f6f8fc (fails AA
-   for text), so it is gold-300 for decorative use only; text-weight blue is #1d5fa6 (gold-400/500).
-   The flare and the beam's foot in the hero agent stay warm: they light the gold tower in the video. */
+   for text), so it is gold-300 for decorative use only; text-weight blue is #1d5fa6 (gold-400/500). */
 :root {
   --rt-ink: #04060d;
   --rt-obsidian: #04060d;
@@ -1270,10 +1269,16 @@ html:not(.light) .faq-a {
       linear-gradient(to bottom, transparent 30%, rgba(4, 6, 13, 0.92) 72%);
   }
 }
-/* the loop is 16:9 with the city on both sides; on narrow screens keep the gold tower (just left of center) */
+/* the video is 16:9 with the gate in the middle; on narrow screens keep the gate and its gold tower centered */
 .city-hero-video {
   object-fit: cover;
   object-position: 50% 40%;
+}
+/* the intro sits over the loop and steps aside once the loop is playing under it (their frames match there) */
+.city-hero-intro[data-done] {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s ease, visibility 0s linear 0.6s;
 }
 /* The hero's search bar: the brand's glowing pill, set above the gold tower. */
 .city-hero-search {
@@ -1337,117 +1342,6 @@ html:not(.light) .faq-a {
   width: 45%;
   height: 45%;
 }
-/* The agent finding the source: a beam drops from the search bar, a reticle locks onto the gold tower (placed in
-   px by HeroVideo), the tower flares and gets a citation tag. Hidden until data-found="true". */
-.city-hero-agent {
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  pointer-events: none;
-}
-.city-hero-agent > * {
-  position: absolute;
-  opacity: 0;
-}
-.city-hero-beam {
-  width: 2px;
-  transform: translateX(-50%) scaleY(0);
-  transform-origin: top;
-  background: linear-gradient(to bottom, rgba(111, 227, 255, 0.9), rgba(111, 227, 255, 0.15) 70%, rgba(255, 199, 107, 0.8));
-  box-shadow: 0 0 10px rgba(111, 227, 255, 0.6);
-}
-.city-hero-flare {
-  transform: translate(-50%, -50%) scale(0.6);
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 214, 140, 0.55) 0%, rgba(255, 199, 107, 0.22) 35%, transparent 68%);
-  mix-blend-mode: screen;
-}
-.city-hero-reticle {
-  transform: translate(-50%, -50%) scale(1.9);
-}
-.city-hero-reticle i {
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  border: 0 solid #6fe3ff;
-  filter: drop-shadow(0 0 4px rgba(111, 227, 255, 0.8));
-  transition: border-color 0.4s ease 0.95s, filter 0.4s ease 0.95s;
-}
-.city-hero-reticle i:nth-child(1) { top: 0; left: 0; border-top-width: 2px; border-left-width: 2px; }
-.city-hero-reticle i:nth-child(2) { top: 0; right: 0; border-top-width: 2px; border-right-width: 2px; }
-.city-hero-reticle i:nth-child(3) { bottom: 0; left: 0; border-bottom-width: 2px; border-left-width: 2px; }
-.city-hero-reticle i:nth-child(4) { bottom: 0; right: 0; border-bottom-width: 2px; border-right-width: 2px; }
-.city-hero-tag {
-  transform: translateX(-6px);
-  white-space: nowrap;
-  font-family: var(--font-body);
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: #d6ecff;
-  padding: 0.3em 0.7em;
-  border-radius: 999px;
-  border: 1px solid rgba(111, 178, 255, 0.55);
-  background: rgba(4, 6, 13, 0.6);
-  backdrop-filter: blur(4px);
-  box-shadow: 0 0 16px rgba(111, 178, 255, 0.3);
-}
-.city-hero-tag b {
-  color: #6fb2ff;
-  font-weight: 700;
-}
-.city-hero-agent[data-found="true"] .city-hero-beam {
-  opacity: 0.85;
-  transform: translateX(-50%) scaleY(1);
-}
-.city-hero-agent[data-found="true"] .city-hero-reticle {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
-}
-.city-hero-agent[data-found="true"] .city-hero-reticle i {
-  border-color: #6fb2ff;
-  filter: drop-shadow(0 0 5px rgba(111, 178, 255, 0.9));
-}
-.city-hero-agent[data-found="true"] .city-hero-flare {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
-}
-.city-hero-agent[data-found="true"] .city-hero-tag {
-  opacity: 1;
-  transform: translateX(0);
-}
-@media (prefers-reduced-motion: no-preference) {
-  .city-hero-beam {
-    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
-  }
-  .city-hero-reticle {
-    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.4s, opacity 0.3s ease 0.4s;
-  }
-  .city-hero-flare {
-    transition: transform 0.7s ease 0.85s, opacity 0.7s ease 0.85s;
-  }
-  .city-hero-tag {
-    transition: transform 0.45s ease 1.1s, opacity 0.45s ease 1.1s;
-  }
-  /* once locked: the beam settles to a faint link and the tower keeps breathing */
-  .city-hero-agent[data-found="true"] .city-hero-beam {
-    animation: city-hero-beam-settle 0.8s ease 1.4s forwards;
-  }
-  .city-hero-agent[data-found="true"] .city-hero-flare {
-    animation: city-hero-flare-breathe 3.2s ease-in-out 1.6s infinite;
-  }
-}
-@keyframes city-hero-beam-settle {
-  to {
-    opacity: 0.3;
-  }
-}
-@keyframes city-hero-flare-breathe {
-  50% {
-    opacity: 0.55;
-    transform: translate(-50%, -50%) scale(0.88);
-  }
-}
 @media (prefers-reduced-motion: no-preference) {
   .city-hero-caret-blink {
     animation: city-hero-blink 1.05s steps(1) infinite;
@@ -1506,148 +1400,16 @@ html.light .city-hero-vignette {
   width: min(900px, 140vw);
   height: 130%;
   transform: translateX(-50%);
-  background: radial-gradient(ellipse at 50% 60%, rgba(4, 6, 13, 0.72), transparent 68%);
+  background: radial-gradient(ellipse at 50% 60%, rgba(4, 6, 13, 0.86), rgba(4, 6, 13, 0.5) 45%, transparent 72%);
   pointer-events: none;
+}
+/* the open gate is bright behind the copy: a soft shadow keeps the eyebrow and subtitle readable over it */
+.city-hero-copy p {
+  text-shadow: 0 0 6px rgba(4, 6, 13, 0.95), 0 1px 16px rgba(4, 6, 13, 0.9);
 }
 /* (the pool's box ends inside the hero's fade, so its foot is masked away too: cut straight, it drew a hard gray
    edge across the cream in the light theme) */
 .city-hero-copy::before {
   -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 88%);
   mask-image: linear-gradient(to bottom, #000 55%, transparent 88%);
-}
-
-/* ── Homepage agent trace (src/components/home/HomeScene.tsx) ──
-   An AI agent's log down each side of a run of sections: a thin rail with a node per step, the action in cyan and
-   its result under it. The block sticks a third of the way down the screen while its sections scroll past; the
-   steps type in one after another when it comes into view, and the last stays lit with a caret. Only from 1536px,
-   where there is room beside the content (which runs to ~1230px). */
-.home-scene {
-  position: relative;
-}
-.agent-trace {
-  display: none;
-}
-@media (min-width: 1536px) {
-  .agent-trace {
-    display: block;
-    position: absolute;
-    top: 6rem;
-    bottom: 6rem;
-    /* hung just outside the 80rem content column, not at the window edges */
-    width: min(230px, calc(50vw - 40rem - 1.5rem));
-    pointer-events: none;
-    user-select: none;
-  }
-  .agent-trace[data-side="left"] {
-    right: calc(50% + 40rem);
-  }
-  .agent-trace[data-side="right"] {
-    left: calc(50% + 40rem);
-  }
-}
-.agent-trace-block {
-  position: sticky;
-  top: 32vh;
-  padding-left: 1.1rem;
-  font-family: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
-  font-size: 0.78rem;
-  line-height: 1.4;
-}
-/* the rail */
-.agent-trace-block::before {
-  content: "";
-  position: absolute;
-  left: 0.2rem;
-  top: 0.35rem;
-  bottom: 0.9rem;
-  width: 1px;
-  background: linear-gradient(to bottom, transparent, rgba(111, 178, 255, 0.35) 12%, rgba(111, 178, 255, 0.35) 88%, transparent);
-}
-.agent-trace-step {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 0.9rem;
-  white-space: nowrap;
-}
-/* the node on the rail */
-.agent-trace-step::before {
-  content: "";
-  position: absolute;
-  left: -1.1rem;
-  top: 0.3rem;
-  width: 0.45rem;
-  height: 0.45rem;
-  margin-left: 0.02rem;
-  border-radius: 50%;
-  border: 1px solid rgba(111, 178, 255, 0.55);
-  background: var(--rt-obsidian);
-}
-.agent-trace-action {
-  color: var(--rt-cyan-500);
-  opacity: 0.7;
-  letter-spacing: 0.02em;
-}
-.agent-trace-result {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: var(--rt-sand-400);
-  opacity: 0.75;
-}
-.agent-trace-step[data-current] .agent-trace-action {
-  opacity: 1;
-}
-.agent-trace-step[data-current] .agent-trace-result {
-  color: var(--rt-gold-300);
-  opacity: 1;
-  text-shadow: 0 0 12px rgba(111, 178, 255, 0.55);
-}
-.agent-trace-step[data-current] .agent-trace-result::after {
-  content: "";
-  display: inline-block;
-  width: 0.45em;
-  height: 1em;
-  margin-left: 0.3em;
-  vertical-align: -0.15em;
-  background: currentColor;
-}
-.agent-trace-step[data-current]::before {
-  border-color: #6fb2ff;
-  background: #6fb2ff;
-  box-shadow: 0 0 10px 2px rgba(111, 178, 255, 0.6);
-}
-html.light .agent-trace-step[data-current] .agent-trace-result {
-  color: var(--rt-gold-400);
-  text-shadow: none;
-}
-html.light .agent-trace-step[data-current]::before {
-  border-color: #1d5fa6;
-  background: #1d5fa6;
-  box-shadow: 0 0 8px 1px rgba(29, 95, 166, 0.35);
-}
-@media (prefers-reduced-motion: no-preference) {
-  html.js .agent-trace-step {
-    opacity: 0;
-  }
-  html.js .is-inview > .agent-trace-step {
-    opacity: 1;
-    animation: agent-trace-in 0.35s ease calc(var(--i) * 0.28s) backwards;
-  }
-  .is-inview > .agent-trace-step[data-current] .agent-trace-result::after {
-    animation: city-hero-blink 1.05s steps(1) calc(var(--i) * 0.28s + 0.35s) infinite;
-  }
-}
-/* the rail draws itself in with its steps (an empty rail waiting below the fold read as a stray line) */
-html.js .agent-trace-block::before {
-  opacity: 0;
-  transition: opacity 0.6s ease;
-}
-html.js .agent-trace-block.is-inview::before {
-  opacity: 1;
-}
-@keyframes agent-trace-in {
-  from {
-    opacity: 0;
-    transform: translateX(-6px);
-  }
 }

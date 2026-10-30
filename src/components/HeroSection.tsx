@@ -9,7 +9,7 @@ import { useAuthModal } from "@/components/AuthModal";
 import HeroVideo from "@/components/home/HeroVideo";
 
 /**
- * The homepage hero: the City of Answers loop (HeroVideo) behind a dark band (hero-media pins the dark tokens
+ * The homepage hero: the Gate video (HeroVideo) behind a dark band (hero-media pins the dark tokens
  * in both themes, and the navbar floats over it from `lg` up). The copy sits low so the scene's cited source
  * rises above it, and is plain server HTML: the headline, one line on who the course is for, the free first
  * lesson and a second way in to the curriculum never wait on the video.

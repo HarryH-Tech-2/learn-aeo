@@ -3,7 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import GetStartedContent from "./GetStartedContent";
 import { PLANS, formatPlanPrice } from "@/lib/plans";
-import { LESSON_CATALOG } from "@/lib/lesson-catalog";
+import { LESSON_CATALOG, courseParts } from "@/lib/lesson-catalog";
 import { pageMetadata } from "@/lib/seo";
 
 const FIRST = LESSON_CATALOG[0];
@@ -28,14 +28,21 @@ export default function GetStartedPage() {
           month by month for {formatPlanPrice(PLANS.monthly, "USD")}. Both include every lesson as it opens.
         </p>
         <h2>The {LESSON_CATALOG.length} lessons</h2>
-        <ul>
-          {LESSON_CATALOG.map((l) => (
-            <li key={l.id}>
-              Lesson {l.order}, {l.district}: {l.title}
-              {l.status === "coming-soon" ? " (coming soon)" : l.isFree ? " (free)" : ""}. {l.summary}
-            </li>
-          ))}
-        </ul>
+        {courseParts().map(({ part, number, lessons }) => (
+          <div key={part.title}>
+            <h3>
+              Part {number}: {part.title}
+            </h3>
+            <ul>
+              {lessons.map((l) => (
+                <li key={l.id}>
+                  Lesson {l.order}, {l.district}: {l.title}
+                  {l.status === "coming-soon" ? " (coming soon)" : l.isFree ? " (free)" : ""}. {l.summary}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
         <h2>Who it is for</h2>
         <p>
           Marketers who know SEO basics and want their pages cited by ChatGPT, Perplexity, Google AI Overviews and other

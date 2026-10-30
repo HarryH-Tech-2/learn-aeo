@@ -13,8 +13,7 @@ export const post: BlogPost = {
   publishedAt: "2026-10-28",
   category: "Basics",
   image: "/blog/what-is-aeo.webp",
-  imageAlt:
-    "Abstract illustration on a navy background with cyan and gold shapes and the title \"What is answer engine optimization (AEO)?\"",
+  imageAlt: "A search bar pouring light into one answer card, which lifts a single gold page from many blue ones",
   relatedSlugs: ["aeo-vs-seo-vs-geo", "how-chatgpt-chooses-sources", "get-cited-in-google-ai-overviews"],
   faqs: [
     {

@@ -11,7 +11,7 @@ export const post: BlogPost = {
   publishedAt: "2026-10-28",
   category: "Careers",
   image: "/blog/best-aeo-courses.webp",
-  imageAlt: "Abstract brand illustration titled \"Best AEO courses (and how to choose one)\"",
+  imageAlt: "A magnifying glass picking out one gold book from a shelf of glowing glass course books",
   relatedSlugs: ["how-to-learn-aeo", "is-aeo-worth-learning", "what-is-aeo"],
   faqs: [
     {

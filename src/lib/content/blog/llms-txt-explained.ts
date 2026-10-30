@@ -11,7 +11,7 @@ export const post: BlogPost = {
   publishedAt: "2026-10-28",
   category: "Technical",
   image: "/blog/llms-txt-explained.webp",
-  imageAlt: "Abstract brand illustration titled \"llms.txt explained\"",
+  imageAlt: "Small drones scanning a glowing plain-text file, its top line lit gold",
   relatedSlugs: ["how-chatgpt-chooses-sources", "get-cited-in-google-ai-overviews", "what-is-aeo"],
   faqs: [
     {

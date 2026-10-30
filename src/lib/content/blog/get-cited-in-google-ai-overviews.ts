@@ -13,8 +13,7 @@ export const post: BlogPost = {
   publishedAt: "2026-10-28",
   category: "Platforms",
   image: "/blog/get-cited-in-google-ai-overviews.webp",
-  imageAlt:
-    "Abstract brand illustration titled \"How to get cited in Google AI Overviews\", with simple shapes linking a search result to a summarized answer.",
+  imageAlt: "A search results page whose AI summary at the top links by a gold thread to the one result it cites",
   relatedSlugs: ["how-chatgpt-chooses-sources", "aeo-vs-seo-vs-geo", "llms-txt-explained"],
   faqs: [
     {

@@ -15,7 +15,7 @@ export const post: BlogPost = {
   publishedAt: "2026-10-28",
   category: "Basics",
   image: "/blog/is-aeo-worth-learning.webp",
-  imageAlt: "Abstract brand illustration titled \"Is AEO worth learning in 2026?\"",
+  imageAlt: "A curve of light rising over a glass city skyline to a gold point at dawn",
   relatedSlugs: ["how-to-learn-aeo", "what-is-aeo", "aeo-vs-seo-vs-geo"],
   faqs: [
     {

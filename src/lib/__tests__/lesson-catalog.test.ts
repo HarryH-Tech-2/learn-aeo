@@ -2,10 +2,12 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
+  COURSE_PARTS,
   FIRST_LESSON_ID,
   FIRST_LESSON_PATH,
   LESSON_CATALOG,
   TOTAL_MINUTES,
+  courseParts,
   lessonMeta,
   lessonPath,
   nextLessonMeta,
@@ -64,5 +66,18 @@ describe("lesson catalog", () => {
     for (const s of specs) expect(["./lesson-types", "@/lib/lesson-types"]).toContain(s);
     expect(src).not.toMatch(/^\s*import\s+["']/m);
     expect(src).not.toMatch(/\brequire\(/);
+  });
+});
+
+describe("course parts", () => {
+  it("puts every lesson in exactly one part, in catalog order", () => {
+    const ids = COURSE_PARTS.flatMap((p) => p.lessonIds);
+    expect(ids).toEqual(LESSON_CATALOG.map((l) => l.id));
+  });
+
+  it("numbers the parts and resolves their lessons", () => {
+    const parts = courseParts();
+    expect(parts.map((p) => p.number)).toEqual([1, 2, 3, 4]);
+    for (const p of parts) expect(p.lessons).toHaveLength(p.part.lessonIds.length);
   });
 });

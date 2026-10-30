@@ -15,7 +15,7 @@ export const post: BlogPost = {
   publishedAt: "2026-10-28",
   category: "Guides",
   image: "/blog/how-to-learn-aeo.webp",
-  imageAlt: "Abstract brand illustration titled \"How to learn AEO\"",
+  imageAlt: "A person climbing a winding stair of glowing glass steps toward a gold light above a city",
   relatedSlugs: ["what-is-aeo", "is-aeo-worth-learning", "best-aeo-courses"],
   faqs: [
     {
