@@ -5,10 +5,20 @@ import { ownerEmail } from "@/lib/notify";
 import { recordLead, isValidEmail, normalizeEmail } from "@/lib/leads";
 import { brandFrom } from "@/lib/email-layout";
 import { newsletterWelcomeHtml } from "@/lib/newsletter-email";
+import { clientKey, rateLimit } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
+  // The footer form is public and every sign-up sends an email, so cap it per visitor.
+  const limit = rateLimit(`newsletter:${clientKey(request)}`, { limit: 5, windowMs: 10 * 60_000 });
+  if (!limit.ok) {
+    return NextResponse.json(
+      { error: "Too many sign-ups. Try again in a few minutes." },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfterSec) } }
+    );
+  }
+
   const resend = new Resend(process.env.RESEND_API_KEY);
   const body = await request.json().catch(() => ({}));
   const rawEmail = body?.email;

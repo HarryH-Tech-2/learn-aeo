@@ -43,12 +43,12 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-[1600px] mx-auto px-6 md:px-8 lg:px-4 xl:px-8 2xl:px-16">
-        <div className="flex items-center justify-between h-20 md:h-18 relative">
+        <div className="flex items-center justify-between h-20 md:h-[5.25rem] relative">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 md:gap-3 group min-w-0 shrink-0">
             {/* The favicon motif: a search bar split by a gold seam */}
-            <BrandMark className="w-8 h-8 md:w-9 md:h-9 transition-transform duration-300 group-hover:scale-110" />
-            <span className="font-display text-2xl md:text-3xl lg:text-2xl xl:text-3xl tracking-wide text-sand-100 group-hover:text-cyan-400 transition-colors truncate">
+            <BrandMark className="w-9 h-9 md:w-10 md:h-10 transition-transform duration-300 group-hover:scale-110" />
+            <span className="font-display text-[1.65rem] md:text-[2rem] lg:text-[1.65rem] xl:text-[2rem] tracking-wide text-sand-100 group-hover:text-cyan-400 transition-colors truncate">
               {SITE.name}
             </span>
           </Link>
@@ -56,7 +56,7 @@ export default function Navbar() {
           {/* Desktop Nav - Center */}
           {/* Centered between the logo and the right-hand controls (flex, not
               absolute, so it can never collide with either at narrow widths). */}
-          <div className="hidden lg:flex flex-1 min-w-0 items-center justify-center gap-4 2xl:gap-6 px-3 whitespace-nowrap">
+          <div className="hidden lg:flex flex-1 min-w-0 items-center justify-center gap-6 2xl:gap-8 px-3 whitespace-nowrap">
             <NavLink href={isHome ? "#curriculum" : "/#curriculum"}>Course</NavLink>
             <NavLink href="/pricing">Pricing</NavLink>
             <NavLink href="/tools">Tools</NavLink>
@@ -77,7 +77,7 @@ export default function Navbar() {
                   </svg>
                   Account
                 </Link>
-                <button onClick={() => signOut({ callbackUrl: "/" })} className="nav-link font-body text-sm 2xl:text-base text-sand-200 hover:text-gold-400 transition-colors">
+                <button onClick={() => signOut({ callbackUrl: "/" })} className="nav-link font-body text-base 2xl:text-lg text-sand-200 hover:text-gold-400 transition-colors">
                   Sign Out
                 </button>
                 <ThemeToggle />
@@ -87,9 +87,16 @@ export default function Navbar() {
                 <button
                   type="button"
                   onClick={() => openAuthModal({ mode: "signin" })}
-                  className="nav-cta"
+                  className="nav-signin nav-cta-plain"
                 >
                   Log in
+                </button>
+                <button
+                  type="button"
+                  onClick={() => openAuthModal({ mode: "signup" })}
+                  className="nav-cta nav-cta-plain"
+                >
+                  Sign up
                 </button>
                 <ThemeToggle />
               </>
@@ -106,7 +113,7 @@ export default function Navbar() {
               className="text-sand-200 hover:text-gold-400 p-2 transition-colors"
             >
               <svg
-                className="w-6 h-6"
+                className="w-7 h-7"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -213,6 +220,16 @@ export default function Navbar() {
                       type="button"
                       onClick={() => {
                         setMenuOpen(false);
+                        openAuthModal({ mode: "signup" });
+                      }}
+                      className="btn-primary w-full justify-center text-sm py-3 mb-1"
+                    >
+                      Sign up
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMenuOpen(false);
                         openAuthModal({ mode: "signin" });
                       }}
                       className="flex w-full items-center justify-between font-body text-sand-200 hover:text-gold-400 text-base py-3 transition-colors"
@@ -235,7 +252,7 @@ function NavLink({ href, children, className = "" }: { href: string; children: R
   return (
     <a
       href={href}
-      className={`nav-link relative font-body text-sm 2xl:text-base text-sand-200 hover:text-gold-400 transition-colors duration-300 tracking-wide after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[1px] after:bg-gold-500 after:transition-all after:duration-300 hover:after:w-full ${className}`}
+      className={`nav-link relative font-body text-base 2xl:text-lg text-sand-200 hover:text-gold-400 transition-colors duration-300 tracking-wide after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[1px] after:bg-gold-500 after:transition-all after:duration-300 hover:after:w-full ${className}`}
     >
       {children}
     </a>

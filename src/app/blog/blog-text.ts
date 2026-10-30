@@ -114,7 +114,7 @@ export function toInternalPath(href: string): string {
  * a post with a single section gets it at the end.
  */
 export const IN_BODY_LINKS_MD =
-  `**Try it as you read:** [take the free first lesson](${FIRST_LESSON_PATH}) and see how answer engines choose their sources.`;
+  `**Try it as you read:** [take the free first lesson](${FIRST_LESSON_PATH}) and see how ChatGPT and other AI search tools choose their sources.`;
 
 export function withInBodyLinks(md: string, links = IN_BODY_LINKS_MD): string {
   if (md.includes(links)) return md;

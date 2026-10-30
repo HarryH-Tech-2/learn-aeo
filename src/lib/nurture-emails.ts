@@ -119,7 +119,7 @@ function textOf(lines: string[], ctx: NurtureEmailContext): string {
 
 /** What Lesson 1 covers, one line each (matches the lesson's three concept groups). */
 const GATE_RECAP = [
-  "An answer engine reads pages for the user and writes one answer, with links to a few sources. Being cited (a link to your page) and being mentioned (your name, no link) are different results, so track them separately.",
+  "An AI search tool like ChatGPT reads pages for the user and writes one answer, with links to a few sources. Being cited (a link to your page) and being mentioned (your name, no link) are different results, so track them separately.",
   "Engines retrieve passages first and then ground the answer in them. Retrieval runs over an index built by crawlers, so a page has to be reachable and indexed before it can be cited.",
   "Query fan-out turns one question into several searches. That widens the pool of candidate pages, but only the passages the answer relies on get cited, so each clearly answered sub-question is another way in.",
 ];
@@ -140,7 +140,7 @@ export function renderNurtureEmail(key: NurtureStepKey, ctx: NurtureEmailContext
 
   switch (key) {
     case "welcome": {
-      const intro = `Your account is ready, and Lesson 1 is free. It starts at ${GATE.district}, the first district of the City of Answers: how answer engines such as Google's AI Overviews, ChatGPT search and Perplexity build an answer, and how they choose which pages to cite.`;
+      const intro = `Your account is ready, and Lesson 1 is free. It starts at ${GATE.district}, the first district of the City of Answers: how AI search tools such as Google's AI Overviews, ChatGPT search and Perplexity build an answer, and how they choose which pages to cite.`;
       const what = `You will follow a question from the prompt to the finished answer, through retrieval, grounding and query fan-out, and see the difference between being cited and being mentioned. It takes about ${GATE.minutes} minutes, and your progress is saved as you go.`;
       const body = [
         eyebrow("Welcome to the City of Answers"),
@@ -152,7 +152,7 @@ export function renderNurtureEmail(key: NurtureStepKey, ctx: NurtureEmailContext
       ].join("");
       return {
         subject: "Welcome to the City of Answers",
-        html: layout({ preheader: `Lesson 1 is free: how answer engines choose their sources.`, body, ctx }),
+        html: layout({ preheader: `Lesson 1 is free: how ChatGPT and other AI search tools choose their sources.`, body, ctx }),
         text: textOf([`Hi ${ctx.firstName},`, intro, what, `Start Lesson 1: ${lessonUrl}`], ctx),
       };
     }
@@ -161,17 +161,17 @@ export function renderNurtureEmail(key: NurtureStepKey, ctx: NurtureEmailContext
       // Never started (no exercise answered): Lesson 1 is still waiting for them.
       // Part-way through: their place is saved, so the ask is to carry on, not to begin.
       if (!ctx.lesson1Started) {
-        const line1 = `You made an account, but you haven't started Lesson 1 yet. It is free, and it is the base the rest of the course builds on: how an answer engine picks the handful of pages it cites.`;
+        const line1 = `You made an account, but you haven't started Lesson 1 yet. It is free, and it is the base the rest of the course builds on: how ChatGPT and other AI search tools pick the handful of pages they cite.`;
         const line2 = `It takes about ${GATE.minutes} minutes in short parts, with quick checks as you go. Nothing to install and nothing to pay.`;
         const body = [eyebrow(`Lesson 1 · ${esc(GATE.district)}`), heading("Lesson 1 is waiting for you"), hi, p(line1), p(line2), button(lessonUrl, "Start Lesson 1")].join("");
         return {
           subject: "Lesson 1 is waiting for you",
-          html: layout({ preheader: "It's free, and it shows how answer engines pick their sources.", body, ctx }),
+          html: layout({ preheader: "It's free, and it shows how ChatGPT and other AI search tools pick their sources.", body, ctx }),
           text: textOf([`Hi ${ctx.firstName},`, line1, line2, `Start Lesson 1: ${lessonUrl}`], ctx),
         };
       }
       const line1 = "You have made a start on Lesson 1, and your progress is saved. Pick up where you stopped; the rest comes in short parts.";
-      const line2 = "By the end you will be able to trace how an answer engine builds an answer, and say what makes one passage easier to cite than another.";
+      const line2 = "By the end you will be able to trace how an AI search tool builds an answer, and say what makes one passage easier to cite than another.";
       const body = [eyebrow("Lesson 1 · in progress"), heading("Your place is saved"), hi, p(line1), p(line2), button(lessonUrl, "Carry on with Lesson 1")].join("");
       return {
         subject: "Your place in Lesson 1 is saved",

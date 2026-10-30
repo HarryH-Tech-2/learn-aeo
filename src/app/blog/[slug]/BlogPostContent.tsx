@@ -207,7 +207,7 @@ export default function BlogPostContent({
               >
                 Start the free first lesson
               </Link>
-              : how answer engines choose their sources, in about 25 minutes. Free
+              : how ChatGPT and other AI search tools choose their sources, in about 25 minutes. Free
               with a Google or email sign-in.
             </p>
           </section>
@@ -373,7 +373,7 @@ export default function BlogPostContent({
               </h3>
               <p className="font-body text-sand-400 font-light mb-6 max-w-lg mx-auto">
                 Lesson 1 follows a question from the prompt to the finished
-                answer, so you can see how answer engines choose their sources
+                answer, so you can see how ChatGPT and other AI search tools choose their sources
                 and what that means for your pages.
               </p>
               <Link

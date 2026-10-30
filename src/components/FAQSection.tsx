@@ -32,7 +32,7 @@ const faqs = [
   {
     question: "What is answer engine optimization (AEO)?",
     answer:
-      "AEO is the work of making your pages easy for AI answer engines (ChatGPT search, Perplexity, Google AI Overviews and AI Mode, Copilot, Claude) to reach, understand and cite when they answer a question. It builds on SEO rather than replacing it: a page an engine cannot crawl or index is a page it cannot cite.",
+      "AEO is the work of making your pages easy for AI search tools (ChatGPT search, Perplexity, Google AI Overviews and AI Mode, Copilot, Claude) to reach, understand and cite when they answer a question. It builds on SEO rather than replacing it: a page an engine cannot crawl or index is a page it cannot cite.",
   },
   {
     question: "How is AEO different from SEO?",

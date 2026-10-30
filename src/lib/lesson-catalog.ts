@@ -35,7 +35,7 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
     order: 3,
     district: "The Answer Quarter",
     title: "Writing citable content",
-    summary: "Write pages with passages an answer engine can lift and trust.",
+    summary: "Write pages with passages ChatGPT and other AI search tools can lift and trust.",
     description:
       "Lead with the answer, then support it. You will practice passage-level clarity, question headings, lists and tables, clean definitions, and keeping dates and freshness honest, so each section still makes sense when it is pulled out on its own.",
     level: "beginner",
@@ -63,7 +63,7 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
     title: "Authority beyond your site",
     summary: "Earn the mentions, reviews and lists that engines lean on.",
     description:
-      "Answer engines learn about you from places you do not control. You will look at brand mentions, reviews, Reddit and forums, digital PR, Wikipedia and Wikidata, and the comparison and \"best X\" lists that shape recommendations.",
+      "AI search tools learn about you from places you do not control. You will look at brand mentions, reviews, Reddit and forums, digital PR, Wikipedia and Wikidata, and the comparison and \"best X\" lists that shape recommendations.",
     level: "intermediate",
     minutes: 25,
     isFree: false,
@@ -74,7 +74,7 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
     order: 6,
     district: "The Embassies",
     title: "Platform playbooks",
-    summary: "What each major answer engine favors, and how to test it.",
+    summary: "What ChatGPT, Perplexity, Google and Copilot each favor, and how to test it.",
     description:
       "Work through Google AI Overviews and AI Mode, ChatGPT search, Perplexity, Copilot and Claude one at a time. For each you will see what it tends to favor and how to run a simple test on your own pages.",
     level: "intermediate",

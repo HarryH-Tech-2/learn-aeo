@@ -18,7 +18,7 @@ const principles = [
   {
     title: "Honest about the unknowns",
     description:
-      "Answer engines change quickly and their makers say only so much. Where the documentation hedges, the lesson says so rather than filling the gap with guesses.",
+      "ChatGPT, Perplexity and Google's AI search change quickly, and their makers say only so much. Where the documentation hedges, the lesson says so rather than filling the gap with guesses.",
   },
 ];
 
@@ -46,7 +46,7 @@ export default function AboutContent() {
             A course in answer engine optimization
           </h1>
           <p className="enter-up font-body text-lg md:text-xl text-sand-300 leading-relaxed max-w-2xl mx-auto">
-            {SITE.name} teaches marketers who already know SEO how AI answer engines pick their sources, and what to
+            {SITE.name} teaches marketers who already know SEO how ChatGPT, Perplexity and Google AI Overviews pick their sources, and what to
             change so your pages are among them.
           </p>
         </div>
@@ -91,7 +91,7 @@ export default function AboutContent() {
             published or last updated, or the date we last checked it. Sources in the live lessons include {SOURCE_EXAMPLES.join(", ")}.
           </p>
           <p>
-            When a vendor documents how its own crawler or answer engine behaves, that is the source we use.
+            When a vendor documents how its own crawler or AI search tool behaves, that is the source we use.
           </p>
           <p>
             Spotted something out of date or wrong?{" "}

@@ -20,7 +20,7 @@ export function BlogComingSoon() {
       </h2>
       <p className="font-body text-base text-sand-400 font-light leading-relaxed mb-6">
         We are writing the first posts now. In the meantime, the first lesson is free with a Google
-        or email sign-in, and shows how answer engines choose their sources.
+        or email sign-in, and shows how ChatGPT and other AI search tools choose their sources.
       </p>
       <Link href={FIRST_LESSON_PATH} className="btn-primary inline-flex justify-center text-base py-4 px-8">
         Start Lesson 1 Free
@@ -61,8 +61,8 @@ export default function BlogContent({ posts }: { posts: BlogSummary[] }) {
               </span>
             </h1>
             <p className="font-body text-lg text-sand-400 font-light max-w-2xl">
-              Answer engine optimization for marketers: how AI answer engines
-              choose their sources, and how to get your brand cited.
+              Answer engine optimization for marketers: how ChatGPT and other AI search
+              tools choose their sources, and how to get your brand cited.
             </p>
           </div>
 

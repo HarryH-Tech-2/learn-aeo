@@ -6,7 +6,7 @@ import { trackEvent } from "@/lib/analytics";
 const MAX_MESSAGE = 2000;
 
 const FIELD =
-  "w-full rounded-lg border border-sand-500/30 bg-ink px-3 py-2.5 text-sand-100 font-body text-base placeholder:text-sand-500/70 focus:outline-none focus-visible:border-cyan focus-visible:ring-2 focus-visible:ring-cyan/40";
+  "w-full rounded-lg border border-sand-500/30 bg-obsidian px-3 py-2.5 text-sand-100 font-body text-base placeholder:text-sand-500/70 focus:outline-none focus-visible:border-cyan focus-visible:ring-2 focus-visible:ring-cyan/40";
 const LABEL = "block font-body text-sm font-medium text-sand-300 mb-1.5";
 
 /** The contact form on /contact and at the foot of the homepage. */

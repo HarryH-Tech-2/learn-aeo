@@ -11,7 +11,7 @@ export const SITE = {
   apexHost: "learnaeo.com" as const,
   tagline: "Learn answer engine optimization",
   description:
-    "Learn answer engine optimization: how to get your brand cited by ChatGPT, Perplexity, Google AI Overviews and other AI answer engines.",
+    "Learn answer engine optimization: how to get your brand cited by ChatGPT, Perplexity, Google AI Overviews and other AI search tools.",
   supportEmail: process.env.CONTACT_TO_EMAIL ?? "hello@learnaeo.com",
   gaId: process.env.NEXT_PUBLIC_GA_ID || undefined,
   /** Social profile URLs for Organization JSON-LD. Empty until profiles exist. */

@@ -26,7 +26,7 @@ export default function BrandMark({ className }: { className?: string }) {
       <path d="M39 39 52 52" stroke="#bff3ff" strokeWidth="6.5" strokeLinecap="round" />
       <path
         d="M28 18.5c.9 5.6 3.9 8.6 9.5 9.5-5.6.9-8.6 3.9-9.5 9.5-.9-5.6-3.9-8.6-9.5-9.5 5.6-.9 8.6-3.9 9.5-9.5Z"
-        fill="#ffc76b"
+        fill="#6fb2ff"
       />
     </svg>
   );

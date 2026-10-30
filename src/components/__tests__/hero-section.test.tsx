@@ -6,7 +6,6 @@ vi.mock("@/components/AuthModal", () => ({ useAuthModal: () => ({ openAuthModal:
 
 import { renderToStaticMarkup } from "react-dom/server";
 import HeroSection from "@/components/HeroSection";
-import { LESSON_CATALOG } from "@/lib/lesson-catalog";
 
 describe("HeroSection server render", () => {
   const html = renderToStaticMarkup(<HeroSection />);
@@ -17,10 +16,9 @@ describe("HeroSection server render", () => {
     expect(h1![1].replace(/<[^>]+>/g, "")).toMatch(/answer engine optimization/i);
   });
 
-  it("has the subline, the free-lesson CTA and its note", () => {
+  it("has the subline and the free-lesson CTA", () => {
     expect(html).toContain("ChatGPT, Perplexity and Google AI Overviews");
     expect(html).toContain("Start lesson 1");
-    expect(html).toContain(`Free · ${LESSON_CATALOG[0].minutes} minutes · no card needed`);
   });
 
   it("never hides the copy in the server HTML", () => {

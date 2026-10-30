@@ -32,11 +32,11 @@ const faqs = [
   },
   {
     question: "What exactly does 'lifetime access' cover?",
-    answer: `Every lesson and exercise on the site now (${LIVE_COUNT} of the ${LESSON_CATALOG.length} lessons are live), each remaining lesson as it opens, any new lessons we add as answer engines change, and the certificate. No extra charges, no upgrade tiers.`,
+    answer: `Every lesson and exercise on the site now (${LIVE_COUNT} of the ${LESSON_CATALOG.length} lessons are live), each remaining lesson as it opens, any new lessons we add as AI search changes, and the certificate. No extra charges, no upgrade tiers.`,
   },
   {
     question: "Do I need any prior knowledge?",
-    answer: "You should know SEO basics: crawling, indexing, title tags and sitemaps. The course does not teach those again. It starts from how answer engines pick their sources and builds up from there.",
+    answer: "You should know SEO basics: crawling, indexing, title tags and sitemaps. The course does not teach those again. It starts from how ChatGPT and other AI search tools pick their sources and builds up from there.",
   },
   {
     question: "How long does it take to complete the course?",
@@ -44,7 +44,7 @@ const faqs = [
   },
   {
     question: "Will new lessons be added?",
-    answer: "Yes. New lessons are added as answer engines change. Lifetime includes every current and future lesson at no extra cost.",
+    answer: "Yes. New lessons are added as AI search changes. Lifetime includes every current and future lesson at no extra cost.",
   },
   {
     question: "Do you offer refunds?",

@@ -9,7 +9,7 @@ import { countWords, stripMarkdown } from "./blog-text";
 
 const SITE = SITE_CONFIG.url;
 const BLOG_DESCRIPTION =
-  "Articles on answer engine optimization for marketers: how AI answer engines choose their sources, and how to get your brand cited by them.";
+  "Articles on answer engine optimization for marketers: how ChatGPT and other AI search tools choose their sources, and how to get your brand cited by them.";
 
 /** Newest first, by publish date; the index card grid uses the same order. */
 const sortedPosts = [...blogPosts].sort((a, b) =>

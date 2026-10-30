@@ -5,17 +5,18 @@
    DARK  (page #04060d)
      body text   sand-100 #e6ebf5 ........ 16.94:1   secondary sand-300 #a3afc6 .. 9.17:1
      muted       sand-400 #8794ad ........  6.62:1   faint     sand-500 #6c7a95 ..  4.68:1
-     accents     gold #ffc76b ............ 13.15:1   cyan #6fe3ff ............... 13.60:1
-     CTA text    #04060d on gold ......... 13.15:1   #04060d on cyan ............ 13.60:1
+     accents     blue #6fb2ff ............  9.15:1   cyan #6fe3ff ............... 13.60:1
+     CTA text    #04122a on blue .........  8.43:1   #04060d on cyan ............ 13.60:1
    LIGHT (page #f6f8fc)
      body text   sand-100 #0b1220 ........ 17.61:1   secondary sand-300 #36445f ..  9.19:1
      muted       sand-400 #4a5873 ........  6.73:1   faint     sand-500 #66728a ..  4.55:1
-     accents     gold-400 #9a6516 ........  4.65:1   cyan-500 #0e7490 ...........  5.04:1
-     CTA text    white on #0e7490 ........  5.36:1   white on #9a6516 ...........  4.94:1
+     accents     gold-400 #1d5fa6 ........  6.10:1   cyan-500 #0e7490 ...........  5.04:1
+     CTA text    white on #0e7490 ........  5.36:1   white on #1d5fa6 ...........  6.48:1
      on obsidian-lighter #e1e8f3: body 15.19:1, muted 5.81:1
-   The brief's light gold #b7791f is only 3.42:1 on #f6f8fc (fails AA for text), so it is kept as
-   gold-300 for decorative use and text-weight gold is darkened to #9a6516 (gold-400/500).
-   Token names (obsidian, sand-*, gold-*) are the sibling's; Plan 4 migrates components to ink/cyan/gold. */
+   The `gold-*` tokens now hold a METALLIC BLUE (2026-10-29), matching the hero video's glass towers; the
+   names stayed so the ~400 class usages didn't churn. Light #3b82c4 is only 3.82:1 on #f6f8fc (fails AA
+   for text), so it is gold-300 for decorative use only; text-weight blue is #1d5fa6 (gold-400/500).
+   The flare and the beam's foot in the hero agent stay warm: they light the gold tower in the video. */
 :root {
   --rt-ink: #04060d;
   --rt-obsidian: #04060d;
@@ -27,24 +28,16 @@
   --rt-sand-300: #a3afc6;
   --rt-sand-400: #8794ad;
   --rt-sand-500: #6c7a95;
-  --rt-gold-300: #ffdca0;
-  --rt-gold-400: #ffd084;
-  --rt-gold-500: #ffc76b;
-  --rt-gold-600: #e0a53f;
-  --rt-gold-700: #8a6a2c;
+  --rt-gold-300: #cfe6ff;
+  --rt-gold-400: #9ccaff;
+  --rt-gold-500: #6fb2ff;
+  --rt-gold-600: #3d8de6;
+  --rt-gold-700: #2a5a94;
   --rt-cyan-300: #b3f0ff;
   --rt-cyan-400: #92e9ff;
   --rt-cyan-500: #6fe3ff;
   --rt-cyan-600: #2cc4e8;
   --rt-cyan-700: #0e7490;
-}
-
-/* Color the media hero fades into at its bottom edge (the page background). */
-:root {
-  --hero-fade: #04060d;
-}
-html.light {
-  --hero-fade: #f6f8fc;
 }
 
 /* The homepage hero is a dark media hero in BOTH themes: video + light text.
@@ -65,11 +58,11 @@ html.light {
   --color-sand-300: #a3afc6;
   --color-sand-400: #8794ad;
   --color-sand-500: #6c7a95;
-  --color-gold-300: #ffdca0;
-  --color-gold-400: #ffd084;
-  --color-gold-500: #ffc76b;
-  --color-gold-600: #e0a53f;
-  --color-gold-700: #8a6a2c;
+  --color-gold-300: #cfe6ff;
+  --color-gold-400: #9ccaff;
+  --color-gold-500: #6fb2ff;
+  --color-gold-600: #3d8de6;
+  --color-gold-700: #2a5a94;
   --color-cyan-300: #b3f0ff;
   --color-cyan-400: #92e9ff;
   --color-cyan-500: #6fe3ff;
@@ -81,11 +74,11 @@ html.light {
   --rt-obsidian-lighter: #121a2b;
   --rt-sand-100: #e6ebf5;
   --rt-sand-300: #a3afc6;
-  --rt-gold-300: #ffdca0;
-  --rt-gold-400: #ffd084;
-  --rt-gold-500: #ffc76b;
-  --rt-gold-600: #e0a53f;
-  --rt-gold-700: #8a6a2c;
+  --rt-gold-300: #cfe6ff;
+  --rt-gold-400: #9ccaff;
+  --rt-gold-500: #6fb2ff;
+  --rt-gold-600: #3d8de6;
+  --rt-gold-700: #2a5a94;
 }
 
 html.light {
@@ -98,11 +91,11 @@ html.light {
   --rt-sand-300: #36445f;
   --rt-sand-400: #4a5873;
   --rt-sand-500: #66728a;
-  --rt-gold-300: #b7791f;
-  --rt-gold-400: #9a6516;
-  --rt-gold-500: #8f5f12;
-  --rt-gold-600: #7a500f;
-  --rt-gold-700: #d9b36b;
+  --rt-gold-300: #3b82c4;
+  --rt-gold-400: #1d5fa6;
+  --rt-gold-500: #1a5596;
+  --rt-gold-600: #154780;
+  --rt-gold-700: #8fb8e3;
   --rt-cyan-300: #0e7490;
   --rt-cyan-400: #0e7490;
   --rt-cyan-500: #0e7490;
@@ -323,27 +316,27 @@ html.js .enter-down {
   animation: enter-down 0.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
-/* The hero's button: a gold pill with the call to action over a reassuring line. A sheen crosses it every few
-   seconds, so it draws the eye without a busy pulse. */
+/* The hero's button: a metallic-blue pill. A sheen crosses it every few seconds, so it draws the eye without a
+   busy pulse. */
 .hero-cta {
   position: relative;
   isolation: isolate;
   display: inline-flex;
   align-items: center;
-  padding: 0.7rem 1.6rem;
+  padding: 0.8rem 1.8rem;
   border: 0;
   border-radius: 999px;
   cursor: pointer;
   text-align: left;
-  color: #1f1404;
+  color: #04122a;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0) 46%),
-    linear-gradient(100deg, #ffc76b 0%, #ffe0a8 28%, #ffc76b 55%, #e0a53f 100%);
+    linear-gradient(100deg, #6fb2ff 0%, #d6ecff 28%, #6fb2ff 55%, #3d8de6 100%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 248, 220, 0.9),
-    inset 0 -3px 0 rgba(122, 78, 8, 0.45),
-    0 18px 40px -12px rgba(240, 180, 60, 0.75),
-    0 0 70px -14px rgba(255, 196, 90, 0.55);
+    inset 0 1px 0 rgba(230, 244, 255, 0.9),
+    inset 0 -3px 0 rgba(10, 50, 110, 0.45),
+    0 18px 40px -12px rgba(60, 150, 255, 0.75),
+    0 0 70px -14px rgba(90, 170, 255, 0.55);
   transition:
     transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
     box-shadow 0.25s ease,
@@ -366,22 +359,17 @@ html.js .enter-down {
   transform: translateY(-3px);
   filter: brightness(1.06) saturate(1.05);
   box-shadow:
-    inset 0 1px 0 rgba(255, 248, 220, 0.9),
-    inset 0 -3px 0 rgba(122, 78, 8, 0.45),
-    0 24px 48px -12px rgba(240, 180, 60, 0.9),
-    0 0 90px -10px rgba(255, 196, 90, 0.7);
+    inset 0 1px 0 rgba(230, 244, 255, 0.9),
+    inset 0 -3px 0 rgba(10, 50, 110, 0.45),
+    0 24px 48px -12px rgba(60, 150, 255, 0.9),
+    0 0 90px -10px rgba(90, 170, 255, 0.7);
 }
 .hero-cta:active {
   transform: translateY(0);
 }
 .hero-cta:focus-visible {
-  outline: 2px solid #fff3cf;
+  outline: 2px solid #e6f3ff;
   outline-offset: 10px;
-}
-.hero-cta-text {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
 }
 .hero-cta-label {
   font-family: var(--font-display);
@@ -391,23 +379,12 @@ html.js .enter-down {
   letter-spacing: 0.01em;
   line-height: 1.15;
 }
-.hero-cta-sub {
-  font-family: var(--font-body);
-  font-size: 0.74rem;
-  white-space: nowrap;
-  font-weight: 600;
-  line-height: 1.2;
-  color: rgba(52, 33, 5, 0.78);
-}
 @media (min-width: 640px) {
   .hero-cta {
-    padding: 0.85rem 2.1rem;
+    padding: 0.95rem 2.2rem;
   }
   .hero-cta-label {
     font-size: 1.3rem;
-  }
-  .hero-cta-sub {
-    font-size: 0.85rem;
   }
 }
 @keyframes hero-cta-sheen {
@@ -436,7 +413,7 @@ html.js .enter-down {
   border-radius: 999px;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   line-height: 1;
   letter-spacing: 0.02em;
   white-space: nowrap;
@@ -453,15 +430,15 @@ html.js .enter-down {
   overflow: hidden;
   padding: 0.48rem 1.2rem 0.48rem 0.48rem;
   border: 0;
-  color: #1f1404;
+  color: #04122a;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0) 50%),
-    linear-gradient(100deg, #ffc76b 0%, #ffe0a8 28%, #ffc76b 55%, #e0a53f 100%);
+    linear-gradient(100deg, #6fb2ff 0%, #d6ecff 28%, #6fb2ff 55%, #3d8de6 100%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 248, 220, 0.9),
-    inset 0 -2px 0 rgba(122, 78, 8, 0.4),
-    0 0 0 1px rgba(246, 210, 120, 0.35),
-    0 8px 22px -8px rgba(240, 180, 60, 0.75);
+    inset 0 1px 0 rgba(230, 244, 255, 0.9),
+    inset 0 -2px 0 rgba(10, 50, 110, 0.4),
+    0 0 0 1px rgba(140, 195, 255, 0.35),
+    0 8px 22px -8px rgba(60, 150, 255, 0.75);
 }
 .nav-cta::after {
   content: "";
@@ -479,26 +456,26 @@ html.js .enter-down {
   transform: translateY(-1px);
   filter: brightness(1.06);
   box-shadow:
-    inset 0 1px 0 rgba(255, 248, 220, 0.9),
-    inset 0 -2px 0 rgba(122, 78, 8, 0.4),
-    0 0 0 1px rgba(246, 210, 120, 0.55),
-    0 12px 28px -8px rgba(240, 180, 60, 0.95);
+    inset 0 1px 0 rgba(230, 244, 255, 0.9),
+    inset 0 -2px 0 rgba(10, 50, 110, 0.4),
+    0 0 0 1px rgba(140, 195, 255, 0.55),
+    0 12px 28px -8px rgba(60, 150, 255, 0.95);
 }
 .nav-cta-free {
   padding: 0.32rem 0.55rem;
   border-radius: 999px;
-  background: rgba(31, 20, 4, 0.9);
-  color: #f6d27a;
+  background: rgba(4, 14, 32, 0.9);
+  color: #9ccaff;
   font-size: 0.66rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 .nav-signin {
   padding: 0.66rem 1.15rem 0.66rem 0.9rem;
-  border: 1px solid rgba(232, 196, 96, 0.6);
+  border: 1px solid rgba(110, 178, 255, 0.6);
   /* (no backdrop blur: over the hero video it was recomputed on every frame) */
-  background: rgba(20, 14, 6, 0.6);
-  color: #f6e4b0;
+  background: rgba(5, 12, 26, 0.6);
+  color: #cfe6ff;
 }
 
 /* A soft dark band behind the transparent bar over the hero video (the bar is
@@ -511,14 +488,14 @@ html.js .enter-down {
     inset: 0 0 -2.5rem 0;
     z-index: -1;
     pointer-events: none;
-    background: linear-gradient(to bottom, rgba(8, 5, 2, 0.72) 0%, rgba(8, 5, 2, 0.45) 55%, rgba(8, 5, 2, 0) 100%);
+    background: linear-gradient(to bottom, rgba(2, 5, 12, 0.72) 0%, rgba(2, 5, 12, 0.45) 55%, rgba(2, 5, 12, 0) 100%);
   }
   .lg\:nav-scrim .nav-link {
-    color: #f8ecd0;
+    color: #e6eefb;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 0 12px rgba(0, 0, 0, 0.65);
   }
   .lg\:nav-scrim .nav-link:hover {
-    color: #f6d27a;
+    color: #9ccaff;
   }
 }
 .nav-signin svg {
@@ -527,34 +504,45 @@ html.js .enter-down {
 }
 .nav-signin:hover {
   transform: translateY(-1px);
-  border-color: #e8c460;
-  background: rgba(232, 196, 96, 0.14);
-  color: #fff3cf;
-  box-shadow: 0 0 18px -4px rgba(232, 196, 96, 0.5);
+  border-color: #6eb2ff;
+  background: rgba(110, 178, 255, 0.14);
+  color: #e6f3ff;
+  box-shadow: 0 0 18px -4px rgba(110, 178, 255, 0.5);
 }
 html.light .nav-signin {
-  border-color: rgba(138, 102, 16, 0.55);
+  border-color: rgba(26, 85, 150, 0.55);
   background: rgba(255, 255, 255, 0.55);
-  color: #6b4e0c;
+  color: #154780;
 }
 html.light .nav-signin:hover {
-  border-color: #8a6610;
-  background: rgba(168, 125, 24, 0.12);
-  color: #4a3507;
+  border-color: #1a5596;
+  background: rgba(40, 105, 180, 0.12);
+  color: #0f3463;
 }
 /* Light theme, but the bar is still floating over the homepage's dark hero (the navbar carries hero-media
    until it is scrolled): the pale pill with brown letters could not be read there, so it keeps the dark look. */
 html.light .hero-media .nav-signin,
 html.light .lg\:hero-media .nav-signin {
-  border-color: rgba(232, 196, 96, 0.75);
-  background: rgba(20, 14, 6, 0.55);
-  color: #fbe9b8;
+  border-color: rgba(110, 178, 255, 0.75);
+  background: rgba(5, 12, 26, 0.55);
+  color: #d6ecff;
 }
 html.light .hero-media .nav-signin:hover,
 html.light .lg\:hero-media .nav-signin:hover {
-  border-color: #e8c460;
-  background: rgba(232, 196, 96, 0.22);
-  color: #fff3cf;
+  border-color: #6eb2ff;
+  background: rgba(110, 178, 255, 0.22);
+  color: #e6f3ff;
+}
+/* text-only pills (no "Free" tag or icon): even padding */
+.nav-cta.nav-cta-plain,
+.nav-signin.nav-cta-plain {
+  padding: 0.74rem 1.4rem;
+}
+@media (min-width: 1280px) {
+  .nav-cta.nav-cta-plain,
+  .nav-signin.nav-cta-plain {
+    padding: 0.82rem 1.65rem;
+  }
 }
 /* the full-width version at the top of the mobile menu */
 .nav-cta.w-full {
@@ -563,13 +551,13 @@ html.light .lg\:hero-media .nav-signin:hover {
 }
 .nav-cta:focus-visible,
 .nav-signin:focus-visible {
-  outline: 2px solid #e8c460;
+  outline: 2px solid #6eb2ff;
   outline-offset: 3px;
 }
 @media (min-width: 1280px) {
   .nav-cta,
   .nav-signin {
-    font-size: 1rem;
+    font-size: 1.08rem;
   }
   .nav-cta {
     padding: 0.55rem 1.45rem 0.55rem 0.55rem;
@@ -780,7 +768,7 @@ html.light .grain-overlay::before {
 }
 
 html.light .btn-primary {
-  background: linear-gradient(135deg, #8a6610, #a87d18);
+  background: linear-gradient(135deg, #1a5596, #2a6db8);
   color: #fff;
 }
 
@@ -806,11 +794,11 @@ html.light .btn-primary {
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(212, 168, 50, 0.3);
+  box-shadow: 0 8px 25px rgba(90, 160, 240, 0.3);
 }
 
 html.light .btn-primary:hover {
-  box-shadow: 0 8px 25px rgba(138, 102, 16, 0.25);
+  box-shadow: 0 8px 25px rgba(26, 85, 150, 0.25);
 }
 
 .btn-secondary {
@@ -830,26 +818,26 @@ html.light .btn-primary:hover {
 }
 
 .btn-secondary:hover {
-  background: rgba(212, 168, 50, 0.08);
+  background: rgba(90, 160, 240, 0.08);
   border-color: var(--rt-gold-500);
   transform: translateY(-2px);
 }
 
 html.light .btn-secondary:hover {
-  background: rgba(138, 102, 16, 0.06);
+  background: rgba(26, 85, 150, 0.06);
 }
 
 /* ── Card Styles ── */
 .card-ancient {
   position: relative;
   background: var(--rt-obsidian-light);
-  border: 1px solid rgba(212, 168, 50, 0.15);
+  border: 1px solid rgba(90, 160, 240, 0.15);
   overflow: hidden;
   transition: all 0.4s ease;
 }
 
 html.light .card-ancient {
-  border-color: rgba(138, 102, 16, 0.15);
+  border-color: rgba(26, 85, 150, 0.15);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
@@ -871,16 +859,16 @@ html.light .card-ancient {
 }
 
 .card-ancient:hover {
-  border-color: rgba(212, 168, 50, 0.3);
+  border-color: rgba(90, 160, 240, 0.3);
   transform: translateY(-4px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3),
-    0 0 60px rgba(212, 168, 50, 0.05);
+    0 0 60px rgba(90, 160, 240, 0.05);
 }
 
 html.light .card-ancient:hover {
-  border-color: rgba(138, 102, 16, 0.3);
+  border-color: rgba(26, 85, 150, 0.3);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08),
-    0 0 40px rgba(168, 125, 24, 0.06);
+    0 0 40px rgba(40, 105, 180, 0.06);
 }
 
 /* Shining border: a soft gold highlight that sweeps continuously around the
@@ -903,9 +891,9 @@ html.light .card-ancient:hover {
   background: conic-gradient(
     from var(--shine-angle),
     transparent 0deg,
-    rgba(212, 168, 50, 0.35) 40deg,
+    rgba(90, 160, 240, 0.35) 40deg,
     var(--rt-gold-300) 70deg,
-    rgba(212, 168, 50, 0.35) 100deg,
+    rgba(90, 160, 240, 0.35) 100deg,
     transparent 140deg,
     transparent 360deg
   );
@@ -924,9 +912,9 @@ html.light .card-shine::after {
   background: conic-gradient(
     from var(--shine-angle),
     transparent 0deg,
-    rgba(138, 102, 16, 0.35) 40deg,
-    #b8860b 70deg,
-    rgba(138, 102, 16, 0.35) 100deg,
+    rgba(26, 85, 150, 0.35) 40deg,
+    #2a6db8 70deg,
+    rgba(26, 85, 150, 0.35) 100deg,
     transparent 140deg,
     transparent 360deg
   );
@@ -946,12 +934,12 @@ html.light .card-shine::after {
 
 /* ── Light mode: misc element overrides ── */
 html.light nav {
-  color: #2a2318;
+  color: #0b1220;
 }
 
 html.light footer {
-  background: #ede5d5;
-  border-color: rgba(138, 102, 16, 0.12);
+  background: #e1e8f3;
+  border-color: rgba(26, 85, 150, 0.12);
 }
 
 /* ── Classroom worksheet (/teachers/worksheet) — print-first, A4 ── */
@@ -1001,7 +989,7 @@ html.light footer {
     display: none !important;
   }
   .no-print,
-  .cookie-scroll {
+  .cookie-card {
     display: none !important;
   }
   .worksheet {
@@ -1033,7 +1021,171 @@ html.light footer {
 /* Footer: dark in both themes (Footer.tsx). */
 .site-footer,
 html.light footer.site-footer {
-  background: #060a14;
+  background: #04060d;
+  border: 0;
+}
+/* a cyan horizon along the top edge, brightest in the middle like the hero's glow */
+.site-footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  z-index: 1;
+  background: linear-gradient(90deg, transparent, rgba(111, 227, 255, 0.7) 50%, transparent);
+  box-shadow: 0 0 24px 2px rgba(111, 178, 255, 0.35);
+}
+/* the hero's skyline, rising out of the bottom and fading up into the navy */
+.site-footer-city {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: min(520px, 75%);
+  pointer-events: none;
+  background: url("/hero/city-poster.webp") center 62% / cover no-repeat;
+  opacity: 0.7;
+  -webkit-mask-image: linear-gradient(to top, #000 15%, transparent 100%);
+  mask-image: linear-gradient(to top, #000 15%, transparent 100%);
+}
+@media (max-width: 640px) {
+  .site-footer-city {
+    background-size: 220% auto;
+    background-position: center bottom;
+  }
+}
+/* ── Cookie notice (CookieScroll.tsx): an answer engine's reply ── */
+.cookie-card {
+  position: fixed;
+  z-index: 50;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  padding: 1.1rem 1.25rem 1.25rem;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(111, 178, 255, 0.28);
+  background:
+    radial-gradient(120% 80% at 0% 0%, rgba(111, 227, 255, 0.1), transparent 60%),
+    linear-gradient(180deg, rgba(18, 26, 43, 0.96), rgba(6, 10, 20, 0.97));
+  box-shadow:
+    0 24px 60px -20px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(4, 6, 13, 0.6),
+    0 0 40px -12px rgba(111, 178, 255, 0.35);
+}
+@media (min-width: 640px) {
+  .cookie-card {
+    left: 1rem;
+    right: auto;
+    bottom: 1rem;
+    max-width: 26rem;
+  }
+}
+.cookie-card-query {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.95rem;
+  border-radius: 999px;
+  border: 1.5px solid #bff3ff;
+  background: rgba(4, 6, 13, 0.6);
+  box-shadow:
+    0 0 16px rgba(111, 227, 255, 0.4),
+    inset 0 0 12px rgba(111, 227, 255, 0.15);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  color: #eef3ff;
+}
+.cookie-card-query svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: none;
+  color: #bff3ff;
+}
+.cookie-card-answer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+.cookie-card-spark {
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+  fill: #6fb2ff;
+  filter: drop-shadow(0 0 6px rgba(111, 178, 255, 0.8));
+}
+.cookie-card-accept,
+.cookie-card-essential {
+  padding: 0.6rem 1.25rem;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.92rem;
+  transition: filter 0.2s ease, border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+}
+.cookie-card-accept {
+  color: #04122a;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0) 50%),
+    linear-gradient(100deg, #6fb2ff 0%, #d6ecff 28%, #6fb2ff 55%, #3d8de6 100%);
+  box-shadow: 0 8px 22px -10px rgba(60, 150, 255, 0.9);
+}
+.cookie-card-accept:hover {
+  filter: brightness(1.08);
+}
+.cookie-card-essential {
+  border: 1px solid rgba(163, 175, 198, 0.4);
+  color: #e6ebf5;
+}
+.cookie-card-essential:hover {
+  border-color: #6fe3ff;
+  color: #6fe3ff;
+}
+.cookie-card-accept:focus-visible,
+.cookie-card-essential:focus-visible {
+  outline: 2px solid #6fe3ff;
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .cookie-card {
+    animation: prompt-card-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+.footer-newsletter-field {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: 999px;
+  border: 1px solid rgba(111, 178, 255, 0.35);
+  background: rgba(10, 15, 28, 0.8);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.footer-newsletter-field:focus-within {
+  border-color: #6fb2ff;
+  box-shadow: 0 0 0 3px rgba(111, 178, 255, 0.25);
+}
+.footer-newsletter-btn {
+  flex: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: #04122a;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0) 50%),
+    linear-gradient(100deg, #6fb2ff 0%, #d6ecff 28%, #6fb2ff 55%, #3d8de6 100%);
+  transition: filter 0.2s ease;
+}
+.footer-newsletter-btn:hover {
+  filter: brightness(1.08);
+}
+.footer-newsletter-btn:disabled {
+  opacity: 0.7;
+}
+.footer-newsletter-btn:focus-visible {
+  outline: 2px solid #e6f3ff;
+  outline-offset: 2px;
 }
 
 /* ── Pricing: the 14-day guarantee seal (src/components/PricingSection.tsx) ── */
@@ -1045,32 +1197,32 @@ html.light footer.site-footer {
   height: 3.25rem;
   flex-shrink: 0;
   border-radius: 999px;
-  color: #2a1a04;
+  color: #04122a;
   /* a gold seal with a pressed inner ring */
-  background: radial-gradient(circle at 35% 30%, #f6d987, #c8952a 70%, #9c6f17);
-  box-shadow: inset 0 0 0 3px rgba(255, 236, 180, 0.35), inset 0 0 0 5px rgba(120, 80, 10, 0.35), 0 4px 12px -4px rgba(0, 0, 0, 0.6);
+  background: radial-gradient(circle at 35% 30%, #d6ecff, #4f9be8 70%, #1d5fa6);
+  box-shadow: inset 0 0 0 3px rgba(210, 232, 255, 0.35), inset 0 0 0 5px rgba(15, 55, 110, 0.35), 0 4px 12px -4px rgba(0, 0, 0, 0.6);
 }
 
 /* ── Homepage FAQ, dark theme: the boxes read as boxes, and the questions and answers are brighter (FAQSection) ── */
 html:not(.light) .faq-item {
   background: #171722;
-  border-color: rgba(212, 168, 50, 0.32);
+  border-color: rgba(90, 160, 240, 0.32);
   transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 html:not(.light) .faq-item:hover {
   background: #1c1c29;
-  border-color: rgba(212, 168, 50, 0.55);
+  border-color: rgba(90, 160, 240, 0.55);
 }
 html:not(.light) .faq-q {
-  color: #f1e7d0;
+  color: #e6eefb;
   font-size: 0.975rem;
 }
 html:not(.light) .faq-plus {
-  color: #e2b947;
+  color: #6fb2ff;
   font-size: 1.35rem;
 }
 html:not(.light) .faq-a {
-  color: #cbbd9d;
+  color: #b4c3da;
 }
 
 /* Bricolage Grotesque reads thin at the light/regular weights the headings were written with, so the
@@ -1178,8 +1330,8 @@ html:not(.light) .faq-a {
   width: clamp(34px, 4.6vh, 44px);
   height: clamp(34px, 4.6vh, 44px);
   border-radius: 50%;
-  background: radial-gradient(circle at 40% 35%, #ffe1a3, #ffc76b 55%, #f0a93c);
-  box-shadow: 0 0 20px rgba(255, 199, 107, 0.6);
+  background: radial-gradient(circle at 40% 35%, #d6ecff, #6fb2ff 55%, #3d8de6);
+  box-shadow: 0 0 20px rgba(111, 178, 255, 0.6);
 }
 .city-hero-search-go svg {
   width: 45%;
@@ -1232,16 +1384,16 @@ html:not(.light) .faq-a {
   font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-  color: #ffe1a3;
+  color: #d6ecff;
   padding: 0.3em 0.7em;
   border-radius: 999px;
-  border: 1px solid rgba(255, 199, 107, 0.55);
+  border: 1px solid rgba(111, 178, 255, 0.55);
   background: rgba(4, 6, 13, 0.6);
   backdrop-filter: blur(4px);
-  box-shadow: 0 0 16px rgba(255, 199, 107, 0.3);
+  box-shadow: 0 0 16px rgba(111, 178, 255, 0.3);
 }
 .city-hero-tag b {
-  color: #ffc76b;
+  color: #6fb2ff;
   font-weight: 700;
 }
 .city-hero-agent[data-found="true"] .city-hero-beam {
@@ -1253,8 +1405,8 @@ html:not(.light) .faq-a {
   transform: translate(-50%, -50%) scale(1);
 }
 .city-hero-agent[data-found="true"] .city-hero-reticle i {
-  border-color: #ffc76b;
-  filter: drop-shadow(0 0 5px rgba(255, 199, 107, 0.9));
+  border-color: #6fb2ff;
+  filter: drop-shadow(0 0 5px rgba(111, 178, 255, 0.9));
 }
 .city-hero-agent[data-found="true"] .city-hero-flare {
   opacity: 1;
@@ -1306,6 +1458,45 @@ html:not(.light) .faq-a {
     opacity: 0;
   }
 }
+/* The hero's foot: the video melts into the page, cream or navy (--page-rgb). A short linear fade from the dark
+   video to cream reads as gray mud; this one is tall and eased (a scrim curve: barely there at the top, quick at
+   the bottom), and in the light theme the vignette's dark floor is lifted, so the video still shows blue where
+   the haze begins. The copy sits above it (pb-[16vh] on the section). */
+:root {
+  --page-rgb: 4, 6, 13;
+}
+html.light {
+  --page-rgb: 246, 248, 252;
+}
+.city-hero-fade {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 30vh;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(var(--page-rgb), 0) 0%,
+    rgba(var(--page-rgb), 0.013) 8.1%,
+    rgba(var(--page-rgb), 0.049) 15.5%,
+    rgba(var(--page-rgb), 0.104) 22.5%,
+    rgba(var(--page-rgb), 0.175) 29%,
+    rgba(var(--page-rgb), 0.259) 35.3%,
+    rgba(var(--page-rgb), 0.352) 41.2%,
+    rgba(var(--page-rgb), 0.45) 47.1%,
+    rgba(var(--page-rgb), 0.55) 52.9%,
+    rgba(var(--page-rgb), 0.648) 58.8%,
+    rgba(var(--page-rgb), 0.741) 64.7%,
+    rgba(var(--page-rgb), 0.825) 71%,
+    rgba(var(--page-rgb), 0.896) 77.5%,
+    rgba(var(--page-rgb), 0.951) 84.5%,
+    rgba(var(--page-rgb), 0.987) 91.9%,
+    rgb(var(--page-rgb)) 100%
+  );
+}
+html.light .city-hero-vignette {
+  background: radial-gradient(ellipse at 50% 42%, transparent 45%, rgba(4, 6, 13, 0.7) 100%),
+    linear-gradient(to bottom, transparent 45%, rgba(4, 6, 13, 0.55) 70%, rgba(4, 6, 13, 0.2) 100%);
+}
 .city-hero-copy::before {
   content: "";
   position: absolute;
@@ -1317,4 +1508,146 @@ html:not(.light) .faq-a {
   transform: translateX(-50%);
   background: radial-gradient(ellipse at 50% 60%, rgba(4, 6, 13, 0.72), transparent 68%);
   pointer-events: none;
+}
+/* (the pool's box ends inside the hero's fade, so its foot is masked away too: cut straight, it drew a hard gray
+   edge across the cream in the light theme) */
+.city-hero-copy::before {
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 88%);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent 88%);
+}
+
+/* ── Homepage agent trace (src/components/home/HomeScene.tsx) ──
+   An AI agent's log down each side of a run of sections: a thin rail with a node per step, the action in cyan and
+   its result under it. The block sticks a third of the way down the screen while its sections scroll past; the
+   steps type in one after another when it comes into view, and the last stays lit with a caret. Only from 1536px,
+   where there is room beside the content (which runs to ~1230px). */
+.home-scene {
+  position: relative;
+}
+.agent-trace {
+  display: none;
+}
+@media (min-width: 1536px) {
+  .agent-trace {
+    display: block;
+    position: absolute;
+    top: 6rem;
+    bottom: 6rem;
+    /* hung just outside the 80rem content column, not at the window edges */
+    width: min(230px, calc(50vw - 40rem - 1.5rem));
+    pointer-events: none;
+    user-select: none;
+  }
+  .agent-trace[data-side="left"] {
+    right: calc(50% + 40rem);
+  }
+  .agent-trace[data-side="right"] {
+    left: calc(50% + 40rem);
+  }
+}
+.agent-trace-block {
+  position: sticky;
+  top: 32vh;
+  padding-left: 1.1rem;
+  font-family: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+/* the rail */
+.agent-trace-block::before {
+  content: "";
+  position: absolute;
+  left: 0.2rem;
+  top: 0.35rem;
+  bottom: 0.9rem;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(111, 178, 255, 0.35) 12%, rgba(111, 178, 255, 0.35) 88%, transparent);
+}
+.agent-trace-step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.9rem;
+  white-space: nowrap;
+}
+/* the node on the rail */
+.agent-trace-step::before {
+  content: "";
+  position: absolute;
+  left: -1.1rem;
+  top: 0.3rem;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-left: 0.02rem;
+  border-radius: 50%;
+  border: 1px solid rgba(111, 178, 255, 0.55);
+  background: var(--rt-obsidian);
+}
+.agent-trace-action {
+  color: var(--rt-cyan-500);
+  opacity: 0.7;
+  letter-spacing: 0.02em;
+}
+.agent-trace-result {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--rt-sand-400);
+  opacity: 0.75;
+}
+.agent-trace-step[data-current] .agent-trace-action {
+  opacity: 1;
+}
+.agent-trace-step[data-current] .agent-trace-result {
+  color: var(--rt-gold-300);
+  opacity: 1;
+  text-shadow: 0 0 12px rgba(111, 178, 255, 0.55);
+}
+.agent-trace-step[data-current] .agent-trace-result::after {
+  content: "";
+  display: inline-block;
+  width: 0.45em;
+  height: 1em;
+  margin-left: 0.3em;
+  vertical-align: -0.15em;
+  background: currentColor;
+}
+.agent-trace-step[data-current]::before {
+  border-color: #6fb2ff;
+  background: #6fb2ff;
+  box-shadow: 0 0 10px 2px rgba(111, 178, 255, 0.6);
+}
+html.light .agent-trace-step[data-current] .agent-trace-result {
+  color: var(--rt-gold-400);
+  text-shadow: none;
+}
+html.light .agent-trace-step[data-current]::before {
+  border-color: #1d5fa6;
+  background: #1d5fa6;
+  box-shadow: 0 0 8px 1px rgba(29, 95, 166, 0.35);
+}
+@media (prefers-reduced-motion: no-preference) {
+  html.js .agent-trace-step {
+    opacity: 0;
+  }
+  html.js .is-inview > .agent-trace-step {
+    opacity: 1;
+    animation: agent-trace-in 0.35s ease calc(var(--i) * 0.28s) backwards;
+  }
+  .is-inview > .agent-trace-step[data-current] .agent-trace-result::after {
+    animation: city-hero-blink 1.05s steps(1) calc(var(--i) * 0.28s + 0.35s) infinite;
+  }
+}
+/* the rail draws itself in with its steps (an empty rail waiting below the fold read as a stray line) */
+html.js .agent-trace-block::before {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+html.js .agent-trace-block.is-inview::before {
+  opacity: 1;
+}
+@keyframes agent-trace-in {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
 }

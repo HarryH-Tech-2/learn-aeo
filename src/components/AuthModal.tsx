@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import { useSession } from "next-auth/react";
+import { usePathname, useRouter } from "next/navigation";
 import AuthCard, { type AuthMode } from "./AuthCard";
 import { trackEvent } from "@/lib/analytics";
 import { isBuyIntent } from "@/lib/checkout-return";
@@ -16,8 +17,11 @@ import { isBuyIntent } from "@/lib/checkout-return";
 interface OpenOptions {
   /** "checkout" or a /checkout?plan=… path for buy intent, a relative path to return to, or omitted for the dashboard. */
   next?: string;
-  /** false = hard gate: no close button, Escape and backdrop don't dismiss. Default true. */
+  /** false = hard gate: Escape and the backdrop don't dismiss, and the close button leaves the page for
+   *  `leaveTo` instead of uncovering it. Default true. */
   dismissible?: boolean;
+  /** Where a hard gate's close button goes. Default "/". */
+  leaveTo?: string;
   /** "signin" opens with returning-user copy. Default "signup". */
   mode?: AuthMode;
   /** Sign-up subtitle override, e.g. "the door carved with Nancy opens on the other side". */
@@ -57,6 +61,9 @@ export default function AuthModalProvider({ children }: { children: React.ReactN
   const closeTimer = useRef<number | null>(null);
   const [next, setNext] = useState<string | null>(null);
   const [dismissible, setDismissible] = useState(true);
+  const [leaveTo, setLeaveTo] = useState("/");
+  const router = useRouter();
+  const pathname = usePathname();
   const [mode, setMode] = useState<AuthMode>("signup");
   const [intro, setIntro] = useState<string | undefined>(undefined);
   const [authModalUsed, setAuthModalUsed] = useState(false);
@@ -78,6 +85,7 @@ export default function AuthModalProvider({ children }: { children: React.ReactN
       const nextMode = opts?.mode ?? "signup";
       setNext(opts?.next ?? null);
       setDismissible(opts?.dismissible ?? true);
+      setLeaveTo(opts?.leaveTo ?? "/");
       setMode(nextMode);
       setIntro(opts?.intro);
       setClosing(false);
@@ -99,6 +107,17 @@ export default function AuthModalProvider({ children }: { children: React.ReactN
       setClosing(false);
     }, CLOSE_MS);
   }, []);
+
+  // The provider sits in the root layout, so the modal would follow a navigation (the card's own links, the
+  // back button) onto the next page, still open and, for a hard gate, impossible to close. A new page shuts it.
+  useEffect(() => {
+    if (closeTimer.current !== null) {
+      window.clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+    setOpen(false);
+    setClosing(false);
+  }, [pathname]);
 
   useEffect(
     () => () => {
@@ -154,7 +173,7 @@ export default function AuthModalProvider({ children }: { children: React.ReactN
               destination={destination}
               buyIntent={buyIntent}
               inlineVerify
-              onClose={dismissible ? close : undefined}
+              onClose={dismissible ? close : () => router.push(leaveTo)}
               mode={mode}
               onSwitchMode={setMode}
               intro={intro}

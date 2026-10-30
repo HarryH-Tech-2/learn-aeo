@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { trackEvent } from "@/lib/analytics";
 import { CONSENT_COOKIE, CONSENT_EVENT, MEASUREMENT_COOKIES } from "@/lib/consent";
@@ -51,37 +50,31 @@ export default function CookieScroll() {
   if (!open || HIDDEN_ON.some((p) => pathname?.startsWith(p))) return null;
 
   return (
-    <aside
-      role="region"
-      aria-label="Cookie notice"
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-gold-500/30 bg-obsidian-light p-4 shadow-2xl sm:inset-x-auto sm:bottom-4 sm:left-4 sm:max-w-md sm:rounded-2xl sm:border"
-    >
-      {/* styled as an answer engine's reply: the question, a short answer, one cited source */}
-      <p className="font-body text-xs uppercase tracking-[0.18em] text-cyan">Does this site use cookies?</p>
-      <h2 className="font-display text-xl text-sand-100 mt-1">Short answer: yes, a few.</h2>
+    // Styled as an answer engine at work: the question typed into the hero's glowing search bar, a short answer
+    // under the brand's spark, two choices. Dark in both themes (hero-media pins the dark tokens).
+    <aside role="region" aria-label="Cookie notice" className="cookie-card hero-media">
+      <p className="cookie-card-query">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
+          <circle cx="11" cy="11" r="6.5" />
+          <path d="m16 16 4 4" />
+        </svg>
+        Does this site use cookies?
+      </p>
+      <h2 className="cookie-card-answer font-display text-xl text-sand-100">
+        <svg aria-hidden="true" viewBox="0 0 20 20" className="cookie-card-spark">
+          <path d="M10 1.5c.9 5.6 2.9 7.6 8.5 8.5-5.6.9-7.6 2.9-8.5 8.5-.9-5.6-2.9-7.6-8.5-8.5 5.6-.9 7.6-2.9 8.5-8.5Z" />
+        </svg>
+        Short answer: yes, a few.
+      </h2>
       <p className="font-body text-sm leading-relaxed text-sand-300 mt-2">
         Some keep you signed in. Others, from Google Analytics, show us which lessons actually get you cited.
         Accept them all, or keep only the ones the site needs.
-        <Link
-          href="/privacy#cookies"
-          className="ml-1 inline-flex items-center gap-1 rounded-full border border-cyan/40 px-2 py-0.5 align-middle text-xs text-cyan hover:border-cyan hover:text-cyan-300"
-        >
-          <span aria-hidden="true">[1]</span> What each one does
-        </Link>
       </p>
-      <div className="flex flex-wrap items-center gap-3 mt-4">
-        <button
-          type="button"
-          onClick={() => choose("all")}
-          className="rounded-lg bg-gold-500 px-4 py-2 font-body text-sm font-semibold text-obsidian hover:bg-gold-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
-        >
+      <div className="flex flex-wrap items-center gap-3 mt-5">
+        <button type="button" onClick={() => choose("all")} className="cookie-card-accept">
           Accept all
         </button>
-        <button
-          type="button"
-          onClick={() => choose("essential")}
-          className="rounded-lg border border-sand-500/40 px-4 py-2 font-body text-sm font-medium text-sand-200 hover:border-cyan hover:text-cyan focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
-        >
+        <button type="button" onClick={() => choose("essential")} className="cookie-card-essential">
           Essentials only
         </button>
       </div>

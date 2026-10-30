@@ -55,7 +55,7 @@ export default function LlmsTxtGeneratorPage() {
             llmstxt.org proposal describes. Copy it or download it, then upload it to the root of your site.
           </p>
           <p className="text-base text-sand-400">
-            No major answer engine documents reading llms.txt yet, so do this after the basics: crawlers allowed (try the{" "}
+            No major AI search tool documents reading llms.txt yet, so do this after the basics: crawlers allowed (try the{" "}
             <Link href="/tools/ai-crawler-checker" className="text-cyan-400 underline underline-offset-2">AI Crawler Checker</Link>) and
             pages that answer questions clearly.
           </p>

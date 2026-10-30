@@ -34,7 +34,7 @@ export function buildLlmsTxt({ lessons, tools, posts, glossary }: LlmsTxtInput):
   const lines: string[] = [
     `# ${SITE.name}`,
     "",
-    `> An online course for marketers on answer engine optimization (AEO): how AI answer engines such as Google AI Overviews, ChatGPT search and Perplexity choose the sources they cite, and what you can do so your pages are among them. The first lesson is free with a sign-in; the rest is a one-time ${formatPlanPrice(PLANS.lifetime, "USD")} lifetime purchase, or ${formatPlanPrice(PLANS.monthly, "USD")} a month.`,
+    `> An online course for marketers on answer engine optimization (AEO): how AI search tools such as Google AI Overviews, ChatGPT search and Perplexity choose the sources they cite, and what you can do so your pages are among them. The first lesson is free with a sign-in; the rest is a one-time ${formatPlanPrice(PLANS.lifetime, "USD")} lifetime purchase, or ${formatPlanPrice(PLANS.monthly, "USD")} a month.`,
     "",
     "- Format: self-paced interactive lessons. Each has short concept cards with sources, a quick check after each group, one hands-on exercise, a real-world example to take apart, and a final audit quiz.",
     `- Lessons: ${sorted.length}, roughly ${TOTAL_MINUTES} minutes in total. Lessons are being released in turn; lifetime access includes every future lesson.`,

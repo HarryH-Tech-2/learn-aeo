@@ -1,15 +1,12 @@
 "use client";
 
-import { FIRST_LESSON_PATH, LESSON_CATALOG } from "@/lib/lesson-catalog";
+import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import type { CSSProperties } from "react";
 import { trackEvent } from "@/lib/analytics";
 import { useAuthModal } from "@/components/AuthModal";
-import CtaInside from "@/components/home/HeroCta";
 import HeroVideo from "@/components/home/HeroVideo";
-
-const FIRST_LESSON_MINUTES = LESSON_CATALOG[0].minutes;
 
 /**
  * The homepage hero: the City of Answers loop (HeroVideo) behind a dark band (hero-media pins the dark tokens
@@ -22,7 +19,7 @@ export default function HeroSection() {
   const { openAuthModal } = useAuthModal();
 
   return (
-    <section className="city-hero hero-media relative flex flex-col justify-end overflow-hidden pt-24 pb-[9vh] bg-[#04060d]">
+    <section className="city-hero hero-media relative flex flex-col justify-end overflow-hidden pt-24 pb-[16vh] bg-[#04060d]">
       {/* Background: navy with a cyan glow behind the headline and a faint gold one low down. Fixed colors,
           never theme-tinted, because the hero is dark in both themes. */}
       <div className="absolute inset-0" aria-hidden="true">
@@ -37,7 +34,7 @@ export default function HeroSection() {
           className="absolute bottom-0 left-0 right-0 h-[60%]"
           style={{
             background:
-              "radial-gradient(ellipse 120% 60% at 50% 100%, rgba(255,199,107,0.10) 0%, rgba(255,199,107,0.03) 40%, transparent 70%)",
+              "radial-gradient(ellipse 120% 60% at 50% 100%, rgba(111,178,255,0.10) 0%, rgba(111,178,255,0.03) 40%, transparent 70%)",
           }}
         />
       </div>
@@ -68,7 +65,7 @@ export default function HeroSection() {
         >
           {session ? (
             <Link href="/dashboard" className="hero-cta">
-              <CtaInside label="Continue the course" sub="Pick up where you left off" />
+              <span className="hero-cta-label">Continue the course</span>
             </Link>
           ) : (
             <button
@@ -79,7 +76,7 @@ export default function HeroSection() {
               }}
               className="hero-cta"
             >
-              <CtaInside label="Start lesson 1" sub={`Free · ${FIRST_LESSON_MINUTES} minutes · no card needed`} />
+              <span className="hero-cta-label">Start lesson 1</span>
             </button>
           )}
           <a
@@ -87,13 +84,12 @@ export default function HeroSection() {
             className="inline-flex items-center gap-2 rounded-full border border-sand-400/40 px-6 py-3 font-body text-sm sm:text-base font-semibold text-sand-100 hover:border-gold-400 hover:text-gold-400 transition-colors"
           >
             See the curriculum
-            <span aria-hidden="true">&darr;</span>
           </a>
         </div>
       </div>
 
-      {/* Bottom fade into the page background */}
-      <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[var(--hero-fade)] to-transparent" />
+      {/* The foot of the hero: a tall, eased fade into the page background, in either theme (.city-hero-fade). */}
+      <div className="city-hero-fade" aria-hidden="true" />
     </section>
   );
 }

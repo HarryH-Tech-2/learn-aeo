@@ -83,11 +83,12 @@ export default function LessonContent() {
   }, [session, preview]);
 
   // Lessons need an account, the free one included: a guest gets the sign-up modal as a hard gate
-  // (no close button; the player is never mounted for them) and comes back here after signing in.
+  // (its close button goes back to the course list; the player is never mounted for them) and comes back here
+  // after signing in.
   const playable = !!lesson && isPlayable(lesson);
   const prompted = useRef(false);
   const askToSignIn = () =>
-    openAuthModal({ next: window.location.pathname + window.location.search, dismissible: false });
+    openAuthModal({ next: window.location.pathname + window.location.search, dismissible: false, leaveTo: "/#curriculum" });
   useEffect(() => {
     if (guest && playable && !prompted.current) {
       prompted.current = true;

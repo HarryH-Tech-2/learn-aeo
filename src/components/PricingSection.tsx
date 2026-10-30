@@ -170,7 +170,7 @@ export default function PricingSection({ headingAs: Heading = "h2" }: { headingA
           <Heading className="reveal font-display text-4xl md:text-5xl lg:text-6xl font-light text-sand-100 mb-6" style={reveal(0.1, { y: 30 })}>
             Get cited by
             <br />
-            <span className="text-gradient-gold font-medium">answer engines</span>
+            <span className="text-gradient-gold font-medium">AI search</span>
           </Heading>
           <p className="reveal font-body text-base md:text-lg text-sand-400 max-w-xl mx-auto font-light leading-relaxed" style={reveal(0.2)}>
             {freeCourse
@@ -285,7 +285,7 @@ export default function PricingSection({ headingAs: Heading = "h2" }: { headingA
         <div className="mt-10 grid sm:grid-cols-3 gap-4 text-center">
           {[
             ["14-day guarantee", "Not for you? Email us within 14 days for a full refund."],
-            ["Always up to date", "New lessons land as answer engines change, included on both plans."],
+            ["Always up to date", "New lessons land as AI search changes, included on both plans."],
             ["Cancel in one click", "Monthly stops from your account page. No emails, no phone calls."],
           ].map(([t, d]) => (
             <div key={t} className="reveal" style={reveal(0.7)}>

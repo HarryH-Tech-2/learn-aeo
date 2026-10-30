@@ -36,7 +36,7 @@ export const TOOLS: readonly ToolMeta[] = [
   {
     slug: "citability-checker",
     name: "Citability Checker",
-    summary: "Enter a URL to see how easily an answer engine can lift and cite its passages, with specific fixes.",
+    summary: "Enter a URL to see how easily ChatGPT and other AI search tools can lift and cite its passages, with specific fixes.",
     kind: "server",
     status: "coming-soon",
   },

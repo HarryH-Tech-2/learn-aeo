@@ -32,7 +32,7 @@ const features: { title: string; description: string; lessons: number[] }[] = [
   {
     title: "Authority and platforms",
     description:
-      "Look at the mentions, reviews and lists answer engines lean on, then at what each major engine tends to favor and how to test it.",
+      "Look at the mentions, reviews and lists AI search tools lean on, then at what each major engine tends to favor and how to test it.",
     lessons: [5, 6],
   },
   {

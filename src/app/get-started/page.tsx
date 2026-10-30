@@ -39,7 +39,7 @@ export default function GetStartedPage() {
         <h2>Who it is for</h2>
         <p>
           Marketers who know SEO basics and want their pages cited by ChatGPT, Perplexity, Google AI Overviews and other
-          AI answer engines.
+          AI search tools.
         </p>
       </section>
       <GetStartedContent />
