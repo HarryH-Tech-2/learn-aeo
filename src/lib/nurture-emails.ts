@@ -47,6 +47,7 @@ export const NURTURE_UTM_SOURCE = "nurture";
 const GATE = LESSON_CATALOG[0];
 /** The seven districts after The Gate, in course order. */
 const AHEAD = LESSON_CATALOG.slice(1);
+const ALL_LIVE = LESSON_CATALOG.every((l) => l.status === "live");
 const NEXT = AHEAD[0];
 const FIRST_LEVEL = LEVEL_THRESHOLDS[0].title;
 const TOP_LEVEL = LEVEL_THRESHOLDS[LEVEL_THRESHOLDS.length - 1].title;
@@ -263,7 +264,9 @@ export function renderNurtureEmail(key: NurtureStepKey, ctx: NurtureEmailContext
       const offer = ctx.offer;
       if (!offer) throw new Error("offer step rendered without an offer");
       const line1 = "You have had a free account for a few days. If you have been weighing up the rest of the course, this makes it an easier yes.";
-      const line2 = "One payment, lifetime access, and every lesson still to come is included when it is released. Full refund within 14 days if it is not for you.";
+      const line2 = ALL_LIVE
+        ? `One payment, lifetime access to all ${LESSON_CATALOG.length} lessons, and any new ones added later. Full refund within 14 days if it is not for you.`
+        : "One payment, lifetime access, and every lesson still to come is included when it is released. Full refund within 14 days if it is not for you.";
       const body = [
         eyebrow("For the next 60 hours"),
         heading(`${offer.percentOff}% off the whole course`),
@@ -292,7 +295,9 @@ export function renderNurtureEmail(key: NurtureStepKey, ctx: NurtureEmailContext
     }
 
     case "coffee": {
-      const line1 = "Your account has the whole course open: every lesson that is live now, and the rest as they are released. There is nothing to pay.";
+      const line1 = ALL_LIVE
+        ? `Your account has the whole course open: all ${LESSON_CATALOG.length} lessons, and any new ones added later. There is nothing to pay.`
+        : "Your account has the whole course open: every lesson that is live now, and the rest as they are released. There is nothing to pay.";
       const line2 = "If something could be clearer or is missing, reply to this email and tell us. It is the quickest way to make the course better.";
       const body = [
         eyebrow("Your account"),

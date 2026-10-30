@@ -13,6 +13,7 @@ export const post: BlogPost = {
     "Learn AEO by reading the primary sources first (Google's guidance on AI features, the crawler docs from OpenAI, Anthropic and Perplexity, the GEO paper and schema.org), then practicing on your own site: check your robots.txt, test real prompts and read your logs. If you know SEO basics, most of the foundation is already in place.",
   date: "October 28, 2026",
   publishedAt: "2026-10-28",
+  updatedAt: "2026-10-30",
   category: "Guides",
   image: "/blog/how-to-learn-aeo.webp",
   imageAlt: "A person climbing a winding stair of glowing glass steps toward a gold light above a city",
@@ -109,7 +110,7 @@ In analytics, look at referral traffic from AI products, such as visits from cha
 
 Self-study works, and everything above is free. A course is useful if you want the material in order, with exercises that check your understanding as you go.
 
-Learn AEO is one option. It has eight lessons for marketers who already know SEO basics; the first, on how answer engines choose sources, is free. Three lessons are live now and the rest are on the way. Full access is $100 once or $10 a month (see [pricing](/pricing)). For other options, see our roundup of [AEO courses](/blog/best-aeo-courses). Whatever you choose, keep the primary docs open alongside it: they change, and the companies' own pages are the final word.
+Learn AEO is one option. It has eight lessons for marketers who already know SEO basics; the first, on how answer engines choose sources, is free. All eight lessons are live. Full access is $100 once or $10 a month (see [pricing](/pricing)). For other options, see our roundup of [AEO courses](/blog/best-aeo-courses). Whatever you choose, keep the primary docs open alongside it: they change, and the companies' own pages are the final word.
 
 ## A simple study order
 

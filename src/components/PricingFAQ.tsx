@@ -32,7 +32,10 @@ const faqs = [
   },
   {
     question: "What exactly does 'lifetime access' cover?",
-    answer: `Every lesson and exercise on the site now (${LIVE_COUNT} of the ${LESSON_CATALOG.length} lessons are live), each remaining lesson as it opens, any new lessons we add as AI search changes, and the certificate. No extra charges, no upgrade tiers.`,
+    answer:
+      LIVE_COUNT === LESSON_CATALOG.length
+        ? `All ${LESSON_CATALOG.length} lessons and their exercises, any new lessons we add as AI search changes, and the certificate. No extra charges, no upgrade tiers.`
+        : `Every lesson and exercise on the site now (${LIVE_COUNT} of the ${LESSON_CATALOG.length} lessons are live), each remaining lesson as it opens, any new lessons we add as AI search changes, and the certificate. No extra charges, no upgrade tiers.`,
   },
   {
     question: "Do I need any prior knowledge?",

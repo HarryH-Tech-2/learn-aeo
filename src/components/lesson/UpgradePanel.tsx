@@ -40,6 +40,7 @@ const SHEET = "rounded-2xl border border-cyan-500/30 bg-obsidian-light p-6 text-
 
 const NUMBER_WORDS = ["No", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"];
 const PAID_LESSONS = LESSON_CATALOG.filter((l) => !l.isFree);
+const ALL_LIVE = LESSON_CATALOG.every((l) => l.status === "live");
 const REMAINING = NUMBER_WORDS[PAID_LESSONS.length] ?? String(PAID_LESSONS.length);
 const FIRST_PAID = PAID_LESSONS[0]?.district;
 const LAST_PAID = PAID_LESSONS[PAID_LESSONS.length - 1]?.district;
@@ -82,8 +83,8 @@ function PaidPitch({ paid, offer: given, location, progressLine }: Props) {
         {progressLine ? `${progressLine}. ` : ""}
         {location === "dashboard" ? "Lesson 1 stays free to the end." : "This lesson stays free to the end."}{" "}
         {FIRST_PAID && LAST_PAID ? `From ${FIRST_PAID} to ${LAST_PAID}, the rest of the course` : "The rest of the course"} opens
-        with Lifetime access or the {PLANS.monthly.name} plan. New lessons are being released in turn, and Lifetime
-        includes every future lesson.
+        with Lifetime access or the {PLANS.monthly.name} plan.{" "}
+        {ALL_LIVE ? "Lifetime includes any lessons added later." : "New lessons are being released in turn, and Lifetime includes every future lesson."}
       </p>
 
       <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2 mb-6">

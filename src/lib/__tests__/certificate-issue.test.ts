@@ -36,10 +36,11 @@ describe("certificate codes", () => {
 });
 
 describe("allLessonsComplete", () => {
-  it("is true only when every catalog lesson, coming-soon ones included, is complete", () => {
+  it("is true only when every catalog lesson is complete", () => {
     expect(allLessonsComplete(allDone())).toBe(true);
-    const soon = LESSON_CATALOG.find((l) => l.status !== "live")!;
-    expect(allLessonsComplete(allDone().filter((p) => p.lessonId !== soon.id))).toBe(false);
+    for (const l of LESSON_CATALOG) {
+      expect(allLessonsComplete(allDone().filter((p) => p.lessonId !== l.id)), l.id).toBe(false);
+    }
     expect(allLessonsComplete(allDone().map((p, i) => (i === 0 ? { ...p, completed: false } : p)))).toBe(false);
     expect(allLessonsComplete([])).toBe(false);
   });

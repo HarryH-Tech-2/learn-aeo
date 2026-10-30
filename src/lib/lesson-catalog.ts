@@ -106,7 +106,7 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
     level: "advanced",
     minutes: 20,
     isFree: false,
-    status: "coming-soon",
+    status: "live",
   },
 ];
 

@@ -9,6 +9,7 @@ export const post: BlogPost = {
     "The right AEO course is one whose claims are sourced, whose material is current, that makes you practice, and whose price and refund terms suit you. Free options include Ahrefs' AEO course, Semrush's AI Visibility Essentials and Google's own AI features guide. Edureka's GEO course on Coursera is included with Coursera Plus, or you buy its Certificate experience for the full materials and certificate, and Learn AEO, which is our course, has a free first lesson and paid plans.",
   date: "October 28, 2026",
   publishedAt: "2026-10-28",
+  updatedAt: "2026-10-30",
   category: "Careers",
   image: "/blog/best-aeo-courses.webp",
   imageAlt: "A magnifying glass picking out one gold book from a shelf of glowing glass course books",
@@ -32,7 +33,7 @@ export const post: BlogPost = {
     {
       question: "Is Learn AEO finished?",
       answer:
-        "No. Three of its eight lessons are live today and five are marked coming soon. Paid plans include the remaining lessons as they open.",
+        "Yes. All eight lessons are live: from how answer engines choose sources to running an AEO program. Paid plans include every lesson and any new ones added later.",
     },
   ],
   content: `## How to choose an AEO course
@@ -80,11 +81,11 @@ There are no exercises or certificate. It suits you if you want the primary sour
 
 ### Learn AEO
 
-Learn AEO is an online course for marketers who already know SEO basics. It has eight lessons. Three are live today: how answer engines choose sources, making your site reachable by AI, and writing citable content. The other five are marked coming soon: structured data and entities, authority beyond your site, platform playbooks, measuring AI visibility, and running an AEO program.
+Learn AEO is an online course for marketers who already know SEO basics. It has eight lessons, all live: how answer engines choose sources, making your site reachable by AI, writing citable content, structured data and entities, authority beyond your site, platform playbooks, measuring AI visibility, and running an AEO program.
 
 Each lesson is interactive, with short checks, a hands-on exercise and an audit, and each concept lists the sources it relies on with the date they were checked. Lessons are listed at 20 to 30 minutes each.
 
-The [first lesson](/lessons/how-answer-engines-choose-sources) is free. The [paid plans](/pricing) are $100 as one payment or $10 per month, which you can cancel at any time. Both include all eight lessons as they open and a certificate. Our terms offer a 14-day money-back guarantee: if you are unhappy within 14 days of purchase, you can ask for a full refund.
+The [first lesson](/lessons/how-answer-engines-choose-sources) is free. The [paid plans](/pricing) are $100 as one payment or $10 per month, which you can cancel at any time. Both include all eight lessons and a certificate. Our terms offer a 14-day money-back guarantee: if you are unhappy within 14 days of purchase, you can ask for a full refund.
 
 ## Side-by-side comparison
 

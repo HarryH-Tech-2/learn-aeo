@@ -68,7 +68,9 @@ export default function AboutContent() {
             {LESSON_CATALOG[LESSON_CATALOG.length - 1].district}, where you plan an AEO program of your own.
           </p>
           <p>
-            {live.length} of the {LESSON_CATALOG.length} lessons are live now:{" "}
+            {live.length === LESSON_CATALOG.length
+              ? `All ${live.length} lessons are live: `
+              : `${live.length} of the ${LESSON_CATALOG.length} lessons are live now: `}
             {live.map((l, i) => (
               <span key={l.id}>
                 <Link href={lessonPath(l.id)} className="text-cyan-500 underline underline-offset-4 hover:text-gold-400">
@@ -77,7 +79,7 @@ export default function AboutContent() {
                 {i < live.length - 1 ? ", " : "."}
               </span>
             ))}{" "}
-            The rest are coming soon. Lesson 1 is free once you sign in.
+            {live.length < LESSON_CATALOG.length && "The rest are coming soon. "}Lesson 1 is free once you sign in.
           </p>
         </div>
       </section>
