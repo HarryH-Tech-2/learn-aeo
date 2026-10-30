@@ -24,6 +24,8 @@ import {
   websiteSchema,
 } from "@/lib/schema";
 import { TOOLS } from "@/lib/tools";
+import { AUTHOR } from "@/lib/author";
+import { AUTHOR_ID, personSchema } from "@/lib/schema";
 import { GLOSSARY } from "@/lib/glossary";
 
 const parse = (html: string) => {
@@ -92,7 +94,7 @@ describe("entities", () => {
     expect(f.mainEntity[0]).toEqual({ "@type": "Question", name: "Q?", acceptedAnswer: { "@type": "Answer", text: "A." } });
   });
 
-  it("credits blog posts to the Organization, never a person", () => {
+  it("credits blog posts to the author, published by the Organization", () => {
     const p = blogPostingSchema({
       url: `${SITE.url}/blog/x`,
       title: "T",
@@ -105,7 +107,7 @@ describe("entities", () => {
       wordCount: 100,
       minutes: 1,
     });
-    expect(p.author).toMatchObject({ "@id": ORG_ID });
+    expect(p.author).toMatchObject({ "@type": "Person", "@id": AUTHOR_ID, name: AUTHOR.name });
     expect(p.publisher).toMatchObject({ "@id": ORG_ID });
   });
 });
@@ -169,8 +171,10 @@ describe("one place for JSON-LD", () => {
     expect(offenders).toEqual([]);
   });
 
-  it("never names a Person", () => {
-    const offenders = files.filter((f) => /"@type":\s*"Person"|@type: "Person"/.test(fs.readFileSync(path.join(root, f), "utf8")));
+  it("names a Person only through the author module", () => {
+    const offenders = files.filter(
+      (f) => f !== "src/lib/schema.ts" && /"@type":\s*"Person"|@type: "Person"/.test(fs.readFileSync(path.join(root, f), "utf8")),
+    );
     expect(offenders).toEqual([]);
   });
 });
@@ -223,5 +227,17 @@ describe("FAQPage identity (SEO audit 2026-10-30)", () => {
       const src = fs.readFileSync(path.resolve(__dirname, "../../..", f), "utf8");
       expect(src, f).not.toMatch(/faqSchema\(faqs\)/);
     }
+  });
+});
+
+describe("author (Harry Harrison)", () => {
+  it("is one Person, defined once with the LinkedIn profile, referenced everywhere by @id", () => {
+    const person = personSchema();
+    expect(person).toMatchObject({ "@type": "Person", "@id": AUTHOR_ID, name: "Harry Harrison" });
+    expect(person.sameAs).toContain("https://www.linkedin.com/in/harry-harrison/");
+    const ref = { "@type": "Person", "@id": AUTHOR_ID, name: AUTHOR.name, url: AUTHOR.pageUrl };
+    expect(learningResourceSchema(LESSON_CATALOG[0]).author).toEqual(ref);
+    expect(courseSchema().author).toEqual(ref);
+    expect(courseSchema().provider).toMatchObject({ "@id": ORG_ID });
   });
 });

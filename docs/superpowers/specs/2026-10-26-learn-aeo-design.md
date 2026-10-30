@@ -50,6 +50,8 @@ Discounts and refunds carry over from the sibling unchanged (decided by Harry): 
 
 **Amended 2026-10-28 (Harry):** the lesson-complete offer lasts **24 hours**, not 60. Site copy uses **US spelling** (optimization, program, behavior); the British spelling elsewhere in this spec is historic.
 
+**Amended 2026-10-30 (Harry):** Harry Harrison is now the named author (LinkedIn https://www.linkedin.com/in/harry-harrison/): Person schema on /about, referenced by posts, lessons and the course; visible bylines. Bio facts only from his public profile. This replaces the "no author" anti-goal below.
+
 **Stripe account (decided by Harry):** a new, separate Stripe account for Learn AEO. No shared webhooks, coupons or products with learnhieroglyphics.com, and no changes to the sibling's live code.
 
 **Certificate access (builder's call):** monthly subscribers can earn the certificate, as on the sibling site.

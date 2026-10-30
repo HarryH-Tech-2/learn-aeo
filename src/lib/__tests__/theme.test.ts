@@ -1,4 +1,6 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { resolveInitialTheme, THEME_INIT_SCRIPT, THEME_STORAGE_KEY, MOBILE_MAX_WIDTH } from "@/lib/theme";
 
 describe("resolveInitialTheme", () => {
@@ -53,6 +55,29 @@ describe("THEME_INIT_SCRIPT", () => {
           resolveInitialTheme(stored, width) === "light"
         );
       }
+    }
+  });
+});
+
+describe("decorative animations wait for load (SEO audit 2026-10-30)", () => {
+  it("the head script marks the page anim-ready shortly after load", () => {
+    vi.useFakeTimers();
+    const classes = new Set<string>();
+    let onLoad: (() => void) | undefined;
+    const doc = { documentElement: { classList: { add: (c: string) => classes.add(c), remove: () => {} } } };
+    const win = { innerWidth: 1440, addEventListener: (e: string, fn: () => void) => e === "load" && (onLoad = fn) };
+    new Function("window", "localStorage", "document", THEME_INIT_SCRIPT)(win, { getItem: () => "dark" }, doc);
+    expect(classes.has("anim-ready")).toBe(false);
+    onLoad?.();
+    vi.runAllTimers();
+    expect(classes.has("anim-ready")).toBe(true);
+    vi.useRealTimers();
+  });
+
+  it("the stylesheet pauses the infinite decorative animations until then", () => {
+    const css = readFileSync(join(process.cwd(), "src/styles/globals.css"), "utf8");
+    for (const sel of [".text-gradient-gold", ".card-shine::after", ".hero-cta::after", ".nav-cta::after"]) {
+      expect(css, sel).toContain(`html.js:not(.anim-ready) ${sel}`);
     }
   });
 });

@@ -128,7 +128,9 @@ export default function HeroVideo() {
         loop
         playsInline
         preload="none"
-        poster={STILL_OPEN}
+        // only the still needs the open-gate poster; otherwise the loop shows its own frames once it plays, and a
+        // poster painted when it loads mid-intro would be the page's largest (and latest) paint
+        poster={still ? STILL_OPEN : undefined}
       >
         {!still && <source src="/hero/gate-loop.webm" type="video/webm" />}
         {!still && <source src="/hero/gate-loop.mp4" type="video/mp4" />}

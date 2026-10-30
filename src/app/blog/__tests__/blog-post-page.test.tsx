@@ -53,7 +53,8 @@ describe("blog post page", () => {
     const ld = JSON.parse(renderToStaticMarkup(ldEl).replace(/^<script[^>]*>|<\/script>$/g, ""))["@graph"];
     expect(ld.map((x: { "@type": string }) => x["@type"])).toEqual(["BlogPosting", "FAQPage", "BreadcrumbList"]);
     expect(ld[0].headline).toBe(fixture.title);
-    expect(ld[0].author).toMatchObject({ "@type": "Organization", "@id": ORG_ID });
+    expect(ld[0].author).toMatchObject({ "@type": "Person", name: "Harry Harrison" });
+    expect(ld[0].publisher).toMatchObject({ "@type": "Organization", "@id": ORG_ID });
     expect(ld[0].keywords).not.toMatch(/alphabet|translate/i);
     const content = kids.find((k) => k.type !== JsonLd)!;
     expect((content.props.headings as { text: string }[]).map((h) => h.text)).toEqual(["The idea", "Why it matters"]);

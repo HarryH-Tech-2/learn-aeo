@@ -9,6 +9,8 @@ export const metadata: Metadata = pageMetadata({
   description:
     "The Learn AEO leaderboard ranks learners by XP earned from concept cards, quick checks, exercises and lesson audits.",
   path: "/leaderboard",
+  // learner names and XP change daily and say nothing a search result needs: crawlable, not indexed
+  noindex: true,
 });
 
 export default function LeaderboardPage() {

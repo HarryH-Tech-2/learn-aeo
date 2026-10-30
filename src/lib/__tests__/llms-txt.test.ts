@@ -68,3 +68,9 @@ describe("buildLlmsTxt", () => {
     expect(txt.slice(opt)).toContain(absoluteUrl("/sitemap.xml"));
   });
 });
+
+describe("llms.txt author", () => {
+  it("names the author with the profile link", () => {
+    expect(buildLlmsTxt(base)).toContain("- Author: Harry Harrison (https://www.linkedin.com/in/harry-harrison/)");
+  });
+});

@@ -4,6 +4,7 @@ import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
 import { reveal } from "@/components/reveal";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
+import { AUTHOR } from "@/lib/author";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -167,7 +168,12 @@ export default function BlogPostContent({
                 </>
               )}
               <span className="text-sand-700">|</span>
-              <span className="font-body text-xs text-sand-500">By the Learn AEO team</span>
+              <span className="font-body text-xs text-sand-500">
+                By{" "}
+                <Link href={AUTHOR.path} className="hover:text-gold-400 underline underline-offset-2">
+                  {AUTHOR.name}
+                </Link>
+              </span>
             </div>
 
             <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-light text-sand-100 mb-6 leading-tight">

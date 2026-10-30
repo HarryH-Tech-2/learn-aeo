@@ -69,3 +69,11 @@ describe("sitemap glossary dates (SEO audit 2026-10-30)", () => {
     }
   });
 });
+
+describe("leaderboard stays out of the index (SEO audit 2026-10-30)", () => {
+  it("is not in the sitemap and its page is noindex", async () => {
+    expect(sitemap().map((e) => e.url)).not.toContain(`${SITE.url}/leaderboard`);
+    const { metadata } = await import("@/app/leaderboard/page");
+    expect((metadata.robots as { index: boolean }).index).toBe(false);
+  });
+});

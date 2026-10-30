@@ -695,6 +695,16 @@ html.light .lg\:hero-media .nav-signin:hover {
   }
 }
 
+/* Infinite decorative animations wait for the page to load (`anim-ready`, set by THEME_INIT_SCRIPT in
+   src/lib/theme.ts a second after load). The gold shimmer animates background-position, which can't run on the
+   compositor: left running from first paint, its repaints sat in the load window and slowed every page. */
+html.js:not(.anim-ready) .text-gradient-gold,
+html.js:not(.anim-ready) .card-shine::after,
+html.js:not(.anim-ready) .hero-cta::after,
+html.js:not(.anim-ready) .nav-cta::after {
+  animation-play-state: paused;
+}
+
 /* ── Utility Classes ── */
 .grain-overlay::before {
   content: "";

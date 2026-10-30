@@ -2,9 +2,11 @@
 // @id: the Organization (defined once, in the root layout), the WebSite, and the Course
 // (on home and pricing). Render with <JsonLd data={...} /> (src/components/JsonLd.tsx),
 // which adds @context and escapes the output.
-// No Person anywhere: the course and posts are credited to the Learn AEO organization.
+// One Person, the author (src/lib/author.ts): defined in full on /about, referenced by @id from the
+// course, lessons and posts. Learn AEO, the Organization, publishes and provides them.
 
 import { SITE, absoluteUrl } from "./site";
+import { AUTHOR } from "./author";
 import { LESSON_CATALOG, TOTAL_MINUTES, lessonPath } from "./lesson-catalog";
 import type { LessonMeta } from "./lesson-types";
 import { PLANS, PLAN_IDS } from "./plans";
@@ -14,11 +16,27 @@ import type { GlossaryTerm } from "./glossary-types";
 export const ORG_ID = `${SITE.url}/#organization`;
 export const WEBSITE_ID = `${SITE.url}/#website`;
 export const COURSE_ID = `${SITE.url}/#course`;
+export const AUTHOR_ID = `${SITE.url}/about#author`;
 
 // A reference that names the Organization too: validators may not join @ids across the page's
 // separate JSON-LD blocks, and Course info / Article rich results want provider.name, author.name.
 const ORG_REF = { "@type": "Organization", "@id": ORG_ID, name: SITE.name, url: SITE.url };
 const LANGUAGE = "en-US";
+// A reference that names the author too, for the same reason as ORG_REF.
+const AUTHOR_REF = { "@type": "Person", "@id": AUTHOR_ID, name: AUTHOR.name, url: AUTHOR.pageUrl };
+
+/** The author in full, on /about (the page bylines link to). */
+export function personSchema() {
+  return {
+    "@type": "Person",
+    "@id": AUTHOR_ID,
+    name: AUTHOR.name,
+    url: AUTHOR.pageUrl,
+    jobTitle: AUTHOR.jobTitle,
+    description: AUTHOR.bio,
+    sameAs: [AUTHOR.linkedIn],
+  };
+}
 
 export function organizationSchema() {
   return {
@@ -55,6 +73,7 @@ export function courseSchema() {
     description: COURSE_DESCRIPTION,
     url: SITE.url,
     provider: ORG_REF,
+    author: AUTHOR_REF,
     inLanguage: LANGUAGE,
     isAccessibleForFree: false,
     hasCourseInstance: {
@@ -108,6 +127,7 @@ export function learningResourceSchema(lesson: LessonMeta) {
     isAccessibleForFree: lesson.isFree,
     isPartOf: { "@id": COURSE_ID },
     provider: ORG_REF,
+    author: AUTHOR_REF,
   };
 }
 
@@ -168,7 +188,7 @@ export function blogPostingSchema(p: BlogPostingInput) {
     datePublished: p.datePublished,
     dateModified: p.dateModified,
     mainEntityOfPage: { "@type": "WebPage", "@id": p.url },
-    author: ORG_REF,
+    author: AUTHOR_REF,
     publisher: ORG_REF,
     isPartOf: { "@type": "Blog", "@id": BLOG_ID, name: BLOG_NAME, url: absoluteUrl("/blog") },
     articleSection: p.section,

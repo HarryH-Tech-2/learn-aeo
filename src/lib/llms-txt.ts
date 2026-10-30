@@ -2,6 +2,7 @@
 // lesson, tool and blog catalogs, so a lesson or tool going live, or a new post, shows up here
 // with no other edit. Served by src/app/llms.txt/route.ts.
 
+import { AUTHOR } from "./author";
 import { SITE, absoluteUrl } from "./site";
 import { PLANS, formatPlanPrice } from "./plans";
 import { TOTAL_MINUTES, lessonPath } from "./lesson-catalog";
@@ -40,6 +41,7 @@ export function buildLlmsTxt({ lessons, tools, posts, glossary }: LlmsTxtInput):
     `- Lessons: ${sorted.length}, roughly ${TOTAL_MINUTES} minutes in total. ${sorted.every((l) => l.status === "live") ? "All lessons are live; lifetime access includes any lessons added later." : "Lessons are being released in turn; lifetime access includes every future lesson."}`,
     `- Free: ${free ? `"${free.title}"` : "the first lesson"}, free with a Google or email sign-in.`,
     `- Price: one-time ${lifetime} for lifetime access, or ${monthly} a month. 14-day money-back guarantee.`,
+    `- Author: ${AUTHOR.name} (${AUTHOR.linkedIn})`,
     "- Audience: marketers who already know SEO basics.",
     "",
     "## Course",
@@ -77,7 +79,6 @@ export function buildLlmsTxt({ lessons, tools, posts, glossary }: LlmsTxtInput):
     "## Optional",
     "",
     `- [Sitemap](${absoluteUrl("/sitemap.xml")})`,
-    `- [Leaderboard](${absoluteUrl("/leaderboard")})`,
     `- [Privacy policy](${absoluteUrl("/privacy")})`,
     `- [Terms of service](${absoluteUrl("/terms")})`,
     ""

@@ -4,7 +4,7 @@ import { devBypassAuth } from "@/lib/dev-bypass";
 import { COUNTRY_COOKIE } from "@/lib/pricing";
 import { ACCESS_COOKIE, ACCESS_COOKIE_MAX_AGE, accessTestPercent, pickVisitorArm } from "@/lib/access-test";
 // (edge runtime: the catalog only, never @/lib/lessons, which pulls in lesson content)
-import { publicLessonPaths } from "@/lib/lesson-catalog";
+import { LESSON_CATALOG, publicLessonPaths } from "@/lib/lesson-catalog";
 
 // Protected routes that require authentication
 const PROTECTED_PATHS = ["/dashboard", "/account", "/certificate", "/checkout", "/lessons"];
@@ -17,6 +17,14 @@ const PUBLIC_LESSONS = publicLessonPaths();
 // A lesson's share image (src/app/lessons/[id]/opengraph-image.tsx; Next adds a ?hash). Social
 // crawlers have no session, and a redirect here would leave paid lessons without a link preview.
 const LESSON_OG_IMAGE = /^\/lessons\/[^/]+\/opengraph-image$/;
+
+// A lesson id that isn't in the catalog isn't gated: the page (dynamicParams = false) answers with a real 404
+// instead of a redirect to sign-up for a lesson that doesn't exist.
+const LESSON_IDS = new Set(LESSON_CATALOG.map((l) => l.id));
+function isUnknownLesson(pathname: string): boolean {
+  const id = /^\/lessons\/([^/]+)/.exec(pathname)?.[1];
+  return id !== undefined && !LESSON_IDS.has(id);
+}
 
 /** The free-unlock test (src/lib/access-test.ts): a new visitor's group, kept in a cookie the pages read. */
 function withAccessCookie(request: NextRequest, response: NextResponse): void {
@@ -61,7 +69,7 @@ export function middleware(request: NextRequest) {
 
   // Only protect known protected routes — let everything else pass through
   // so Next.js can serve the page or return a proper 404
-  if (!isProtected || isPublicLesson) {
+  if (!isProtected || isPublicLesson || isUnknownLesson(pathname)) {
     return withCountryCookie(request, NextResponse.next());
   }
 

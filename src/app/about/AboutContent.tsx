@@ -3,6 +3,9 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import { LESSON_CATALOG, lessonPath } from "@/lib/lesson-catalog";
 import { SITE } from "@/lib/site";
+import JsonLd from "@/components/JsonLd";
+import { AUTHOR } from "@/lib/author";
+import { personSchema } from "@/lib/schema";
 
 const principles = [
   {
@@ -101,6 +104,27 @@ export default function AboutContent() {
               Tell us
             </Link>{" "}
             and we will check it against the source.
+          </p>
+        </div>
+      </section>
+
+      {/* Who writes it: the author every byline links to (src/lib/author.ts) */}
+      <section id="author" aria-labelledby="author-heading" className="relative py-16 scroll-mt-28">
+        <JsonLd data={personSchema()} />
+        <div className="max-w-3xl mx-auto px-6 lg:px-8 space-y-6 font-body text-sand-400 leading-relaxed">
+          <h2 id="author-heading" className="font-display text-3xl md:text-4xl font-semibold text-sand-100">
+            Who writes {SITE.name}
+          </h2>
+          <p>{AUTHOR.bio}</p>
+          <p>
+            <a
+              href={AUTHOR.linkedIn}
+              target="_blank"
+              rel="me noopener noreferrer"
+              className="text-cyan-500 underline underline-offset-4 hover:text-gold-400"
+            >
+              {AUTHOR.name} on LinkedIn
+            </a>
           </p>
         </div>
       </section>

@@ -21,3 +21,14 @@ describe("middleware", () => {
     expect(isRedirect("/lessons/make-your-site-reachable-by-ai/opengraph-image-x")).toBe(true);
   });
 });
+
+describe("unknown lesson addresses (SEO audit 2026-10-30)", () => {
+  it("lets an id that isn't in the catalog through, so the page returns a real 404", () => {
+    expect(isRedirect("/lessons/1")).toBe(false);
+    expect(isRedirect("/lessons/not-a-lesson")).toBe(false);
+  });
+
+  it("still gates every paid lesson in the catalog", () => {
+    expect(isRedirect("/lessons/running-an-aeo-program")).toBe(true);
+  });
+});

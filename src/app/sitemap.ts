@@ -73,12 +73,6 @@ export function buildSitemap({
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/leaderboard`,
-      lastModified: SITE_LASTMOD,
-      changeFrequency: "daily",
-      priority: 0.5,
-    },
-    {
       url: `${baseUrl}/privacy`,
       lastModified: SITE_LASTMOD,
       changeFrequency: "yearly",
