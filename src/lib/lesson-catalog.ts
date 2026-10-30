@@ -67,7 +67,7 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
     level: "intermediate",
     minutes: 25,
     isFree: false,
-    status: "coming-soon",
+    status: "live",
   },
   {
     id: "platform-playbooks",
