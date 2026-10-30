@@ -93,7 +93,7 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
     level: "advanced",
     minutes: 25,
     isFree: false,
-    status: "coming-soon",
+    status: "live",
   },
   {
     id: "running-an-aeo-program",
