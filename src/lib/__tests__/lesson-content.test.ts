@@ -94,7 +94,6 @@ describe("lesson registry", () => {
     expect(isLive(l)).toBe(true);
     expect(getLesson("nope")).toBeUndefined();
     expect(isLive(undefined)).toBe(false);
-    expect(isLive(getLesson("platform-playbooks"))).toBe(false);
   });
 });
 

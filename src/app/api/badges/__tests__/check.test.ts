@@ -2,6 +2,13 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { BADGE_DEFINITIONS } from "@/lib/gamification";
 import { LESSONS, isLive, type LiveLesson } from "@/lib/lessons";
 
+// A lesson forced to "coming soon", so the coming-soon branch stays tested once every real lesson is live.
+const { SOON_ID } = vi.hoisted(() => ({ SOON_ID: "running-an-aeo-program" }));
+vi.mock("@/lib/lesson-catalog", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/lesson-catalog")>();
+  const LESSON_CATALOG = actual.LESSON_CATALOG.map((l) => (l.id === SOON_ID ? { ...l, status: "coming-soon" as const } : l));
+  return { ...actual, LESSON_CATALOG };
+});
 vi.mock("next-auth", () => ({ getServerSession: vi.fn() }));
 vi.mock("@/lib/auth", () => ({ authOptions: {} }));
 vi.mock("@/lib/subscription", () => ({ checkSubscription: vi.fn() }));
@@ -40,7 +47,6 @@ const nameOf = (criteria: string) => BADGE_DEFINITIONS.find((b) => b.criteria ==
 const live = LESSONS.filter(isLive) as LiveLesson[];
 const FREE = live.find((l) => l.isFree)!;
 const PAID = live.find((l) => !l.isFree)!;
-const SOON = LESSONS.find((l) => l.status === "coming-soon")!;
 const FREE_TOTAL = FREE.content.audit.length;
 const PAID_TOTAL = PAID.content.audit.length;
 
@@ -109,7 +115,7 @@ describe("POST /api/badges/check", () => {
   });
 
   it("rejects a coming-soon lesson with 400", async () => {
-    const res = await post({ lessonId: SOON.id, score: 0, total: 10 });
+    const res = await post({ lessonId: SOON_ID, score: 0, total: 10 });
     expect(res.status).toBe(400);
     expect(prisma.userBadge.create).not.toHaveBeenCalled();
   });

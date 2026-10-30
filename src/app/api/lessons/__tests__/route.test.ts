@@ -1,5 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
+// A lesson forced to "coming soon", so the coming-soon branch stays tested once every real lesson is live.
+const { SOON_ID } = vi.hoisted(() => ({ SOON_ID: "running-an-aeo-program" }));
+vi.mock("@/lib/lesson-catalog", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/lesson-catalog")>();
+  const LESSON_CATALOG = actual.LESSON_CATALOG.map((l) => (l.id === SOON_ID ? { ...l, status: "coming-soon" as const } : l));
+  return { ...actual, LESSON_CATALOG };
+});
 vi.mock("next-auth", () => ({
   getServerSession: vi.fn(),
 }));
@@ -90,10 +97,10 @@ describe("GET /api/lessons/[id]", () => {
 
   it("returns catalog data, without content, for a coming-soon lesson", async () => {
     mockedGetServerSession.mockResolvedValue(null);
-    const { response, body } = await get("structured-data-and-entities");
+    const { response, body } = await get(SOON_ID);
     expect(response.status).toBe(200);
     expect(body.status).toBe("coming-soon");
-    expect(body.district).toBe("The Schema Works");
+    expect(body.district).toBe("The Citadel");
     expect("content" in body).toBe(false);
   });
 
