@@ -9,8 +9,9 @@ import CodeBlock from "@/components/player/CodeBlock";
 import { SourceLink } from "@/components/player/ConceptCard";
 import { pageMetadata } from "@/lib/seo";
 import { breadcrumbSchema, definedTermSchema } from "@/lib/schema";
-import { GLOSSARY, getTerm } from "@/lib/glossary";
+import { GLOSSARY, getTerm, glossaryTitle } from "@/lib/glossary";
 import { LESSON_CATALOG, lessonPath, FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
+import { getPostBySlug } from "@/lib/blog-posts";
 
 type Params = { params: Promise<{ term: string }> };
 
@@ -30,7 +31,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const t = getTerm((await params).term);
   if (!t) return { title: "Term not found", robots: { index: false, follow: true } };
   return pageMetadata({
-    title: `What is ${t.term}? AEO glossary`,
+    title: glossaryTitle(t),
     description: metaDescription(t.definition),
     path: `/glossary/${t.slug}`,
   });
@@ -60,6 +61,7 @@ export default async function TermPage({ params }: Params) {
   const t = getTerm((await params).term);
   if (!t) notFound();
   const lesson = t.lesson ? LESSON_CATALOG.find((l) => l.id === t.lesson) : undefined;
+  const guide = t.guide ? getPostBySlug(t.guide) : undefined;
   const related = t.related.map(getTerm).filter((r): r is NonNullable<typeof r> => !!r);
 
   return (
@@ -96,6 +98,15 @@ export default async function TermPage({ params }: Params) {
           <section aria-labelledby="example" className="mb-12">
             <h2 id="example" className="font-display text-2xl font-light text-sand-100 mb-4">Example</h2>
             <CodeBlock language={t.example.language ?? "text"} caption={t.example.label} code={t.example.body} />
+          </section>
+        )}
+
+        {guide && (
+          <section aria-label="Full guide" className="card-ancient p-6 mb-6">
+            <p className="font-body text-xs uppercase tracking-[0.2em] text-cyan-500 mb-2">Read the full guide</p>
+            <p className="font-body text-sand-300">
+              <Link href={`/blog/${guide.slug}`} className="text-cyan-400 underline underline-offset-4">{guide.title}</Link>
+            </p>
           </section>
         )}
 

@@ -3,6 +3,7 @@ import type { GlossaryTerm } from "@/lib/glossary-types";
 export const term: GlossaryTerm = {
   slug: "crawl-budget",
   term: "Crawl budget",
+  question: "What is crawl budget?",
   definition:
     "Crawl budget is, in Google's definition, the set of URLs that Google can and wants to crawl on a site, set by its crawl capacity limit and crawl demand.",
   explanation:

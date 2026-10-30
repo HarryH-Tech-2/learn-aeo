@@ -3,6 +3,7 @@ import type { GlossaryTerm } from "@/lib/glossary-types";
 export const term: GlossaryTerm = {
   slug: "structured-data",
   term: "Structured data",
+  question: "What is structured data?",
   aka: ["Schema markup"],
   definition:
     "Structured data is machine-readable code on a page, usually schema.org vocabulary in JSON-LD, that labels what the page is about for search engines.",

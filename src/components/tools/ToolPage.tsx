@@ -4,7 +4,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
 import { breadcrumbSchema, faqSchema, webApplicationSchema } from "@/lib/schema";
-import { toolPath, type ToolMeta } from "@/lib/tools";
+import { TOOL_RELATED, toolPath, type ToolMeta } from "@/lib/tools";
+import { getTerm } from "@/lib/glossary";
+import { getPostBySlug } from "@/lib/blog-posts";
 import { absoluteUrl } from "@/lib/site";
 import { FIRST_LESSON_PATH, LESSON_CATALOG } from "@/lib/lesson-catalog";
 
@@ -27,6 +29,12 @@ export default function ToolPage({
   howItWorks: ReactNode;
   faqs: ToolFaq[];
 }) {
+  // Glossary terms by their name, posts by their title; a path that no longer resolves is skipped.
+  const related = (TOOL_RELATED[tool.slug] ?? []).flatMap((href) => {
+    const [, kind, slug] = href.split("/");
+    const label = kind === "glossary" ? getTerm(slug)?.term : getPostBySlug(slug)?.title;
+    return label ? [{ href, label }] : [];
+  });
   const crumbs = [
     { name: "Home", path: "/" },
     { name: "Tools", path: "/tools" },
@@ -55,6 +63,19 @@ export default function ToolPage({
           <h2 className="font-display text-3xl font-light text-sand-100 mb-5">How it works</h2>
           <div className="font-body text-sand-400 leading-relaxed space-y-4 max-w-3xl">{howItWorks}</div>
         </section>
+
+        {related.length > 0 && (
+          <section className="mb-16">
+            <h2 className="font-display text-3xl font-light text-sand-100 mb-5">Related reading</h2>
+            <ul className="font-body text-sand-300 space-y-2 list-disc pl-6">
+              {related.map((r) => (
+                <li key={r.href}>
+                  <Link href={r.href} className="text-cyan-400 underline underline-offset-4">{r.label}</Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         <section className="mb-16">
           <h2 className="font-display text-3xl font-light text-sand-100 mb-5">Questions</h2>

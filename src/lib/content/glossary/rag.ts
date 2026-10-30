@@ -3,6 +3,7 @@ import type { GlossaryTerm } from "@/lib/glossary-types";
 export const term: GlossaryTerm = {
   slug: "rag",
   term: "Retrieval-augmented generation",
+  question: "What is RAG (retrieval-augmented generation)?",
   aka: ["RAG"],
   definition:
     "RAG is a method where an AI system first retrieves relevant passages from an index, then generates its answer using those passages as context.",

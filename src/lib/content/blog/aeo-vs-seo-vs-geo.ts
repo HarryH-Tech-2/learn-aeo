@@ -11,6 +11,7 @@ export const post: BlogPost = {
     "SEO is optimizing for ranked search results; AEO (answer engine optimization) and GEO (generative engine optimization) are newer labels for optimizing to be used and cited in AI-written answers. AEO and GEO have no official definitions and mostly describe the same work; GEO's clearest definition comes from a 2023 research paper by Aggarwal et al. All three rest on the same foundation: crawlable, indexable, genuinely useful pages.",
   date: "October 28, 2026",
   publishedAt: "2026-10-28",
+  updatedAt: "2026-10-30",
   category: "Basics",
   image: "/blog/aeo-vs-seo-vs-geo.webp",
   imageAlt: "Three glowing glass pillars: a ranked list of results, a single chat answer, and a network of AI nodes, joined by a gold line",
@@ -73,7 +74,7 @@ The paper names the systems it studies: "We dub these systems generative engines
 What the paper found:
 
 - **A benchmark.** The authors built GEO-bench, "a benchmark consisting of 10000 queries from diverse domains and sources."
-- **Content changes can help.** The abstract reports that "GEO can boost visibility by up to 40% in generative engine responses." The methods tested included adding quotations, statistics and citations to sources.
+- **Content changes can help.** The abstract reports that "GEO can boost visibility by up to 40% in generative engine responses." That figure comes from the paper's own benchmark, mostly on a generative engine the authors built. The methods tested included adding quotations, statistics and citations to sources.
 - **One real engine.** On Perplexity.ai, "Quotation Addition performs best in Position-Adjusted Word Count with a 22% improvement over the baseline."
 - **Keyword stuffing doesn't carry over.** For that classic tactic, the authors report "such methods offer little to no improvement."
 - **Smaller sites gained more.** The paper says "lower-ranked websites, which typically struggle for visibility, benefit significantly more from GEO."
@@ -102,7 +103,7 @@ None of this is new to an SEO. Here's how the shared work splits:
 | --- | --- | --- |
 | Crawl access | Let Googlebot and Bingbot in | Decide on AI search crawlers too, such as [OAI-SearchBot](/glossary/oai-searchbot) and [PerplexityBot](/glossary/perplexitybot) |
 | Indexing | Pages must be indexed | Same; Google's AI features draw on its index |
-| Content | Helpful, original pages | Passages that still make sense when lifted out on their own |
+| Content | Helpful, original pages | Clear answers that make sense when quoted on their own |
 | Structured data | Markup that matches the page | Same rule: Google asks that "all the content in your markup is also visible on your web page" |
 | Snippet controls | nosnippet, max-snippet, noindex | Google lists these as the controls for your content in its AI features |
 | Measurement | Rankings and clicks | Citations, cited pages and brand mentions |
@@ -113,7 +114,7 @@ Four things are genuinely new, whichever acronym you use.
 
 **1. You compete for a citation, not a position.** An answer links to the sources it relied on, not to every page it found. OpenAI notes that "The number of sources is often greater than the number of citations," so a page can be read and still not get the link.
 
-**2. Passages are the unit.** Microsoft's post says "AI assistants don't read a page top to bottom like a person would" and recommends "Sentences that make sense even when pulled out of context." Google says its AI Mode uses a "query fan-out technique, breaking down your question into subtopics," so a single page may be found through a search you never targeted. See [query fan-out](/glossary/query-fan-out) and [passage ranking](/glossary/passage-ranking).
+**2. Microsoft says passages are the unit.** Its post says "AI assistants don't read a page top to bottom like a person would" and recommends "Sentences that make sense even when pulled out of context." Google's AI guide adds a caution for Google Search: "There's no requirement to break your content into tiny pieces for AI to better understand it." Google also says its AI Mode uses a "query fan-out technique, breaking down your question into subtopics," so a single page may be found through a search you never targeted. See [query fan-out](/glossary/query-fan-out) and [passage ranking](/glossary/passage-ranking).
 
 **3. More crawlers matter.** Each engine has its own bots with their own rules. OpenAI says "Sites that are opted out of OAI-SearchBot will not be shown in ChatGPT search answers." Perplexity says PerplexityBot "is designed to surface and link websites in search results on Perplexity." A [robots.txt](/glossary/robots-txt) rule written years ago can quietly remove you from an engine. Our [AI crawler checker](/tools/ai-crawler-checker) shows what your file allows.
 
@@ -127,6 +128,14 @@ What you shouldn't do is chase tricks sold under any of these names. Google's sp
 
 Call it AEO, GEO or plain SEO. The job is the same: be the clearest, most trustworthy source for the questions your buyers ask, and make sure every engine can reach it.`,
   sources: [
+    {
+      title: "Optimizing your website for generative AI features on Google Search",
+      publisher: "Google Search Central",
+      url: "https://developers.google.com/search/docs/fundamentals/ai-optimization-guide",
+      date: "2026-07-10",
+      dateKind: "updated",
+      accessed: "2026-10-30",
+    },
     {
       title: "GEO: Generative Engine Optimization (Aggarwal et al.)",
       publisher: "arXiv",

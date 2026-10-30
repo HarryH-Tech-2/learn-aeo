@@ -156,7 +156,8 @@ export default function PricingSection({ headingAs: Heading = "h2" }: { headingA
     <section id="pricing" className="relative py-20">
       <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 80% 50% at 50% 50%, rgba(30,58,95,0.08) 0%, transparent 70%)" }} />
 
-      <InView className="relative max-w-7xl mx-auto px-6 lg:px-8" margin="-100px">
+      {/* On /pricing the section is the top of the page: start the entrance on first paint, not after hydration. */}
+      <InView className={`relative max-w-7xl mx-auto px-6 lg:px-8 ${Heading === "h1" ? "is-inview" : ""}`} margin="-100px">
         <Suspense>
           <CheckoutNotice />
         </Suspense>

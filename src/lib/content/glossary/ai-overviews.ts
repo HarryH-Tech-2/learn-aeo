@@ -3,6 +3,8 @@ import type { GlossaryTerm } from "@/lib/glossary-types";
 export const term: GlossaryTerm = {
   slug: "ai-overviews",
   term: "AI Overviews",
+  guide: "get-cited-in-google-ai-overviews",
+  question: "What are AI Overviews?",
   definition:
     "AI Overviews are AI-generated summaries that Google shows in some search results, with links to the web pages that support the answer.",
   explanation:

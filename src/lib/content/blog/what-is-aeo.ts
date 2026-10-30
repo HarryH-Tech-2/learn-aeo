@@ -11,6 +11,7 @@ export const post: BlogPost = {
     "Answer engine optimization (AEO) is the practice of making your content easy for AI-powered search products, such as Google's AI Overviews, Copilot Search, ChatGPT search and Perplexity, to find, use and cite in the answers they write. It has no single official definition: it's an industry label for SEO work aimed at being a cited source, not just a ranked link.",
   date: "October 28, 2026",
   publishedAt: "2026-10-28",
+  updatedAt: "2026-10-30",
   category: "Basics",
   image: "/blog/what-is-aeo.webp",
   imageAlt: "A search bar pouring light into one answer card, which lifts a single gold page from many blue ones",
@@ -73,14 +74,14 @@ What does change:
 
 | | Classic SEO | AEO |
 | --- | --- | --- |
-| Unit that wins | The page, as a ranked result | A passage the engine can lift and cite |
+| Unit that wins | The page, as a ranked result | A clear answer the engine can quote and cite |
 | Main question | Where do I rank? | Am I cited, mentioned, or absent? |
 | Who visits | Googlebot, Bingbot | Those, plus AI search crawlers such as [OAI-SearchBot](/glossary/oai-searchbot) and [PerplexityBot](/glossary/perplexitybot) |
 | Reporting | Rankings, clicks, impressions | Citations, cited pages, [brand mentions](/glossary/brand-mention) |
 
 Two points from the table are worth expanding.
 
-**Passages matter more.** The Microsoft Advertising post puts it plainly: "AI assistants don't read a page top to bottom like a person would." It says they "break content into smaller, usable pieces" and recommends "Sentences that make sense even when pulled out of context."
+**Microsoft says passages matter more.** Its Microsoft Advertising post puts it plainly: "AI assistants don't read a page top to bottom like a person would." It says they "break content into smaller, usable pieces" and recommends "Sentences that make sense even when pulled out of context." That is Microsoft's advice for Copilot and Bing. Google's guide to its own AI features says the opposite for Google Search: "There's no requirement to break your content into tiny pieces for AI to better understand it." Write clear, self-contained answers for readers first; there's no need to cut pages into pieces.
 
 **Retrieved is not the same as cited.** OpenAI's web search guide notes that "The number of sources is often greater than the number of citations." Your page can be read and still not get the link. And an answer can name your brand without linking to you at all.
 
@@ -119,6 +120,14 @@ Start with the checks that can rule you out entirely:
 
 Then decide how far you want to go. If you're weighing the terms, our post on [AEO vs SEO vs GEO](/blog/aeo-vs-seo-vs-geo) compares them side by side.`,
   sources: [
+    {
+      title: "Optimizing your website for generative AI features on Google Search",
+      publisher: "Google Search Central",
+      url: "https://developers.google.com/search/docs/fundamentals/ai-optimization-guide",
+      date: "2026-07-10",
+      dateKind: "updated",
+      accessed: "2026-10-30",
+    },
     {
       title: "AI features and your website",
       publisher: "Google Search Central",

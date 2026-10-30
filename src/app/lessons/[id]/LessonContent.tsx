@@ -15,7 +15,7 @@ import { BTN_PRIMARY, BTN_SECONDARY, EYEBROW, FOCUS } from "@/components/player/
 import { trackEvent } from "@/lib/analytics";
 import { submitAuditResult } from "@/lib/audit-submit";
 import { HttpError, fetchJson } from "@/lib/fetch-json";
-import { nextLessonMeta } from "@/lib/lesson-catalog";
+import { lessonMeta, nextLessonMeta } from "@/lib/lesson-catalog";
 import type { LessonMeta } from "@/lib/lesson-types";
 import type { LiveLesson } from "@/lib/lessons";
 import type { XpClaim } from "@/lib/xp-claims";
@@ -49,7 +49,8 @@ function Shell({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function LessonContent() {
+/** `overview`: server-rendered text about the lesson (LessonOverview), shown while it loads and under the player. */
+export default function LessonContent({ overview }: { overview?: React.ReactNode }) {
   const params = useParams();
   const id = String(params.id);
   const { data: session, status } = useSession();
@@ -159,6 +160,24 @@ export default function LessonContent() {
   }
 
   if (!lesson || status === "loading") {
+    // The server renders this state, so it carries the lesson's title (the page's h1) and overview for
+    // crawlers that don't run JavaScript; the player's own header replaces it once the lesson loads.
+    const meta = lessonMeta(id);
+    if (meta && overview) {
+      return (
+        <Shell>
+          <header className="mb-8">
+            <p className={`${EYEBROW} mb-2`}>{meta.district}</p>
+            <h1 className="font-display text-3xl md:text-4xl text-sand-100">{meta.title}</h1>
+            <p className="mt-1 font-sans text-sm text-sand-400">{meta.minutes} min</p>
+          </header>
+          <p className="font-sans text-sm text-sand-400" role="status">
+            Loading lesson…
+          </p>
+          {overview}
+        </Shell>
+      );
+    }
     return (
       <div className="min-h-screen flex items-center justify-center bg-obsidian" role="status">
         <div className="flex flex-col items-center gap-4">
@@ -255,6 +274,7 @@ export default function LessonContent() {
         upgrade={{ paid, offer }}
         next={nextLessonMeta(id)}
       />
+      {overview}
     </Shell>
   );
 }

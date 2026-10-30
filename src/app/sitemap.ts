@@ -9,15 +9,21 @@ import type { GlossaryTerm } from "@/lib/glossary-types";
 // Real edit dates, not `new Date()`: Google treats per-request timestamps as a weak freshness
 // signal. Bump a date when those pages are substantively edited.
 // Marketing and legal pages: Learn AEO copy (Plans 3–5).
-const SITE_LASTMOD = new Date("2026-10-28");
-// The home page: the City of Answers hero and the tools section (Plan 4).
-const HOME_LASTMOD = new Date("2026-10-28");
-// The lesson catalog and lessons 1–3.
-const LESSONS_LASTMOD = new Date("2026-10-27");
+const SITE_LASTMOD = new Date("2026-10-30");
+// The home page: the gate hero and the course in four parts.
+const HOME_LASTMOD = new Date("2026-10-30");
+// The lesson catalog and lessons 1–8 (all live).
+const LESSONS_LASTMOD = new Date("2026-10-30");
 // Tool pages go live in Plan 6; bump when one changes.
 const TOOLS_LASTMOD = new Date("2026-10-28");
-// The glossary terms (sources checked 2026-10-28). Bump when a term is revised.
+// The glossary index. Each term page is dated by the day its sources were last checked.
 const GLOSSARY_LASTMOD = new Date("2026-10-28");
+
+/** The latest `accessed` date among a term's sources, or the index date when there are none. */
+function termLastmod(t: Partial<Pick<GlossaryTerm, "sources">>): Date {
+  const latest = (t.sources ?? []).map((s) => s.accessed).sort().at(-1);
+  return latest ? new Date(latest) : GLOSSARY_LASTMOD;
+}
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return buildSitemap({ posts: blogPosts, tools: TOOLS, glossary: GLOSSARY });
@@ -31,7 +37,7 @@ export function buildSitemap({
 }: {
   posts: Pick<BlogPost, "slug" | "publishedAt" | "updatedAt">[];
   tools: readonly ToolMeta[];
-  glossary: readonly Pick<GlossaryTerm, "slug">[];
+  glossary: readonly (Pick<GlossaryTerm, "slug"> & Partial<Pick<GlossaryTerm, "sources">>)[];
 }): MetadataRoute.Sitemap {
   const baseUrl = SITE.url;
 
@@ -136,7 +142,7 @@ export function buildSitemap({
   const glossaryPages: MetadataRoute.Sitemap = glossary.length
     ? [
         { url: `${baseUrl}/glossary`, lastModified: GLOSSARY_LASTMOD, changeFrequency: "monthly", priority: 0.7 },
-        ...glossary.map((t) => ({ url: `${baseUrl}/glossary/${t.slug}`, lastModified: GLOSSARY_LASTMOD, changeFrequency: "monthly" as const, priority: 0.6 })),
+        ...glossary.map((t) => ({ url: `${baseUrl}/glossary/${t.slug}`, lastModified: termLastmod(t), changeFrequency: "monthly" as const, priority: 0.6 })),
       ]
     : [];
 

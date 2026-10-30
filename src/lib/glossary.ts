@@ -43,3 +43,10 @@ export const GLOSSARY: readonly GlossaryTerm[] = [
 export function getTerm(slug: string): GlossaryTerm | undefined {
   return GLOSSARY.find((t) => t.slug === slug);
 }
+
+/** A term page's title: its question, plus "AEO glossary" when that still fits in 60 characters with the site name. */
+export function glossaryTitle(t: GlossaryTerm): string {
+  const question = t.question ?? `What is ${t.term}?`;
+  const withLabel = `${question} AEO glossary`;
+  return `${withLabel} | Learn AEO`.length <= 60 ? withLabel : question;
+}

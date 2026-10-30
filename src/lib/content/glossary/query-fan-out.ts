@@ -3,6 +3,7 @@ import type { GlossaryTerm } from "@/lib/glossary-types";
 export const term: GlossaryTerm = {
   slug: "query-fan-out",
   term: "Query fan-out",
+  question: "What is query fan-out?",
   definition:
     "Query fan-out is a technique where an AI search system splits one question into several related searches across subtopics, then combines the results into one answer.",
   explanation:

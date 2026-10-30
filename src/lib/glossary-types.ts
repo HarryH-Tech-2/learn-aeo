@@ -7,6 +7,8 @@ export type GlossaryTerm = {
   slug: string;
   /** The term as it should be displayed, e.g. "Query fan-out". */
   term: string;
+  /** The page title, when "What is <term>?" doesn't read naturally (an article, a plural, an acronym first). */
+  question?: string;
   /** Other names people search for, e.g. ["GEO"] on generative engine optimization. */
   aka?: string[];
   /** One sentence, at most 30 words, that starts with the term (or one of its aka names) and answers "what is it?". */
@@ -17,6 +19,8 @@ export type GlossaryTerm = {
   example?: { label: string; body: string; language?: CodeLanguage };
   /** Slugs of related terms (each must exist in the glossary). */
   related: string[];
+  /** The slug of a blog post that covers the term in full, linked as "Read the full guide". */
+  guide?: string;
   /** The lesson id that covers it, from src/lib/lesson-catalog.ts. */
   lesson?: string;
   /** At least one; every factual claim in definition/explanation/example traces to one of these. */

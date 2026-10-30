@@ -3,6 +3,8 @@ import type { GlossaryTerm } from "@/lib/glossary-types";
 export const term: GlossaryTerm = {
   slug: "llmo",
   term: "LLM optimization",
+  guide: "aeo-vs-seo-vs-geo",
+  question: "What is LLMO (LLM optimization)?",
   aka: ["LLMO", "Large language model optimization"],
   definition:
     "LLMO is a vendor term for optimizing your content and website so large language model tools mention and cite you more often in their answers.",

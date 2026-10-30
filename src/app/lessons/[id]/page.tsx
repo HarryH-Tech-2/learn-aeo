@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { LESSON_CATALOG, lessonMeta, lessonPath } from "@/lib/lesson-catalog";
 import LessonContent from "./LessonContent";
+import LessonOverview from "./LessonOverview";
+import { getLesson, isLive } from "@/lib/lessons";
 import JsonLd from "@/components/JsonLd";
 import { learningResourceSchema } from "@/lib/schema";
 import { pageMetadata } from "@/lib/seo";
@@ -45,6 +47,9 @@ export default async function LessonPage({
 }) {
   const { id } = await params;
   const lesson = lessonMeta(id);
+  // Free lessons are public, so they get server-rendered text; paid ones redirect signed-out visitors.
+  const full = getLesson(id);
+  const overview = isLive(full) && full.isFree ? <LessonOverview lesson={full} /> : undefined;
 
   return (
     <>
@@ -52,7 +57,7 @@ export default async function LessonPage({
         <JsonLd data={learningResourceSchema(lesson)} />
       )}
       <Suspense>
-        <LessonContent />
+        <LessonContent overview={overview} />
       </Suspense>
     </>
   );

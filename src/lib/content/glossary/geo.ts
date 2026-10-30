@@ -3,6 +3,8 @@ import type { GlossaryTerm } from "@/lib/glossary-types";
 export const term: GlossaryTerm = {
   slug: "geo",
   term: "Generative engine optimization",
+  guide: "aeo-vs-seo-vs-geo",
+  question: "What is GEO (generative engine optimization)?",
   aka: ["GEO"],
   definition:
     "GEO is the practice of improving how visible your content is inside the answers that generative AI search engines write, a term introduced in a 2023 research paper.",

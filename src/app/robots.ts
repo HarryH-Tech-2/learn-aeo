@@ -1,9 +1,9 @@
 import type { MetadataRoute } from "next";
-import { SITE, absoluteUrl } from "@/lib/site";
+import { absoluteUrl } from "@/lib/site";
 import { AI_CRAWLERS } from "@/lib/ai-crawlers";
 
 // Pages that are personal or transactional — no value in any index.
-const PRIVATE = ["/dashboard", "/account", "/certificate", "/checkout", "/login", "/api/"];
+const PRIVATE = ["/dashboard", "/account", "/certificate", "/checkout", "/login", "/welcome", "/admin", "/api/"];
 
 // Every AI crawler and token in src/lib/ai-crawlers.ts gets an explicit group with the same
 // allow/disallow as everyone else: it signals that the public content is meant to be read,
@@ -16,6 +16,5 @@ export default function robots(): MetadataRoute.Robots {
       ...AI_CRAWLERS.map(({ token }) => ({ userAgent: token, allow: "/", disallow: PRIVATE })),
     ],
     sitemap: absoluteUrl("/sitemap.xml"),
-    host: SITE.url,
   };
 }

@@ -11,6 +11,7 @@ export const post: BlogPost = {
     "Google says there are no extra requirements: a page must be indexed and eligible to show in Search with a snippet. Beyond that, the levers are ordinary SEO practices Google lists, and inclusion is never guaranteed.",
   date: "October 28, 2026",
   publishedAt: "2026-10-28",
+  updatedAt: "2026-10-30",
   category: "Platforms",
   image: "/blog/get-cited-in-google-ai-overviews.webp",
   imageAlt: "A search results page whose AI summary at the top links by a gold thread to the one result it cites",
@@ -74,7 +75,7 @@ Google's AI features page lists its best practices. They are ordinary SEO work, 
 
 Google also suggests verifying your site in Search Console so you can spot and diagnose technical issues quickly.
 
-Just as useful is what you can skip. Google says: "You don't need to create new machine readable files, AI text files, or markup to appear in these features." An [llms.txt](/glossary/llms-txt) file may have other uses, but Google does not ask for one here.
+Just as useful is what you can skip. Google says: "You don't need to create new machine readable files, AI text files, or markup to appear in these features." An [llms.txt](/glossary/llms-txt) file may have other uses, but Google does not ask for one here. Nor do you need to split pages up: Google's guide to optimizing for its generative AI features says "There's no requirement to break your content into tiny pieces for AI to better understand it."
 
 Past these basics, the work is the same as for any answer engine: write pages that answer a question directly and clearly enough to be quoted as a passage. That is practice, not a documented Google rule, and the free lesson on [how answer engines choose sources](/lessons/how-answer-engines-choose-sources) explains why it tends to matter.
 
@@ -120,6 +121,14 @@ Google also claims "when people click from search results pages with AI Overview
 Be indexed, be snippet-eligible, follow the SEO basics Google lists, and don't block yourself by accident with \`nosnippet\` or a CDN rule. Leave Google-Extended out of your AI Overviews decisions, skip new AI files, and measure through the Web search type in Search Console. Nothing on that list guarantees a citation, and Google says as much.
 `,
   sources: [
+    {
+      title: "Optimizing your website for generative AI features on Google Search",
+      publisher: "Google Search Central",
+      url: "https://developers.google.com/search/docs/fundamentals/ai-optimization-guide",
+      date: "2026-07-10",
+      dateKind: "updated",
+      accessed: "2026-10-30",
+    },
     {
       title: "AI features and your website",
       publisher: "Google Search Central",

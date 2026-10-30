@@ -3,6 +3,7 @@ import type { GlossaryTerm } from "@/lib/glossary-types";
 export const term: GlossaryTerm = {
   slug: "zero-click-search",
   term: "Zero-click search",
+  question: "What is zero-click search?",
   aka: ["Zero-click"],
   definition:
     "Zero-click search is a search that ends without the user clicking on any of the results shown on the search results page.",

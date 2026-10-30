@@ -22,21 +22,21 @@ export const TOOLS: readonly ToolMeta[] = [
   {
     slug: "llms-txt-generator",
     name: "llms.txt Generator",
-    summary: "Fill in a short form to build a valid llms.txt file you can copy or download.",
+    summary: "Fill in a short form to build an llms.txt file in the llmstxt.org format, ready to copy or download.",
     kind: "client",
     status: "live",
   },
   {
     slug: "schema-generator",
     name: "Schema Generator",
-    summary: "Build Organization, Article, FAQPage, HowTo or Product JSON-LD, with hints that catch common mistakes.",
+    summary: "Build Organization, Article or Product JSON-LD, with hints that catch common mistakes.",
     kind: "client",
     status: "coming-soon",
   },
   {
     slug: "citability-checker",
     name: "Citability Checker",
-    summary: "Enter a URL to see how easily ChatGPT and other AI search tools can lift and cite its passages, with specific fixes.",
+    summary: "Enter a URL to see how clearly the page answers questions and backs its claims, with specific fixes.",
     kind: "server",
     status: "coming-soon",
   },
@@ -45,3 +45,17 @@ export const TOOLS: readonly ToolMeta[] = [
 export function toolPath(slug: string): string {
   return `/tools/${slug}`;
 }
+
+/** Further reading for each tool page: glossary terms and blog posts that explain what it checks (paths). */
+export const TOOL_RELATED: Readonly<Record<string, readonly string[]>> = {
+  "ai-crawler-checker": [
+    "/glossary/robots-txt",
+    "/glossary/gptbot",
+    "/glossary/oai-searchbot",
+    "/glossary/claudebot",
+    "/glossary/perplexitybot",
+    "/glossary/google-extended",
+    "/blog/how-chatgpt-chooses-sources",
+  ],
+  "llms-txt-generator": ["/glossary/llms-txt", "/blog/llms-txt-explained", "/glossary/robots-txt", "/blog/what-is-aeo"],
+};

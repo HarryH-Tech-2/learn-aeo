@@ -3,6 +3,7 @@ import type { GlossaryTerm } from "@/lib/glossary-types";
 export const term: GlossaryTerm = {
   slug: "passage-ranking",
   term: "Passage ranking",
+  question: "What is passage ranking?",
   definition:
     "Passage ranking is Google's AI system for judging individual sections, or passages, of a web page to understand how relevant the page is to a search.",
   explanation:

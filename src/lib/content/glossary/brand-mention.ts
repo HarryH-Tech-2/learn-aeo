@@ -3,6 +3,7 @@ import type { GlossaryTerm } from "@/lib/glossary-types";
 export const term: GlossaryTerm = {
   slug: "brand-mention",
   term: "Brand mention",
+  question: "What is a brand mention?",
   definition:
     "A brand mention is your brand named in the text of an AI-generated answer, whether or not the answer links to your website.",
   explanation:

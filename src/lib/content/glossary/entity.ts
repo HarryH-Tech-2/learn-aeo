@@ -3,6 +3,7 @@ import type { GlossaryTerm } from "@/lib/glossary-types";
 export const term: GlossaryTerm = {
   slug: "entity",
   term: "Entity",
+  question: "What is an entity in search?",
   definition:
     "An entity is a real-world thing, such as a person, place, organization or product, that search systems recognize as distinct, rather than as a string of words.",
   explanation:

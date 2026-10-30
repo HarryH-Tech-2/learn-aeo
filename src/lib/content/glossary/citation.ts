@@ -3,6 +3,7 @@ import type { GlossaryTerm } from "@/lib/glossary-types";
 export const term: GlossaryTerm = {
   slug: "citation",
   term: "Citation",
+  question: "What is a citation in AI search?",
   aka: ["AI citation"],
   definition:
     "Citations are links an AI answer attaches to a specific source page, showing which page supports each part of the response.",

@@ -3,6 +3,7 @@ import type { GlossaryTerm } from "@/lib/glossary-types";
 export const term: GlossaryTerm = {
   slug: "user-agent",
   term: "User agent",
+  question: "What is a user agent?",
   aka: ["User-Agent header", "user-agent token"],
   definition:
     "A user agent is the name a crawler or browser identifies itself by: a full string in the HTTP User-Agent header, and a shorter product token used in robots.txt.",

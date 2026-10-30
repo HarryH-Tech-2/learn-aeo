@@ -3,6 +3,7 @@ import type { GlossaryTerm } from "@/lib/glossary-types";
 export const term: GlossaryTerm = {
   slug: "ai-share-of-voice",
   term: "AI share of voice",
+  question: "What is AI share of voice?",
   aka: ["AI SOV", "Share of voice in AI search"],
   definition:
     "AI share of voice is a vendor-defined metric comparing how often your brand appears in AI-generated answers with how often competitors appear, across a set of prompts.",

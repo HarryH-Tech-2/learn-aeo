@@ -16,7 +16,7 @@ const STILL_OPEN = "/hero/gate-open.webp";
 /**
  * The Gate behind the homepage hero copy, two silent videos made on Higgsfield. The intro (public/hero/gate.*,
  * closed-gate and open-gate stills as first and last frames) plays once: a glowing gateway opens onto an AI answer
- * engine citing its sources, and the waiting crowd walks through to learn. Then the loop (public/hero/gate-loop.*,
+ * engine citing its sources, and the waiting crowd walks through to learn. Then the loop (public/hero/gate-loop.*, loaded once the intro starts playing,
  * the open-gate still as first and last frame, the seam cross-faded) takes over: people keep walking in and light
  * keeps flowing from the pages into the answer, which cites one gold page as source [1]. The loop sits preloaded under the intro and starts the moment the
  * intro ends, so the hand-off has no cut. The glowing search bar types its question over the intro and sits just
@@ -61,6 +61,12 @@ export default function HeroVideo() {
       find = window.setTimeout(() => setFound(true), FIND_DELAY_MS);
     };
     const onLoopPlaying = () => setLooping(true);
+    // the loop only loads once the intro is playing, so its bytes don't compete with the first paint
+    const warmLoop = () => {
+      loop.preload = "auto";
+      loop.load();
+    };
+    video.addEventListener("playing", warmLoop, { once: true });
     video.addEventListener("ended", onEnded);
     loop.addEventListener("playing", onLoopPlaying);
 
@@ -91,6 +97,7 @@ export default function HeroVideo() {
 
     return () => {
       io.disconnect();
+      video.removeEventListener("playing", warmLoop);
       video.removeEventListener("ended", onEnded);
       loop.removeEventListener("playing", onLoopPlaying);
       document.removeEventListener("visibilitychange", sync);
@@ -120,7 +127,7 @@ export default function HeroVideo() {
         muted
         loop
         playsInline
-        preload="auto"
+        preload="none"
         poster={STILL_OPEN}
       >
         {!still && <source src="/hero/gate-loop.webm" type="video/webm" />}

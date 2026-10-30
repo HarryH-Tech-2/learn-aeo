@@ -3,6 +3,7 @@ import type { GlossaryTerm } from "@/lib/glossary-types";
 export const term: GlossaryTerm = {
   slug: "grounding",
   term: "Grounding",
+  question: "What is grounding in AI search?",
   definition:
     "Grounding is connecting an AI model's answer to retrieved sources, such as live search results, so its claims can be traced back to specific pages.",
   explanation:

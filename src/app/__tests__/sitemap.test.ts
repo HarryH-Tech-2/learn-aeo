@@ -58,3 +58,14 @@ describe("sitemap tools and dates", () => {
     }
   });
 });
+
+describe("sitemap glossary dates (SEO audit 2026-10-30)", () => {
+  it("dates each term by the day its sources were last checked, not one shared date", () => {
+    const entries = sitemap();
+    for (const t of GLOSSARY) {
+      const e = entries.find((x) => x.url === `${SITE.url}/glossary/${t.slug}`)!;
+      const checked = t.sources.map((s) => s.accessed).sort().at(-1)!;
+      expect(new Date(e.lastModified!).toISOString().slice(0, 10), t.slug).toBe(checked);
+    }
+  });
+});

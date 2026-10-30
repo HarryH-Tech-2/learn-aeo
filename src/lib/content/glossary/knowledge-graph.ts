@@ -3,6 +3,7 @@ import type { GlossaryTerm } from "@/lib/glossary-types";
 export const term: GlossaryTerm = {
   slug: "knowledge-graph",
   term: "Knowledge Graph",
+  question: "What is the Knowledge Graph?",
   aka: ["Google Knowledge Graph"],
   definition:
     "The Knowledge Graph is Google's database of billions of facts about people, places and things, which powers features such as knowledge panels in Google Search.",

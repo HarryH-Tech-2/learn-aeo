@@ -10,7 +10,7 @@ const TOOL = TOOLS.find((t) => t.slug === "llms-txt-generator")!;
 export const metadata: Metadata = pageMetadata({
   title: "llms.txt Generator: build your file free",
   description:
-    "Fill in a short form and get a valid llms.txt file in the llmstxt.org format, ready to copy or download. Free, runs in your browser.",
+    "Fill in a short form and get an llms.txt file in the llmstxt.org format, ready to copy or download. Free, runs in your browser.",
   path: "/tools/llms-txt-generator",
 });
 

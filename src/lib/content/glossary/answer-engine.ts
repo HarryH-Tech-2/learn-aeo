@@ -3,6 +3,7 @@ import type { GlossaryTerm } from "@/lib/glossary-types";
 export const term: GlossaryTerm = {
   slug: "answer-engine",
   term: "Answer engine",
+  question: "What is an answer engine?",
   definition:
     "Answer engines are search products that read web pages for the user and write a direct response, with links to the sources they drew on.",
   explanation:

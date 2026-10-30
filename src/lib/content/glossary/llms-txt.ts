@@ -3,6 +3,8 @@ import type { GlossaryTerm } from "@/lib/glossary-types";
 export const term: GlossaryTerm = {
   slug: "llms-txt",
   term: "llms.txt",
+  guide: "llms-txt-explained",
+  question: "llms.txt definition: the proposed file",
   definition:
     "llms.txt is a proposed markdown file, suggested by Jeremy Howard, that gives AI agents a short, curated guide to a site's most useful content.",
   explanation:

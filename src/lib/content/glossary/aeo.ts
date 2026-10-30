@@ -3,6 +3,8 @@ import type { GlossaryTerm } from "@/lib/glossary-types";
 export const term: GlossaryTerm = {
   slug: "aeo",
   term: "Answer engine optimization",
+  guide: "what-is-aeo",
+  question: "AEO definition: answer engine optimization",
   aka: ["AEO"],
   definition:
     "AEO is the practice of making your content easy for AI answer engines to find, understand and cite when they write a response to a question.",
