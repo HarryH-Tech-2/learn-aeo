@@ -34,7 +34,7 @@ describe("lesson catalog", () => {
       expect(l).toMatchObject({ id, district, title, level, minutes, isFree, order: i + 1 });
       expect(l.summary.length).toBeGreaterThan(10);
       expect(l.description.length).toBeGreaterThan(40);
-      expect(l.status).toBe(i <= 2 ? "live" : "coming-soon");
+      expect(l.status).toBe(i <= 3 ? "live" : "coming-soon");
     });
     expect(new Set(LESSON_CATALOG.map((l) => l.id)).size).toBe(8);
   });
