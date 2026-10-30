@@ -117,12 +117,18 @@ export const LESSON_8: LessonContent = {
       ],
       check: [
         {
-          kind: "order",
+          kind: "choice",
           id: "q-audit-order",
-          prompt: "Put the six audit areas in the order the course checks them.",
-          items: ["Access", "Content", "Structured data", "Authority", "Platforms", "Measurement"],
+          prompt: "Which audit area does the course check first, and why?",
+          options: [
+            "Content, because it is what engines quote",
+            "Access, because nothing else matters until bots can reach and index the pages",
+            "Authority, because AI answers lean on other sites",
+            "Measurement, because you need numbers before anything",
+          ],
+          answer: 1,
           explanation:
-            "From the door inwards: bots must reach the page, the page must be worth lifting, markup and other sites describe it, each platform is checked, and measurement shows what changed.",
+            "If a platform's bot can't reach a page, or the page isn't indexed, content, markup and authority can't show up on that platform. (The baseline is recorded before fixes, but the audit checks access first.)",
         },
         {
           kind: "choice",
@@ -161,7 +167,7 @@ export const LESSON_8: LessonContent = {
           term: "Impact and effort",
           summary: "After blockers, rank the remaining work by likely impact and effort, and drop the tactics the platforms say don't matter.",
           explanation:
-            "Put each finding in one of four boxes:\n\n- **Quick wins** (high impact, low effort): an answer-first rewrite of your top pages, fixing markup that contradicts the page.\n- **Projects** (high impact, high effort): original research for digital PR, a review program.\n- **Fill-ins** (low impact, low effort): do them when there is time.\n- **Drop** (low impact, high effort): stop.\n\nThe platforms help you fill the last box. Google's guide says: \"For Google Search, you can ignore tactics like \"chunking\" content, creating unnecessary AI text files (like llms.txt), or pursuing inauthentic mentions.\" It also reminds you that \"you don't need to accomplish everything in this guide in order to succeed on Google Search.\"",
+            "Put each finding in one of four boxes:\n\n- **Quick wins** (high impact, low effort): an answer-first opening for your three most important pages, fixing markup that contradicts the page.\n- **Projects** (high impact, high effort): original research for digital PR, a review program.\n- **Fill-ins** (low impact, low effort): do them when there is time.\n- **Drop** (low impact, high effort): stop.\n\nThe platforms help you fill the last box. Google's guide says: \"For Google Search, you can ignore tactics like \"chunking\" content, creating unnecessary AI text files (like llms.txt), or pursuing inauthentic mentions.\" It also reminds you that \"you don't need to accomplish everything in this guide in order to succeed on Google Search.\"",
           whyItMatters:
             "Every program has more ideas than time. A visible ranking makes the trade-offs explicit, so the team agrees on what isn't being done as well as what is.",
           pitfall:
@@ -318,7 +324,7 @@ export const LESSON_8: LessonContent = {
     id: "x-prioritize-audit",
     title: "Prioritize the audit",
     brief:
-      "You've audited Larkfield Tea (made up). The findings: OAI-SearchBot is disallowed in robots.txt; Product markup shows last year's prices; product pages open with three paragraphs of brand story before any facts; there is no Organization markup; there is no prompt set or baseline; and the agency wants to add an llms.txt file and \"chunk\" every page for AI. Turn this into a plan.",
+      "You've audited Larkfield Tea (made up). The findings: OAI-SearchBot is disallowed in robots.txt; Product markup shows last year's prices; all 400 product pages open with three paragraphs of brand story before any facts; there is no Organization markup; there is no prompt set or baseline; and the agency wants to add an llms.txt file and \"chunk\" every page for AI. Turn this into a plan.",
     steps: [
       {
         kind: "choice",
@@ -340,7 +346,7 @@ export const LESSON_8: LessonContent = {
         prompt: "Put each finding in its box.",
         pairs: [
           { term: "Product markup shows last year's prices", definition: "Quick win" },
-          { term: "Product pages bury the facts under brand story", definition: "Project" },
+          { term: "All 400 product pages bury the facts under brand story", definition: "Project" },
           { term: "Chunk every page for Google's AI", definition: "Drop" },
         ],
         explanation:
@@ -423,7 +429,7 @@ export const LESSON_8: LessonContent = {
     {
       kind: "choice",
       id: "a-blocker",
-      prompt: "Why do access blockers go before everything else?",
+      prompt: "Why do access blockers go before other improvements?",
       options: [
         "They are the most expensive fixes",
         "While a platform can't reach or show your pages, no other improvement can appear on it",

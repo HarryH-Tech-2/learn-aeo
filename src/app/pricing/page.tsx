@@ -23,8 +23,15 @@ const LAST = LESSON_CATALOG[LESSON_CATALOG.length - 1];
 /** What's included: lesson counts and district names from the catalog, never typed here. */
 const INCLUDED = [
   {
-    title: `${LESSON_CATALOG.length} lessons, ${LIVE.length} live now`,
-    body: `One lesson for each district of the City of Answers, from ${FIRST.district} (${titleMidSentence(FIRST.title)}) to ${LAST.district} (${titleMidSentence(LAST.title)}). The rest open as they are finished, at no extra cost.`,
+    title:
+      LIVE.length === LESSON_CATALOG.length
+        ? `All ${LESSON_CATALOG.length} lessons`
+        : `${LESSON_CATALOG.length} lessons, ${LIVE.length} live now`,
+    body: `One lesson for each district of the City of Answers, from ${FIRST.district} (${titleMidSentence(FIRST.title)}) to ${LAST.district} (${titleMidSentence(LAST.title)}). ${
+      LIVE.length === LESSON_CATALOG.length
+        ? "New lessons are added at no extra cost."
+        : "The rest open as they are finished, at no extra cost."
+    }`,
   },
   {
     title: "Checks and hands-on exercises",

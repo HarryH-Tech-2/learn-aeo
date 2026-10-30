@@ -8,6 +8,7 @@ vi.mock("@/components/AuthModal", () => ({ useAuthModal: () => ({ openAuthModal:
 import { renderToStaticMarkup } from "react-dom/server";
 import AboutContent from "@/app/about/AboutContent";
 import PricingFAQ from "@/components/PricingFAQ";
+import PricingPage from "@/app/pricing/page";
 import UpgradePanel from "@/components/lesson/UpgradePanel";
 import { LESSON_CATALOG } from "@/lib/lesson-catalog";
 import { buildLlmsTxt } from "@/lib/llms-txt";
@@ -32,6 +33,12 @@ describe("copy once the whole course is live", () => {
 
   it("the pricing FAQ doesn't mention remaining lessons", () => {
     expect(renderToStaticMarkup(<PricingFAQ />)).not.toMatch(STALE);
+  });
+
+  it("the pricing page doesn't say lessons are still opening", () => {
+    const html = renderToStaticMarkup(<PricingPage />);
+    expect(html).not.toMatch(STALE);
+    expect(html).not.toMatch(/live now|open as they are finished/i);
   });
 
   it("the upgrade panel doesn't say lessons are being released", () => {

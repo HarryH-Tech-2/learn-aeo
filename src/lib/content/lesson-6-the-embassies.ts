@@ -239,7 +239,7 @@ export const LESSON_6: LessonContent = {
         {
           id: "c-perplexity",
           term: "Perplexity",
-          summary: "Perplexity answers with numbered citations; PerplexityBot decides whether your site can appear, and Perplexity-User fetches pages for users.",
+          summary: "Perplexity answers with numbered citations; PerplexityBot is the bot it uses to surface and link sites, and Perplexity-User fetches pages for users.",
           explanation:
             "Perplexity's help center says \"Each answer includes numbered citations linking to the original sources\".\n\nIts crawler docs describe two agents. \"PerplexityBot is designed to surface and link websites in search results on Perplexity. It is not used to crawl content for AI foundation models.\" Perplexity recommends \"allowing PerplexityBot in your site's robots.txt file and permitting requests from our published IP ranges\". Perplexity-User \"supports user actions within Perplexity\" and \"is not used for web crawling or to collect content for training AI foundation models.\"",
           whyItMatters:
@@ -299,7 +299,7 @@ export const LESSON_6: LessonContent = {
           term: "A fair platform test",
           summary: "Ask each platform the same fixed questions in a fresh session, record the answer and its sources, and repeat on different days.",
           explanation:
-            "A single screenshot of a single answer proves very little. A test you can repeat looks like this:\n\n1. **Fix the questions**: write them down, word for word, before you start.\n2. **Use a fresh session**: logged out or in a clean profile, so past chats don't shape the answer.\n3. **Record everything**: the date, the platform, whether you're mentioned, which URLs are cited and in what order.\n4. **Repeat**: run the same set on several days before drawing conclusions.\n\nThe platforms themselves warn against trusting one answer. OpenAI's help center says: \"Search results and citations can be incomplete, outdated, or incorrect.\"",
+            "A single screenshot of a single answer proves very little. A test you can repeat looks like this:\n\n1. **Fix the questions**: write them down, word for word, before you start.\n2. **Use a fresh session**: logged out where the platform allows it, or a clean account with chat history and memory turned off, so past chats don't shape the answer.\n3. **Record everything**: the date, the platform, whether you're mentioned, which URLs are cited and in what order.\n4. **Repeat**: run the same set on several days before drawing conclusions.\n\nThe platforms themselves warn against trusting one answer. OpenAI's help center says: \"Search results and citations can be incomplete, outdated, or incorrect.\"",
           whyItMatters:
             "Without a fixed method, a team can find a screenshot to support any story. A repeatable test gives the same evidence to everyone, and Lesson 7 builds it into ongoing tracking.",
           pitfall:
@@ -326,7 +326,7 @@ export const LESSON_6: LessonContent = {
           prompt: "Put the steps of a fair platform test in order.",
           items: [
             "Write down the exact questions to ask",
-            "Open a fresh, logged-out session on each platform",
+            "Open a fresh session on each platform (logged out, or a clean account)",
             "Ask each question and record mentions and cited URLs",
             "Repeat the same set on several different days",
           ],
@@ -532,13 +532,12 @@ export const LESSON_6: LessonContent = {
       id: "a-order-diagnose",
       prompt: "You're missing from one platform's answers. Put the checks in a sensible order.",
       items: [
-        "Check robots.txt and your firewall let that platform's bot in",
-        "Check the page is in that platform's index",
+        "Check that platform's bot can reach the page and the page is in its index",
         "Rerun the fixed test on several days",
         "Only then review the content itself",
       ],
       explanation:
-        "Work from the door inwards: access, then the index, then confirm with repeated tests, and only then change the content.",
+        "Work from the door inwards: access and indexing, then confirm with repeated tests, and only then change the content.",
     },
     {
       kind: "choice",

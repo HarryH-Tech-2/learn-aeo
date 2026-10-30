@@ -596,7 +596,7 @@ export const LESSON_4: LessonContent = {
   example: {
     title: "Mailchimp's Organization markup",
     context:
-      "The JSON-LD on mailchimp.com's home page, fetched on 30 October 2026. The excerpt keeps both nodes of its @graph but leaves out the logo and four of the seven sameAs links, marked with …",
+      "The JSON-LD on mailchimp.com's home page, fetched on 30 October 2026. The excerpt keeps both nodes of its @graph but is shortened: it leaves out the logo, four of the seven sameAs links (marked with …), Intuit's url and tickerSymbol, and the WebSite node's url and name.",
     excerpt: {
       kind: "code",
       language: "json",

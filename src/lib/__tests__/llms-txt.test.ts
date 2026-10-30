@@ -1,4 +1,13 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
+
+// A lesson forced to "coming soon", so the coming-soon branch stays tested once every real lesson is live.
+vi.mock("@/lib/lesson-catalog", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/lesson-catalog")>();
+  const LESSON_CATALOG = actual.LESSON_CATALOG.map((l) =>
+    l.id === "running-an-aeo-program" ? { ...l, status: "coming-soon" as const } : l,
+  );
+  return { ...actual, LESSON_CATALOG };
+});
 import { buildLlmsTxt } from "@/lib/llms-txt";
 import { LESSON_CATALOG, lessonPath } from "@/lib/lesson-catalog";
 import { TOOLS, toolPath } from "@/lib/tools";
@@ -16,6 +25,7 @@ describe("buildLlmsTxt", () => {
   });
 
   it("links only lessons a signed-out visitor can open: free and live", () => {
+    expect(LESSON_CATALOG.some((l) => l.status === "coming-soon"), "no coming-soon lesson to test").toBe(true);
     for (const l of LESSON_CATALOG) {
       const link = `](${absoluteUrl(lessonPath(l.id))})`;
       const line = lines.find((x) => x.includes(l.title));

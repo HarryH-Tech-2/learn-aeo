@@ -2,9 +2,8 @@
 // Claims about Google Analytics, Search Console, Bing Webmaster Tools, HTTP and
 // crawler verification are tied to sources checked on the `accessed` date.
 // Mention rate, citation rate and share of voice are this course's own
-// definitions, given as formulas, not industry benchmarks. The regex in the
-// exercise was tested against the listed domains and lookalikes before
-// publishing. Larkfield Tea is the made-up shop from Lesson 4; its prompts,
+// definitions, given as formulas, not industry benchmarks. The regexes are
+// checked as GA4 applies them, as full matches (lesson-7-ga4-regex.test.ts). Larkfield Tea is the made-up shop from Lesson 4; its prompts,
 // results and log lines are invented, and its IP addresses come from the
 // documentation ranges (RFC 5737).
 
@@ -71,6 +70,13 @@ const GA4_CUSTOM_CHANNELS: Source = {
   title: "Custom channel groups",
   publisher: "Google Analytics Help",
   url: "https://support.google.com/analytics/answer/13051316",
+  accessed: ACCESSED,
+};
+
+const GA4_REGEX: Source = {
+  title: "About regular expressions (regex)",
+  publisher: "Google Analytics Help",
+  url: "https://support.google.com/analytics/answer/1034324",
   accessed: ACCESSED,
 };
 
@@ -262,12 +268,12 @@ export const LESSON_7: LessonContent = {
           term: "A custom AI channel",
           summary: "A custom channel group with a tight regex lets you choose exactly which assistants count, but the regex has to be precise.",
           explanation:
-            "If you want your own definition, Google Analytics lets you build a custom channel group: add a channel, choose \"matches regex\", list the assistants, and then \"reorder your channel list so that\" the AI channel appears above Referrals.\n\nBe careful with broad patterns. Google's own example regex starts with `^.*ai|`, an alternative that matches any source containing the letters \"ai\". Tested against it, `mail.google.com`, `mailchimp.com` and `dailymail.co.uk` all match. A tighter pattern names the domains:\n\n`^(.*\\.)?(chatgpt\\.com|perplexity\\.ai|copilot\\.microsoft\\.com|gemini\\.google\\.com)$`\n\nCheck the exact source values in your own Traffic acquisition report before you finalize the list, and update it when assistants change. Google notes: \"You should update your regex expression if URLs or the list of assistants you wish to measure change.\"",
+            "If you want your own definition, Google Analytics lets you build a custom channel group: add a channel, choose \"matches regex\", list the assistants, and then \"reorder your channel list so that\" the AI channel appears above Referrals.\n\nBe careful with broad patterns. Google Analytics applies a regex to the whole value: \"By default, Google Analytics Regex is full regex and case sensitive.\" Google's own example starts with `^.*ai|`, so it accepts any source that ends in \"ai\": every .ai domain, whether or not it is an AI assistant. Its `.*gpt.*` alternative accepts any source containing \"gpt\". A tighter pattern names the domains:\n\n`^(.*\\.)?(chatgpt\\.com|perplexity\\.ai|copilot\\.microsoft\\.com|gemini\\.google\\.com|claude\\.ai)$`\n\nCheck the exact source values in your own Traffic acquisition report before you finalize the list, and update it when assistants change. Google notes: \"You should update your regex expression if URLs or the list of assistants you wish to measure change.\"",
           whyItMatters:
-            "A loose regex quietly pulls email and newsletter traffic into your AI numbers, and those inflated numbers then go into reports.",
+            "A loose regex quietly pulls other referrals into your AI numbers, such as any software company on a .ai domain that links to you, and those inflated numbers then go into reports.",
           pitfall:
             "Leaving the new channel below Referrals. Google says to reorder it above, or the visits are claimed by Referrals first.",
-          sources: [GA4_CUSTOM_CHANNELS, OPENAI_SEARCH_HELP],
+          sources: [GA4_CUSTOM_CHANNELS, GA4_REGEX, OPENAI_SEARCH_HELP],
         },
         {
           id: "c-missing-referrer",
@@ -295,12 +301,12 @@ export const LESSON_7: LessonContent = {
         {
           kind: "spot",
           id: "q-ga4-regex",
-          prompt: "Which alternative in this regex would wrongly pull in mail.google.com and mailchimp.com?",
+          prompt: "GA4 applies this regex as a full match. Which alternative would also count acme.ai, a software company's site, as an AI assistant?",
           language: "text",
           lines: ["^.*ai", "|.*chatgpt.*", "|.*perplexity.*", "|.*copilot.*"],
           answer: 0,
           explanation:
-            "^.*ai matches any value that contains \"ai\" anywhere, including mail.google.com and mailchimp.com. The other alternatives each need a specific product name.",
+            "GA4 matches the whole value, so .*ai accepts any source that ends in \"ai\": every .ai domain, AI assistant or not. The other alternatives each need a product name in the value.",
         },
       ],
     },
@@ -400,13 +406,13 @@ export const LESSON_7: LessonContent = {
       {
         kind: "blank",
         id: "x-step-regex",
-        prompt: "Complete the custom channel regex so it matches Perplexity and Copilot without matching mail.google.com.",
-        text: "^(.*\\.)?(chatgpt\\.com|___|copilot\\.___\\.com|gemini\\.google\\.com)$",
+        prompt: "Complete the custom channel regex so it matches Perplexity and Copilot, and no other site on a .ai domain.",
+        text: "^(.*\\.)?(chatgpt\\.com|___|copilot\\.___\\.com|gemini\\.google\\.com|claude\\.ai)$",
         mono: true,
         answers: ["perplexity\\.ai", "microsoft"],
-        distractors: [".*ai", "google", ".*"],
+        distractors: [".*ai", "bing", "perplexity"],
         explanation:
-          "Naming each domain, with the dots escaped, keeps the pattern tight. .*ai would match any value containing \"ai\", which is how mail.google.com and mailchimp.com slip in.",
+          "Naming each domain, with the dots escaped, keeps the pattern tight. .*ai would accept any source ending in \"ai\", such as another company's .ai site, and perplexity alone wouldn't match perplexity.ai, because GA4 matches the whole value. Copilot's address is copilot.microsoft.com.",
       },
       {
         kind: "spot",
@@ -424,7 +430,7 @@ export const LESSON_7: LessonContent = {
       },
     ],
     debrief:
-      "Larkfield now has a ruler (a fixed prompt set covering the journey), a clean traffic channel that won't count its email newsletter as AI, and a way to tell real crawlers from impostors. None of it is clever; all of it can be rerun next month and give comparable numbers, which is what turns visibility from an opinion into a trend.",
+      "Larkfield now has a ruler (a fixed prompt set covering the journey), a clean traffic channel that counts only the assistants it names, and a way to tell real crawlers from impostors. None of it is clever; all of it can be rerun next month and give comparable numbers, which is what turns visibility from an opinion into a trend.",
   },
 
   example: {

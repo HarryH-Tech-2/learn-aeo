@@ -6,6 +6,15 @@ import type { Metadata } from "next";
 vi.mock("@/lib/db", () => ({ prisma: {} }));
 vi.mock("next-auth", () => ({ getServerSession: vi.fn() }));
 vi.mock("@/lib/auth", () => ({ authOptions: {} }));
+// A lesson forced to "coming soon", so the coming-soon branch stays tested once every real lesson is live.
+vi.mock("@/lib/lesson-catalog", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/lesson-catalog")>();
+  const LESSON_CATALOG = actual.LESSON_CATALOG.map((l) =>
+    l.id === "running-an-aeo-program" ? { ...l, status: "coming-soon" as const } : l,
+  );
+  // the page reads lessonMeta, which closes over the real catalog, so it is swapped too
+  return { ...actual, LESSON_CATALOG, lessonMeta: (id: string) => LESSON_CATALOG.find((l) => l.id === id) };
+});
 
 import { absoluteUrl } from "@/lib/site";
 import { LESSON_CATALOG, lessonPath } from "@/lib/lesson-catalog";
@@ -66,6 +75,7 @@ describe("public page metadata", () => {
 
   it("each lesson", async () => {
     const mod = (await import("@/app/lessons/[id]/page")) as unknown as PageModule;
+    expect(LESSON_CATALOG.some((l) => l.status === "coming-soon"), "no coming-soon lesson to test").toBe(true);
     for (const l of LESSON_CATALOG) {
       const m = await mod.generateMetadata!({ params: Promise.resolve({ id: l.id }) });
       expectPublic(m, lessonPath(l.id));
