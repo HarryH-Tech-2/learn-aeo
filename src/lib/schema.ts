@@ -71,7 +71,7 @@ export function courseSchema() {
     "@id": COURSE_ID,
     name: SITE.name,
     description: COURSE_DESCRIPTION,
-    url: SITE.url,
+    url: absoluteUrl("/course"),
     provider: ORG_REF,
     author: AUTHOR_REF,
     inLanguage: LANGUAGE,

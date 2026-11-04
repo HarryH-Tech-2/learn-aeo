@@ -15,11 +15,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import XPBar from "@/components/XPBar";
+import DashboardHero from "@/components/DashboardHero";
 import BadgeShelf from "@/components/BadgeShelf";
 import Leaderboard from "@/components/Leaderboard";
 import { planById, PLANS } from "@/lib/plans";
-import HeardAboutCard from "@/components/HeardAboutCard";
 import { fetchJson } from "@/lib/fetch-json";
 import { CERTIFICATE } from "@/lib/certificate";
 
@@ -36,7 +35,6 @@ type Me = {
   badges: any[];
   access: { active: boolean; via?: string | null };
   offer: OfferData | null;
-  askHeardAbout?: boolean;
   /** The free-unlock test group (src/lib/access-test.ts) */
   accessTest?: "free" | "paid" | null;
   /** Questions in each live lesson's audit, keyed by lesson id */
@@ -173,35 +171,14 @@ function DashboardInner() {
       <Navbar />
 
       <div className="max-w-6xl mx-auto px-6 lg:px-8 pt-28 pb-20 flex-1 w-full">
-        {/* Welcome Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="mb-12"
-        >
-          <div className="flex items-center gap-3 mb-2">
-            <span className="font-body text-xs tracking-[0.2em] uppercase text-gold-500">
-              Your dashboard
-            </span>
-          </div>
-          <h1 className="font-display text-4xl md:text-5xl font-light text-sand-100 mb-2">
-            Welcome back,{" "}
-            <span className="text-gradient-gold font-medium">
-              {session.user?.name?.split(" ")[0] || "there"}
-            </span>
-          </h1>
-          <div className="flex items-center gap-4">
-            <p className="font-body text-sand-500 font-light">
-              Pick up where you left off in the City of Answers.
-            </p>
-            {progress && progress.streak > 0 && (
-              <span className="font-body text-xs text-gold-400 bg-gold-500/10 border border-gold-500/20 px-3 py-1">
-                {progress.streak}-day streak
-              </span>
-            )}
-          </div>
-        </motion.div>
+        <DashboardHero
+          firstName={session.user?.name?.split(" ")[0] || "there"}
+          xp={progress?.xp ?? 0}
+          streak={progress?.streak ?? 0}
+          badgesEarned={badges.length}
+          districts={districts}
+          paid={!!hasSubscription}
+        />
 
         {/* A live discount (section-end, lesson-end, abandoned-checkout or day-5 email), for its whole lifetime:
             top of the page, since 2 of the first 3 course sales came from this offer. /api/me only sends it to
@@ -219,22 +196,11 @@ function DashboardInner() {
           </div>
         )}
 
-        {/* XP Bar */}
-        <div className="mb-8">
-          <XPBar xp={progress?.xp ?? 0} />
-        </div>
-
-        {me?.askHeardAbout && (
-          <div className="mb-8">
-            <HeardAboutCard />
-          </div>
-        )}
-
         {/* Section tabs: one section visible at a time */}
         <div
           role="tablist"
           aria-label="Dashboard sections"
-          className="grid grid-cols-3 gap-1 p-1 mb-8 border border-gold-700/30 bg-obsidian-lighter/70 sm:flex sm:flex-wrap"
+          className="grid grid-cols-4 gap-1 p-1.5 mb-8 rounded-2xl border border-gold-700/30 bg-obsidian-lighter/70 sm:flex sm:flex-wrap"
         >
           {TABS.map((t) => {
             const active = t.id === tab;
@@ -249,7 +215,7 @@ function DashboardInner() {
                 onClick={() => selectTab(t.id)}
                 whileHover="hover"
                 whileTap={{ scale: 0.96 }}
-                className={`group relative cursor-pointer flex flex-col items-center justify-center gap-1.5 px-1 py-3 font-body text-[10px] tracking-[0.12em] uppercase outline-none focus-visible:ring-2 focus-visible:ring-gold-500/60 transition-colors duration-200 sm:flex-1 sm:min-w-[8rem] sm:flex-row sm:gap-2 sm:px-3 sm:py-2.5 sm:text-[11px] sm:tracking-[0.18em] ${
+                className={`group relative cursor-pointer flex flex-col items-center justify-center gap-1.5 px-1 py-3 font-display font-bold text-[11px] tracking-[0.1em] uppercase outline-none focus-visible:ring-2 focus-visible:ring-gold-500/60 transition-colors duration-200 sm:flex-1 sm:min-w-[8rem] sm:flex-row sm:gap-2 sm:px-3 sm:py-3 sm:text-xs sm:tracking-[0.16em] ${
                   active ? "text-obsidian" : "text-sand-400 hover:text-gold-300"
                 }`}
               >
@@ -257,7 +223,7 @@ function DashboardInner() {
                   <motion.span
                     layoutId="dashboard-tab-pill"
                     transition={{ type: "spring", stiffness: 420, damping: 34 }}
-                    className="absolute inset-0 bg-gradient-to-br from-gold-600 to-gold-400 shadow-[0_0_22px_rgba(212,168,50,0.35)] overflow-hidden"
+                    className="absolute inset-0 rounded-xl bg-gradient-to-br from-gold-600 to-gold-400 shadow-[0_0_22px_rgba(212,168,50,0.35)] overflow-hidden"
                     aria-hidden="true"
                   >
                     <span className="absolute inset-y-0 -left-1/2 w-1/2 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-[tab-gleam_2.8s_ease-in-out_infinite]" />
@@ -266,7 +232,7 @@ function DashboardInner() {
                 {!active && (
                   <span
                     aria-hidden="true"
-                    className="absolute inset-0 border border-transparent group-hover:border-gold-500/40 group-hover:bg-gold-500/5 transition-colors duration-200"
+                    className="absolute inset-0 rounded-xl border border-transparent group-hover:border-gold-500/40 group-hover:bg-gold-500/5 transition-colors duration-200"
                   />
                 )}
                 <span className="relative sm:hidden">{t.short}</span>
@@ -294,7 +260,7 @@ function DashboardInner() {
         {tab === "journey" && (
           <>
         <div className="mb-8">
-          <h2 className="font-display text-3xl md:text-4xl text-sand-100 mb-2">The City of Answers</h2>
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-sand-100 mb-2">The City of Answers</h2>
           <p className="font-sans text-sm text-sand-400">
             {completedLive} of {liveLessons.length} {liveLessons.length === 1 ? "lesson" : "lessons"} complete
             {comingSoon > 0 ? ` · ${comingSoon} more ${comingSoon === 1 ? "district" : "districts"} opening soon` : ""}

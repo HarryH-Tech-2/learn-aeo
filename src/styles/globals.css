@@ -137,9 +137,10 @@ html.light {
   --color-terracotta: #e0674a;
 
   /* ── Typography ── */
-  /* Figtree for UI/body, Bricolage Grotesque for display. */
+  /* Figtree for UI/body, Arial for display (headings and buttons). */
   --font-sans: var(--font-figtree), system-ui, sans-serif;
-  --font-display: var(--font-bricolage), system-ui, sans-serif;
+  /* Headings and buttons: Arial (2026-11-04), a system font, so nothing to download. */
+  --font-display: Arial, "Helvetica Neue", Helvetica, sans-serif;
   --font-body: var(--font-sans);
 
   /* ── Spacing Scale ── */
@@ -1049,7 +1050,7 @@ html.light footer.site-footer {
 .site-footer-city {
   position: absolute;
   inset: auto 0 0 0;
-  height: min(520px, 75%);
+  height: min(300px, 55%);
   pointer-events: none;
   background: url("/hero/city-poster.webp") center 62% / cover no-repeat;
   opacity: 0.7;
@@ -1234,8 +1235,8 @@ html:not(.light) .faq-a {
   color: #b4c3da;
 }
 
-/* Bricolage Grotesque reads thin at the light/regular weights the headings were written with, so the
-   display face sits one step heavier than its class says. It has no italic: never let the browser fake one. */
+/* Headings were written for a variable display face; Arial has only regular (400) and bold (700), so these map
+   each class onto one of the two: unweighted and medium headings come out bold, light ones regular. */
 .font-display {
   font-synthesis: none;
 }
@@ -1422,4 +1423,316 @@ html.light .city-hero-vignette {
 .city-hero-copy::before {
   -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 88%);
   mask-image: linear-gradient(to bottom, #000 55%, transparent 88%);
+}
+
+/* ── /course page (src/app/course/page.tsx) ── */
+.course-hero-glow {
+  position: absolute;
+  inset: -20% -10% auto;
+  height: 520px;
+  background:
+    radial-gradient(ellipse 50% 60% at 30% 40%, color-mix(in srgb, var(--rt-cyan-400) 22%, transparent), transparent 70%),
+    radial-gradient(ellipse 45% 55% at 72% 35%, color-mix(in srgb, var(--rt-gold-400) 20%, transparent), transparent 70%);
+  filter: blur(10px);
+  pointer-events: none;
+}
+.course-stat {
+  border: 1px solid color-mix(in srgb, var(--rt-gold-500) 22%, transparent);
+  background: color-mix(in srgb, var(--rt-obsidian-light) 70%, transparent);
+  backdrop-filter: blur(6px);
+  border-radius: 1rem;
+  padding: 1.1rem 1rem;
+  text-align: center;
+}
+.course-lesson {
+  display: flex;
+  gap: 1.1rem;
+  padding: 1.4rem 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--rt-gold-500) 18%, transparent);
+  background: color-mix(in srgb, var(--rt-obsidian-light) 80%, transparent);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.course-lesson:hover {
+  border-color: color-mix(in srgb, var(--rt-cyan-400) 50%, transparent);
+  transform: translateY(-2px);
+}
+.course-lesson-num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--rt-obsidian);
+  background: linear-gradient(135deg, var(--rt-cyan-400), var(--rt-gold-400));
+}
+.course-free-tag {
+  border-radius: 999px;
+  padding: 0.1rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--rt-cyan-400);
+  border: 1px solid color-mix(in srgb, var(--rt-cyan-400) 45%, transparent);
+}
+.course-plan-featured {
+  border-color: color-mix(in srgb, var(--rt-cyan-400) 60%, transparent) !important;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--rt-cyan-400) 30%, transparent), 0 18px 40px -20px color-mix(in srgb, var(--rt-cyan-400) 45%, transparent);
+}
+.course-cta {
+  border-radius: 1.5rem;
+  padding: 3rem 1.5rem;
+  border: 1px solid color-mix(in srgb, var(--rt-cyan-400) 30%, transparent);
+  background:
+    radial-gradient(ellipse 70% 90% at 50% 0%, color-mix(in srgb, var(--rt-cyan-400) 16%, transparent), transparent 70%),
+    var(--rt-obsidian-light);
+}
+@media (prefers-reduced-motion: reduce) {
+  .course-lesson { transition: none; }
+  .course-lesson:hover { transform: none; }
+}
+
+/* ── Dashboard hero (src/components/DashboardHero.tsx) ── */
+.dash-hero {
+  position: relative;
+  border-radius: 1.75rem;
+  padding: 1.75rem;
+  border: 1px solid color-mix(in srgb, var(--rt-cyan-400) 22%, transparent);
+  background:
+    radial-gradient(ellipse 60% 80% at 0% 0%, color-mix(in srgb, var(--rt-cyan-400) 12%, transparent), transparent 70%),
+    radial-gradient(ellipse 50% 70% at 100% 100%, color-mix(in srgb, var(--rt-gold-400) 12%, transparent), transparent 70%),
+    var(--rt-obsidian-light);
+  overflow: hidden;
+}
+@media (min-width: 768px) {
+  .dash-hero { padding: 2.25rem; }
+}
+.dash-hero-glow {
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  right: -120px;
+  top: -160px;
+  border-radius: 999px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--rt-cyan-400) 25%, transparent), transparent 65%);
+  pointer-events: none;
+}
+.dash-continue {
+  position: relative;
+  display: grid;
+  gap: 0.35rem;
+  margin-top: auto;
+  padding: 1.25rem 3.5rem 1.25rem 1.4rem;
+  border-radius: 1.25rem;
+  color: #f4f8ff;
+  background: linear-gradient(135deg, var(--rt-cyan-600), #16294a 70%);
+  box-shadow: 0 18px 40px -22px color-mix(in srgb, var(--rt-cyan-400) 70%, transparent);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.dash-continue:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 48px -20px color-mix(in srgb, var(--rt-cyan-400) 80%, transparent);
+}
+.dash-continue:focus-visible {
+  outline: 2px solid var(--rt-cyan-400);
+  outline-offset: 3px;
+}
+.dash-continue-kicker {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #a9e6f5;
+}
+.dash-continue-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.dash-continue-meta {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: #c9d6ea;
+}
+.dash-continue-arrow {
+  position: absolute;
+  right: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 999px;
+  font-size: 1.2rem;
+  background: rgba(255, 255, 255, 0.14);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.dash-continue:hover .dash-continue-arrow {
+  transform: translate(4px, -50%);
+  background: rgba(255, 255, 255, 0.24);
+}
+.dash-tile {
+  border-radius: 1.1rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid color-mix(in srgb, var(--rt-gold-500) 18%, transparent);
+  background: color-mix(in srgb, var(--rt-obsidian) 55%, transparent);
+}
+.dash-stat dt {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rt-sand-400);
+}
+.dash-stat dd {
+  margin-top: 0.3rem;
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--rt-sand-100);
+}
+.dash-stat dd span {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--rt-sand-400);
+}
+.dash-mini-bar {
+  margin-top: 0.5rem;
+  height: 4px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--rt-sand-400) 20%, transparent);
+  overflow: hidden;
+}
+.dash-mini-bar span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--rt-cyan-400), var(--rt-gold-400));
+}
+.dash-ring-track {
+  fill: none;
+  stroke-width: 8;
+  stroke: color-mix(in srgb, var(--rt-sand-400) 18%, transparent);
+}
+.dash-ring-fill {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke: var(--rt-cyan-400);
+}
+@media (prefers-reduced-motion: reduce) {
+  .dash-continue, .dash-continue-arrow { transition: none; }
+  .dash-continue:hover { transform: none; }
+}
+
+/* ── Account page (src/app/account/AccountContent.tsx) ── */
+.acct-banner {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.75rem;
+  padding: 1.75rem;
+  border: 1px solid color-mix(in srgb, var(--rt-cyan-400) 22%, transparent);
+  background: var(--rt-obsidian-light);
+}
+.acct-banner-art {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 7.5rem;
+  background:
+    radial-gradient(ellipse 60% 120% at 15% 0%, color-mix(in srgb, var(--rt-cyan-400) 35%, transparent), transparent 70%),
+    radial-gradient(ellipse 50% 120% at 85% 0%, color-mix(in srgb, var(--rt-gold-400) 30%, transparent), transparent 70%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent);
+  mask-image: linear-gradient(to bottom, #000 40%, transparent);
+}
+.acct-avatar {
+  width: 5.5rem;
+  height: 5.5rem;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 3px solid var(--rt-obsidian-light);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--rt-cyan-400) 60%, transparent), 0 12px 30px -12px rgba(0, 0, 0, 0.6);
+  background: linear-gradient(135deg, var(--rt-cyan-600), #16294a);
+}
+.acct-level-pill {
+  align-self: flex-start;
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #04122a;
+  background: linear-gradient(135deg, var(--rt-cyan-400), var(--rt-gold-400));
+  white-space: nowrap;
+}
+.acct-stat {
+  border-radius: 1rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--rt-gold-500) 18%, transparent);
+  background: color-mix(in srgb, var(--rt-obsidian) 55%, transparent);
+}
+.acct-stat dt {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rt-sand-400);
+}
+.acct-stat dd {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--rt-sand-100);
+}
+.acct-shortcut {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 1rem 0.5rem;
+  border-radius: 1.1rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--rt-sand-100);
+  border: 1px solid color-mix(in srgb, var(--rt-gold-500) 18%, transparent);
+  background: var(--rt-obsidian-light);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.acct-shortcut span {
+  font-size: 1.5rem;
+}
+.acct-shortcut:hover {
+  border-color: color-mix(in srgb, var(--rt-cyan-400) 55%, transparent);
+  transform: translateY(-2px);
+}
+.acct-card {
+  border-radius: 1.25rem;
+}
+.acct-plan-badge {
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #04122a;
+  background: var(--rt-cyan-400);
+}
+.acct-plan-badge-free {
+  color: var(--rt-sand-300);
+  background: color-mix(in srgb, var(--rt-sand-400) 20%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .acct-shortcut {
+    transition: none;
+  }
+  .acct-shortcut:hover {
+    transform: none;
+  }
 }

@@ -57,10 +57,11 @@ export default function Navbar() {
           {/* Centered between the logo and the right-hand controls (flex, not
               absolute, so it can never collide with either at narrow widths). */}
           <div className="hidden lg:flex flex-1 min-w-0 items-center justify-center gap-6 2xl:gap-8 px-3 whitespace-nowrap">
-            <NavLink href={isHome ? "#curriculum" : "/#curriculum"}>Course</NavLink>
+            <NavLink href="/course">Course</NavLink>
             <NavLink href="/pricing">Pricing</NavLink>
             <NavLink href="/tools">Tools</NavLink>
             <NavLink href="/blog">Blog</NavLink>
+            <NavLink href="/about">About</NavLink>
           </div>
 
           {/* Desktop Nav - Right */}
@@ -169,7 +170,7 @@ export default function Navbar() {
                     >
                       Account
                     </MobileLink>
-                    <MobileLink href="/#curriculum" onClick={() => setMenuOpen(false)}>
+                    <MobileLink href="/course" onClick={() => setMenuOpen(false)}>
                       Course
                     </MobileLink>
                     <MobileLink href="/pricing" onClick={() => setMenuOpen(false)}>
@@ -180,6 +181,9 @@ export default function Navbar() {
                     </MobileLink>
                     <MobileLink href="/blog" onClick={() => setMenuOpen(false)}>
                       Blog
+                    </MobileLink>
+                    <MobileLink href="/about" onClick={() => setMenuOpen(false)}>
+                      About
                     </MobileLink>
                   </div>
 
@@ -200,7 +204,7 @@ export default function Navbar() {
                 <>
                   {/* Primary CTA first, then nav */}
                   <div className="flex flex-col">
-                    <MobileLink href={isHome ? "#curriculum" : "/#curriculum"} onClick={() => setMenuOpen(false)}>
+                    <MobileLink href="/course" onClick={() => setMenuOpen(false)}>
                       Course
                     </MobileLink>
                     <MobileLink href="/pricing" onClick={() => setMenuOpen(false)}>
@@ -211,6 +215,9 @@ export default function Navbar() {
                     </MobileLink>
                     <MobileLink href="/blog" onClick={() => setMenuOpen(false)}>
                       Blog
+                    </MobileLink>
+                    <MobileLink href="/about" onClick={() => setMenuOpen(false)}>
+                      About
                     </MobileLink>
                   </div>
 

@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { THEME_INIT_SCRIPT, THEME_COLOR } from "@/lib/theme";
 import { gaCountryBlockScript, trafficTypeScript } from "@/lib/traffic-type";
-import { Bricolage_Grotesque, Figtree } from "next/font/google";
+import { Figtree } from "next/font/google";
 import Script from "next/script";
 import Providers from "@/components/Providers";
 import CampaignTracker from "@/components/CampaignTracker";
@@ -30,13 +30,6 @@ const figtree = Figtree({
   display: "swap",
 });
 
-// variable weight and optical size: tighter, crisper letterforms at headline sizes (no italic exists)
-const bricolage = Bricolage_Grotesque({
-  subsets: ["latin"],
-  axes: ["opsz"],
-  variable: "--font-bricolage",
-  display: "swap",
-});
 
 export const viewport: Viewport = {
   themeColor: THEME_COLOR,
@@ -90,7 +83,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${figtree.variable} ${bricolage.variable}`}>
+    <html lang="en" suppressHydrationWarning className={figtree.variable}>
       <head>
         <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32" />
         <link rel="icon" href="/favicon-64.png" type="image/png" sizes="64x64" />

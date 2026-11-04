@@ -9,7 +9,7 @@ import type { GlossaryTerm } from "@/lib/glossary-types";
 // Real edit dates, not `new Date()`: Google treats per-request timestamps as a weak freshness
 // signal. Bump a date when those pages are substantively edited.
 // Marketing and legal pages: Learn AEO copy (Plans 3–5).
-const SITE_LASTMOD = new Date("2026-10-30");
+const SITE_LASTMOD = new Date("2026-11-04");
 // The home page: the gate hero and the course in four parts.
 const HOME_LASTMOD = new Date("2026-10-30");
 // The lesson catalog and lessons 1–8 (all live).
@@ -59,6 +59,12 @@ export function buildSitemap({
       lastModified: SITE_LASTMOD,
       changeFrequency: "monthly",
       priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/course`,
+      lastModified: SITE_LASTMOD,
+      changeFrequency: "monthly",
+      priority: 0.9,
     },
     {
       url: `${baseUrl}/pricing`,

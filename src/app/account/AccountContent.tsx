@@ -7,8 +7,23 @@ import { PLANS } from "@/lib/plans";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { fetchJson } from "@/lib/fetch-json";
+import { BADGE_DEFINITIONS, getLevelTitle, getXPForNextLevel } from "@/lib/gamification";
+import { LESSON_CATALOG } from "@/lib/lesson-catalog";
+
+type Via = "lifetime" | "monthly" | "yearly" | "free-unlock" | null;
+type Subscription = { active: boolean; via?: Via; periodEnd?: string | null; trial: boolean };
+type Stats = { xp: number; done: number; badges: number; streak: number };
+
+const PLAN_LABEL: Record<string, string> = {
+  monthly: "Monthly plan",
+  yearly: "Yearly plan",
+  "free-unlock": "Full course, open to you free",
+  lifetime: "Lifetime access",
+};
 
 export default function AccountContent() {
   const { data: session, status, update } = useSession();
@@ -16,12 +31,8 @@ export default function AccountContent() {
   const [name, setName] = useState("");
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
-  const [subscription, setSubscription] = useState<{
-    active: boolean;
-    via?: "lifetime" | "monthly" | "free-unlock" | null;
-    periodEnd?: string | null;
-    trial: boolean;
-  } | null>(null);
+  const [subscription, setSubscription] = useState<Subscription | null>(null);
+  const [stats, setStats] = useState<Stats | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -33,10 +44,25 @@ export default function AccountContent() {
 
   useEffect(() => {
     if (session?.user?.email) {
-      fetchJson<{ active: boolean; trial: boolean; via?: "lifetime" | "monthly" | "free-unlock" | null; periodEnd?: string | null}>("/api/stripe/check-subscription")
+      fetchJson<Subscription>("/api/stripe/check-subscription")
         .then(setSubscription)
         .catch(() => setSubscription({ active: false, trial: false }));
     }
+  }, [session]);
+
+  // Level, lessons and badges for the profile banner (the same /api/me the dashboard reads)
+  useEffect(() => {
+    if (!session?.user) return;
+    fetchJson<{ progress: { xp: number; streak: number; lessons: Record<string, { completed: boolean }> }; badges: unknown[] }>("/api/me")
+      .then((d) =>
+        setStats({
+          xp: d.progress?.xp ?? 0,
+          streak: d.progress?.streak ?? 0,
+          done: Object.values(d.progress?.lessons ?? {}).filter((l) => l.completed).length,
+          badges: Array.isArray(d.badges) ? d.badges.length : 0,
+        }),
+      )
+      .catch(() => setStats(null));
   }, [session]);
 
   useEffect(() => {
@@ -94,15 +120,28 @@ export default function AccountContent() {
     }
   };
 
+  const openPortal = async () => {
+    const res = await fetch("/api/stripe/create-portal-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ returnTo: "/account" }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (data.url) window.location.href = data.url;
+  };
+
+  const level = stats ? getXPForNextLevel(stats.xp).currentLevel : null;
+  const isSubscription = subscription?.via === "monthly" || subscription?.via === "yearly";
+
   return (
-    <div className="min-h-screen bg-obsidian grain-overlay">
+    <div className="min-h-screen bg-obsidian grain-overlay flex flex-col">
       {/* Toast */}
       {toast && (
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          className="fixed top-24 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-gold-500/10 border border-gold-500/30 backdrop-blur-sm"
+          className="fixed top-24 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-full bg-gold-500/10 border border-gold-500/30 backdrop-blur-sm"
         >
           <p className="font-body text-sm text-gold-400">{toast}</p>
         </motion.div>
@@ -110,103 +149,112 @@ export default function AccountContent() {
 
       <Navbar />
 
-      <div className="max-w-2xl mx-auto px-6 lg:px-8 pt-28 pb-20">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          {/* Page Header */}
-          <div className="mb-8">
-            <div className="flex items-center gap-3">
-              <span className="h-2 w-2 rounded-full bg-cyan-500" aria-hidden="true" />
-              <h1 className="font-body text-xs tracking-[0.2em] uppercase text-gold-500">
-                Account
-              </h1>
-            </div>
-          </div>
-
-          {/* Profile Section */}
-          <section className="card-ancient p-6 mb-6">
-            <h2 className="font-display text-lg font-semibold text-sand-100 mb-4">
-              Profile
-            </h2>
-            <div className="flex items-center gap-4 mb-6">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-20 w-full flex-1">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+          {/* Profile banner */}
+          <section aria-labelledby="account-title" className="acct-banner mb-6">
+            <div aria-hidden="true" className="acct-banner-art" />
+            <div className="relative flex flex-col sm:flex-row sm:items-end gap-5 pt-6">
               {session.user?.image ? (
-                <img
-                  src={session.user.image}
-                  alt=""
-                  className="w-14 h-14 rounded-full border border-gold-700/30"
-                />
+                <img src={session.user.image} alt="" className="acct-avatar" referrerPolicy="no-referrer" />
               ) : (
-                <div className="w-14 h-14 rounded-full bg-gold-500/10 border border-gold-700/30 flex items-center justify-center">
-                  <span className="text-gold-400 font-display text-xl">
+                <div className="acct-avatar grid place-items-center">
+                  <span className="font-display text-3xl font-bold text-white">
                     {(session.user?.name || session.user?.email || "?")[0].toUpperCase()}
                   </span>
                 </div>
               )}
-              <div>
-                <p className="font-body text-sm text-sand-100">
+              <div className="min-w-0 flex-1">
+                <p className="font-body text-xs tracking-[0.25em] uppercase text-cyan-400 mb-1">Your account</p>
+                <h1 id="account-title" className="font-display text-3xl md:text-4xl font-bold text-sand-100 truncate">
                   {session.user?.name || "No name set"}
-                </p>
-                <p className="font-body text-xs text-sand-500">
-                  {session.user?.email}
-                </p>
+                </h1>
+                <p className="font-body text-base text-sand-400 truncate">{session.user?.email}</p>
               </div>
-            </div>
-            <div className="space-y-3">
-              <label className="block">
-                <span className="font-body text-xs text-sand-400 uppercase tracking-wider">
-                  Display Name
+              {level !== null && (
+                <span className="acct-level-pill">
+                  Lv.{level} · {getLevelTitle(level)}
                 </span>
+              )}
+            </div>
+            {stats && (
+              <dl className="relative grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
+                {[
+                  { label: "XP", value: String(stats.xp) },
+                  { label: "Lessons", value: `${stats.done}/${LESSON_CATALOG.length}` },
+                  { label: "Badges", value: `${stats.badges}/${BADGE_DEFINITIONS.length}` },
+                  { label: "Streak", value: `${stats.streak} ${stats.streak === 1 ? "day" : "days"}` },
+                ].map((s) => (
+                  <div key={s.label} className="acct-stat">
+                    <dt>{s.label}</dt>
+                    <dd>{s.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+          </section>
+
+          {/* Shortcuts */}
+          <nav aria-label="Account shortcuts" className="grid grid-cols-3 gap-3 mb-6">
+            <Link href="/dashboard" className="acct-shortcut">
+              <span aria-hidden="true">🗺️</span>
+              City map
+            </Link>
+            <Link href="/dashboard?tab=badges" className="acct-shortcut">
+              <span aria-hidden="true">🏅</span>
+              Badges
+            </Link>
+            <Link href="/dashboard?tab=certificate" className="acct-shortcut">
+              <span aria-hidden="true">📜</span>
+              Certificate
+            </Link>
+          </nav>
+
+          {/* Profile */}
+          <section className="card-ancient acct-card p-6 mb-6">
+            <h2 className="font-display text-xl font-bold text-sand-100 mb-1">Profile</h2>
+            <p className="font-body text-sm text-sand-400 mb-5">This name goes on your certificate and the leaderboard.</p>
+            <div className="flex flex-col sm:flex-row gap-3 sm:items-end">
+              <label className="block flex-1">
+                <span className="font-body text-xs text-sand-400 uppercase tracking-wider">Display name</span>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="mt-1 block w-full bg-obsidian border border-gold-700/20 px-4 py-2.5 font-body text-sm text-sand-100 focus:outline-none focus:border-gold-500/50 transition-colors"
+                  className="mt-1 block w-full rounded-xl bg-obsidian border border-gold-700/20 px-4 py-3 font-body text-base text-sand-100 focus:outline-none focus:border-cyan-400/60 transition-colors"
                 />
               </label>
               <button
                 onClick={handleSaveName}
                 disabled={saving || name === session.user?.name}
-                className="btn-primary text-sm py-2.5 px-5 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="btn-primary text-sm py-3 px-6 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {saving ? "Saving..." : "Save"}
               </button>
             </div>
           </section>
 
-          {/* Access Section */}
-          <section className="card-ancient p-6 mb-6">
-            <h2 className="font-display text-lg font-semibold text-sand-100 mb-4">
-              Access
-            </h2>
+          {/* Plan */}
+          <section className="card-ancient acct-card p-6 mb-6">
+            <h2 className="font-display text-xl font-bold text-sand-100 mb-4">Your plan</h2>
             {subscription === null ? (
               <p className="font-body text-sm text-sand-500">Loading...</p>
             ) : subscription.active ? (
               <div>
-                <div className="flex items-center gap-2">
-                  <span className="inline-block w-2 h-2 rounded-full bg-turquoise" />
-                  <span className="font-body text-sm text-sand-100">
-                    {subscription.via === "monthly"
-                      ? "Monthly plan"
-                      : subscription.via === "free-unlock"
-                        ? "Full course, open to you free"
-                        : "Lifetime Access"}
-                  </span>
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="acct-plan-badge">Active</span>
+                  <span className="font-display text-lg font-bold text-sand-100">{PLAN_LABEL[subscription.via ?? "lifetime"] ?? PLAN_LABEL.lifetime}</span>
                 </div>
-                {subscription.via === "monthly" && subscription.periodEnd && (
-                  <p className="font-body text-xs text-sand-500 mt-2">Renews {new Date(subscription.periodEnd).toLocaleDateString()}. Cancel any time in the billing portal below.</p>
+                {isSubscription && subscription.periodEnd && (
+                  <p className="font-body text-sm text-sand-400 mt-3">
+                    Renews {new Date(subscription.periodEnd).toLocaleDateString()}. Cancel any time in the billing portal.
+                  </p>
                 )}
-                {subscription.via === "monthly" && (
+                {isSubscription && (
                   <button
                     type="button"
-                    onClick={async () => {
-                      const res = await fetch("/api/stripe/create-portal-session", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ returnTo: "/account" }) });
-                      const data = await res.json().catch(() => ({}));
-                      if (data.url) window.location.href = data.url;
-                    }}
-                    className="mt-3 font-body text-xs text-gold-500 hover:text-gold-300 underline underline-offset-4"
+                    onClick={openPortal}
+                    className="mt-4 rounded-full font-body text-sm text-cyan-400 border border-cyan-400/40 px-5 py-2.5 hover:bg-cyan-400/10 transition-colors"
                   >
                     Manage billing or cancel
                   </button>
@@ -214,39 +262,37 @@ export default function AccountContent() {
               </div>
             ) : (
               <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="inline-block w-2 h-2 rounded-full bg-sand-600" />
-                  <span className="font-body text-sm text-sand-100">Not purchased</span>
+                <div className="flex flex-wrap items-center gap-3 mb-3">
+                  <span className="acct-plan-badge acct-plan-badge-free">Free</span>
+                  <span className="font-display text-lg font-bold text-sand-100">Lesson 1 only</span>
                 </div>
-                <p className="font-body text-xs text-sand-500 mb-4">
-                  You don&apos;t have lifetime access yet. Unlock the full course for
-                  a one-time payment of <Price />, or <Price plan={PLANS.monthly} /> a month.
+                <p className="font-body text-sm text-sand-400 mb-5">
+                  Unlock all {LESSON_CATALOG.length} lessons for a one-time payment of <Price />, or <Price plan={PLANS.monthly} /> a month.
                 </p>
-                <a href="/checkout" className="btn-primary text-sm py-2.5 px-5 inline-block">
-                  Get Lifetime Access
-                </a>
-                <a href="/pricing" className="ml-3 font-body text-xs text-sand-500 hover:text-gold-400 underline underline-offset-4">
-                  All plans
-                </a>
+                <div className="flex flex-wrap items-center gap-4">
+                  <a href="/checkout" className="btn-primary text-sm py-3 px-6 inline-block">
+                    Get Lifetime Access
+                  </a>
+                  <Link href="/pricing" className="font-body text-sm text-sand-400 hover:text-gold-400 underline underline-offset-4">
+                    All plans
+                  </Link>
+                </div>
                 <GuaranteeNote align="left" />
               </div>
             )}
           </section>
 
           {/* Danger Zone */}
-          <section className="border border-terracotta/20 bg-terracotta/5 p-6">
-            <h2 className="font-display text-lg font-semibold text-terracotta mb-2">
-              Danger Zone
-            </h2>
-            <p className="font-body text-xs text-sand-500 mb-4">
-              Permanently delete your account and all progress. This action
-              cannot be undone. Note: deleting your account does not refund
+          <section className="rounded-2xl border border-terracotta/20 bg-terracotta/5 p-6">
+            <h2 className="font-display text-xl font-bold text-terracotta mb-2">Danger Zone</h2>
+            <p className="font-body text-sm text-sand-500 mb-4">
+              Permanently delete your account and all progress. This action cannot be undone. Note: deleting your account does not refund
               your purchase; contact support if you need a refund.
             </p>
             {!showDeleteConfirm ? (
               <button
                 onClick={() => setShowDeleteConfirm(true)}
-                className="font-body text-sm text-terracotta border border-terracotta/30 px-5 py-2.5 hover:bg-terracotta/10 transition-colors"
+                className="rounded-full font-body text-sm text-terracotta border border-terracotta/30 px-5 py-2.5 hover:bg-terracotta/10 transition-colors"
               >
                 Delete Account
               </button>
@@ -255,14 +301,11 @@ export default function AccountContent() {
                 <button
                   onClick={handleDeleteAccount}
                   disabled={deleting}
-                  className="font-body text-sm text-white bg-terracotta px-5 py-2.5 hover:bg-terracotta/80 transition-colors disabled:opacity-50"
+                  className="rounded-full font-body text-sm text-white bg-terracotta px-5 py-2.5 hover:bg-terracotta/80 transition-colors disabled:opacity-50"
                 >
                   {deleting ? "Deleting..." : "Yes, delete my account"}
                 </button>
-                <button
-                  onClick={() => setShowDeleteConfirm(false)}
-                  className="font-body text-sm text-sand-400 hover:text-sand-200 transition-colors"
-                >
+                <button onClick={() => setShowDeleteConfirm(false)} className="font-body text-sm text-sand-400 hover:text-sand-200 transition-colors">
                   Cancel
                 </button>
               </div>
@@ -270,6 +313,7 @@ export default function AccountContent() {
           </section>
         </motion.div>
       </div>
+      <Footer />
     </div>
   );
 }

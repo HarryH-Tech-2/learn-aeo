@@ -25,6 +25,7 @@ type PageModule = { metadata?: Metadata; generateMetadata?: (a: { params: Promis
 const PUBLIC: [string, string, () => Promise<PageModule>][] = [
   ["/", "home", () => import("@/app/page")],
   ["/about", "about", () => import("@/app/about/page")],
+  ["/course", "course", () => import("@/app/course/page")],
   ["/contact", "contact", () => import("@/app/contact/page")],
   ["/pricing", "pricing", () => import("@/app/pricing/page")],
   ["/get-started", "get-started", () => import("@/app/get-started/page")],

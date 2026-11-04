@@ -5,7 +5,7 @@
 import { AUTHOR } from "./author";
 import { SITE, absoluteUrl } from "./site";
 import { PLANS, formatPlanPrice } from "./plans";
-import { TOTAL_MINUTES, lessonPath } from "./lesson-catalog";
+import { LESSON_CATALOG, TOTAL_MINUTES, lessonPath } from "./lesson-catalog";
 import type { LessonMeta } from "./lesson-types";
 import { toolPath, type ToolMeta } from "./tools";
 
@@ -72,6 +72,7 @@ export function buildLlmsTxt({ lessons, tools, posts, glossary }: LlmsTxtInput):
     "## Key pages",
     "",
     `- [Get started with the free lesson](${absoluteUrl("/get-started")})`,
+    `- [The course](${absoluteUrl("/course")}): the ${LESSON_CATALOG.length} lessons, who the course is for and how a lesson works`,
     `- [Pricing](${absoluteUrl("/pricing")}): lifetime or monthly access, and what is included`,
     `- [About](${absoluteUrl("/about")}): what the course is and how its lessons are sourced`,
     `- [Contact](${absoluteUrl("/contact")})`,

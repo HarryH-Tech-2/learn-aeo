@@ -42,7 +42,7 @@ export async function GET(request: Request) {
     offer: offer && !pppBeatsOffer(requestCountry(request), offer.percentOff) ? { code: offer.code, expiresAt: offer.expiresAt.toISOString(), percentOff: offer.percentOff, source: offer.source } : null,
     // The free-unlock test group, for the GA4 user property access_test (src/lib/access-test.ts); null when not in it
     accessTest: armOf(states.find((s) => s.game === ACCESS_TEST_GAME)?.state),
-    // false once they've answered (or skipped) "How did you find us?" (src/components/HeardAboutCard.tsx)
+    // false once they have answered "How did you find us?" (the dashboard card was removed 2026-11-04; the field stays for old clients)
     askHeardAbout: !account?.heardAbout,
     // Questions in each live lesson's audit, so the city map can show a stored best score as "N of M"
     auditLengths: auditLengths(),
