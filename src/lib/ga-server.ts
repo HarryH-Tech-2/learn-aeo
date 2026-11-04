@@ -80,3 +80,38 @@ export async function sendPurchaseToGA4(p: ServerPurchase, fetchImpl: typeof fet
     return false;
   }
 }
+
+/**
+ * A new account, sent from /welcome (NextAuth's pages.newUser, which only the sign-in that created the account
+ * passes through). Sign-ups had no event at all before November 2026, so GA4 could not count them as a key event.
+ * Sent only with the visitor's own `_ga` client id: no cookie means analytics was declined (or blocked), and then
+ * nothing is sent.
+ */
+export async function sendSignUpToGA4(
+  s: { clientId?: string | null; sessionId?: string | null },
+  fetchImpl: typeof fetch = fetch,
+): Promise<boolean> {
+  const secret = process.env.GA4_MP_API_SECRET;
+  if (!secret || !GA_MEASUREMENT_ID || !s.clientId) return false;
+  const url = `https://www.google-analytics.com/mp/collect?measurement_id=${GA_MEASUREMENT_ID}&api_secret=${encodeURIComponent(secret)}`;
+  const body = {
+    client_id: s.clientId,
+    events: [
+      {
+        name: "sign_up",
+        params: {
+          sent_from: "welcome",
+          engagement_time_msec: 1,
+          ...(s.sessionId ? { session_id: s.sessionId } : {}),
+        },
+      },
+    ],
+  };
+  try {
+    const res = await fetchImpl(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    return res.ok;
+  } catch (err) {
+    console.error("[ga-server] sign_up send failed:", err);
+    return false;
+  }
+}

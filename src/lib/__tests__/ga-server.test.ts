@@ -4,7 +4,7 @@ vi.hoisted(() => {
   process.env.NEXT_PUBLIC_GA_ID = "G-TESTAEO123";
 });
 
-import { gaClientIdFromCookie, gaSessionIdFromCookie, sendPurchaseToGA4, GA_MEASUREMENT_ID, GA_SESSION_COOKIE } from "@/lib/ga-server";
+import { gaClientIdFromCookie, gaSessionIdFromCookie, sendPurchaseToGA4, sendSignUpToGA4, GA_MEASUREMENT_ID, GA_SESSION_COOKIE } from "@/lib/ga-server";
 
 describe("gaClientIdFromCookie", () => {
   it("strips the GA1.1 prefix", () => {
@@ -71,5 +71,33 @@ describe("sendPurchaseToGA4", () => {
     expect(JSON.parse(f.mock.calls[0][1].body).client_id).toMatch(/^\d+\.\d+$/);
     const boom = vi.fn().mockRejectedValue(new Error("offline"));
     expect(await sendPurchaseToGA4(purchase, boom as any)).toBe(false);
+  });
+});
+
+describe("sendSignUpToGA4", () => {
+  const original = process.env.GA4_MP_API_SECRET;
+  afterEach(() => {
+    if (original === undefined) delete process.env.GA4_MP_API_SECRET;
+    else process.env.GA4_MP_API_SECRET = original;
+  });
+
+  it("sends nothing without the API secret or without the visitor's GA client id", async () => {
+    const fetchImpl = vi.fn();
+    delete process.env.GA4_MP_API_SECRET;
+    expect(await sendSignUpToGA4({ clientId: "1.2" }, fetchImpl as unknown as typeof fetch)).toBe(false);
+    process.env.GA4_MP_API_SECRET = "s3cret";
+    expect(await sendSignUpToGA4({ clientId: "" }, fetchImpl as unknown as typeof fetch)).toBe(false);
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
+  it("posts a sign_up event against the visitor's client and session", async () => {
+    process.env.GA4_MP_API_SECRET = "s3cret";
+    const fetchImpl = vi.fn().mockResolvedValue({ ok: true });
+    expect(await sendSignUpToGA4({ clientId: "1.2", sessionId: "1700000000" }, fetchImpl as unknown as typeof fetch)).toBe(true);
+    const [url, init] = fetchImpl.mock.calls[0];
+    expect(url).toContain(`measurement_id=${GA_MEASUREMENT_ID}`);
+    const body = JSON.parse(init.body);
+    expect(body.client_id).toBe("1.2");
+    expect(body.events[0]).toMatchObject({ name: "sign_up", params: { sent_from: "welcome", session_id: "1700000000" } });
   });
 });
