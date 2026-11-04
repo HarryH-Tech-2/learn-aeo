@@ -1,4 +1,4 @@
-// The eight-lesson course catalog: ids, districts, titles, levels and blurbs.
+// The course catalog: ids, districts, titles, levels and blurbs, one entry per lesson.
 // Imported by middleware, so it must stay edge-safe: import only lesson-types.
 
 import type { LessonMeta } from "./lesson-types";
@@ -108,12 +108,64 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
     isFree: false,
     status: "live",
   },
+  {
+    id: "products-and-shopping-in-ai-answers",
+    order: 9,
+    district: "The Market",
+    title: "Products and shopping in AI answers",
+    summary: "Get your products into the shopping answers AI assistants give.",
+    description:
+      "Learn how ChatGPT, Google's AI Mode and Gemini, Copilot and Perplexity choose products, and which merchant listing markup, feeds and reviews feed them. You will fix product markup, write a feed row, keep prices and stock accurate everywhere, and see what the new agentic checkout protocols ask of a merchant.",
+    level: "intermediate",
+    minutes: 25,
+    isFree: false,
+    status: "live",
+  },
+  {
+    id: "local-businesses-and-reviews",
+    order: 10,
+    district: "The Neighborhoods",
+    title: "Local businesses and reviews in AI answers",
+    summary: "Get your local business into AI answers with accurate listings, markup and reviews.",
+    description:
+      "Learn how Google ranks local results, what its AI features and ChatGPT document about nearby businesses, and how to claim and align your listings on Google, Apple and Bing. Mark up each location with LocalBusiness structured data, then ask for and reply to reviews within Google's policies and the FTC's rule.",
+    level: "intermediate",
+    minutes: 35,
+    isFree: false,
+    status: "live",
+  },
+  {
+    id: "video-images-and-youtube",
+    order: 11,
+    district: "The Picture House",
+    title: "Video, images and YouTube in AI answers",
+    summary: "How AI answers use video and images, and the Google and YouTube basics that get yours shown and credited.",
+    description:
+      "AI Overviews, AI Mode and ChatGPT can show videos and images with links back to their source. Learn what Google, YouTube and OpenAI actually document: watch pages, VideoObject and key moments, video and image sitemaps, YouTube titles, chapters and captions, alt text and image license metadata.",
+    level: "intermediate",
+    minutes: 25,
+    isFree: false,
+    status: "live",
+  },
+  {
+    id: "when-ai-gets-your-brand-wrong",
+    order: 12,
+    district: "The Hall of Records",
+    title: "When AI gets your brand wrong",
+    summary: "Trace a wrong AI answer about your brand to its source, fix it, and report it the right way.",
+    description:
+      "Learn why answer engines get brand facts wrong, from hallucinations to outdated training data to faithfully repeating a bad page. You will trace errors through citations, fix the sources under each site's rules, use each platform's documented feedback routes, and avoid the shortcuts that backfire.",
+    level: "intermediate",
+    minutes: 30,
+    isFree: false,
+    status: "live",
+  },
 ];
 
 /** A part of the course: a run of consecutive lessons under one heading. */
 export type CoursePart = { title: string; summary: string; lessonIds: readonly string[] };
 
-// The course in four parts, in lesson order: how AI search works, your own site, everywhere else, then measuring and
+// The course in five parts, in lesson order: how AI search works, your own site, everywhere else, measuring and
 // running it. Every lesson sits in exactly one part (lesson-catalog.test.ts).
 export const COURSE_PARTS: readonly CoursePart[] = [
   {
@@ -135,6 +187,11 @@ export const COURSE_PARTS: readonly CoursePart[] = [
     title: "Measure and scale",
     summary: "Track your AI visibility and run AEO as an ongoing program.",
     lessonIds: ["measuring-ai-visibility", "running-an-aeo-program"],
+  },
+  {
+    title: "Advanced playbooks",
+    summary: "Products, local businesses, video and images, and fixing what AI gets wrong about you.",
+    lessonIds: ["products-and-shopping-in-ai-answers", "local-businesses-and-reviews", "video-images-and-youtube", "when-ai-gets-your-brand-wrong"],
   },
 ];
 

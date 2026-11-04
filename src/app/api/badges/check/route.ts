@@ -3,6 +3,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { getLesson, isLive } from "@/lib/lessons";
+import { LESSON_CATALOG } from "@/lib/lesson-catalog";
+import { HALF_CITY } from "@/lib/gamification";
 import { checkSubscription } from "@/lib/subscription";
 
 /**
@@ -110,8 +112,9 @@ export async function POST(request: Request) {
 
   const milestones = [
     { criteria: "milestone:first-lesson", check: startedCount >= 1 },
-    { criteria: "milestone:half-city", check: completedCount >= 4 },
-    { criteria: "milestone:all-districts", check: completedCount >= 8 },
+    // (counted from the catalog, so adding districts moves the milestones with them)
+    { criteria: "milestone:half-city", check: completedCount >= HALF_CITY },
+    { criteria: "milestone:all-districts", check: completedCount >= LESSON_CATALOG.length },
   ];
 
   for (const m of milestones) {

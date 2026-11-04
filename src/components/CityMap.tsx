@@ -50,7 +50,7 @@ function Card({ d, children }: { d: DistrictView; children: ReactNode }) {
   );
 }
 
-/** The eight districts of the City of Answers, in order, along one path. */
+/** The districts of the City of Answers, in order, along one path. */
 export default function CityMap({ districts }: { districts: DistrictView[] }) {
   return (
     <ol className="relative space-y-4" aria-label="Districts of the City of Answers">

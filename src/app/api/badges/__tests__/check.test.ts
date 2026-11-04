@@ -146,23 +146,23 @@ describe("POST /api/badges/check", () => {
     expect(awarded).toEqual([nameOf("milestone:first-lesson")]);
   });
 
-  it("fires half-city at 4 completed districts, not 3", async () => {
-    db.progress = others(4, 3);
+  it("fires half-city at 6 completed districts (half of 12), not 5", async () => {
+    db.progress = others(6, 5);
     expect((await check({ lessonId: FREE.id, score: 0, total: FREE_TOTAL })).awarded).not.toContain(
       nameOf("milestone:half-city")
     );
-    db.progress = others(4, 4);
+    db.progress = others(6, 6);
     expect((await check({ lessonId: FREE.id, score: 0, total: FREE_TOTAL })).awarded).toContain(
       nameOf("milestone:half-city")
     );
   });
 
-  it("fires all-districts at 8 completed districts, not 7", async () => {
-    db.progress = others(8, 7);
+  it("fires all-districts at 12 completed districts, not 11", async () => {
+    db.progress = others(12, 11);
     expect((await check({ lessonId: FREE.id, score: 0, total: FREE_TOTAL })).awarded).not.toContain(
       nameOf("milestone:all-districts")
     );
-    db.progress = others(8, 8);
+    db.progress = others(12, 12);
     const { awarded } = await check({ lessonId: FREE.id, score: 0, total: FREE_TOTAL });
     expect(awarded).toContain(nameOf("milestone:all-districts"));
     expect(awarded).toContain(nameOf("milestone:half-city"));

@@ -69,13 +69,17 @@ describe("BADGE_DEFINITIONS", () => {
       ["Ambassador", "complete:platform-playbooks", "Completed The Embassies"],
       ["Stargazer", "complete:measuring-ai-visibility", "Completed The Observatory"],
       ["Keeper of the Citadel", "complete:running-an-aeo-program", "Completed The Citadel"],
+      ["Market Maker", "complete:products-and-shopping-in-ai-answers", "Completed The Market"],
+      ["Local Hero", "complete:local-businesses-and-reviews", "Completed The Neighborhoods"],
+      ["Picture Perfect", "complete:video-images-and-youtube", "Completed The Picture House"],
+      ["Record Keeper", "complete:when-ai-gets-your-brand-wrong", "Completed The Hall of Records"],
       ["Perfect Audit", "perfect-audit", "Scored 100% on a lesson audit"],
       ["3-Day Streak", "streak:3", "Kept a 3-day streak"],
       ["7-Day Streak", "streak:7", "Kept a 7-day streak"],
       ["30-Day Streak", "streak:30", "Kept a 30-day streak"],
       ["First Steps", "milestone:first-lesson", "Started your first lesson"],
-      ["Halfway Across the City", "milestone:half-city", "Completed 4 districts"],
-      ["The Whole City", "milestone:all-districts", "Completed all 8 districts"],
+      ["Halfway Across the City", "milestone:half-city", "Completed 6 districts"],
+      ["The Whole City", "milestone:all-districts", "Completed all 12 districts"],
     ]);
   });
 

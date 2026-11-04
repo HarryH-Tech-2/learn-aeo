@@ -33,7 +33,7 @@ export const post: BlogPost = {
     {
       question: "Is Learn AEO finished?",
       answer:
-        "Yes. All eight lessons are live: from how answer engines choose sources to running an AEO program. Paid plans include every lesson and any new ones added later.",
+        "Yes. All twelve lessons are live: from how answer engines choose sources to fixing what AI gets wrong about your brand. Paid plans include every lesson and any new ones added later.",
     },
   ],
   content: `## How to choose an AEO course
@@ -81,11 +81,11 @@ There are no exercises or certificate. It suits you if you want the primary sour
 
 ### Learn AEO
 
-[Learn AEO](/) is an online AEO course for marketers who already know SEO basics. It has eight lessons, all live: how answer engines choose sources, making your site reachable by AI, writing citable content, structured data and entities, authority beyond your site, platform playbooks, measuring AI visibility, and running an AEO program.
+[Learn AEO](/) is an online AEO course for marketers who already know SEO basics. It has twelve lessons, all live: how answer engines choose sources, making your site reachable by AI, writing citable content, structured data and entities, authority beyond your site, platform playbooks, measuring AI visibility, running an AEO program, and four advanced playbooks on products and shopping, local businesses and reviews, video and images, and fixing what AI gets wrong about your brand.
 
-Each lesson is interactive, with short checks, a hands-on exercise and an audit, and each concept lists the sources it relies on with the date they were checked. Lessons are listed at 20 to 30 minutes each.
+Each lesson is interactive, with short checks, a hands-on exercise and an audit, and each concept lists the sources it relies on with the date they were checked. Lessons are listed at 20 to 35 minutes each.
 
-The [first lesson](/lessons/how-answer-engines-choose-sources) is free. The [paid plans](/pricing) are $100 as one payment or $10 per month, which you can cancel at any time. Both include all eight lessons and a certificate. Our terms offer a 14-day money-back guarantee: if you are unhappy within 14 days of purchase, you can ask for a full refund.
+The [first lesson](/lessons/how-answer-engines-choose-sources) is free. The [paid plans](/pricing) are $100 as one payment, $60 a year or $10 a month, and you can cancel the yearly and monthly plans at any time. Every plan includes all twelve lessons and a certificate. Our terms offer a 14-day money-back guarantee: if you are unhappy within 14 days of purchase, you can ask for a full refund.
 
 ## Side-by-side comparison
 
@@ -97,7 +97,7 @@ Every cell comes from the provider's own page on October 28, 2026, or, for Learn
 | AI Visibility Essentials with Semrush | Semrush Academy | 20 video lessons | 1–8 min per lesson | "Enroll for free" | Yes, after final assessment |
 | Generative Engine Content Optimization | Edureka on Coursera | Self-paced, 5 modules, 17 assignments | 8 hours | "Enroll for free"; included with Coursera Plus; certificate bought separately | Yes, with paid Certificate experience |
 | AI features and your website | Google Search Central | Documentation page | Not shown | Free | No |
-| Learn AEO | Learn AEO (ours) | 8 interactive lessons, all live | 20–30 min per lesson | Lesson 1 free; $100 once or $10/month | Yes |
+| Learn AEO | Learn AEO (ours) | 12 interactive lessons, all live | 20–35 min per lesson | Lesson 1 free; $100 once, $60/year or $10/month | Yes |
 
 ## How to use this list
 

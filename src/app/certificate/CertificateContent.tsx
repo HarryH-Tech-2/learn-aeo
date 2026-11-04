@@ -173,7 +173,7 @@ export default function CertificateContent() {
             <span className="text-gradient-gold font-medium">Locked</span>
           </h1>
           <p className="font-body text-sm text-sand-400 mb-8">
-            Complete all 8 lessons to unlock your Learn AEO Certificate.
+            Complete all {LESSON_CATALOG.length} lessons to unlock your Learn AEO Certificate.
           </p>
           <Link href="/dashboard" className="btn-primary py-3 px-8 text-sm">
             Back to Dashboard
@@ -228,7 +228,7 @@ export default function CertificateContent() {
             </span>
           </h1>
           <p className="font-body text-sand-400 font-light">
-            You have completed all 8 lessons. Here is your certificate.
+            You have completed all {LESSON_CATALOG.length} lessons. Here is your certificate.
           </p>
         </motion.div>
 

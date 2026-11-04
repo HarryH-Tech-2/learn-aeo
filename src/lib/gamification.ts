@@ -1,3 +1,8 @@
+import { LESSON_CATALOG } from "./lesson-catalog";
+
+/** Districts to complete for the "Halfway Across the City" badge: half the catalog, rounded up. */
+export const HALF_CITY = Math.ceil(LESSON_CATALOG.length / 2);
+
 export const XP_REWARDS = {
   // The AEO lesson player (src/components/player)
   /** Moving on from a concept card */
@@ -87,11 +92,15 @@ export const BADGE_DEFINITIONS = [
   { name: "Ambassador", criteria: "complete:platform-playbooks", description: "Completed The Embassies", icon: "/badges/district-the-embassies.webp" },
   { name: "Stargazer", criteria: "complete:measuring-ai-visibility", description: "Completed The Observatory", icon: "/badges/district-the-observatory.webp" },
   { name: "Keeper of the Citadel", criteria: "complete:running-an-aeo-program", description: "Completed The Citadel", icon: "/badges/district-the-citadel.webp" },
+  { name: "Market Maker", criteria: "complete:products-and-shopping-in-ai-answers", description: "Completed The Market", icon: "/badges/district-the-market.webp" },
+  { name: "Local Hero", criteria: "complete:local-businesses-and-reviews", description: "Completed The Neighborhoods", icon: "/badges/district-the-neighborhoods.webp" },
+  { name: "Picture Perfect", criteria: "complete:video-images-and-youtube", description: "Completed The Picture House", icon: "/badges/district-the-picture-house.webp" },
+  { name: "Record Keeper", criteria: "complete:when-ai-gets-your-brand-wrong", description: "Completed The Hall of Records", icon: "/badges/district-the-hall-of-records.webp" },
   { name: "Perfect Audit", criteria: "perfect-audit", description: "Scored 100% on a lesson audit", icon: "/badges/perfect-audit.webp" },
   { name: "3-Day Streak", criteria: "streak:3", description: "Kept a 3-day streak", icon: "/badges/streak-3-days.webp" },
   { name: "7-Day Streak", criteria: "streak:7", description: "Kept a 7-day streak", icon: "/badges/streak-7-days.webp" },
   { name: "30-Day Streak", criteria: "streak:30", description: "Kept a 30-day streak", icon: "/badges/streak-30-days.webp" },
   { name: "First Steps", criteria: "milestone:first-lesson", description: "Started your first lesson", icon: "/badges/milestone-first-lesson.webp" },
-  { name: "Halfway Across the City", criteria: "milestone:half-city", description: "Completed 4 districts", icon: "/badges/milestone-half-city.webp" },
-  { name: "The Whole City", criteria: "milestone:all-districts", description: "Completed all 8 districts", icon: "/badges/milestone-all-districts.webp" },
+  { name: "Halfway Across the City", criteria: "milestone:half-city", description: `Completed ${HALF_CITY} districts`, icon: "/badges/milestone-half-city.webp" },
+  { name: "The Whole City", criteria: "milestone:all-districts", description: `Completed all ${LESSON_CATALOG.length} districts`, icon: "/badges/milestone-all-districts.webp" },
 ] as const;

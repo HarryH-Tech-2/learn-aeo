@@ -83,7 +83,7 @@ export const LESSON_8: LessonContent = {
     "You have reached The Citadel, the last district of the City of Answers. Everything you have learned so far is a set of tools; here you learn to run them as a program. You will audit a site from the gate to the observatory, decide what to fix first, report it honestly, and leave with a 90-day plan you can start on Monday.",
 
   outro:
-    "You have walked the whole City of Answers: how answers are built, how bots get in, how passages get lifted, how markup and other sites describe you, how each platform works, how to measure it, and now how to run it as a program. That is the course. Once you have passed the audit in all eight lessons, your certificate is ready on the Certificate tab of your dashboard.",
+    "You have walked the heart of the City of Answers: how answers are built, how bots get in, how passages get lifted, how markup and other sites describe you, how each platform works, how to measure it, and now how to run it as a program. That is the core of the course. The advanced playbooks come next: products and shopping, local businesses and reviews, video and images, and what to do when AI gets your brand wrong. Pass the audit in every lesson and your certificate is ready on the Certificate tab of your dashboard.",
 
   groups: [
     {

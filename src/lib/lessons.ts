@@ -11,6 +11,10 @@ import { LESSON_5 } from "./content/lesson-5-the-agora";
 import { LESSON_6 } from "./content/lesson-6-the-embassies";
 import { LESSON_7 } from "./content/lesson-7-the-observatory";
 import { LESSON_8 } from "./content/lesson-8-the-citadel";
+import { LESSON_9 } from "./content/lesson-9-the-market";
+import { LESSON_10 } from "./content/lesson-10-the-neighborhoods";
+import { LESSON_11 } from "./content/lesson-11-the-picture-house";
+import { LESSON_12 } from "./content/lesson-12-the-hall-of-records";
 
 export type LiveLesson = LessonMeta & { status: "live"; content: LessonContent };
 export type Lesson = LiveLesson | (LessonMeta & { status: "coming-soon" });
@@ -25,6 +29,10 @@ export const CONTENT: Readonly<Record<string, LessonContent>> = {
   "platform-playbooks": LESSON_6,
   "measuring-ai-visibility": LESSON_7,
   "running-an-aeo-program": LESSON_8,
+  "products-and-shopping-in-ai-answers": LESSON_9,
+  "local-businesses-and-reviews": LESSON_10,
+  "video-images-and-youtube": LESSON_11,
+  "when-ai-gets-your-brand-wrong": LESSON_12,
 };
 
 export const LESSONS: readonly Lesson[] = LESSON_CATALOG.map((meta): Lesson => {

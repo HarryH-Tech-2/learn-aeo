@@ -2,7 +2,7 @@
  * Copy and rendering for the nurture sequence (src/lib/nurture.ts).
  *
  * Written for marketers who know SEO basics, in the City of Answers voice: the course is a walk through
- * eight districts, one per lesson, starting at The Gate (Lesson 1, free). District names, titles and
+ * districts, one per lesson, starting at The Gate (Lesson 1, free). District names, titles and
  * which lessons are live come from the catalog (src/lib/lesson-catalog.ts), so the copy never drifts
  * from the course. The look is the shared one in src/lib/email-layout.ts.
  *

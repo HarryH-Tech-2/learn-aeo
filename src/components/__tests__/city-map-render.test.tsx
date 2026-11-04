@@ -13,9 +13,9 @@ const catalog: LessonMeta[] = LESSON_CATALOG.map((l) => ({ ...l, status: l.order
 const html = renderToStaticMarkup(<CityMap districts={districtViews(catalog, null, false)} />);
 
 describe("CityMap", () => {
-  it("renders all eight districts", () => {
+  it("renders every district", () => {
     for (const l of catalog) expect(html).toContain(l.district);
-    expect((html.match(/data-district=/g) ?? []).length).toBe(8);
+    expect((html.match(/data-district=/g) ?? []).length).toBe(LESSON_CATALOG.length);
   });
 
   it("links the next district to its lesson", () => {
@@ -30,7 +30,7 @@ describe("CityMap", () => {
   it("does not link coming-soon districts", () => {
     expect(html).not.toContain(lessonPath(catalog[3].id));
     const soon = html.split("data-district=").filter((s) => s.includes("Coming soon"));
-    expect(soon.length).toBe(5);
+    expect(soon.length).toBe(LESSON_CATALOG.length - 3);
     for (const s of soon) expect(s.split("data-district=")[0]).not.toContain("href=");
   });
 

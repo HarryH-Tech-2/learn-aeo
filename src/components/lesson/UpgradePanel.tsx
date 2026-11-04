@@ -38,7 +38,7 @@ type Props = UpgradeInfo & {
 
 const SHEET = "rounded-2xl border border-cyan-500/30 bg-obsidian-light p-6 text-left md:p-8";
 
-const NUMBER_WORDS = ["No", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"];
+const NUMBER_WORDS = ["No", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen"];
 const PAID_LESSONS = LESSON_CATALOG.filter((l) => !l.isFree);
 const ALL_LIVE = LESSON_CATALOG.every((l) => l.status === "live");
 const REMAINING = NUMBER_WORDS[PAID_LESSONS.length] ?? String(PAID_LESSONS.length);

@@ -392,7 +392,7 @@ export default function BlogPostContent({
                 Start Lesson 1 Free
               </Link>
               <p className="font-body text-xs text-sand-500 mt-4">
-                Lesson 1 is free with a Google or email sign-in. Lifetime access to all eight lessons is
+                Lesson 1 is free with a Google or email sign-in. Lifetime access to every lesson is
                 one payment later, if you want it.
               </p>
             </div>

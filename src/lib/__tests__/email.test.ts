@@ -11,7 +11,7 @@ vi.mock("resend", () => ({
 }));
 
 import { sendWelcomeEmail } from "@/lib/email";
-import { LESSON_CATALOG } from "@/lib/lesson-catalog";
+import { LESSON_CATALOG, titleMidSentence } from "@/lib/lesson-catalog";
 import { Resend } from "resend";
 
 describe("sendWelcomeEmail", () => {
@@ -67,14 +67,14 @@ describe("sendWelcomeEmail", () => {
     expect(html).toContain(`All ${LESSON_CATALOG.length} lessons`);
   });
 
-  it("purchase welcome counts lessons honestly and keeps AEO in the last title", async () => {
+  it("purchase welcome counts lessons honestly and keeps the capitals (AI, AEO) in the last title", async () => {
     const { lessonsIncludedLine } = await import("@/lib/plans");
     for (const plan of ["lifetime", "monthly"] as const) {
       mockSend.mockClear();
       await sendWelcomeEmail("Ana", "a@example.com", plan);
       const { html } = mockSend.mock.calls[0][0];
       expect(html).toContain(lessonsIncludedLine());
-      expect(html).toContain("running an AEO program");
+      expect(html).toContain(titleMidSentence(LESSON_CATALOG[LESSON_CATALOG.length - 1].title));
       if (LESSON_CATALOG.some((l) => l.status !== "live")) {
         expect(html).not.toContain(`All ${LESSON_CATALOG.length} lessons, from`);
         expect(html).toContain("live now");

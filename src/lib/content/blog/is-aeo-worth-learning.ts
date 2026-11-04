@@ -13,6 +13,7 @@ export const post: BlogPost = {
     "For most marketers who already know SEO, yes: Google reports that AI Mode passed 1 billion monthly active users in 2026, and independent studies link AI summaries to fewer clicks on classic results. The learning cost is modest, because Google says AI features need no special optimizations beyond good SEO.",
   date: "October 28, 2026",
   publishedAt: "2026-10-28",
+  updatedAt: "2026-11-04",
   category: "Basics",
   image: "/blog/is-aeo-worth-learning.webp",
   imageAlt: "A curve of light rising over a glass city skyline to a gold point at dawn",
@@ -36,7 +37,7 @@ export const post: BlogPost = {
     {
       question: "Do I need to pay to learn AEO?",
       answer:
-        "No. The primary documentation from Google, OpenAI, Anthropic and Perplexity is free. A course such as Learn AEO adds structure and practice; its first lesson is free and full access is $100 once or $10 a month.",
+        "No. The primary documentation from Google, OpenAI, Anthropic and Perplexity is free. A course such as Learn AEO adds structure and practice; its first lesson is free and full access is $100 once, $60 a year or $10 a month.",
     },
   ],
   content: `## Is AEO worth learning in 2026?
@@ -103,7 +104,7 @@ It is less urgent if your customers rarely find you through search, or if your w
 
 No. Google's AI features guidance, the crawler docs from OpenAI, Anthropic and Perplexity, the GEO paper and schema.org's documentation are all free, and they are the primary sources any course should be built on.
 
-A course is worth it if you want structure and practice. [Learn AEO](/) is one option: an AEO course with eight lessons for marketers who know SEO basics, with the first lesson free and full access at $100 once or $10 a month (see [pricing](/pricing)). It will not guarantee citations, and nothing honestly can. What it can do is help you understand the system well enough to make good decisions and measure the results.`,
+A course is worth it if you want structure and practice. [Learn AEO](/) is one option: an AEO course with twelve lessons for marketers who know SEO basics, with the first lesson free and full access at $100 once, $60 a year or $10 a month (see [pricing](/pricing)). It will not guarantee citations, and nothing honestly can. What it can do is help you understand the system well enough to make good decisions and measure the results.`,
   sources: [
     {
       title: "Q2 earnings call: CEO's remarks",

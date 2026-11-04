@@ -14,7 +14,7 @@ import { AUTHOR } from "@/lib/author";
 // Lesson names, counts and minutes come from the catalog, prices from the plan catalog: nothing is typed twice.
 
 export const metadata: Metadata = pageMetadata({
-  title: "The AEO course: 8 lessons for marketers",
+  title: `The AEO course: ${LESSON_CATALOG.length} lessons for marketers`,
   description:
     "An answer engine optimization course for marketers who know SEO: how AI search picks sources, crawler access, citable writing, schema and measurement.",
   path: "/course",

@@ -24,11 +24,15 @@ const EXPECTED = [
   ["platform-playbooks", "The Embassies", "Platform playbooks", "intermediate", 25, false],
   ["measuring-ai-visibility", "The Observatory", "Measuring AI visibility", "advanced", 25, false],
   ["running-an-aeo-program", "The Citadel", "Running an AEO program", "advanced", 20, false],
+  ["products-and-shopping-in-ai-answers", "The Market", "Products and shopping in AI answers", "intermediate", 25, false],
+  ["local-businesses-and-reviews", "The Neighborhoods", "Local businesses and reviews in AI answers", "intermediate", 35, false],
+  ["video-images-and-youtube", "The Picture House", "Video, images and YouTube in AI answers", "intermediate", 25, false],
+  ["when-ai-gets-your-brand-wrong", "The Hall of Records", "When AI gets your brand wrong", "intermediate", 30, false],
 ] as const;
 
 describe("lesson catalog", () => {
   it("matches the agreed lesson table", () => {
-    expect(LESSON_CATALOG).toHaveLength(8);
+    expect(LESSON_CATALOG).toHaveLength(12);
     LESSON_CATALOG.forEach((l, i) => {
       const [id, district, title, level, minutes, isFree] = EXPECTED[i];
       expect(l).toMatchObject({ id, district, title, level, minutes, isFree, order: i + 1 });
@@ -36,11 +40,11 @@ describe("lesson catalog", () => {
       expect(l.description.length).toBeGreaterThan(40);
       expect(l.status).toBe("live");
     });
-    expect(new Set(LESSON_CATALOG.map((l) => l.id)).size).toBe(8);
+    expect(new Set(LESSON_CATALOG.map((l) => l.id)).size).toBe(12);
   });
 
   it("has totals and paths", () => {
-    expect(TOTAL_MINUTES).toBe(210);
+    expect(TOTAL_MINUTES).toBe(325);
     expect(FIRST_LESSON_PATH).toBe("/lessons/how-answer-engines-choose-sources");
     expect(lessonPath(FIRST_LESSON_ID)).toBe(FIRST_LESSON_PATH);
     expect(publicLessonPaths()).toEqual([FIRST_LESSON_PATH]);
@@ -49,7 +53,8 @@ describe("lesson catalog", () => {
   it("looks lessons up and walks to the next", () => {
     expect(lessonMeta("nope")).toBeUndefined();
     expect(lessonMeta(FIRST_LESSON_ID)?.order).toBe(1);
-    expect(nextLessonMeta("running-an-aeo-program")).toBeUndefined();
+    expect(nextLessonMeta("running-an-aeo-program")?.id).toBe("products-and-shopping-in-ai-answers");
+    expect(nextLessonMeta("when-ai-gets-your-brand-wrong")).toBeUndefined();
     expect(nextLessonMeta(FIRST_LESSON_ID)?.order).toBe(2);
     expect(nextLessonMeta("nope")).toBeUndefined();
   });
@@ -57,7 +62,7 @@ describe("lesson catalog", () => {
   it("lowercases only the first letter of a title used mid-sentence, keeping AEO", () => {
     expect(titleMidSentence("Running an AEO program")).toBe("running an AEO program");
     expect(titleMidSentence("Make your site reachable by AI")).toBe("make your site reachable by AI");
-    expect(titleMidSentence(LESSON_CATALOG[LESSON_CATALOG.length - 1].title)).toContain("AEO");
+    expect(titleMidSentence(LESSON_CATALOG[LESSON_CATALOG.length - 1].title)).toBe("when AI gets your brand wrong");
   });
 
   it("imports only lesson-types (middleware imports it)", () => {
@@ -77,7 +82,7 @@ describe("course parts", () => {
 
   it("numbers the parts and resolves their lessons", () => {
     const parts = courseParts();
-    expect(parts.map((p) => p.number)).toEqual([1, 2, 3, 4]);
+    expect(parts.map((p) => p.number)).toEqual([1, 2, 3, 4, 5]);
     for (const p of parts) expect(p.lessons).toHaveLength(p.part.lessonIds.length);
   });
 });

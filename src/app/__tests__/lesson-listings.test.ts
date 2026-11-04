@@ -22,10 +22,10 @@ describe("sitemap lessons", () => {
 });
 
 describe("llms.txt lessons", () => {
-  it("lists all 8 lessons by title, marking the free one and the coming-soon ones", async () => {
+  it("lists every lesson by title, marking the free one and the coming-soon ones", async () => {
     const body = await llms().text();
     const lines = body.split("\n");
-    expect(LESSON_CATALOG).toHaveLength(8);
+    expect(LESSON_CATALOG).toHaveLength(12);
     expect(LESSON_CATALOG.some((l) => l.status === "coming-soon"), "no coming-soon lesson to test").toBe(true);
     for (const l of LESSON_CATALOG) {
       const line = lines.find((x) => x.includes(l.title));

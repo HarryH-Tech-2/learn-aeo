@@ -75,5 +75,6 @@ describe("leaderboard stays out of the index (SEO audit 2026-10-30)", () => {
     expect(sitemap().map((e) => e.url)).not.toContain(`${SITE.url}/leaderboard`);
     const { metadata } = await import("@/app/leaderboard/page");
     expect((metadata.robots as { index: boolean }).index).toBe(false);
-  });
+    // (importing the page pulls in its whole component tree: slow on a busy machine)
+  }, 30_000);
 });
