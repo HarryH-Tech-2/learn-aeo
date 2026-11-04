@@ -15,6 +15,11 @@ export type GlossaryTerm = {
   definition: string;
   /** Markdown, 80 to 250 words: what it means in practice for a marketer, answer first. */
   explanation: string;
+  /**
+   * Longer sections for the few terms people search in depth (e.g. "llmo metrics", "llmo strategy"):
+   * each an h2 heading and 40 to 250 words of Markdown. Most terms leave this out and stay short.
+   */
+  sections?: { heading: string; body: string }[];
   /** Optional concrete illustration: a robots.txt line, a JSON-LD snippet, a before/after passage. */
   example?: { label: string; body: string; language?: CodeLanguage };
   /** Slugs of related terms (each must exist in the glossary). */

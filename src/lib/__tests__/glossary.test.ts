@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { GLOSSARY, getTerm } from "@/lib/glossary";
 import { LESSON_CATALOG } from "@/lib/lesson-catalog";
+import { blogPosts } from "@/lib/blog-posts";
 
 const words = (s: string) => s.replace(/```[\s\S]*?```/g, " ").split(/\s+/).filter(Boolean).length;
 const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
@@ -38,10 +39,22 @@ describe("GLOSSARY", () => {
     }
   });
 
+  it.each(GLOSSARY.filter((t) => t.sections).map((t) => [t.slug, t] as const))("%s: sections have unique headings and 40-250 words each", (_slug, t) => {
+    const headings = t.sections!.map((s) => s.heading);
+    expect(new Set(headings).size).toBe(headings.length);
+    for (const s of t.sections!) {
+      expect(s.heading.length).toBeGreaterThan(0);
+      const n = words(s.body);
+      expect(n, s.heading).toBeGreaterThanOrEqual(40);
+      expect(n, s.heading).toBeLessThanOrEqual(250);
+    }
+  });
+
   it("links internally only to pages that exist", () => {
-    const ok = new Set(["/pricing", "/tools", "/tools/ai-crawler-checker", "/tools/llms-txt-generator", ...LESSON_CATALOG.map((l) => `/lessons/${l.id}`), ...GLOSSARY.map((t) => `/glossary/${t.slug}`)]);
+    const ok = new Set(["/", "/pricing", "/tools", "/tools/ai-crawler-checker", "/tools/llms-txt-generator", ...LESSON_CATALOG.map((l) => `/lessons/${l.id}`), ...GLOSSARY.map((t) => `/glossary/${t.slug}`), ...blogPosts.map((p) => `/blog/${p.slug}`)]);
     for (const t of GLOSSARY) {
-      for (const m of t.explanation.matchAll(/\]\((\/[^)\s#]*)/g)) expect(ok.has(m[1]), `${t.slug} links ${m[1]}`).toBe(true);
+      const text = [t.explanation, ...(t.sections ?? []).map((s) => s.body)].join("\n");
+      for (const m of text.matchAll(/\]\((\/[^)\s#]*)/g)) expect(ok.has(m[1]), `${t.slug} links ${m[1]}`).toBe(true);
     }
   });
 });

@@ -110,7 +110,7 @@ In analytics, look at referral traffic from AI products, such as visits from cha
 
 Self-study works, and everything above is free. A course is useful if you want the material in order, with exercises that check your understanding as you go.
 
-Learn AEO is one option. It has eight lessons for marketers who already know SEO basics; the first, on how answer engines choose sources, is free. All eight lessons are live. Full access is $100 once or $10 a month (see [pricing](/pricing)). For other options, see our roundup of [AEO courses](/blog/best-aeo-courses). Whatever you choose, keep the primary docs open alongside it: they change, and the companies' own pages are the final word.
+[Learn AEO](/) is one option: an AEO course with eight lessons for marketers who already know SEO basics; the first, on how answer engines choose sources, is free. All eight lessons are live. Full access is $100 once or $10 a month (see [pricing](/pricing)). For other options, see our roundup of [AEO courses](/blog/best-aeo-courses). Whatever you choose, keep the primary docs open alongside it: they change, and the companies' own pages are the final word.
 
 ## A simple study order
 

@@ -103,7 +103,7 @@ It is less urgent if your customers rarely find you through search, or if your w
 
 No. Google's AI features guidance, the crawler docs from OpenAI, Anthropic and Perplexity, the GEO paper and schema.org's documentation are all free, and they are the primary sources any course should be built on.
 
-A course is worth it if you want structure and practice. Learn AEO is one option: eight lessons for marketers who know SEO basics, with the first lesson free and full access at $100 once or $10 a month (see [pricing](/pricing)). It will not guarantee citations, and nothing honestly can. What it can do is help you understand the system well enough to make good decisions and measure the results.`,
+A course is worth it if you want structure and practice. [Learn AEO](/) is one option: an AEO course with eight lessons for marketers who know SEO basics, with the first lesson free and full access at $100 once or $10 a month (see [pricing](/pricing)). It will not guarantee citations, and nothing honestly can. What it can do is help you understand the system well enough to make good decisions and measure the results.`,
   sources: [
     {
       title: "Q2 earnings call: CEO's remarks",

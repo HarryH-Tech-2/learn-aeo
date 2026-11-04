@@ -90,23 +90,31 @@ export default async function TermPage({ params }: Params) {
         {t.aka?.length ? <p className="font-body text-sand-400 mb-6">Also called {t.aka.join(", ")}</p> : null}
         <p className="font-body text-xl text-sand-100 leading-relaxed border-l-2 border-cyan-400 pl-5 mt-6 mb-10">{t.definition}</p>
 
+        {/* The full guide goes straight after the definition: this page answers "what is it", the post covers it in full. */}
+        {guide && (
+          <section aria-label="Full guide" className="card-ancient p-6 mb-10">
+            <p className="font-body text-xs uppercase tracking-[0.2em] text-cyan-500 mb-2">Read the full guide</p>
+            <p className="font-body text-sand-300">
+              <Link href={`/blog/${guide.slug}`} className="text-cyan-400 underline underline-offset-4">{guide.title}</Link>
+            </p>
+          </section>
+        )}
+
         <section aria-label="Explanation" className="mb-10">
           <Markdown components={MD}>{t.explanation}</Markdown>
         </section>
+
+        {t.sections?.map((s, i) => (
+          <section key={s.heading} aria-labelledby={`section-${i}`} className="mb-10">
+            <h2 id={`section-${i}`} className="font-display text-2xl font-light text-sand-100 mb-4">{s.heading}</h2>
+            <Markdown components={MD}>{s.body}</Markdown>
+          </section>
+        ))}
 
         {t.example && (
           <section aria-labelledby="example" className="mb-12">
             <h2 id="example" className="font-display text-2xl font-light text-sand-100 mb-4">Example</h2>
             <CodeBlock language={t.example.language ?? "text"} caption={t.example.label} code={t.example.body} />
-          </section>
-        )}
-
-        {guide && (
-          <section aria-label="Full guide" className="card-ancient p-6 mb-6">
-            <p className="font-body text-xs uppercase tracking-[0.2em] text-cyan-500 mb-2">Read the full guide</p>
-            <p className="font-body text-sand-300">
-              <Link href={`/blog/${guide.slug}`} className="text-cyan-400 underline underline-offset-4">{guide.title}</Link>
-            </p>
           </section>
         )}
 

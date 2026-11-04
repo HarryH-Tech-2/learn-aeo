@@ -44,7 +44,7 @@ export default function HeroSection() {
       {/* Content */}
       <div className="city-hero-copy relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <p className="font-body text-xs sm:text-sm uppercase tracking-[0.2em] text-cyan-400 mb-5">
-          A course for marketers who know SEO
+          An AEO course for marketers who know SEO
         </p>
         {/* Visible at first paint (no opacity fade): Chrome ignores opacity-0 text for LCP. */}
         <h1 className="hero-title font-display text-4xl sm:text-6xl md:text-7xl font-light leading-[1.02] mb-6 sm:mb-8 tracking-tight">
