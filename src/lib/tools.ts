@@ -31,14 +31,14 @@ export const TOOLS: readonly ToolMeta[] = [
     name: "Schema Generator",
     summary: "Build Organization, Article or Product JSON-LD, with hints that catch common mistakes.",
     kind: "client",
-    status: "coming-soon",
+    status: "live",
   },
   {
     slug: "citability-checker",
     name: "Citability Checker",
     summary: "Enter a URL to see how clearly the page answers questions and backs its claims, with specific fixes.",
     kind: "server",
-    status: "coming-soon",
+    status: "live",
   },
 ];
 
@@ -58,4 +58,12 @@ export const TOOL_RELATED: Readonly<Record<string, readonly string[]>> = {
     "/blog/how-chatgpt-chooses-sources",
   ],
   "llms-txt-generator": ["/glossary/llms-txt", "/blog/llms-txt-explained", "/glossary/robots-txt", "/blog/what-is-aeo"],
+  "schema-generator": ["/glossary/structured-data", "/glossary/json-ld", "/glossary/entity", "/glossary/same-as", "/glossary/knowledge-graph"],
+  "citability-checker": [
+    "/glossary/passage-ranking",
+    "/glossary/citation",
+    "/glossary/e-e-a-t",
+    "/blog/get-cited-in-google-ai-overviews",
+    "/blog/how-chatgpt-chooses-sources",
+  ],
 };

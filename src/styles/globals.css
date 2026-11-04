@@ -1736,3 +1736,81 @@ html.light .city-hero-vignette {
     transform: none;
   }
 }
+
+/* ── Citability Checker and Schema Generator results ── */
+.cite-check {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+  padding: 1rem 1.1rem;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--rt-gold-500) 16%, transparent);
+  background: color-mix(in srgb, var(--rt-obsidian) 50%, transparent);
+}
+.cite-check-sm {
+  padding: 0.65rem 0.8rem;
+  gap: 0.65rem;
+}
+.cite-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #04122a;
+}
+.cite-check-sm .cite-icon {
+  width: 1.35rem;
+  height: 1.35rem;
+  font-size: 0.72rem;
+}
+.cite-pass .cite-icon { background: #3ccf91; }
+.cite-warn .cite-icon { background: #f2b84b; }
+.cite-fail .cite-icon { background: #ef6b5a; color: #fff; }
+.cite-tip .cite-icon { background: var(--rt-cyan-400); }
+.cite-fail { border-color: rgba(239, 107, 90, 0.35); }
+.cite-warn { border-color: rgba(242, 184, 75, 0.3); }
+.cite-pass-text { color: #2fb27c; }
+.cite-warn-text { color: #c98d1a; }
+.cite-fail-text { color: #e0674a; }
+.cite-ring { stroke: var(--rt-cyan-400); }
+.cite-lead {
+  border-left: 3px solid var(--rt-cyan-400);
+  padding: 1rem 1.25rem;
+  border-radius: 0 1rem 1rem 0;
+  background: color-mix(in srgb, var(--rt-cyan-400) 8%, transparent);
+}
+.schema-kind {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  text-align: left;
+  padding: 0.9rem 1rem;
+  border-radius: 1rem;
+  color: var(--rt-sand-200);
+  border: 1px solid color-mix(in srgb, var(--rt-gold-500) 20%, transparent);
+  background: color-mix(in srgb, var(--rt-obsidian) 45%, transparent);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.schema-kind:hover {
+  border-color: color-mix(in srgb, var(--rt-cyan-400) 50%, transparent);
+}
+.schema-kind-on {
+  color: #f4f8ff;
+  border-color: var(--rt-cyan-400);
+  background: linear-gradient(135deg, var(--rt-cyan-600), #16294a);
+}
+.schema-output {
+  border-radius: 1rem;
+  overflow: hidden;
+  background: #0b1220;
+  border: 1px solid rgba(111, 178, 255, 0.25);
+}
+/* the code panel is dark in both themes, so its text is fixed light */
+.schema-code {
+  color: #dbe6f7;
+}

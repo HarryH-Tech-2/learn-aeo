@@ -164,16 +164,24 @@ describe("one place for JSON-LD", () => {
   };
   walk(path.join(root, "src"));
 
+  // The free tools handle other people's JSON-LD, never the site's own: the Schema Generator writes a snippet for the
+  // visitor to copy, and the Citability Checker reads the JSON-LD of the page it checks.
+  const TOOL_FILES = ["src/lib/schema-generator.ts", "src/lib/citability.ts"];
+
   it("only JsonLd writes ld+json script tags (content data may show the tag as example text)", () => {
     const offenders = files.filter(
-      (f) => f !== "src/components/JsonLd.tsx" && !f.startsWith("src/lib/content/") && fs.readFileSync(path.join(root, f), "utf8").includes("application/ld+json")
+      (f) =>
+        f !== "src/components/JsonLd.tsx" &&
+        !TOOL_FILES.includes(f) &&
+        !f.startsWith("src/lib/content/") &&
+        fs.readFileSync(path.join(root, f), "utf8").includes("application/ld+json")
     );
     expect(offenders).toEqual([]);
   });
 
   it("names a Person only through the author module", () => {
     const offenders = files.filter(
-      (f) => f !== "src/lib/schema.ts" && /"@type":\s*"Person"|@type: "Person"/.test(fs.readFileSync(path.join(root, f), "utf8")),
+      (f) => f !== "src/lib/schema.ts" && !TOOL_FILES.includes(f) && /"@type":\s*"Person"|@type: "Person"/.test(fs.readFileSync(path.join(root, f), "utf8")),
     );
     expect(offenders).toEqual([]);
   });

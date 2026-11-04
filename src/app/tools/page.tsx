@@ -12,7 +12,7 @@ import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
 export const metadata: Metadata = pageMetadata({
   title: "Free AEO tools",
   description:
-    "Free answer engine optimization tools: check which AI crawlers your robots.txt allows, and build an llms.txt file. No sign-in needed.",
+    "Free AEO tools: check which AI crawlers your robots.txt allows, score how quotable a page is, and build JSON-LD schema or an llms.txt file. No sign-in.",
   path: "/tools",
 });
 
