@@ -63,7 +63,10 @@ export const PLANS: Record<PlanId, Plan> = {
     features: [
       lessonsIncludedLine(),
       "Every new lesson we add, at no extra cost",
-      "Certificate to share on LinkedIn",
+      "Hands-on exercises, quick checks and an audit in every lesson",
+      "Sources on every concept, with the date they were checked",
+      "Certificate with a verify link, to share on LinkedIn",
+      "XP, levels, badges and the leaderboard",
       "14-day money-back guarantee",
     ],
     envKey: "STRIPE_PRICE_ID",
@@ -78,7 +81,14 @@ export const PLANS: Record<PlanId, Plan> = {
     usd: 60,
     gbp: 48,
     audience: "For working through the course at your own pace over a year",
-    features: ["Everything in Lifetime for a year", "Half the price of twelve monthly payments", "Cancel any time from your account"],
+    features: [
+      "Everything in Lifetime for a year",
+      "Half the price of twelve monthly payments",
+      "New lessons included while it runs",
+      "Certificate when you finish",
+      "Progress kept if you come back",
+      "Cancel any time from your account",
+    ],
     envKey: "STRIPE_PRICE_YEARLY",
   },
   monthly: {
@@ -90,7 +100,13 @@ export const PLANS: Record<PlanId, Plan> = {
     usd: 10,
     gbp: 8,
     audience: "For trying the whole course without paying up front",
-    features: ["Everything in Lifetime while it runs", "Cancel any time from your account", "Progress kept if you come back"],
+    features: [
+      "Everything in Lifetime while it runs",
+      "New lessons included while it runs",
+      "Certificate when you finish",
+      "Progress kept if you come back",
+      "Cancel any time from your account",
+    ],
     envKey: "STRIPE_PRICE_MONTHLY",
   },
 };

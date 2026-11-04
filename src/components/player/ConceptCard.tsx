@@ -6,6 +6,7 @@ import type { Concept, Source } from "@/lib/lesson-types";
 import CodeBlock from "./CodeBlock";
 import BeforeAfterPredict from "./BeforeAfterPredict";
 import ConfidenceCheck from "./ConfidenceCheck";
+import ConceptQuiz from "./ConceptQuiz";
 import type { Confidence } from "@/lib/concept-confidence";
 import { EYEBROW, FOCUS, HEADING, PROSE, formatSourceDate } from "./ui";
 
@@ -71,7 +72,7 @@ type Props = {
 };
 
 export default function ConceptCard({ concept, eyebrow, confidence, onConfidence }: Props) {
-  const { id, term, summary, explanation, whyItMatters, example, pitfall, sources } = concept;
+  const { id, term, summary, explanation, whyItMatters, example, pitfall, sources, quiz } = concept;
   return (
     <article className="space-y-7">
       <header className="space-y-2">
@@ -89,6 +90,8 @@ export default function ConceptCard({ concept, eyebrow, confidence, onConfidence
           {explanation}
         </Markdown>
       </div>
+
+      {quiz && <ConceptQuiz key={quiz.id} question={quiz} conceptId={id} />}
 
       <Section title="Why it matters">
         <p className={PROSE}>{whyItMatters}</p>

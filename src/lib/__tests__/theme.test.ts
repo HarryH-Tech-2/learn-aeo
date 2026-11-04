@@ -1,24 +1,18 @@
 import { describe, it, expect, vi } from "vitest";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { resolveInitialTheme, THEME_INIT_SCRIPT, THEME_STORAGE_KEY, MOBILE_MAX_WIDTH } from "@/lib/theme";
+import { resolveInitialTheme, THEME_INIT_SCRIPT, THEME_STORAGE_KEY } from "@/lib/theme";
 
 describe("resolveInitialTheme", () => {
-  it("defaults to light on phone-sized viewports", () => {
-    expect(resolveInitialTheme(null, 375)).toBe("light");
-    expect(resolveInitialTheme(null, MOBILE_MAX_WIDTH)).toBe("light");
-  });
-  it("defaults to dark on larger viewports", () => {
-    expect(resolveInitialTheme(null, MOBILE_MAX_WIDTH + 1)).toBe("dark");
-    expect(resolveInitialTheme(null, 1440)).toBe("dark");
+  it("defaults to dark", () => {
+    expect(resolveInitialTheme(null)).toBe("dark");
   });
   it("always honors a saved choice", () => {
-    expect(resolveInitialTheme("dark", 375)).toBe("dark");
-    expect(resolveInitialTheme("light", 1440)).toBe("light");
+    expect(resolveInitialTheme("dark")).toBe("dark");
+    expect(resolveInitialTheme("light")).toBe("light");
   });
   it("ignores garbage in storage", () => {
-    expect(resolveInitialTheme("banana", 375)).toBe("light");
-    expect(resolveInitialTheme("banana", 1440)).toBe("dark");
+    expect(resolveInitialTheme("banana")).toBe("dark");
   });
 });
 
@@ -50,10 +44,8 @@ describe("THEME_INIT_SCRIPT", () => {
 
   it("matches resolveInitialTheme for every case", () => {
     for (const stored of [null, "light", "dark", "banana"]) {
-      for (const width of [320, MOBILE_MAX_WIDTH, MOBILE_MAX_WIDTH + 1, 1920]) {
-        expect(run(stored, width), `stored=${stored} width=${width}`).toBe(
-          resolveInitialTheme(stored, width) === "light"
-        );
+      for (const width of [320, 767, 768, 1920]) {
+        expect(run(stored, width), `stored=${stored} width=${width}`).toBe(resolveInitialTheme(stored) === "light");
       }
     }
   });

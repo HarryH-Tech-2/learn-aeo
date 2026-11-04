@@ -19,7 +19,7 @@ export default function HeroSection() {
   const { openAuthModal } = useAuthModal();
 
   return (
-    <section className="city-hero hero-media relative flex flex-col justify-end overflow-hidden pt-24 pb-[16vh] bg-[#04060d]">
+    <section className="city-hero hero-media relative flex flex-col justify-end overflow-hidden pb-[16vh] bg-[#04060d]">
       {/* Background: navy with a cyan glow behind the headline and a faint gold one low down. Fixed colors,
           never theme-tinted, because the hero is dark in both themes. */}
       <div className="absolute inset-0" aria-hidden="true">

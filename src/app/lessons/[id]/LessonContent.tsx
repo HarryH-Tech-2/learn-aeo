@@ -11,7 +11,8 @@ import type { OfferData } from "@/components/OfferBanner";
 import Price from "@/components/Price";
 import GuaranteeNote from "@/components/GuaranteeNote";
 import LessonPlayer from "@/components/player/LessonPlayer";
-import { BTN_PRIMARY, BTN_SECONDARY, EYEBROW, FOCUS } from "@/components/player/ui";
+import LessonHero from "@/components/lesson/LessonHero";
+import { BTN_PRIMARY, BTN_SECONDARY, EYEBROW } from "@/components/player/ui";
 import { trackEvent } from "@/lib/analytics";
 import { submitAuditResult } from "@/lib/audit-submit";
 import { HttpError, fetchJson } from "@/lib/fetch-json";
@@ -166,11 +167,7 @@ export default function LessonContent({ overview }: { overview?: React.ReactNode
     if (meta && overview) {
       return (
         <Shell>
-          <header className="mb-8">
-            <p className={`${EYEBROW} mb-2`}>{meta.district}</p>
-            <h1 className="font-display text-3xl md:text-4xl text-sand-100">{meta.title}</h1>
-            <p className="mt-1 font-sans text-sm text-sand-400">{meta.minutes} min</p>
-          </header>
+          <LessonHero lesson={meta} />
           <p className="font-sans text-sm text-sand-400" role="status">
             Loading lesson…
           </p>
@@ -237,35 +234,43 @@ export default function LessonContent({ overview }: { overview?: React.ReactNode
 
   // Sign-up gate: the forced auth modal (opened by the effect above) sits over this shell.
   if (guest) {
+    const c = lesson.content;
+    const concepts = c.groups.reduce((n, g) => n + g.concepts.length, 0);
+    const checks = c.groups.reduce((n, g) => n + g.check.length, 0);
     return (
       <Shell>
-        <section className={`${PANEL} text-center`}>
-          <p className={`${EYEBROW} mb-3`}>{lesson.district}</p>
-          <h1 className="font-display text-3xl sm:text-4xl text-sand-100 mb-4">{lesson.title}</h1>
-          <p className="font-sans text-base text-sand-300 mb-8">
-            Create a free account to start this lesson. Your XP and progress will be saved as you go.
+        <LessonHero lesson={lesson} />
+        <section className="lesson-gate mx-auto max-w-3xl">
+          <h2 className="font-display text-2xl font-bold text-sand-100 mb-2">What you&rsquo;ll do in this lesson</h2>
+          <p className="font-sans text-base text-sand-300 mb-6">
+            {lesson.isFree ? "Free with an account. " : ""}Your XP, badges and place in the lesson are saved as you go.
           </p>
+          <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+            {[
+              { n: concepts, label: "concept cards", sub: "each with its sources" },
+              { n: checks, label: "quick-check questions", sub: "answered as you go" },
+              { n: c.exercise.steps.length, label: "exercise steps", sub: c.exercise.title },
+              { n: c.audit.length, label: "audit questions", sub: "to earn the badge" },
+            ].map((x) => (
+              <li key={x.label} className="lesson-gate-tile">
+                <span className="font-display text-3xl font-bold text-sand-100">{x.n}</span>
+                <span className="font-sans text-sm font-semibold text-sand-200">{x.label}</span>
+                <span className="font-sans text-xs text-sand-400">{x.sub}</span>
+              </li>
+            ))}
+          </ol>
           <button type="button" onClick={askToSignIn} className={BTN_PRIMARY}>
             Sign up free and begin
           </button>
         </section>
+        {overview}
       </Shell>
     );
   }
 
   return (
     <Shell>
-      <header className="mb-8">
-        <nav aria-label="Breadcrumb" className="mb-2 flex items-center gap-2 font-sans text-sm text-sand-400">
-          <Link href="/dashboard" className={`hover:text-cyan-400 transition-colors ${FOCUS}`}>
-            Dashboard
-          </Link>
-          <span aria-hidden="true">/</span>
-          <span className="text-cyan-400">{lesson.district}</span>
-        </nav>
-        <h1 className="font-display text-3xl md:text-4xl text-sand-100">{lesson.title}</h1>
-        <p className="mt-1 font-sans text-sm text-sand-400">{lesson.minutes} min</p>
-      </header>
+      <LessonHero lesson={lesson} />
 
       <LessonPlayer
         lesson={lesson}

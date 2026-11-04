@@ -25,12 +25,6 @@ const HOURS = Math.round((TOTAL_MINUTES / 60) * 2) / 2;
 
 const LEVEL_LABEL: Record<string, string> = { beginner: "Beginner", intermediate: "Intermediate", advanced: "Advanced" };
 
-const STATS = [
-  { value: String(LESSON_CATALOG.length), label: "lessons" },
-  { value: `~${HOURS}h`, label: "of hands-on work" },
-  { value: "1", label: "free lesson, no card" },
-  { value: "1", label: "certificate at the end" },
-];
 
 const WHO = [
   {
@@ -118,17 +112,6 @@ export default function CoursePage() {
           </div>
         </div>
 
-        <dl className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-          {STATS.map((s) => (
-            <div key={s.label} className="course-stat">
-              <dt className="sr-only">{s.label}</dt>
-              <dd>
-                <span className="block font-display text-3xl md:text-4xl font-bold text-sand-100">{s.value}</span>
-                <span className="block font-body text-sm text-sand-400 mt-1">{s.label}</span>
-              </dd>
-            </div>
-          ))}
-        </dl>
       </section>
 
       {/* Who it's for */}

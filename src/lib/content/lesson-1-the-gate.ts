@@ -146,6 +146,7 @@ export const LESSON_1: LessonContent = {
       concepts: [
         {
           id: "c-answer-engine",
+          quiz: {"kind": "choice", "id": "cq-answer-engine", "prompt": "What does Google say a page needs to appear as a link in AI Overviews?", "options": ["To be indexed and eligible to appear in Search with a snippet", "Special AI markup on the page", "An llms.txt file at the root of the site", "A separate submission to an AI program"], "answer": 0, "explanation": "Google's guidance says there are no extra requirements: a page has to be indexed and eligible to appear in Search with a snippet."},
           term: "Answer engine",
           summary: "A search product that reads pages for the user and writes a response, with links to its sources.",
           explanation:
@@ -158,6 +159,7 @@ export const LESSON_1: LessonContent = {
         },
         {
           id: "c-cited-vs-mentioned",
+          quiz: {"kind": "match", "id": "cq-cited-vs-mentioned", "prompt": "Match each outcome to what it means for your page.", "pairs": [{"term": "Cited", "definition": "A link to your page is attached to part of the answer"}, {"term": "Mentioned", "definition": "Your brand is named in the text, with no link"}, {"term": "Retrieved but not cited", "definition": "Your page was consulted but isn't shown as a source"}], "explanation": "Citations link to a specific page as evidence. Mentions only name you. And engines consult more sources than they cite."},
           term: "Cited source vs mention",
           summary: "A citation links to your page as evidence; a mention only names you.",
           explanation:
@@ -176,6 +178,7 @@ export const LESSON_1: LessonContent = {
         },
         {
           id: "c-passage-unit",
+          quiz: {"kind": "choice", "id": "cq-passage-unit", "prompt": "How much of the cited text does a Claude web search citation carry?", "options": ["Up to 150 characters", "The whole page", "The first 1,000 words", "Only the page title"], "answer": 0, "explanation": "Claude's web search citations carry up to 150 characters of the cited content: a sentence or two, which is why the passage is the unit."},
           term: "The passage is the unit",
           summary: "Engines lift and cite a sentence or passage, not a whole page.",
           explanation:
@@ -241,6 +244,7 @@ export const LESSON_1: LessonContent = {
       concepts: [
         {
           id: "c-training-vs-retrieval",
+          quiz: {"kind": "blank", "id": "cq-training-vs-retrieval", "prompt": "Fill in OpenAI's two crawlers.", "text": "___ crawls content that may be used in training, while ___ surfaces websites in ChatGPT search.", "answers": ["GPTBot", "OAI-SearchBot"], "distractors": ["ChatGPT-User", "Googlebot"], "explanation": "GPTBot is OpenAI's training crawler and OAI-SearchBot its search crawler. Each robots.txt setting is independent, so you can opt out of one and stay in the other."},
           term: "Training data vs live retrieval",
           summary: "A model knows some things from training and looks others up at the moment you ask.",
           explanation:
@@ -259,6 +263,7 @@ export const LESSON_1: LessonContent = {
         },
         {
           id: "c-rag",
+          quiz: {"kind": "order", "id": "cq-rag", "prompt": "Put the retrieve-then-generate pattern in order.", "items": ["The question arrives", "A retriever searches an index for the most relevant passages", "A generator writes the answer using those passages as context"], "explanation": "Retrieval comes first. If your passage isn't retrieved, the generator never sees it."},
           term: "Retrieval-augmented generation (RAG)",
           summary: "Retrieve relevant passages first, then generate an answer conditioned on them.",
           explanation:
@@ -271,6 +276,7 @@ export const LESSON_1: LessonContent = {
         },
         {
           id: "c-grounding",
+          quiz: {"kind": "choice", "id": "cq-grounding", "prompt": "Which question is most likely to make an assistant search the web before answering?", "options": ["What does Larkfield Tea charge for delivery this month?", "What is a noun?", "Who wrote Hamlet?"], "answer": 0, "explanation": "Anthropic says Claude searches when a request depends on information that is current, changing or outside its training data. Prices fit; settled facts usually don't. (Larkfield Tea is made up.)"},
           term: "Grounding",
           summary: "Basing an answer on retrieved sources and linking each claim back to them.",
           explanation:
@@ -283,6 +289,7 @@ export const LESSON_1: LessonContent = {
         },
         {
           id: "c-search-index",
+          quiz: {"kind": "choice", "id": "cq-search-index", "prompt": "What has to be true before any of these engines can use your page in an answer?", "options": ["The page is crawled and in the engine's index", "The page has an FAQ section", "The page is longer than 2,000 words"], "answer": 0, "explanation": "Every engine retrieves from an index of the web. A page the crawler can't reach, or that the index drops, isn't a candidate for any answer."},
           term: "Engines depend on a search index",
           summary: "Retrieval runs over an index built by crawlers, so crawlability and indexing come first.",
           explanation:
@@ -344,6 +351,7 @@ export const LESSON_1: LessonContent = {
       concepts: [
         {
           id: "c-fan-out",
+          quiz: {"kind": "choice", "id": "cq-fan-out", "prompt": "What is query fan-out?", "options": ["Splitting one question into several related searches and combining the results", "Sending the same answer to many users at once", "Ranking pages by how many links point to them"], "answer": 0, "explanation": "Google says AI Mode breaks a question into subtopics and issues many queries at once on your behalf, so each clearly answered subtopic is another way in."},
           term: "Query fan-out",
           summary: "The engine splits one question into several related searches and combines the results.",
           explanation:
@@ -356,6 +364,7 @@ export const LESSON_1: LessonContent = {
         },
         {
           id: "c-candidate-set",
+          quiz: {"kind": "choice", "id": "cq-candidate-set", "prompt": "Your page is retrieved for one of the sub-queries. Is it guaranteed a citation?", "options": ["No: engines consult more sources than they cite", "Yes: every retrieved page is cited", "Only if it ranks in the top three for the head term"], "answer": 0, "explanation": "OpenAI says the number of sources consulted is often greater than the number of citations. The passage has to be the one the answer relies on."},
           term: "A wider candidate set",
           summary: "More queries pull in more candidate pages, but only some of them get cited.",
           explanation:
@@ -368,6 +377,7 @@ export const LESSON_1: LessonContent = {
         },
         {
           id: "c-liftable",
+          quiz: {"kind": "passage", "id": "cq-liftable", "prompt": "Which passage is easier to lift into an answer on its own?", "passages": ["It usually takes about a week, depending on where you are.", "Larkfield Tea delivers UK orders in 2 to 4 working days."], "answer": 1, "explanation": "The second names its subject and puts the figure and condition in the same sentence, so it still makes sense when quoted alone. (Larkfield Tea is made up.)"},
           term: "What makes a passage easy to lift",
           summary: "Self-contained, specific, original and technically reachable.",
           explanation:

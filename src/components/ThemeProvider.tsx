@@ -27,7 +27,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     try {
       stored = localStorage.getItem(THEME_STORAGE_KEY);
     } catch {}
-    const initial = resolveInitialTheme(stored, window.innerWidth);
+    const initial = resolveInitialTheme(stored);
     setTheme(initial);
     document.documentElement.classList.toggle("light", initial === "light");
   }, []);

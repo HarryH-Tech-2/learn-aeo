@@ -9,7 +9,8 @@ import type { LessonContent, Question, Source } from "@/lib/lesson-types";
 const BANNED = /\b(hieroglyph\w*|egypt\w*|pharaoh\w*|papyr\w*|scribes?|glyphs?|tombs?|cartouches?|expeditions?|chambers?|dig|digs|digging|ankhs?)\b/i;
 
 function allQuestions(c: LessonContent): Question[] {
-  return [...c.groups.flatMap((g) => g.check), ...c.exercise.steps, ...c.audit];
+  const quizzes = c.groups.flatMap((g) => g.concepts.flatMap((k) => (k.quiz ? [k.quiz] : [])));
+  return [...c.groups.flatMap((g) => g.check), ...quizzes, ...c.exercise.steps, ...c.audit];
 }
 
 function checkSource(s: Source) {

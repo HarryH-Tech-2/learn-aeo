@@ -37,6 +37,11 @@ export type Concept = {
   example?: CodeExample | BeforeAfterExample;
   pitfall: string;
   sources: Source[];
+  /**
+   * A quick question asked on the card itself, right after the explanation, answered only from what the card says.
+   * Practice only: it earns no XP (the server prices only checks, exercises and the audit).
+   */
+  quiz?: Question;
 };
 
 export type Question =
