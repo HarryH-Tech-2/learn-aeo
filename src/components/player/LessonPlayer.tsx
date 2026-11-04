@@ -24,6 +24,8 @@ import type { OfferData } from "@/components/OfferBanner";
 import ConceptCard from "./ConceptCard";
 import QuestionCard from "./QuestionCard";
 import ExampleDissect from "./ExampleDissect";
+import ReviewDeck from "./ReviewDeck";
+import { readConfidence, writeConfidence, type Confidence, type ConfidenceMap } from "@/lib/concept-confidence";
 import AuditResult, { passMark } from "./AuditResult";
 import { BTN_PRIMARY, BTN_SECONDARY, EYEBROW, FOCUS, HEADING, PROSE } from "./ui";
 import { auditGain, claimExerciseAnswer, claimXp, cleanKey } from "./xp";
@@ -206,6 +208,18 @@ export default function LessonPlayer({ lesson, onXP, onAuditComplete, upgrade, n
 
   const step = steps[index] ?? steps[0];
 
+  // "Got it / Not sure yet" per concept, kept in this browser (src/lib/concept-confidence.ts) for the outro's review
+  const [confidence, setConfidence] = useState<ConfidenceMap>({});
+  useEffect(() => setConfidence(readConfidence(lesson.id)), [lesson.id]);
+  const rateConcept = (conceptId: string, c: Confidence) => {
+    setConfidence((m) => {
+      const next = { ...m, [conceptId]: c };
+      writeConfidence(lesson.id, next);
+      return next;
+    });
+    trackEvent("concept_confidence", { lesson_id: lesson.id, concept_id: conceptId, confidence: c });
+  };
+
   const goNext = () => {
     if (step.kind === "concept") {
       award(conceptKey(content.groups[step.group].concepts[step.concept].id), XP_REWARDS.conceptRead);
@@ -264,6 +278,8 @@ export default function LessonPlayer({ lesson, onXP, onAuditComplete, upgrade, n
           <ConceptCard
             concept={group.concepts[s.concept]}
             eyebrow={`${group.title} · ${s.concept + 1} of ${group.concepts.length}`}
+            confidence={confidence[group.concepts[s.concept].id]}
+            onConfidence={(c) => rateConcept(group.concepts[s.concept].id, c)}
           />
         );
       }
@@ -449,6 +465,8 @@ function Outro({
       )}
 
       <p className={PROSE}>{lesson.content.outro}</p>
+
+      <ReviewDeck lessonId={lesson.id} concepts={lesson.content.groups.flatMap((g) => g.concepts)} />
 
       <p className="font-sans text-sm text-sand-300">
         You earned <span className="font-semibold text-gold-400">{xp} XP</span> this sitting.

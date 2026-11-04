@@ -4,6 +4,9 @@ import type { Components } from "react-markdown";
 import type { ReactNode } from "react";
 import type { Concept, Source } from "@/lib/lesson-types";
 import CodeBlock from "./CodeBlock";
+import BeforeAfterPredict from "./BeforeAfterPredict";
+import ConfidenceCheck from "./ConfidenceCheck";
+import type { Confidence } from "@/lib/concept-confidence";
 import { EYEBROW, FOCUS, HEADING, PROSE, formatSourceDate } from "./ui";
 
 const MD_CLASSES =
@@ -59,10 +62,16 @@ function Section({ title, children, tone = "plain" }: { title: string; children:
   );
 }
 
-type Props = { concept: Concept; eyebrow?: string };
+type Props = {
+  concept: Concept;
+  eyebrow?: string;
+  /** The learner's own "got it / not sure" rating; the check shows only when onConfidence is given. */
+  confidence?: Confidence;
+  onConfidence?: (c: Confidence) => void;
+};
 
-export default function ConceptCard({ concept, eyebrow }: Props) {
-  const { term, summary, explanation, whyItMatters, example, pitfall, sources } = concept;
+export default function ConceptCard({ concept, eyebrow, confidence, onConfidence }: Props) {
+  const { id, term, summary, explanation, whyItMatters, example, pitfall, sources } = concept;
   return (
     <article className="space-y-7">
       <header className="space-y-2">
@@ -70,7 +79,10 @@ export default function ConceptCard({ concept, eyebrow }: Props) {
         <h2 className={HEADING}>{term}</h2>
       </header>
 
-      <p className="max-w-[68ch] font-sans text-lg font-semibold leading-snug text-sand-100">{summary}</p>
+      <p className="key-idea max-w-[68ch] font-sans text-lg font-semibold leading-snug text-sand-100">
+        <span className="key-idea-label">Key idea</span>
+        {summary}
+      </p>
 
       <div className={MD_CLASSES}>
         <Markdown remarkPlugins={[remarkGfm]} components={MD_COMPONENTS}>
@@ -83,25 +95,13 @@ export default function ConceptCard({ concept, eyebrow }: Props) {
       </Section>
 
       {example?.kind === "code" && <CodeBlock language={example.language} code={example.code} caption={example.caption} />}
-      {example?.kind === "before-after" && (
-        <figure className="space-y-3">
-          <div className="grid gap-3 md:grid-cols-2">
-            <div className="min-w-0 rounded-xl border border-sand-500/30 bg-obsidian p-4">
-              <p className="mb-2 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-sand-400">Before</p>
-              <p className="whitespace-pre-wrap font-sans text-[0.95rem] leading-relaxed text-sand-300 [overflow-wrap:anywhere]">{example.before}</p>
-            </div>
-            <div className="min-w-0 rounded-xl border border-cyan-500/50 bg-obsidian p-4">
-              <p className="mb-2 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-cyan-400">After</p>
-              <p className="whitespace-pre-wrap font-sans text-[0.95rem] leading-relaxed text-sand-100 [overflow-wrap:anywhere]">{example.after}</p>
-            </div>
-          </div>
-          <figcaption className="max-w-[68ch] font-sans text-sm leading-relaxed text-sand-400">{example.note}</figcaption>
-        </figure>
-      )}
+      {example?.kind === "before-after" && <BeforeAfterPredict example={example} conceptId={id} />}
 
       <Section title="Pitfall" tone="warn">
         <p className={PROSE}>{pitfall}</p>
       </Section>
+
+      {onConfidence && <ConfidenceCheck value={confidence} onChange={onConfidence} />}
 
       {sources.length > 0 && (
         <Section title="Sources">

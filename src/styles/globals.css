@@ -1814,3 +1814,139 @@ html.light .city-hero-vignette {
 .schema-code {
   color: #dbe6f7;
 }
+
+/* ── Lesson interactions (src/components/player): key idea, predict the better version, confidence, review deck ── */
+.key-idea {
+  position: relative;
+  padding: 1rem 1.15rem 1rem 1.25rem;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--rt-cyan-400) 35%, transparent);
+  background: color-mix(in srgb, var(--rt-cyan-400) 7%, transparent);
+}
+.key-idea-label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rt-cyan-400);
+}
+.predict-card {
+  display: block;
+  width: 100%;
+  border-radius: 0.9rem;
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, var(--rt-sand-400) 30%, transparent);
+  background: var(--rt-obsidian);
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+.predict-card-open {
+  cursor: pointer;
+}
+.predict-card-open:hover {
+  border-color: color-mix(in srgb, var(--rt-cyan-400) 60%, transparent);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -16px color-mix(in srgb, var(--rt-cyan-400) 60%, transparent);
+}
+.predict-card:disabled {
+  cursor: default;
+}
+.predict-card-good {
+  border-color: color-mix(in srgb, var(--rt-cyan-400) 70%, transparent);
+}
+.predict-card-bad {
+  opacity: 0.85;
+}
+.predict-card-mine {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--rt-gold-400) 60%, transparent);
+}
+.confidence-check {
+  display: grid;
+  gap: 0.5rem;
+  max-width: 68ch;
+  padding: 1rem 1.15rem;
+  border-radius: 1rem;
+  border: 1px dashed color-mix(in srgb, var(--rt-sand-400) 40%, transparent);
+}
+.confidence-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--rt-sand-200);
+  border: 1px solid color-mix(in srgb, var(--rt-sand-400) 40%, transparent);
+  background: var(--rt-obsidian);
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+}
+.confidence-btn:hover {
+  border-color: color-mix(in srgb, var(--rt-cyan-400) 60%, transparent);
+}
+.confidence-btn:active {
+  transform: scale(0.96);
+}
+.confidence-btn-got {
+  color: #04122a;
+  border-color: transparent;
+  background: var(--rt-cyan-400);
+}
+.confidence-btn-shaky {
+  color: #2a1a00;
+  border-color: transparent;
+  background: #f2b84b;
+}
+.review-deck {
+  padding: 1.4rem;
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--rt-cyan-400) 25%, transparent);
+  background:
+    radial-gradient(ellipse 70% 80% at 0% 0%, color-mix(in srgb, var(--rt-cyan-400) 10%, transparent), transparent 70%),
+    var(--rt-obsidian-light);
+}
+.flip-card {
+  perspective: 1200px;
+  cursor: pointer;
+  border-radius: 1.1rem;
+}
+.flip-card-inner {
+  position: relative;
+  min-height: 13rem;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-style: preserve-3d;
+}
+.flip-card-on .flip-card-inner {
+  transform: rotateY(180deg);
+}
+.flip-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border-radius: 1.1rem;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border: 1px solid color-mix(in srgb, var(--rt-gold-500) 22%, transparent);
+  background: var(--rt-obsidian);
+}
+.flip-back {
+  transform: rotateY(180deg);
+  border-color: color-mix(in srgb, var(--rt-cyan-400) 55%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .predict-card,
+  .confidence-btn,
+  .flip-card-inner {
+    transition: none;
+  }
+  .predict-card-open:hover {
+    transform: none;
+  }
+}
