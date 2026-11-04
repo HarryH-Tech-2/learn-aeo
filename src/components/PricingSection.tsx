@@ -62,6 +62,8 @@ function GuaranteeLine() {
 
 /** How many months of Monthly cost the same as Lifetime, from the plan amounts. */
 const MONTHS_TO_LIFETIME = Math.round(PLANS.lifetime.usd / PLANS.monthly.usd);
+/** Yearly against twelve months of Monthly, as a whole percent. */
+const YEARLY_SAVING = Math.round((1 - PLANS.yearly.usd / (PLANS.monthly.usd * 12)) * 100);
 
 /** `headingAs` is "h1" on /pricing, where this headline is the page's; on the homepage it stays an h2. */
 export default function PricingSection({ headingAs: Heading = "h2" }: { headingAs?: "h1" | "h2" } = {}) {
@@ -71,7 +73,7 @@ export default function PricingSection({ headingAs: Heading = "h2" }: { headingA
   const ppp = usePpp();
   const [loading, setLoading] = useState<PlanId | null>(null);
   // What the signed-in visitor already holds, so we never offer it again.
-  const [owned, setOwned] = useState<"lifetime" | "monthly" | "free-unlock" | null>(null);
+  const [owned, setOwned] = useState<"lifetime" | "monthly" | "yearly" | "free-unlock" | null>(null);
   // The free-unlock test's free group (src/lib/access-test.ts): the course is free, so nothing is sold here
   const freeGuest = useFreeCourseGuest();
   const freeCourse = freeGuest || owned === "free-unlock";
@@ -87,6 +89,7 @@ export default function PricingSection({ headingAs: Heading = "h2" }: { headingA
         if (canceled || !a?.active) return;
         if (a.via === "lifetime") setOwned("lifetime");
         else if (a.via === "monthly") setOwned("monthly");
+        else if (a.via === "yearly") setOwned("yearly");
         else if (a.via === "free-unlock") setOwned("free-unlock");
       })
       .catch(() => null);
@@ -150,7 +153,8 @@ export default function PricingSection({ headingAs: Heading = "h2" }: { headingA
     }
   };
 
-  const cards: Plan[] = freeCourse ? [] : [PLANS.monthly, PLANS.lifetime];
+  const cards: Plan[] = freeCourse ? [] : [PLANS.monthly, PLANS.lifetime, PLANS.yearly];
+  const onSubscription = owned === "monthly" || owned === "yearly";
 
   return (
     <section id="pricing" className="relative py-20">
@@ -176,7 +180,7 @@ export default function PricingSection({ headingAs: Heading = "h2" }: { headingA
           <p className="reveal font-body text-base md:text-lg text-sand-400 max-w-xl mx-auto font-light leading-relaxed" style={reveal(0.2)}>
             {freeCourse
               ? "Every lesson is free for you: make an account and the whole course opens."
-              : "The first lesson is free. After that, pay once and keep the course for good, or learn a month at a time."}
+              : "The first lesson is free. After that, pay once and keep the course for good, or pay by the year or the month."}
           </p>
         </div>
 
@@ -197,7 +201,7 @@ export default function PricingSection({ headingAs: Heading = "h2" }: { headingA
         {!freeCourse && <PppBanner />}
 
 
-        <div className={`grid gap-5 lg:gap-8 items-stretch ${freeCourse ? "max-w-xl mx-auto" : "md:grid-cols-2 max-w-4xl mx-auto"}`}>
+        <div className={`grid gap-5 lg:gap-8 items-stretch ${freeCourse ? "max-w-xl mx-auto" : "md:grid-cols-3 max-w-6xl mx-auto"}`}>
           {freeCourse && (
             <div className="reveal relative flex order-first" style={reveal(0.3, { y: 40 })}>
               <div className="relative flex-1 flex flex-col [&>div]:flex-1 [&>div]:flex [&>div]:flex-col [&>div]:justify-center [&>div]:p-8 md:[&>div]:p-10">
@@ -211,12 +215,13 @@ export default function PricingSection({ headingAs: Heading = "h2" }: { headingA
           )}
           {cards.map((plan, i) => {
             const featured = !!plan.featured;
-            const covered = (owned === "lifetime" && (plan.id === "lifetime" || plan.id === "monthly")) || (owned === "monthly" && plan.id === "monthly");
+            // Lifetime covers everything; a subscriber's own plan is covered, and the other subscription is a switch in the portal
+            const covered = owned === "lifetime" || (onSubscription && plan.mode === "subscription");
             return (
-              // Lifetime ("Most chosen") first on phones, on the right from md up
+              // Lifetime ("Most chosen") first on phones, in the middle from md up
               <div key={plan.id} className={`reveal relative flex ${featured ? "order-first md:order-none md:-my-4" : ""}`} style={reveal(0.3 + i * 0.1, { y: 40 })}>
                 {featured && <div className="absolute -inset-px bg-gradient-to-b from-gold-500/40 via-gold-700/10 to-gold-500/40 blur-sm" />}
-                <div className={`relative flex-1 flex flex-col bg-obsidian-light border p-8 md:p-10 lg:p-12 ${featured ? "border-gold-500/50" : "border-gold-700/25"}`}>
+                <div className={`relative flex-1 flex flex-col bg-obsidian-light border p-7 lg:p-9 ${featured ? "border-gold-500/50" : "border-gold-700/25"}`}>
                   {featured && (
                     <>
                       <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-gold-500/60" />
@@ -232,7 +237,7 @@ export default function PricingSection({ headingAs: Heading = "h2" }: { headingA
                   </div>
 
                   <div className="mb-1">
-                    <span className={`font-display font-light text-sand-100 ${featured ? "text-7xl" : "text-6xl"}`}>
+                    <span className={`font-display font-light text-sand-100 ${featured ? "text-6xl" : "text-5xl"}`}>
                       <PlanPrice plan={plan} big={featured} />
                     </span>
                     <span className="font-body text-base text-sand-500 ml-2">{planPeriodLabel(plan)}</span>
@@ -252,8 +257,14 @@ export default function PricingSection({ headingAs: Heading = "h2" }: { headingA
                   </ul>
 
                   {covered ? (
-                    <Link href="/dashboard" className={`${featured ? "btn-primary" : "btn-secondary"} w-full justify-center text-base py-4`}>
-                      {plan.id === "lifetime" ? "You have Lifetime access · Dashboard" : owned === "lifetime" ? "Covered by your Lifetime access" : "Your plan is active · Dashboard"}
+                    <Link href={covered && owned !== plan.id && owned !== "lifetime" && plan.id !== "lifetime" ? "/account" : "/dashboard"} className={`${featured ? "btn-primary" : "btn-secondary"} w-full justify-center text-base py-4`}>
+                      {plan.id === "lifetime"
+                        ? "You have Lifetime access · Dashboard"
+                        : owned === "lifetime"
+                          ? "Covered by your Lifetime access"
+                          : owned === plan.id
+                            ? "Your plan is active · Dashboard"
+                            : "Switch plans from your account"}
                     </Link>
                   ) : (
                     <button
@@ -264,10 +275,10 @@ export default function PricingSection({ headingAs: Heading = "h2" }: { headingA
                       {loading === plan.id
                         ? "Preparing…"
                         : plan.id === "lifetime"
-                          ? owned === "monthly"
+                          ? onSubscription
                             ? "Upgrade to Lifetime"
                             : "Get Lifetime Access"
-                          : "Start Monthly"}
+                          : `Start ${plan.name}`}
                     </button>
                   )}
                   {error?.plan === plan.id && <CheckoutError message={error.message} />}
@@ -275,6 +286,11 @@ export default function PricingSection({ headingAs: Heading = "h2" }: { headingA
                   {plan.id === "monthly" && (
                     <p className="font-body text-xs text-sand-500 text-center mt-4">
                       Cancel any time from your account. {MONTHS_TO_LIFETIME} months costs the same as Lifetime.
+                    </p>
+                  )}
+                  {plan.id === "yearly" && (
+                    <p className="font-body text-xs text-sand-500 text-center mt-4">
+                      Cancel any time from your account. Saves {YEARLY_SAVING}% on twelve monthly payments.
                     </p>
                   )}
                 </div>
@@ -286,8 +302,8 @@ export default function PricingSection({ headingAs: Heading = "h2" }: { headingA
         <div className="mt-10 grid sm:grid-cols-3 gap-4 text-center">
           {[
             ["14-day guarantee", "Not for you? Email us within 14 days for a full refund."],
-            ["Always up to date", "New lessons land as AI search changes, included on both plans."],
-            ["Cancel in one click", "Monthly stops from your account page. No emails, no phone calls."],
+            ["Always up to date", "New lessons land as AI search changes, included on every plan."],
+            ["Cancel in one click", "Yearly and Monthly stop from your account page. No emails, no phone calls."],
           ].map(([t, d]) => (
             <div key={t} className="reveal" style={reveal(0.7)}>
               <p className="font-body text-sm text-sand-200 font-medium mt-1">{t}</p>

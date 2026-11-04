@@ -101,7 +101,7 @@ CHECK_SOURCES=1 npx vitest run src/lib/__tests__/lesson-sources.live.test.ts
 Run test mode first.
 
 ```bash
-STRIPE_SECRET_KEY=sk_test_... node scripts/stripe-create-plans.mjs        # prints STRIPE_PRICE_ID and STRIPE_PRICE_MONTHLY
+STRIPE_SECRET_KEY=sk_test_... node scripts/stripe-create-plans.mjs        # prints STRIPE_PRICE_ID, STRIPE_PRICE_YEARLY and STRIPE_PRICE_MONTHLY
 STRIPE_SECRET_KEY=sk_test_... node scripts/stripe-create-ppp-coupons.mjs
 STRIPE_SECRET_KEY=sk_test_... node scripts/stripe-audit-prices.mjs        # read-only
 ```

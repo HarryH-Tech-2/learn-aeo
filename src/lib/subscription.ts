@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import { ACCESS_TEST_GAME, armOf } from "@/lib/access-test";
+import { SUBSCRIPTION_PLAN_IDS, isSubscriptionPlanId, type SubscriptionPlanId } from "@/lib/plans";
 
 /**
  * Who has access to the full course, and how.
@@ -8,31 +9,31 @@ import { ACCESS_TEST_GAME, armOf } from "@/lib/access-test";
  *              checkout) or `Subscription.active` with plan "lifetime". Kept
  *              forever: legacy monthly-plan webhooks can flip the flag back
  *              to false, so EITHER marker counts.
- *   monthly    `Subscription.active` with plan "monthly" and a period end in
+ *   monthly / yearly  `Subscription.active` with that plan and a period end in
  *              the future (plus a grace window for late renewals).
  *   free-unlock  In the free group of the free-unlock test (src/lib/access-test.ts): the course, not
  *              paid extras such as HD pictures (hasPaidAccess). Any paid access above wins over it.
  */
 
-export const MONTHLY_GRACE_DAYS = 3;
+export const SUBSCRIPTION_GRACE_DAYS = 3;
 
-export type AccessVia = "lifetime" | "monthly" | "free-unlock" | null;
+export type AccessVia = "lifetime" | SubscriptionPlanId | "free-unlock" | null;
 
 export type AccessSummary = {
   active: boolean;
   trial: boolean;
   via: AccessVia;
-  /** Monthly: when the current period ends */
+  /** Monthly or yearly: when the current period ends */
   periodEnd: string | null;
 };
 
 const NO_ACCESS: AccessSummary = { active: false, trial: false, via: null, periodEnd: null };
 
-/** Pure: is a monthly row still within its paid period (+ grace)? */
-export function monthlyActive(sub: { active: boolean; plan: string; currentPeriodEnd: Date | null }, now = new Date()): boolean {
-  if (!sub.active || sub.plan !== "monthly") return false;
+/** Pure: is a subscription row (monthly or yearly) still within its paid period (+ grace)? */
+export function subscriptionActive(sub: { active: boolean; plan: string; currentPeriodEnd: Date | null }, now = new Date()): boolean {
+  if (!sub.active || !isSubscriptionPlanId(sub.plan)) return false;
   if (!sub.currentPeriodEnd) return true; // period unknown yet (webhook race): trust the flag
-  return sub.currentPeriodEnd.getTime() + MONTHLY_GRACE_DAYS * 86_400_000 > now.getTime();
+  return sub.currentPeriodEnd.getTime() + SUBSCRIPTION_GRACE_DAYS * 86_400_000 > now.getTime();
 }
 
 export async function checkSubscription(email: string, now = new Date()): Promise<AccessSummary> {
@@ -51,8 +52,8 @@ export async function checkSubscription(email: string, now = new Date()): Promis
   const lifetime = user.status === "ACTIVE" || (sub?.active === true && (sub.plan ?? "lifetime") === "lifetime");
   if (lifetime) return { active: true, trial, via: "lifetime", periodEnd: null };
 
-  if (sub && monthlyActive({ active: sub.active, plan: sub.plan ?? "lifetime", currentPeriodEnd: sub.currentPeriodEnd ?? null }, now)) {
-    return { active: true, trial, via: "monthly", periodEnd: sub.currentPeriodEnd?.toISOString() ?? null };
+  if (sub && subscriptionActive({ active: sub.active, plan: sub.plan ?? "lifetime", currentPeriodEnd: sub.currentPeriodEnd ?? null }, now)) {
+    return { active: true, trial, via: sub.plan as SubscriptionPlanId, periodEnd: sub.currentPeriodEnd?.toISOString() ?? null };
   }
 
   if (armOf(user.gameStates?.[0]?.state) === "free") return { active: true, trial, via: "free-unlock", periodEnd: null };
@@ -66,15 +67,15 @@ export function hasPaidAccess(access: Pick<AccessSummary, "active" | "via">): bo
 }
 
 export type ActivateOptions = {
-  plan?: "lifetime" | "monthly";
+  plan?: "lifetime" | SubscriptionPlanId;
   stripeSubscriptionId?: string | null;
   currentPeriodEnd?: Date | null;
 };
 
 /**
  * Record a paid plan on the user. Lifetime promotes the user to ACTIVE (a
- * permanent marker); monthly leaves status alone so access lapses with the
- * subscription.
+ * permanent marker); monthly and yearly leave status alone so access lapses
+ * with the subscription.
  */
 export async function activateSubscription(email: string, stripeCustomerId: string, opts: ActivateOptions = {}): Promise<void> {
   const user = await prisma.user.findUnique({ where: { email } });
@@ -86,15 +87,15 @@ export async function activateSubscription(email: string, stripeCustomerId: stri
   }
 
   const existingSub = await prisma.subscription.findUnique({ where: { userId: user.id } });
-  // Never downgrade a lifetime row to monthly.
-  const keepLifetime = existingSub?.plan === "lifetime" && existingSub.active && plan === "monthly";
+  // Never downgrade a lifetime row to a subscription.
+  const keepLifetime = existingSub?.plan === "lifetime" && existingSub.active && plan !== "lifetime";
   const data = {
     active: true,
     trial: false,
     stripeCustomerId,
     plan: keepLifetime ? "lifetime" : plan,
     stripeSubscriptionId: opts.stripeSubscriptionId ?? existingSub?.stripeSubscriptionId ?? null,
-    currentPeriodEnd: opts.currentPeriodEnd ?? (plan === "monthly" ? existingSub?.currentPeriodEnd ?? null : null),
+    currentPeriodEnd: opts.currentPeriodEnd ?? (plan !== "lifetime" ? existingSub?.currentPeriodEnd ?? null : null),
   };
 
   await prisma.subscription.upsert({
@@ -108,12 +109,12 @@ export async function activateSubscription(email: string, stripeCustomerId: stri
 export async function deactivateSubscription(email: string): Promise<void> {
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user) return;
-  await prisma.subscription.updateMany({ where: { userId: user.id, plan: "monthly" }, data: { active: false, trial: false } });
+  await prisma.subscription.updateMany({ where: { userId: user.id, plan: { in: SUBSCRIPTION_PLAN_IDS } }, data: { active: false, trial: false } });
 }
 
 /**
  * Take lifetime access away after a full refund or a lost dispute: the reverse of activateSubscription's
- * lifetime branch. Leaves monthly passes alone. Returns whether there was lifetime access to remove.
+ * lifetime branch. Leaves monthly and yearly subscriptions alone. Returns whether there was lifetime access to remove.
  */
 export async function revokeLifetime(email: string): Promise<boolean> {
   const user = await prisma.user.findUnique({ where: { email }, include: { subscription: true } });
@@ -126,8 +127,8 @@ export async function revokeLifetime(email: string): Promise<boolean> {
   return true;
 }
 
-/** Stripe subscription lifecycle for the monthly plan. */
-export async function syncMonthlySubscription(stripeSubscriptionId: string, status: string, currentPeriodEnd: Date | null): Promise<boolean> {
+/** Stripe subscription lifecycle for the monthly and yearly plans. */
+export async function syncSubscription(stripeSubscriptionId: string, status: string, currentPeriodEnd: Date | null): Promise<boolean> {
   const row = await prisma.subscription.findUnique({ where: { stripeSubscriptionId } });
   if (!row) return false;
   const active = status === "active" || status === "trialing" || status === "past_due";

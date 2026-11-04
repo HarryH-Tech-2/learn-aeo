@@ -1,8 +1,9 @@
 /**
- * The plan catalog. Two ways to pay, one source of truth for the pricing
+ * The plan catalog. Three ways to pay, one source of truth for the pricing
  * page, checkout, the webhook and the account page.
  *
  *   lifetime   one payment of $100 (£80), the anchor
+ *   yearly     $60 (£48) a year, half the monthly price over twelve months (added 2026-11-04)
  *   monthly    $10 (£8) a month, cancel any time
  *
  * Nothing else is sold. A Stripe event naming any other plan (or none) is
@@ -26,7 +27,10 @@ export function lessonsIncludedLine(): string {
     : `All ${LESSON_TOTAL} lessons as they open (${LESSONS_LIVE} live now)`;
 }
 
-export type PlanId = "lifetime" | "monthly";
+export type PlanId = "lifetime" | "yearly" | "monthly";
+
+/** The plans billed as Stripe subscriptions. */
+export type SubscriptionPlanId = Exclude<PlanId, "lifetime">;
 
 export type Plan = {
   id: PlanId;
@@ -34,7 +38,7 @@ export type Plan = {
   tagline: string;
   /** Stripe Checkout mode */
   mode: "payment" | "subscription";
-  interval?: "month";
+  interval?: "month" | "year";
   /** Amounts in major units */
   usd: number;
   gbp: number;
@@ -65,6 +69,18 @@ export const PLANS: Record<PlanId, Plan> = {
     envKey: "STRIPE_PRICE_ID",
     featured: true,
   },
+  yearly: {
+    id: "yearly",
+    name: "Yearly",
+    tagline: "A year of access at half the monthly price.",
+    mode: "subscription",
+    interval: "year",
+    usd: 60,
+    gbp: 48,
+    audience: "For working through the course at your own pace over a year",
+    features: ["Everything in Lifetime for a year", "Half the price of twelve monthly payments", "Cancel any time from your account"],
+    envKey: "STRIPE_PRICE_YEARLY",
+  },
   monthly: {
     id: "monthly",
     name: "Monthly",
@@ -79,7 +95,12 @@ export const PLANS: Record<PlanId, Plan> = {
   },
 };
 
-export const PLAN_IDS: PlanId[] = ["lifetime", "monthly"];
+export const PLAN_IDS: PlanId[] = ["lifetime", "yearly", "monthly"];
+export const SUBSCRIPTION_PLAN_IDS: SubscriptionPlanId[] = ["yearly", "monthly"];
+
+export function isSubscriptionPlanId(x: unknown): x is SubscriptionPlanId {
+  return typeof x === "string" && (SUBSCRIPTION_PLAN_IDS as string[]).includes(x);
+}
 
 export function isPlanId(x: unknown): x is PlanId {
   return typeof x === "string" && (PLAN_IDS as string[]).includes(x);
@@ -106,7 +127,12 @@ export function formatPlanPrice(plan: Plan, currency: Currency): string {
 }
 
 export function planPeriodLabel(plan: Plan): string {
-  return plan.mode === "payment" ? "one payment" : "per month";
+  return plan.mode === "payment" ? "one payment" : plan.interval === "year" ? "per year" : "per month";
+}
+
+/** "a month", "a year": for "$10 a month" in running text. */
+export function planPerLabel(plan: Plan): string {
+  return plan.interval === "year" ? "a year" : "a month";
 }
 
 export function stripePriceIdFor(plan: Plan): string | undefined {

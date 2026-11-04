@@ -15,6 +15,7 @@ const full: Record<string, string | undefined> = {
   STRIPE_WEBHOOK_SECRET: "whsec_abc",
   STRIPE_PRICE_ID: "price_life",
   STRIPE_PRICE_MONTHLY: "price_month",
+  STRIPE_PRICE_YEARLY: "price_year",
   RESEND_API_KEY: "re_abc",
   RESEND_FROM_EMAIL: "Learn AEO <hello@learnaeo.com>",
   RESEND_AUDIENCE_ID: "aud_1",
@@ -37,7 +38,7 @@ describe("checkProductionEnv", () => {
   it("requires exactly the launch variables", () => {
     expect(REQUIRED_PRODUCTION_ENV).toEqual([
       "NEXTAUTH_URL", "NEXTAUTH_SECRET", "DATABASE_URL", "POSTGRES_URL", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET",
-      "STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET", "STRIPE_PRICE_ID", "STRIPE_PRICE_MONTHLY", "RESEND_API_KEY",
+      "STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET", "STRIPE_PRICE_ID", "STRIPE_PRICE_MONTHLY", "STRIPE_PRICE_YEARLY", "RESEND_API_KEY",
       "RESEND_FROM_EMAIL", "RESEND_AUDIENCE_ID", "CRON_SECRET", "ADMIN_EMAILS", "NEXT_PUBLIC_GA_ID",
     ]);
   });
@@ -52,6 +53,7 @@ describe("checkProductionEnv", () => {
     ["STRIPE_WEBHOOK_SECRET", { STRIPE_WEBHOOK_SECRET: "abc" }],
     ["STRIPE_PRICE_ID", { STRIPE_PRICE_ID: "prod_1" }],
     ["STRIPE_PRICE_MONTHLY", { STRIPE_PRICE_MONTHLY: "1000" }],
+    ["STRIPE_PRICE_YEARLY", { STRIPE_PRICE_YEARLY: "6000" }],
     ["NEXTAUTH_URL", { NEXTAUTH_URL: "https://learnaeo.vercel.app" }],
     ["NEXT_PUBLIC_SITE_URL", { NEXT_PUBLIC_SITE_URL: "https://learnaeo.com" }],
     ["AEO_DEV_BYPASS_AUTH", { AEO_DEV_BYPASS_AUTH: "1" }],

@@ -21,6 +21,7 @@ const { stripe, mode } = stripeFromEnv();
 // The amounts the site shows, in minor units. Keep in sync with src/lib/plans.ts.
 const EXPECTED = [
   { id: "lifetime", usd: 10000, gbp: 8000, interval: null, envKey: "STRIPE_PRICE_ID" },
+  { id: "yearly", usd: 6000, gbp: 4800, interval: "year", envKey: "STRIPE_PRICE_YEARLY" },
   { id: "monthly", usd: 1000, gbp: 800, interval: "month", envKey: "STRIPE_PRICE_MONTHLY" },
 ];
 

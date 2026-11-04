@@ -9,8 +9,8 @@ export default function GuaranteeNote({
   align = "center",
   className = "",
 }: {
-  /** "monthly" leads with canceling, the pass's own reassurance */
-  plan?: "lifetime" | "monthly";
+  /** a subscription plan leads with canceling, its own reassurance */
+  plan?: "lifetime" | "monthly" | "yearly";
   /** an optional one-line "what's included" above the guarantee */
   included?: string;
   align?: "center" | "left";
@@ -25,7 +25,7 @@ export default function GuaranteeNote({
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3z" />
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4" />
         </svg>
-        {plan === "monthly" ? "Cancel any time · 14-day money-back guarantee" : "14-day money-back guarantee"}
+        {plan === "monthly" || plan === "yearly" ? "Cancel any time · 14-day money-back guarantee" : "14-day money-back guarantee"}
       </p>
     </div>
   );

@@ -1,8 +1,8 @@
 /**
- * POST /api/webhooks/stripe: Stripe's events for this site's two plans (src/lib/plans.ts).
+ * POST /api/webhooks/stripe: Stripe's events for this site's three plans (src/lib/plans.ts).
  *
- * Access is granted only for money received on a plan this site sells: a paid Lifetime or Monthly checkout,
- * or a legacy subscription on the monthly Price. A checkout naming any other plan (old classroom/school
+ * Access is granted only for money received on a plan this site sells: a paid Lifetime, Yearly or Monthly
+ * checkout, or a legacy subscription on the monthly or yearly Price. A checkout naming any other plan (old classroom/school
  * metadata) or no plan at all is logged, the owner told, and acknowledged with a 200 so Stripe stops
  * retrying; nothing is granted and no purchase is sent to GA4.
  */
@@ -10,12 +10,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { notifyOwner } from "@/lib/notify";
 import Stripe from "stripe";
 import { getStripe } from "@/lib/stripe";
-import { activateSubscription, deactivateSubscription, syncMonthlySubscription } from "@/lib/subscription";
+import { activateSubscription, deactivateSubscription, syncSubscription } from "@/lib/subscription";
 import { sendWelcomeEmail, sendCheckoutRecoveryEmail } from "@/lib/email";
 import { OFFER_PERCENT_OFF, grantOffer } from "@/lib/offers";
 import { pppBeatsOffer } from "@/lib/ppp";
 import { prisma } from "@/lib/db";
-import { PLANS, planById, stripePriceIdFor } from "@/lib/plans";
+import { PLANS, SUBSCRIPTION_PLAN_IDS, planById, stripePriceIdFor, type SubscriptionPlanId } from "@/lib/plans";
 import { sendPurchaseToGA4 } from "@/lib/ga-server";
 import { describeSource } from "@/lib/referrer";
 import { handleDispute, handleRefund } from "@/lib/refunds";
@@ -24,12 +24,18 @@ import { recordCheckoutLog, type CheckoutLogOutcome } from "@/lib/checkout-recov
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
-/** Is this subscription on the monthly Price (STRIPE_PRICE_MONTHLY)? False when the variable is unset. */
-function isMonthlyPriceSubscription(sub: Stripe.Subscription): boolean {
-  const monthlyPrice = stripePriceIdFor(PLANS.monthly);
-  if (!monthlyPrice) return false;
+/**
+ * Which of this site's subscription plans a Stripe subscription is on: every item must be on that plan's Price
+ * (STRIPE_PRICE_MONTHLY or STRIPE_PRICE_YEARLY). Null for any other price, or when the variable is unset.
+ */
+function subscriptionPlanOf(sub: Stripe.Subscription): SubscriptionPlanId | null {
   const items = sub.items?.data ?? [];
-  return items.length > 0 && items.every((item) => item.price?.id === monthlyPrice);
+  if (!items.length) return null;
+  for (const id of SUBSCRIPTION_PLAN_IDS) {
+    const price = stripePriceIdFor(PLANS[id]);
+    if (price && items.every((item) => item.price?.id === price)) return id;
+  }
+  return null;
 }
 
 function periodEnd(sub: Stripe.Subscription): Date | null {
@@ -150,15 +156,15 @@ async function fulfillCheckout(session: Stripe.Checkout.Session) {
       }
     }
 
-    if (plan.id === "monthly") {
-      await activateSubscription(email, customerId, { plan: "monthly", stripeSubscriptionId: subId, currentPeriodEnd: end });
+    if (plan.id === "monthly" || plan.id === "yearly") {
+      await activateSubscription(email, customerId, { plan: plan.id, stripeSubscriptionId: subId, currentPeriodEnd: end });
       void notifyOwner({
-        subject: `New monthly plan: ${email}`,
-        text: `${name ?? "Someone"} <${email}> started the monthly plan. Stripe customer ${customerId}, subscription ${subId}.${pppNote}${sourceNote}`,
+        subject: `New ${plan.id} plan: ${email}`,
+        text: `${name ?? "Someone"} <${email}> started the ${plan.id} plan. Stripe customer ${customerId}, subscription ${subId}.${pppNote}${sourceNote}`,
         replyTo: email,
       });
       try {
-        await sendWelcomeEmail(name, email, "monthly");
+        await sendWelcomeEmail(name, email, plan.id);
       } catch (err) {
         console.error("[stripe:checkout.session.completed] Welcome email failed:", err);
       }
@@ -277,20 +283,21 @@ export async function POST(request: NextRequest) {
         const end = periodEnd(subscription);
         console.log(`[stripe:${event.type}] subscription=${subscription.id} status=${status}`);
 
-        // New-style rows are keyed by subscription id: monthly passes.
-        if (await syncMonthlySubscription(subscription.id, status, end)) break;
+        // New-style rows are keyed by subscription id: monthly and yearly plans.
+        if (await syncSubscription(subscription.id, status, end)) break;
 
-        // Legacy rows were keyed by customer email. Only a subscription on the monthly Price may grant monthly
+        // Legacy rows were keyed by customer email. Only a subscription on the monthly or yearly Price may grant
         // access this way: any other subscription on the account (a price this site doesn't sell) grants nothing.
         const customerId = typeof subscription.customer === "string" ? subscription.customer : subscription.customer.id;
         const customer = (await getStripe().customers.retrieve(customerId)) as Stripe.Customer;
         if (customer.email) {
           if (status === "active" || status === "trialing") {
-            if (!isMonthlyPriceSubscription(subscription)) {
-              console.error("[stripe] subscription not on the monthly price, no access given", { subscription: subscription.id, customer: customerId });
+            const subPlan = subscriptionPlanOf(subscription);
+            if (!subPlan) {
+              console.error("[stripe] subscription not on a plan price, no access given", { subscription: subscription.id, customer: customerId });
               break;
             }
-            await activateSubscription(customer.email, customerId, { plan: "monthly", stripeSubscriptionId: subscription.id, currentPeriodEnd: end });
+            await activateSubscription(customer.email, customerId, { plan: subPlan, stripeSubscriptionId: subscription.id, currentPeriodEnd: end });
           } else if (status === "past_due" || status === "canceled" || status === "unpaid") {
             await deactivateSubscription(customer.email);
           }

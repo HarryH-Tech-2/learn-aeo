@@ -83,7 +83,7 @@ function PaidPitch({ paid, offer: given, location, progressLine }: Props) {
         {progressLine ? `${progressLine}. ` : ""}
         {location === "dashboard" ? "Lesson 1 stays free to the end." : "This lesson stays free to the end."}{" "}
         {FIRST_PAID && LAST_PAID ? `From ${FIRST_PAID} to ${LAST_PAID}, the rest of the course` : "The rest of the course"} opens
-        with Lifetime access or the {PLANS.monthly.name} plan.{" "}
+        with Lifetime access, or the {PLANS.yearly.name} or {PLANS.monthly.name} plan.{" "}
         {ALL_LIVE ? "Lifetime includes any lessons added later." : "New lessons are being released in turn, and Lifetime includes every future lesson."}
       </p>
 
@@ -107,7 +107,7 @@ function PaidPitch({ paid, offer: given, location, progressLine }: Props) {
               <Price /> <span className="font-sans text-sm text-sand-400">once, yours for good</span>
             </p>
             <p className="font-sans text-xs text-sand-400 mt-1">
-              Or <Price plan={PLANS.monthly} /> a month with the {PLANS.monthly.name} plan. Cancel any time.
+              Or <Price plan={PLANS.yearly} /> a year, or <Price plan={PLANS.monthly} /> a month. Cancel any time.
             </p>
           </div>
           <div className="flex flex-col">

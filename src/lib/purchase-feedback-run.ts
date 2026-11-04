@@ -46,7 +46,7 @@ export async function runPurchaseFeedback(opts: { now?: Date; dry?: boolean; lim
     where: {
       activatedAt: { gte: new Date(now.getTime() - (FEEDBACK_LAST_DAY + 1) * DAY_MS) },
       trial: false,
-      plan: { in: ["lifetime", "monthly"] },
+      plan: { in: ["lifetime", "monthly", "yearly"] },
     },
     select: {
       plan: true,

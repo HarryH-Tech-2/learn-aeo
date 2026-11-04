@@ -21,6 +21,7 @@ const STATEMENT_DESCRIPTOR = "LEARNAEO";
 // Keep in sync with src/lib/plans.ts (amounts in minor units).
 const PLANS = [
   { id: "lifetime", name: "Learn AEO — Lifetime", description: "The full answer engine optimization course: every lesson as it's released, tools, templates and certificate. One payment.", usd: 10000, gbp: 8000, recurring: null, envKey: "STRIPE_PRICE_ID" },
+  { id: "yearly", name: "Learn AEO — Yearly", description: "The full answer engine optimization course for a year. Cancel any time.", usd: 6000, gbp: 4800, recurring: { interval: "year" }, envKey: "STRIPE_PRICE_YEARLY" },
   { id: "monthly", name: "Learn AEO — Monthly", description: "The full answer engine optimization course, month by month. Cancel any time.", usd: 1000, gbp: 800, recurring: { interval: "month" }, envKey: "STRIPE_PRICE_MONTHLY" },
 ];
 

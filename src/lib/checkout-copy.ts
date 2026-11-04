@@ -13,6 +13,8 @@ export function checkoutSubmitText(plan: Pick<Plan, "id">): string {
   switch (plan.id) {
     case "lifetime":
       return "One payment, no subscription: every lesson, yours for life. Not for you? Email us within 14 days for a full refund.";
+    case "yearly":
+      return "The full course for a year, at half the monthly price. Cancel any time from your account. Not for you? Email us within 14 days for a full refund.";
     case "monthly":
       return "The full course, month by month. Cancel any time from your account. Not for you? Email us within 14 days for a full refund.";
   }

@@ -10,9 +10,9 @@ import { LESSON_CATALOG, titleMidSentence } from "@/lib/lesson-catalog";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Pricing: lifetime or monthly",
+  title: "Pricing: lifetime, yearly or monthly",
   description:
-    `Lifetime access to the answer engine optimization course for one payment of ${formatPlanPrice(PLANS.lifetime, "USD")}, or ${formatPlanPrice(PLANS.monthly, "USD")} a month. The first lesson is free.`,
+    `The answer engine optimization course for one payment of ${formatPlanPrice(PLANS.lifetime, "USD")}, ${formatPlanPrice(PLANS.yearly, "USD")} a year or ${formatPlanPrice(PLANS.monthly, "USD")} a month. The first lesson is free.`,
   path: "/pricing",
 });
 

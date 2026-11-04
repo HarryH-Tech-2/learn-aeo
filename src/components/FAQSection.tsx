@@ -77,12 +77,12 @@ const faqs = [
   },
   {
     question: PRICING_QUESTION,
-    answer: `Lifetime access is a single payment of ${formatPlanPrice(PLANS.lifetime, "USD")} (${formatPlanPrice(PLANS.lifetime, "GBP")}), with no recurring charges. If you would rather not pay up front, the Monthly plan is ${formatPlanPrice(PLANS.monthly, "USD")} (${formatPlanPrice(PLANS.monthly, "GBP")}) a month and you can cancel any time from your account. Payments are handled by Stripe.`,
+    answer: `Lifetime access is a single payment of ${formatPlanPrice(PLANS.lifetime, "USD")} (${formatPlanPrice(PLANS.lifetime, "GBP")}), with no recurring charges. If you would rather not pay up front, the Yearly plan is ${formatPlanPrice(PLANS.yearly, "USD")} (${formatPlanPrice(PLANS.yearly, "GBP")}) a year and the Monthly plan ${formatPlanPrice(PLANS.monthly, "USD")} (${formatPlanPrice(PLANS.monthly, "GBP")}) a month; you can cancel either any time from your account. Payments are handled by Stripe.`,
   },
   {
     question: "Can I get a refund?",
     answer:
-      "Yes. There is a 14-day money-back guarantee: if you are unhappy with the course within 14 days of buying it, email us and we will refund you in full. A Monthly plan can be canceled at any time, and your access runs to the end of the period you have paid for.",
+      "Yes. There is a 14-day money-back guarantee: if you are unhappy with the course within 14 days of buying it, email us and we will refund you in full. A Yearly or Monthly plan can be canceled at any time, and your access runs to the end of the period you have paid for.",
   },
   {
     question: "Is there a discount?",

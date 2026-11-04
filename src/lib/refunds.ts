@@ -12,6 +12,7 @@ import { notifyOwner } from "@/lib/notify";
 import { revokeLifetime } from "@/lib/subscription";
 import { planById } from "@/lib/plans";
 
+/** "monthly" stands for any subscription plan (Monthly or Yearly); the label names which. */
 export type PurchaseKind = "lifetime" | "monthly" | "product" | "unknown";
 
 /** What a checkout session paid for, from the metadata checkout writes (null session: a charge we can't trace). */

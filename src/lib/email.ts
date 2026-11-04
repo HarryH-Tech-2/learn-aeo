@@ -61,10 +61,10 @@ function codePanel(label: string | null, code: string, under: string): string {
 }
 
 /** The plans the purchase welcome covers. */
-export type WelcomePlan = "lifetime" | "monthly";
+export type WelcomePlan = "lifetime" | "monthly" | "yearly";
 
 /**
- * Sent by the Stripe webhook after a Lifetime or Monthly purchase. Opens with a short
+ * Sent by the Stripe webhook after a Lifetime, Yearly or Monthly purchase. Opens with a short
  * thank-you from the Learn AEO team; replies go to the owner inbox (CONTACT_TO_EMAIL, see notify.ts).
  */
 export async function sendWelcomeEmail(
@@ -78,16 +78,18 @@ export async function sendWelcomeEmail(
   const accountUrl = `${process.env.NEXTAUTH_URL}/account`;
   const firstTitle = titleMidSentence(LESSON_CATALOG[0].title);
   const lastTitle = titleMidSentence(LESSON_CATALOG[LESSON_CATALOG.length - 1].title);
-  const monthly = plan === "monthly";
+  // "monthly" here means any subscription plan (monthly or yearly); `period` names which.
+  const monthly = plan !== "lifetime";
+  const period = plan === "yearly" ? "yearly" : "monthly";
 
   const thanks = monthly
-    ? `Thank you for starting the monthly plan. It genuinely means a lot: Learn AEO is a small independent team, and every subscriber helps keep it going.`
+    ? `Thank you for starting the ${period} plan. It genuinely means a lot: Learn AEO is a small independent team, and every subscriber helps keep it going.`
     : `Thank you for buying the course. It genuinely means a lot: Learn AEO is a small independent team, and every purchase helps keep it going.`;
   const access = monthly
-    ? `Your monthly plan is active, so every lesson is open to you for as long as it runs, including new ones as they are released.`
+    ? `Your ${period} plan is active, so every lesson is open to you for as long as it runs, including new ones as they are released.`
     : `Your lifetime access is active, so every lesson is yours to keep, forever, including new ones as they are released.`;
   const footer = monthly
-    ? `Monthly plan: renews monthly, cancel any time. Your progress is kept if you come back.`
+    ? `${period === "yearly" ? "Yearly plan: renews each year" : "Monthly plan: renews monthly"}, cancel any time. Your progress is kept if you come back.`
     : `One-time payment. Lifetime access.`;
 
   const bullet = `<span style="color:${C.gold};">&#9670;</span>&nbsp;`;
@@ -95,7 +97,7 @@ export async function sendWelcomeEmail(
     from: personalFrom(),
     to: email,
     replyTo: ownerEmail(),
-    subject: `Thank you${displayName ? `, ${displayName}` : ""}: ${monthly ? "your monthly plan is active" : "welcome to Learn AEO"}`,
+    subject: `Thank you${displayName ? `, ${displayName}` : ""}: ${monthly ? `your ${period} plan is active` : "welcome to Learn AEO"}`,
     html: emailLayout({
       baseUrl: layoutBase(),
       preheader: access,
@@ -113,7 +115,7 @@ export async function sendWelcomeEmail(
           </p>`
         )}
         ${button(dashboardUrl, "Go to your dashboard")}`,
-      reason: `You are getting this because you ${monthly ? "started the monthly plan" : "bought the course"} at learnaeo.com.<br/>${footer}<br/>${footLink(accountUrl, "Manage your account")}`,
+      reason: `You are getting this because you ${monthly ? `started the ${period} plan` : "bought the course"} at learnaeo.com.<br/>${footer}<br/>${footLink(accountUrl, "Manage your account")}`,
     }),
     text: [
       `Hi ${greetingName},`,

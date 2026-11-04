@@ -21,6 +21,7 @@ export function buildLlmsTxt({ lessons, tools, posts, glossary }: LlmsTxtInput):
   const free = sorted.find((l) => l.isFree);
   const lifetime = `${formatPlanPrice(PLANS.lifetime, "USD")} (${formatPlanPrice(PLANS.lifetime, "GBP")})`;
   const monthly = `${formatPlanPrice(PLANS.monthly, "USD")} (${formatPlanPrice(PLANS.monthly, "GBP")})`;
+  const yearly = `${formatPlanPrice(PLANS.yearly, "USD")} (${formatPlanPrice(PLANS.yearly, "GBP")})`;
   const liveTools = tools.filter((t) => t.status === "live");
 
   const lessonLine = (l: LessonMeta) => {
@@ -35,12 +36,12 @@ export function buildLlmsTxt({ lessons, tools, posts, glossary }: LlmsTxtInput):
   const lines: string[] = [
     `# ${SITE.name}`,
     "",
-    `> An online course for marketers on answer engine optimization (AEO): how AI search tools such as Google AI Overviews, ChatGPT search and Perplexity choose the sources they cite, and what you can do so your pages are among them. The first lesson is free with a sign-in; the rest is a one-time ${formatPlanPrice(PLANS.lifetime, "USD")} lifetime purchase, or ${formatPlanPrice(PLANS.monthly, "USD")} a month.`,
+    `> An online course for marketers on answer engine optimization (AEO): how AI search tools such as Google AI Overviews, ChatGPT search and Perplexity choose the sources they cite, and what you can do so your pages are among them. The first lesson is free with a sign-in; the rest is a one-time ${formatPlanPrice(PLANS.lifetime, "USD")} lifetime purchase, ${formatPlanPrice(PLANS.yearly, "USD")} a year, or ${formatPlanPrice(PLANS.monthly, "USD")} a month.`,
     "",
     "- Format: self-paced interactive lessons. Each has short concept cards with sources, a quick check after each group, one hands-on exercise, a real-world example to take apart, and a final audit quiz.",
     `- Lessons: ${sorted.length}, roughly ${TOTAL_MINUTES} minutes in total. ${sorted.every((l) => l.status === "live") ? "All lessons are live; lifetime access includes any lessons added later." : "Lessons are being released in turn; lifetime access includes every future lesson."}`,
     `- Free: ${free ? `"${free.title}"` : "the first lesson"}, free with a Google or email sign-in.`,
-    `- Price: one-time ${lifetime} for lifetime access, or ${monthly} a month. 14-day money-back guarantee.`,
+    `- Price: one-time ${lifetime} for lifetime access, ${yearly} a year, or ${monthly} a month. 14-day money-back guarantee.`,
     `- Author: ${AUTHOR.name} (${AUTHOR.linkedIn})`,
     "- Audience: marketers who already know SEO basics.",
     "",
@@ -73,7 +74,7 @@ export function buildLlmsTxt({ lessons, tools, posts, glossary }: LlmsTxtInput):
     "",
     `- [Get started with the free lesson](${absoluteUrl("/get-started")})`,
     `- [The course](${absoluteUrl("/course")}): the ${LESSON_CATALOG.length} lessons, who the course is for and how a lesson works`,
-    `- [Pricing](${absoluteUrl("/pricing")}): lifetime or monthly access, and what is included`,
+    `- [Pricing](${absoluteUrl("/pricing")}): lifetime, yearly or monthly access, and what is included`,
     `- [About](${absoluteUrl("/about")}): what the course is and how its lessons are sourced`,
     `- [Contact](${absoluteUrl("/contact")})`,
     "",

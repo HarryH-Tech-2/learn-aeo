@@ -34,7 +34,7 @@ Do all of this in **test mode** first, then again in **live mode** with `--live`
 1. Settings → Public details: business name **Learn AEO**, statement descriptor **LEARNAEO**.
 2. Create the plans (Lifetime $100 / £80, Monthly $10 / £8):
    `STRIPE_SECRET_KEY=sk_test_... node scripts/stripe-create-plans.mjs`
-   It prints `STRIPE_PRICE_ID` and `STRIPE_PRICE_MONTHLY`.
+   It prints `STRIPE_PRICE_ID`, `STRIPE_PRICE_YEARLY` and `STRIPE_PRICE_MONTHLY`.
 3. Create the coupons (PPP 30/50/65% and the 33% completion offer, which is limited to the Lifetime product):
    `STRIPE_SECRET_KEY=sk_test_... node scripts/stripe-create-ppp-coupons.mjs`
 4. Developers → Webhooks → add an endpoint with these 9 events. In live mode its URL is `https://www.learnaeo.com/api/webhooks/stripe`. In test mode use the Preview URL from step 9 (`https://<preview url>/api/webhooks/stripe`), so test events don't go to production.
@@ -50,7 +50,7 @@ Do all of this in **test mode** first, then again in **live mode** with `--live`
 
    Its signing secret goes in `STRIPE_WEBHOOK_SECRET` (the test one in the Preview env, the live one in Production).
 5. Check everything, passing the two price ids step 2 printed:
-   `STRIPE_SECRET_KEY=sk_test_... STRIPE_PRICE_ID=price_... STRIPE_PRICE_MONTHLY=price_... NEXT_PUBLIC_SITE_URL=https://<preview url> node scripts/stripe-check-launch.mjs`
+   `STRIPE_SECRET_KEY=sk_test_... STRIPE_PRICE_ID=price_... STRIPE_PRICE_MONTHLY=price_... STRIPE_PRICE_YEARLY=price_... NEXT_PUBLIC_SITE_URL=https://<preview url> node scripts/stripe-check-launch.mjs`
    In live mode, drop `NEXT_PUBLIC_SITE_URL` (it then checks www.learnaeo.com) and add `--live`.
    *Worked when:* it prints ✓ and the price audit passes, with exit code 0.
    If it says the `NEXT-DISTRICT-33` coupon must be limited to the Lifetime product, delete that coupon in the dashboard and re-run step 3. Do this before the site is live: deleting the coupon also cancels every open 33% offer code.

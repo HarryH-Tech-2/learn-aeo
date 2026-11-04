@@ -18,6 +18,7 @@ export const REQUIRED_PRODUCTION_ENV = [
   "STRIPE_WEBHOOK_SECRET",
   "STRIPE_PRICE_ID",
   "STRIPE_PRICE_MONTHLY",
+  "STRIPE_PRICE_YEARLY",
   "RESEND_API_KEY",
   "RESEND_FROM_EMAIL",
   "RESEND_AUDIENCE_ID",
@@ -44,6 +45,7 @@ export function checkProductionEnv(env, siteUrl) {
   flag("STRIPE_WEBHOOK_SECRET", (v) => !v.startsWith("whsec_"), "must be the endpoint's signing secret (whsec_…)");
   flag("STRIPE_PRICE_ID", (v) => !v.startsWith("price_"), "must be a Stripe Price id (price_…)");
   flag("STRIPE_PRICE_MONTHLY", (v) => !v.startsWith("price_"), "must be a Stripe Price id (price_…)");
+  flag("STRIPE_PRICE_YEARLY", (v) => !v.startsWith("price_"), "must be a Stripe Price id (price_…)");
   flag("NEXTAUTH_URL", (v) => v.replace(/\/+$/, "") !== siteUrl, `must be ${siteUrl}`);
   flag("NEXT_PUBLIC_SITE_URL", (v) => v.replace(/\/+$/, "") !== siteUrl, `must be ${siteUrl} or empty`);
   flag("AEO_DEV_BYPASS_AUTH", () => true, "must be empty in production (it skips sign-in)");

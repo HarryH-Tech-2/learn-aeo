@@ -18,14 +18,14 @@ import { REFERRER_COOKIE, decodeReferrer } from "@/lib/referrer";
 const SESSION_TTL_SECONDS = 2 * 60 * 60;
 
 /**
- * POST /api/stripe/create-checkout  { plan?: "lifetime" | "monthly", from?: string, promo?: boolean }
+ * POST /api/stripe/create-checkout  { plan?: "lifetime" | "yearly" | "monthly", from?: string, promo?: boolean }
  * → { url }  Defaults to lifetime when no plan is given; any other plan value is a 400. `from` is the page the
  * buyer came from, where Cancel takes them back to (src/lib/checkout-return.ts); `promo` shows Stripe's
- * promotion-code box. Lifetime uses mode "payment", monthly "subscription"; the plan travels in metadata so the
+ * promotion-code box. Lifetime uses mode "payment", yearly and monthly "subscription"; the plan travels in metadata so the
  * webhook knows what was bought.
  *
- * An account that already holds the plan (or Lifetime, which covers the
- * monthly pass) is sent to the dashboard instead of to Stripe:
+ * An account that already holds the plan (Lifetime covers every plan; a yearly or monthly subscriber can't
+ * start a second subscription) is sent to the dashboard instead of to Stripe:
  * { url: "/dashboard?already=active", alreadyActive: true }.
  */
 export async function POST(request: NextRequest) {
@@ -44,17 +44,20 @@ export async function POST(request: NextRequest) {
     } catch {
       body = {};
     }
-    // Only the two plans this site sells. No plan at all means Lifetime; anything else (an old classroom or
+    // Only the three plans this site sells. No plan at all means Lifetime; anything else (an old classroom or
     // school link, junk) is refused rather than quietly sold as Lifetime.
     const plan = body.plan === undefined ? PLANS.lifetime : planById(typeof body.plan === "string" ? body.plan : null);
     if (!plan) {
-      return NextResponse.json({ error: "Unknown plan. Choose Lifetime or Monthly." }, { status: 400 });
+      return NextResponse.json({ error: "Unknown plan. Choose Lifetime, Yearly or Monthly." }, { status: 400 });
     }
 
     // Never sell someone what they already own.
     const access = await checkSubscription(email).catch(() => null);
     // (the free-unlock test's free group has the course already: src/lib/access-test.ts)
-    const owned = access?.active && (access.via === "lifetime" || access.via === "free-unlock" || (access.via === "monthly" && plan.id === "monthly"));
+    // A subscriber buying the other subscription would end up paying twice: they switch in the billing portal instead.
+    // Lifetime stays open to subscribers (an upgrade they can cancel the subscription after).
+    const onSubscription = access?.via === "monthly" || access?.via === "yearly";
+    const owned = access?.active && (access.via === "lifetime" || access.via === "free-unlock" || (onSubscription && plan.mode === "subscription"));
     if (owned) {
       console.log(`[create-checkout] ${email} already has ${access?.via} access; skipping ${plan.id} checkout`);
       return NextResponse.json({ url: "/dashboard?already=active", alreadyActive: true });

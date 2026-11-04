@@ -1,15 +1,19 @@
 import { describe, it, expect } from "vitest";
 import { PLANS, PLAN_IDS, isPlanId, planById, planAmount, planMinor, formatPlanPrice, planPeriodLabel, lessonsIncludedLine } from "@/lib/plans";
 import { PRICES, discounted, formatPrice } from "@/lib/pricing";
-import { monthlyActive, MONTHLY_GRACE_DAYS } from "@/lib/subscription";
+import { subscriptionActive, SUBSCRIPTION_GRACE_DAYS } from "@/lib/subscription";
 
 describe("plans", () => {
   it("the lessons line is the Lifetime plan's first feature and says how many are live", () => {
     expect(PLANS.lifetime.features[0]).toBe(lessonsIncludedLine());
   });
 
-  it("two plans: $100 / £80 lifetime and $10 / £8 monthly", () => {
-    expect(PLAN_IDS).toEqual(["lifetime", "monthly"]);
+  it("three plans: $100 / £80 lifetime, $60 / £48 yearly and $10 / £8 monthly", () => {
+    expect(PLAN_IDS).toEqual(["lifetime", "yearly", "monthly"]);
+    expect(PLANS.yearly.usd).toBe(60);
+    expect(PLANS.yearly.gbp).toBe(48);
+    expect(PLANS.yearly.interval).toBe("year");
+    expect(planPeriodLabel(PLANS.yearly)).toBe("per year");
     expect(PLANS.lifetime.usd).toBe(100);
     expect(PLANS.lifetime.gbp).toBe(80);
     expect(PLANS.monthly.usd).toBe(10);
@@ -69,15 +73,17 @@ describe("plans", () => {
   });
 });
 
-describe("monthly rules", () => {
+describe("subscription rules (monthly and yearly)", () => {
   it("runs to the period end plus grace", () => {
     const now = new Date("2026-09-08T12:00:00Z");
     const day = 86_400_000;
-    expect(monthlyActive({ active: true, plan: "monthly", currentPeriodEnd: null }, now)).toBe(true);
-    expect(monthlyActive({ active: true, plan: "monthly", currentPeriodEnd: new Date(now.getTime() + day) }, now)).toBe(true);
-    expect(monthlyActive({ active: true, plan: "monthly", currentPeriodEnd: new Date(now.getTime() - (MONTHLY_GRACE_DAYS - 1) * day) }, now)).toBe(true);
-    expect(monthlyActive({ active: true, plan: "monthly", currentPeriodEnd: new Date(now.getTime() - (MONTHLY_GRACE_DAYS + 1) * day) }, now)).toBe(false);
-    expect(monthlyActive({ active: false, plan: "monthly", currentPeriodEnd: new Date(now.getTime() + day) }, now)).toBe(false);
-    expect(monthlyActive({ active: true, plan: "lifetime", currentPeriodEnd: null }, now)).toBe(false);
+    expect(subscriptionActive({ active: true, plan: "monthly", currentPeriodEnd: null }, now)).toBe(true);
+    expect(subscriptionActive({ active: true, plan: "monthly", currentPeriodEnd: new Date(now.getTime() + day) }, now)).toBe(true);
+    expect(subscriptionActive({ active: true, plan: "monthly", currentPeriodEnd: new Date(now.getTime() - (SUBSCRIPTION_GRACE_DAYS - 1) * day) }, now)).toBe(true);
+    expect(subscriptionActive({ active: true, plan: "monthly", currentPeriodEnd: new Date(now.getTime() - (SUBSCRIPTION_GRACE_DAYS + 1) * day) }, now)).toBe(false);
+    expect(subscriptionActive({ active: false, plan: "monthly", currentPeriodEnd: new Date(now.getTime() + day) }, now)).toBe(false);
+    expect(subscriptionActive({ active: true, plan: "lifetime", currentPeriodEnd: null }, now)).toBe(false);
+    expect(subscriptionActive({ active: true, plan: "yearly", currentPeriodEnd: new Date(now.getTime() + 200 * day) }, now)).toBe(true);
+    expect(subscriptionActive({ active: true, plan: "classroom", currentPeriodEnd: null }, now)).toBe(false);
   });
 });

@@ -23,7 +23,7 @@ export const FEEDBACK_LAST_DAY = 14;
 
 const DAY_MS = 86_400_000;
 
-export type FeedbackPlan = "lifetime" | "monthly";
+export type FeedbackPlan = "lifetime" | "monthly" | "yearly";
 
 export type FeedbackCandidate = {
   userId: string;
@@ -43,8 +43,8 @@ export function feedbackPlanOf(c: FeedbackCandidate): FeedbackPlan | null {
   if (!sub || sub.trial) return null;
   const plan = sub.plan ?? "lifetime";
   if (plan === "lifetime" && (sub.active || c.lifetimeStatus)) return "lifetime";
-  // (an active monthly row stays active to the end of the paid period, even after a cancel)
-  if (plan === "monthly" && sub.active) return "monthly";
+  // (an active subscription row stays active to the end of the paid period, even after a cancel)
+  if ((plan === "monthly" || plan === "yearly") && sub.active) return plan;
   return null;
 }
 
@@ -65,10 +65,10 @@ export function renderFeedbackEmail(name: string | null | undefined, plan: Feedb
   const first = firstName(name);
   const hi = `Hi ${first},`;
   const opener =
-    plan === "monthly"
-      ? "It's been about five days since you started the monthly plan, so I wanted to ask you one thing:"
+    plan !== "lifetime"
+      ? `It's been about five days since you started the ${plan} plan, so I wanted to ask you one thing:`
       : "It's been about five days since you bought the course, so I wanted to ask you one thing:";
-  const thanks = plan === "monthly" ? "Thanks again for giving it a go." : "Thanks again for your support.";
+  const thanks = plan !== "lifetime" ? "Thanks again for giving it a go." : "Thanks again for your support.";
   const text = [
     hi,
     "",

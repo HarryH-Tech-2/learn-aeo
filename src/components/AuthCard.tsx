@@ -75,7 +75,7 @@ function BuyIntro({ destination }: { destination: string }) {
   const plan = planById(planIdFromCheckoutPath(destination)) ?? PLANS.lifetime;
   const freeGuest = useFreeCourseGuest();
   // (the free-unlock test's free group: the course is free on the account, src/lib/access-test.ts)
-  if (freeGuest && (plan.id === "lifetime" || plan.id === "monthly")) {
+  if (freeGuest) {
     return <>Create your free account and the whole course opens on it, with nothing to pay.</>;
   }
   if (plan.mode === "payment") {

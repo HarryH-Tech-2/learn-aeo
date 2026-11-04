@@ -84,21 +84,21 @@ export function courseSchema() {
     offers: PLAN_IDS.map((id) => ({
       "@type": "Offer",
       name: PLANS[id].name,
-      // Google's Course info categories: a one-time payment is "Paid", monthly is "Subscription".
+      // Google's Course info categories: a one-time payment is "Paid", yearly and monthly are "Subscription".
       category: PLANS[id].mode === "subscription" ? "Subscription" : "Paid",
       price: String(PLANS[id].usd),
       priceCurrency: "USD",
       availability: "https://schema.org/InStock",
       url: absoluteUrl("/pricing"),
-      // The monthly price is per month, not once.
+      // A subscription price is per period, not once.
       ...(PLANS[id].mode === "subscription"
         ? {
             priceSpecification: {
               "@type": "UnitPriceSpecification",
               price: String(PLANS[id].usd),
               priceCurrency: "USD",
-              billingDuration: "P1M",
-              unitCode: "MON",
+              billingDuration: PLANS[id].interval === "year" ? "P1Y" : "P1M",
+              unitCode: PLANS[id].interval === "year" ? "ANN" : "MON",
             },
           }
         : {}),

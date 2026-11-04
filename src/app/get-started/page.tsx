@@ -24,8 +24,8 @@ export default function GetStartedPage() {
         <h1>Start learning answer engine optimization: lesson 1 free</h1>
         <p>
           Sign in with Google or your email address and start lesson 1, {FIRST.title}, straight away. When you&apos;re
-          ready, unlock the rest of the course for a single payment of {formatPlanPrice(PLANS.lifetime, "USD")}, or learn
-          month by month for {formatPlanPrice(PLANS.monthly, "USD")}. Both include every lesson, and any new ones added later.
+          ready, unlock the rest of the course for a single payment of {formatPlanPrice(PLANS.lifetime, "USD")}, pay
+          {formatPlanPrice(PLANS.yearly, "USD")} a year or {formatPlanPrice(PLANS.monthly, "USD")} a month. Every plan includes every lesson, and any new ones added later.
         </p>
         <h2>The {LESSON_CATALOG.length} lessons</h2>
         {courseParts().map(({ part, number, lessons }) => (

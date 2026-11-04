@@ -28,6 +28,10 @@ const faqs = [
     answer: `The full course for ${both(PLANS.monthly)} a month, for people who would rather not pay up front. Cancel any time from your account page; your progress is kept if you come back. ${MONTHS_TO_LIFETIME} months costs the same as Lifetime, so if you know you'll finish, Lifetime is the better deal.`,
   },
   {
+    question: "How does the Yearly plan work?",
+    answer: `The full course for ${both(PLANS.yearly)} a year: half the price of twelve monthly payments, for people who want time to work through it without paying for Lifetime. It renews each year until you cancel from your account page.`,
+  },
+  {
     question: "Can I try a lesson before I buy?",
     answer: "Yes. The first lesson is completely free with a free account. Work through it to get a feel for the teaching before you pay anything.",
   },

@@ -91,6 +91,15 @@ describe("POST /api/stripe/create-checkout (authenticated)", () => {
     expect((await res.json()).url).toContain("checkout.stripe.com");
   });
 
+  it("a subscriber can't start a second subscription (monthly → yearly, yearly → monthly): they switch in the portal", async () => {
+    for (const [via, plan] of [["monthly", "yearly"], ["yearly", "monthly"], ["yearly", "yearly"]]) {
+      mockedGetServerSession.mockResolvedValue({ user: { email: `${via}@example.com` } } as any);
+      mockedCheckSubscription.mockResolvedValue({ ...noAccess, active: true, via } as any);
+      const res = await POST(new NextRequest("http://localhost/api/stripe/create-checkout", { method: "POST", body: JSON.stringify({ plan }) }));
+      expect((await res.json()).alreadyActive, `${via} → ${plan}`).toBe(true);
+    }
+  });
+
   it("stores the GA4 client id from the _ga cookie in the session metadata", async () => {
     mockedGetServerSession.mockResolvedValue({ user: { email: "ga@example.com" } } as any);
     const req = new NextRequest("http://localhost/api/stripe/create-checkout", { method: "POST", body: JSON.stringify({ plan: "lifetime" }), headers: { cookie: "_ga=GA1.1.123456789.1700000000" } });

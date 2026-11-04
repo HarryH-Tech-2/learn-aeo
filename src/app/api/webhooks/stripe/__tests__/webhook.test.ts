@@ -20,7 +20,7 @@ vi.mock("@/lib/stripe", () => ({
 vi.mock("@/lib/subscription", () => ({
   activateSubscription: mockActivate,
   deactivateSubscription: mockDeactivate,
-  syncMonthlySubscription: mockSyncMonthly,
+  syncSubscription: mockSyncMonthly,
 }));
 
 vi.mock("@/lib/db", () => ({ prisma: { user: { findUnique: mockUserFindUnique } } }));
@@ -63,6 +63,7 @@ describe("POST /api/webhooks/stripe", () => {
     mockReminder.mockResolvedValue("sent");
     process.env.STRIPE_WEBHOOK_SECRET = "whsec_test";
     process.env.STRIPE_PRICE_MONTHLY = "price_monthly";
+    process.env.STRIPE_PRICE_YEARLY = "price_yearly";
   });
 
   it("returns 400 when stripe-signature header is missing", async () => {
@@ -207,6 +208,24 @@ describe("POST /api/webhooks/stripe", () => {
     expect(res.status).toBe(200);
     expect(mockActivate).toHaveBeenCalledWith("m@example.com", "cus_m", expect.objectContaining({ plan: "monthly", stripeSubscriptionId: "sub_m", currentPeriodEnd: new Date(1_800_000_000 * 1000) }));
     expect(mockSendWelcome).toHaveBeenCalledWith("Mo", "m@example.com", "monthly");
+  });
+
+  it("yearly checkout: activates as yearly with the subscription id, and welcomes as yearly", async () => {
+    mockConstructEvent.mockReturnValue({
+      type: "checkout.session.completed",
+      data: { object: { payment_status: "paid", customer_email: "y@example.com", customer: "cus_y", subscription: "sub_y", customer_details: { name: "Yan" }, metadata: { plan: "yearly" } } },
+    });
+    mockSubscriptionsRetrieve.mockResolvedValue({ id: "sub_y", items: { data: [{ current_period_end: 1_830_000_000 }] } });
+    expect((await send()).status).toBe(200);
+    expect(mockActivate).toHaveBeenCalledWith("y@example.com", "cus_y", expect.objectContaining({ plan: "yearly", stripeSubscriptionId: "sub_y", currentPeriodEnd: new Date(1_830_000_000 * 1000) }));
+    expect(mockSendWelcome).toHaveBeenCalledWith("Yan", "y@example.com", "yearly");
+  });
+
+  it("legacy subscription.updated on the yearly price activates as yearly", async () => {
+    mockConstructEvent.mockReturnValue({ type: "customer.subscription.updated", data: { object: { id: "sub_9", status: "active", customer: "cus_456", items: { data: [{ price: { id: "price_yearly" } }] } } } });
+    mockCustomersRetrieve.mockResolvedValue({ email: "user@example.com" });
+    expect((await send()).status).toBe(200);
+    expect(mockActivate).toHaveBeenCalledWith("user@example.com", "cus_456", expect.objectContaining({ plan: "yearly" }));
   });
 
   it("subscription.updated for a known monthly row is synced, not routed to the legacy path", async () => {
