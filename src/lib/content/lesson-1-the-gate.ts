@@ -255,7 +255,7 @@ export const LESSON_1: LessonContent = {
             kind: "code",
             language: "text",
             caption: "User-agent strings as published by OpenAI and Perplexity (version numbers may change)",
-            code: "# OpenAI search crawler (ChatGPT search)\nMozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36; compatible; OAI-SearchBot/1.4; +https://openai.com/searchbot\n\n# OpenAI training crawler\nMozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; GPTBot/1.4; +https://openai.com/gptbot\n\n# Perplexity search crawler\nMozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; PerplexityBot/1.0; +https://perplexity.ai/perplexitybot)",
+            code: "# OpenAI search crawler (ChatGPT search)\nMozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36; compatible; OAI-SearchBot/1.4; +https://openai.com/searchbot\n\n# OpenAI training crawler\nMozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; GPTBot/1.4; +https://openai.com/gptbot\n\n# Perplexity search crawler\nMozilla/5.0 (compatible; PerplexityBot/1.0; +https://perplexity.ai/perplexitybot)",
           },
           pitfall:
             "Blocking every AI bot at once to stop training. OpenAI states that sites opted out of OAI-SearchBot \"will not be shown in ChatGPT search answers, though can still appear as navigational links\".",

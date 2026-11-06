@@ -1,12 +1,13 @@
 // Lesson 2, The Crawl Docks: make your site reachable by AI.
 // Every claim about a crawler, robots.txt, rendering, sitemaps, IndexNow,
-// llms.txt or CDN blocking is tied to a source checked on the `accessed` date.
+// llms.txt, training-preference signals, bot verification or CDN blocking is
+// tied to a source checked on the `accessed` date.
 // Fernhill Garden Supply is a made-up shop. Log lines use documentation-only
 // IP addresses (RFC 5737) with user-agent strings as the vendors publish them.
 
 import type { LessonContent, Source } from "../lesson-types";
 
-const ACCESSED = "2026-10-26";
+const ACCESSED = "2026-11-06";
 
 const OPENAI_CRAWLERS: Source = {
   title: "Overview of OpenAI Crawlers",
@@ -19,7 +20,16 @@ const ANTHROPIC_CRAWLERS: Source = {
   title: "Does Anthropic crawl data from the web, and how can site owners block the crawler?",
   publisher: "Claude Help Center",
   url: "https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler",
-  date: "2026-04-07",
+  date: "2026-11-05",
+  dateKind: "updated",
+  accessed: ACCESSED,
+};
+
+const CLAUDE_AGENT: Source = {
+  title: "How do Anthropic-hosted browsers identify themselves when they browse the web on a user's behalf?",
+  publisher: "Claude Help Center",
+  url: "https://support.claude.com/en/articles/18234133",
+  date: "2026-11-05",
   dateKind: "updated",
   accessed: ACCESSED,
 };
@@ -35,7 +45,16 @@ const GOOGLE_COMMON_CRAWLERS: Source = {
   title: "Google's common crawlers",
   publisher: "Google Crawling Infrastructure",
   url: "https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers",
-  date: "2026-10-15",
+  date: "2026-10-30",
+  dateKind: "updated",
+  accessed: ACCESSED,
+};
+
+const GOOGLE_USER_FETCHERS: Source = {
+  title: "Google user-triggered fetchers",
+  publisher: "Google Crawling Infrastructure",
+  url: "https://developers.google.com/crawling/docs/crawlers-fetchers/google-user-triggered-fetchers",
+  date: "2026-08-19",
   dateKind: "updated",
   accessed: ACCESSED,
 };
@@ -46,6 +65,22 @@ const GOOGLE_AI_FEATURES: Source = {
   url: "https://developers.google.com/search/docs/appearance/ai-features",
   date: "2025-12-10",
   dateKind: "updated",
+  accessed: ACCESSED,
+};
+
+const GOOGLE_AI_GUIDE: Source = {
+  title: "Google's guide to optimizing for generative AI features on Google Search",
+  publisher: "Google Search Central",
+  url: "https://developers.google.com/search/docs/fundamentals/ai-optimization-guide",
+  date: "2026-07-10",
+  dateKind: "updated",
+  accessed: ACCESSED,
+};
+
+const APPLEBOT: Source = {
+  title: "About Applebot",
+  publisher: "Apple Support",
+  url: "https://support.apple.com/en-us/119829",
   accessed: ACCESSED,
 };
 
@@ -68,6 +103,15 @@ const RFC_9309: Source = {
   publisher: "IETF (RFC Editor)",
   url: "https://www.rfc-editor.org/rfc/rfc9309.html",
   date: "2022-09",
+  dateKind: "published",
+  accessed: ACCESSED,
+};
+
+const AIPREF_DRAFT: Source = {
+  title: "Machine-Readable Training Preference Signal (draft-kelley-aipref-training-preference-signal-00)",
+  publisher: "IETF Datatracker (individual Internet-Draft)",
+  url: "https://datatracker.ietf.org/doc/draft-kelley-aipref-training-preference-signal",
+  date: "2026-10-30",
   dateKind: "published",
   accessed: ACCESSED,
 };
@@ -175,10 +219,10 @@ const CLOUDFLARE_DEFAULT_BLOCK: Source = {
 };
 
 const CLOUDFLARE_AI_BOTS_DOCS: Source = {
-  title: "Block AI Bots",
+  title: "AI Crawler and Agent access policies",
   publisher: "Cloudflare Docs",
   url: "https://developers.cloudflare.com/bots/additional-configurations/block-ai-bots/",
-  date: "2026-07-01",
+  date: "2026-11-02",
   dateKind: "updated",
   accessed: ACCESSED,
 };
@@ -204,7 +248,7 @@ export const LESSON_2: LessonContent = {
     "You have reached The Crawl Docks, the second district of the City of Answers. Bots arrive here all day to collect pages for the city's indexes and answers, and the well-behaved ones read your robots.txt before they take anything. Your job in this district is to make sure the right ones get in, and that nothing on your side turns them away by accident.",
 
   outro:
-    "You leave The Crawl Docks knowing who is knocking, what your robots.txt actually says to each of them, and where a CDN setting can overrule both. Next stop is The Answer Quarter, where you work on the passages those bots carry away.",
+    "You leave The Crawl Docks knowing who is knocking, what your robots.txt actually says to each of them, how to tell a real bot from an impostor, and where a CDN setting can overrule all of it. Next stop is The Answer Quarter, where you work on the passages those bots carry away.",
 
   groups: [
     {
@@ -213,16 +257,17 @@ export const LESSON_2: LessonContent = {
       concepts: [
         {
           id: "c-three-jobs",
+          quiz: {"kind": "match", "id": "cq-three-jobs", "prompt": "Match each token to the job its vendor describes.", "pairs": [{"term": "GPTBot", "definition": "Crawls content that may be used to train OpenAI's models"}, {"term": "Claude-SearchBot", "definition": "Analyzes content to improve Claude's search responses"}, {"term": "Perplexity-User", "definition": "Visits a page because someone asked Perplexity a question"}, {"term": "OAI-AdsBot", "definition": "Only visits pages submitted as ads on ChatGPT"}], "explanation": "Training, search, user-triggered and ads: each job has its own token, and each token is a separate switch in robots.txt."},
           term: "Three jobs, three kinds of bot",
           summary: "Training crawlers, search crawlers and user-triggered fetchers each get their own user-agent token.",
           explanation:
-            "The Gate introduced these bots. Here is the full set you will write rules for, grouped by the job each vendor says it does:\n\n- **Training.** OpenAI's `GPTBot` crawls content \"that may be used in training our generative AI foundation models\". Anthropic's `ClaudeBot` collects content \"that could potentially contribute to their training\".\n- **Search.** `OAI-SearchBot` surfaces sites in ChatGPT's search features. `Claude-SearchBot` analyzes content \"to enhance the relevance and accuracy of search responses\". `PerplexityBot` surfaces and links sites in Perplexity's results, and Perplexity says \"It is not used to crawl content for AI foundation models.\"\n- **User-triggered.** `ChatGPT-User`, `Claude-User` and `Perplexity-User` visit a page because someone asked a question that needs it.\n\nOpenAI also runs `OAI-AdsBot`, which \"only visits pages submitted as ads\" on ChatGPT.",
+            "The Gate introduced these bots. Here is the full set you will write rules for, grouped by the job each vendor says it does:\n\n- **Training.** OpenAI's `GPTBot` crawls content \"that may be used in training our generative AI foundation models\". Anthropic's `ClaudeBot` collects content \"that could potentially contribute to their training\".\n- **Search.** `OAI-SearchBot` surfaces sites in ChatGPT's search features. `Claude-SearchBot` analyzes content \"to enhance the relevance and accuracy of search responses\". `PerplexityBot` surfaces and links sites in Perplexity's results, and Perplexity says \"It is not used to crawl content for AI foundation models.\"\n- **User-triggered.** `ChatGPT-User`, `Claude-User` and `Perplexity-User` visit a page because someone asked a question that needs it.\n\nOpenAI also runs `OAI-AdsBot`, which \"only visits pages submitted as ads\" on ChatGPT. Google and Apple split the jobs differently: their search crawlers also gather the content, and a separate control token (`Google-Extended`, `Applebot-Extended`) carries the training choice. The next cards cover both.",
           whyItMatters:
             "Each token is a separate switch. OpenAI says \"Each setting is independent of the others\", and Perplexity says \"Each setting works independently\". You can say no to training and yes to search in the same file, but only if you name the right tokens.",
           example: {
             kind: "code",
             language: "text",
-            caption: "Robots.txt tokens by job, as each vendor documents them",
+            caption: "Robots.txt tokens by job, as each vendor documents them (November 2026)",
             code: "Job               OpenAI          Anthropic          Perplexity\nTraining          GPTBot          ClaudeBot          (none listed)\nSearch            OAI-SearchBot   Claude-SearchBot   PerplexityBot\nUser-triggered    ChatGPT-User    Claude-User        Perplexity-User",
           },
           pitfall:
@@ -231,18 +276,20 @@ export const LESSON_2: LessonContent = {
         },
         {
           id: "c-user-fetchers",
-          term: "User-triggered fetchers play by different rules",
-          summary: "Vendors do not all say the same thing about whether their user fetchers obey robots.txt.",
+          quiz: {"kind": "choice", "id": "cq-user-fetchers", "prompt": "Which of these does its vendor say honors robots.txt directives?", "options": ["Claude-User", "ChatGPT-User", "Perplexity-User", "Google's user-triggered fetchers"], "answer": 0, "explanation": "Anthropic says all of its bots, Claude-User included, honor robots.txt. OpenAI says robots.txt rules may not apply to ChatGPT-User, and Perplexity and Google say their user-triggered fetchers generally ignore them."},
+          term: "User-triggered fetchers and agents play by different rules",
+          summary: "Vendors do not all say the same thing about whether visits a user started obey robots.txt.",
           explanation:
-            "Read each vendor's wording, because it differs:\n\n- **OpenAI** on ChatGPT-User: \"Because these actions are initiated by a user, robots.txt rules may not apply.\"\n- **Perplexity** on Perplexity-User: \"Since a user requested the fetch, this fetcher generally ignores robots.txt rules.\"\n- **Anthropic** covers all three of its bots, Claude-User included: \"Anthropic's Bots respect “do not crawl” signals by honoring industry standard directives in robots.txt.\"\n\nOpenAI adds that ChatGPT-User \"is not used to determine whether content may appear in Search\" and points you to OAI-SearchBot for that.",
+            "Read each vendor's wording, because it differs:\n\n- **OpenAI** on ChatGPT-User: \"Because these actions are initiated by a user, robots.txt rules may not apply.\"\n- **Perplexity** on Perplexity-User: \"Since a user requested the fetch, this fetcher generally ignores robots.txt rules.\"\n- **Google** on its user-triggered fetchers: \"Because the fetch was requested by a user, these fetchers generally ignore robots.txt rules.\"\n- **Anthropic** covers all three of its bots, Claude-User included: \"Anthropic's Bots respect “do not crawl” signals by honoring industry standard directives in robots.txt.\"\n\nA newer kind of visitor drives a whole browser. Google lists `Google-Agent` among its user-triggered fetchers: it \"is used by agents hosted on Google infrastructure to navigate the web and perform actions upon user request\". Anthropic's hosted browsers add a `Claude-Agent` token, and Anthropic says \"Agentic browser use is different from Anthropic's robots\". Its article identifies Claude-Agent by that token and a published IP list, not by a robots.txt rule.",
           whyItMatters:
-            "A Disallow for ChatGPT-User or Perplexity-User is not a dependable way to stop those visits, and it is the wrong switch for search visibility anyway. A Disallow for Claude-User is honored, and Anthropic warns it \"may reduce your site's visibility for user-directed web search\".",
+            "A Disallow for ChatGPT-User, Perplexity-User or a Google user-triggered fetcher is not a dependable way to stop those visits, and it is the wrong switch for search visibility anyway. A Disallow for Claude-User is honored, and Anthropic warns it \"may reduce your site's visibility for user-directed web search\". Browser agents are a firewall question, covered in the last group.",
           pitfall:
-            "Blocking ChatGPT-User to leave ChatGPT search, or allowing it to get in. OpenAI says to use OAI-SearchBot in robots.txt \"for managing Search opt outs and automatic crawl\".",
-          sources: [OPENAI_CRAWLERS, PERPLEXITY_CRAWLERS, ANTHROPIC_CRAWLERS],
+            "Blocking ChatGPT-User to leave ChatGPT search, or allowing it to get in. OpenAI says ChatGPT-User \"is not used to determine whether content may appear in Search\", and to use OAI-SearchBot in robots.txt \"for managing Search opt outs and automatic crawl\".",
+          sources: [OPENAI_CRAWLERS, PERPLEXITY_CRAWLERS, GOOGLE_USER_FETCHERS, ANTHROPIC_CRAWLERS, CLAUDE_AGENT],
         },
         {
           id: "c-product-token",
+          quiz: {"kind": "choice", "id": "cq-product-token", "prompt": "Which robots.txt token controls whether your pages can appear in Google's AI Overviews and AI Mode?", "options": ["Googlebot", "Google-Extended", "Google-Agent", "There is no robots.txt control for it"], "answer": 0, "explanation": "Google says AI is integral to how Search functions, so robots.txt rules for Googlebot are the control. Google-Extended covers Gemini training and grounding, not Search."},
           term: "A product token is not always a crawler",
           summary: "Google-Extended is a name you write rules for, but no bot visits under that name.",
           explanation:
@@ -260,7 +307,27 @@ export const LESSON_2: LessonContent = {
           sources: [GOOGLE_COMMON_CRAWLERS, GOOGLE_AI_FEATURES, RFC_9309],
         },
         {
+          id: "c-apple",
+          quiz: {"kind": "spot", "id": "cq-apple", "prompt": "Goal: keep your content out of Apple's model training but stay in Siri, Spotlight and Safari. Which line is wrong?", "language": "robots", "lines": ["User-agent: Applebot", "Disallow: /", "User-agent: *", "Disallow: /checkout/"], "answer": 0, "explanation": "Disallowing Applebot takes you out of Apple's search features too. Apple's training opt-out is a Disallow for Applebot-Extended, which leaves Applebot free to crawl."},
+          term: "Apple's two switches: Applebot-Extended and nosnippet",
+          summary: "Applebot feeds Siri, Spotlight and Safari. A separate token and a meta tag control how Apple's AI uses your pages.",
+          explanation:
+            "Applebot is Apple's crawler. Apple says enabling it in robots.txt \"allows website content to appear in search results for Apple users around the world\" in Spotlight, Siri and Safari. Apple then gives you two separate AI controls:\n\n- **Training.** \"Web publishers can opt-out from having their content used to train generative foundation models by disallowing Applebot-Extended in the robots.txt file.\"\n- **AI answers.** Applebot data can also be used when AI models generate answers, such as broad world-knowledge questions in Siri and Search. \"Web publishers can opt out of their content being used in these broad world knowledge answers by applying the nosnippet meta tag to specific content.\"\n\nWith both in place, Apple says \"Your content will remain discoverable through Spotlight, Siri, and Safari\".\n\nTwo rules catch people out. \"If robots instructions don't mention Applebot but mention Googlebot, the Apple robot will follow Googlebot instructions.\" And \"Applebot does not follow crawl-delay.\"",
+          whyItMatters:
+            "A Googlebot group you wrote for Google alone can quietly govern Apple's crawler as well. If you want Applebot treated differently, give it a group of its own.",
+          example: {
+            kind: "code",
+            language: "robots",
+            caption: "Applebot-Extended is opted out of training. Applebot has no group, so it follows the Googlebot group, not the * group",
+            code: "User-agent: Applebot-Extended\nDisallow: /\n\nUser-agent: Googlebot\nDisallow: /internal-search/\n\nUser-agent: *\nDisallow: /checkout/",
+          },
+          pitfall:
+            "Disallowing Applebot to stop Apple's AI training. That also removes you from Apple's search features. Applebot-Extended is the training switch, and nosnippet is the switch for AI-generated answers.",
+          sources: [APPLEBOT],
+        },
+        {
           id: "c-ccbot",
+          quiz: {"kind": "choice", "id": "cq-ccbot", "prompt": "Why does it matter that Common Crawl's archive is open?", "options": ["Anyone who downloads it can use a page that is in it", "Only Common Crawl's own search engine can read it", "Pages in it are automatically indexed by Google", "It only stores pages that allow JavaScript"], "answer": 0, "explanation": "Common Crawl builds an open repository that anyone can access and analyze, so a page in the archive is available to anyone who downloads it. CCBot is the token to disallow to stay out of future crawls."},
           term: "Common Crawl's CCBot",
           summary: "A non-profit crawler that builds an open archive of the web anyone can download.",
           explanation:
@@ -307,6 +374,21 @@ export const LESSON_2: LessonContent = {
           explanation:
             "Three vendors, three different answers for user-triggered fetchers, and one token that is not a fetcher at all. Read the vendor's page for each token rather than assuming they all behave alike.",
         },
+        {
+          kind: "choice",
+          id: "q-g1-apple",
+          prompt:
+            "Your robots.txt has a Googlebot group with \"Disallow: /staging/\" and a * group with \"Disallow: /checkout/\". There is no Applebot group. According to Apple, which rules does Applebot follow?",
+          options: [
+            "The Googlebot group, so /staging/ is off-limits but /checkout/ is not",
+            "The * group, like any crawler without a group of its own",
+            "Both groups combined",
+            "None: Applebot only reads rules addressed to Applebot-Extended",
+          ],
+          answer: 0,
+          explanation:
+            "Apple says that if robots instructions don't mention Applebot but mention Googlebot, Applebot follows the Googlebot instructions. To keep Applebot out of /checkout/, give it a group of its own or add the rule to the Googlebot group.",
+        },
       ],
     },
     {
@@ -315,6 +397,7 @@ export const LESSON_2: LessonContent = {
       concepts: [
         {
           id: "c-groups",
+          quiz: {"kind": "choice", "id": "cq-groups", "prompt": "Your file has a * group and a separate group that names PerplexityBot. Which rules does PerplexityBot obey?", "options": ["Only the rules in its own group", "The * rules plus its own group's rules", "Only the * rules", "Whichever group comes first in the file"], "answer": 0, "explanation": "A crawler falls back to * only if no group names it. Google says specific and global groups are not combined, and the order of groups is irrelevant."},
           term: "Groups, and how a bot finds its own",
           summary: "A bot obeys one group: the one that names it, or the * group if none does.",
           explanation:
@@ -333,6 +416,7 @@ export const LESSON_2: LessonContent = {
         },
         {
           id: "c-precedence",
+          quiz: {"kind": "blank", "id": "cq-precedence", "prompt": "Complete the matching rules.", "text": "Within a group, the rule with the ___ matching path wins. If an allow rule and a disallow rule are equivalent, the ___ rule should be used.", "answers": ["longest", "allow"], "distractors": ["shortest", "disallow", "first"], "explanation": "RFC 9309 says the most specific match, the one with the most octets, must be used, and an allow rule should win a tie. Google says it uses the least restrictive rule."},
           term: "Allow vs Disallow: the longest match wins",
           summary: "Within a group, the rule with the longest matching path applies; a tie goes to Allow.",
           explanation:
@@ -351,6 +435,7 @@ export const LESSON_2: LessonContent = {
         },
         {
           id: "c-crawl-not-index",
+          quiz: {"kind": "choice", "id": "cq-crawl-not-index", "prompt": "You want a page kept out of Google entirely. Which approach does Google recommend?", "options": ["noindex on a page Google can crawl, or password protection", "A Disallow line for the page in robots.txt", "Removing the page from your XML sitemap", "Adding the path to llms.txt"], "answer": 0, "explanation": "Google says robots.txt is not a mechanism for keeping a page out of Google, and a disallowed URL can still be indexed if it is linked elsewhere. noindex or a password keeps it out."},
           term: "robots.txt controls crawling, not indexing",
           summary: "A Disallow stops the fetch. It does not keep the URL out of an index, and it does not lock anything.",
           explanation:
@@ -363,15 +448,35 @@ export const LESSON_2: LessonContent = {
         },
         {
           id: "c-token-scope",
+          quiz: {"kind": "match", "id": "cq-token-scope", "prompt": "Match each Disallow to what its vendor says it does.", "pairs": [{"term": "GPTBot", "definition": "Content should not be used to train generative AI foundation models"}, {"term": "OAI-SearchBot", "definition": "Not shown in ChatGPT search answers, though navigational links may still appear"}, {"term": "ClaudeBot", "definition": "Future materials excluded from AI model training datasets"}, {"term": "Claude-SearchBot", "definition": "Content not indexed for search optimization"}], "explanation": "Two of these are training opt-outs and two are search opt-outs. Read the vendor's definition of each token, not just its name."},
           term: "What each token does and does not control",
           summary: "Each vendor defines what a Disallow for its token means. Read the definition, not the name.",
           explanation:
-            "Here is what each vendor says a block does:\n\n- `GPTBot`: \"Disallowing GPTBot indicates a site's content should not be used in training generative AI foundation models.\"\n- `OAI-SearchBot`: opted-out sites \"will not be shown in ChatGPT search answers, though can still appear as navigational links\".\n- `ClaudeBot`: a block \"signals that the site's future materials should be excluded from our AI model training datasets\".\n- `Claude-SearchBot`: a block \"prevents our system from indexing your content for search optimization\".\n- `Google-Extended`: Gemini training and grounding only, not Google Search.\n\nChanges take time. OpenAI says it \"can take ~24 hours\" for search results to adjust, Perplexity says \"up to 24 hours\", and Google says it \"generally caches the contents of robots.txt file for up to 24 hours\".\n\n`Crawl-delay` is not universal either. Anthropic and Common Crawl support it. Google lists it among fields that \"aren't supported\".",
+            "Here is what each vendor says a block does:\n\n- `GPTBot`: \"Disallowing GPTBot indicates a site's content should not be used in training generative AI foundation models.\"\n- `OAI-SearchBot`: opted-out sites \"will not be shown in ChatGPT search answers, though can still appear as navigational links\".\n- `ClaudeBot`: a block \"signals that the site's future materials should be excluded from our AI model training datasets\".\n- `Claude-SearchBot`: a block \"prevents our system from indexing your content for search optimization\".\n- `Google-Extended`: Gemini training and grounding only, not Google Search.\n- `Applebot-Extended`: Apple's generative model training only. Applebot keeps crawling for Apple's search features.\n\nChanges take time. OpenAI says it \"can take ~24 hours\" for search results to adjust, Perplexity says \"up to 24 hours\", and Google says it \"generally caches the contents of robots.txt file for up to 24 hours\".\n\n`Crawl-delay` is not universal either. Anthropic and Common Crawl support it. Google lists it among fields that \"aren't supported\", and Apple says \"Applebot does not follow crawl-delay.\"",
           whyItMatters:
             "A training opt-out is a statement about future use, in the vendor's own words. A search opt-out removes you from that engine's answers. Treat them as two separate decisions.",
           pitfall:
             "Expecting a change to show up the next morning in every engine, or reading Anthropic's \"future materials\" as removal of content it has already collected. Write down the date of each robots.txt change so you can compare against your logs later.",
-          sources: [OPENAI_CRAWLERS, ANTHROPIC_CRAWLERS, PERPLEXITY_CRAWLERS, GOOGLE_COMMON_CRAWLERS, GOOGLE_ROBOTS_SPEC, CCBOT_FAQ],
+          sources: [OPENAI_CRAWLERS, ANTHROPIC_CRAWLERS, PERPLEXITY_CRAWLERS, GOOGLE_COMMON_CRAWLERS, GOOGLE_ROBOTS_SPEC, CCBOT_FAQ, APPLEBOT],
+        },
+        {
+          id: "c-training-signal",
+          quiz: {"kind": "choice", "id": "cq-training-signal", "prompt": "Your file has a User-agent: * group with Disallow: /staging/, and no __usage_ai-training group. Under the draft, what training preference have you expressed?", "options": ["None: the * group must not be read as matching the policy token", "A preference against training on /staging/", "A preference against training on the whole site", "A preference in favor of training everywhere"], "answer": 0, "explanation": "The draft says wildcard groups must not be interpreted as matching the policy token, and if no group names it, no preference has been expressed."},
+          term: "A shared \"no AI training\" signal",
+          summary: "A draft robots.txt token, __usage_ai-training, states one training preference for every vendor that reads it.",
+          explanation:
+            "So far each vendor has needed its own training token: GPTBot, ClaudeBot, Google-Extended, Applebot-Extended. An individual Internet-Draft published on 30 October 2026, written by an Anthropic author and discussed in the IETF's AI Preferences working group, proposes one cross-vendor **policy token**, `__usage_ai-training`, written as an ordinary robots.txt group. The draft \"introduces no new directive names and no new grammar\".\n\nTwo rules matter most:\n\n- \"wildcard groups (i.e., User-Agent: *) MUST NOT be interpreted as matching the policy token\". Your `*` group says nothing about training. If no group names the token, \"then no preference has been expressed\".\n- \"This policy token is not a directive for crawling behavior.\" It states a preference about use. Crawling is still governed by each crawler's own group.\n\nWho reads it: Anthropic says that as of October 30, 2026 it \"has begun recognizing a machine-readable signal that lets website owners express a preference about whether their content may be used to train AI models\", rolling out over time. Google says it \"intends to support the AIPREF shared machine-readable training preference signal\" in early 2027. OpenAI's and Perplexity's crawler pages do not mention it.",
+          whyItMatters:
+            "It is one group to add, and it does not change who can crawl. Vendor-specific groups still win where you have them: Anthropic says \"If your robots.txt file names ClaudeBot, we follow that rule, even if your general setting says something different\".",
+          example: {
+            kind: "code",
+            language: "robots",
+            caption: "The draft's own example: a preference against AI training everywhere except /press-kit/",
+            code: "User-Agent: __usage_ai-training\nDisallow: /\nAllow: /press-kit/",
+          },
+          pitfall:
+            "Treating it as a finished standard, or as a block. It is a draft, and Anthropic says \"Because standards in this space are still evolving, the way we read and apply these settings may change too.\" Keep the vendor training tokens you already use.",
+          sources: [AIPREF_DRAFT, ANTHROPIC_CRAWLERS, GOOGLE_COMMON_CRAWLERS],
         },
       ],
       check: [
@@ -423,10 +528,11 @@ export const LESSON_2: LessonContent = {
       concepts: [
         {
           id: "c-js-rendering",
+          quiz: {"kind": "passage", "id": "cq-js-rendering", "prompt": "Which raw HTML response gives a crawler that does not run JavaScript the delivery terms?", "passages": ["<div id=\"app\"></div><script src=\"/bundle.js\"></script>", "<h1>Fernhill compost bin</h1><p>Free UK delivery on orders over £50.</p><script src=\"/bundle.js\"></script>"], "answer": 1, "explanation": "The first response is empty until bundle.js runs, so a bot that does not execute JavaScript sees nothing. The second sends the text in the HTML. (Fernhill is made up.)"},
           term: "Content that needs JavaScript to appear",
-          summary: "Google renders JavaScript. A 2024 study found that the major AI crawlers it measured did not.",
+          summary: "Google and Apple say they can render JavaScript. A 2024 study found that the major AI crawlers it measured did not.",
           explanation:
-            "Google documents its own process: it handles JavaScript pages in \"three main phases\", crawling, rendering and indexing. It still adds that \"server-side or pre-rendering is still a great idea because it makes your website faster for users and crawlers, and not all bots can run JavaScript.\"\n\nFor AI crawlers, there are two kinds of evidence:\n\n- **A vendor statement.** Common Crawl says of CCBot: \"Currently, JavaScript is not executed\".\n- **A published study.** In December 2024, Vercel and MERJ analyzed crawler traffic on nextjs.org and the Vercel network. They reported that \"none of the major AI crawlers currently render JavaScript\", naming OpenAI's OAI-SearchBot, ChatGPT-User and GPTBot, Anthropic's ClaudeBot and PerplexityBot among others. They found Gemini uses Googlebot's infrastructure and renders fully.\n\nOpenAI, Anthropic and Perplexity's crawler pages do not say whether their bots render JavaScript. Claude-SearchBot and Claude-User were not in the study's list.",
+            "Google documents its own process: it handles JavaScript pages in \"three main phases\", crawling, rendering and indexing. It still adds that \"server-side or pre-rendering is still a great idea because it makes your website faster for users and crawlers, and not all bots can run JavaScript.\"\n\nFor other crawlers, there are three kinds of evidence:\n\n- **Vendor statements.** Common Crawl says of CCBot: \"Currently, JavaScript is not executed\". Apple says \"Applebot may render the content of your website within a browser\", but may not render the page properly if scripts, CSS and other resources are blocked in robots.txt.\n- **A published study.** In December 2024, Vercel and MERJ analyzed crawler traffic on nextjs.org and the Vercel network. They reported that \"none of the major AI crawlers currently render JavaScript\", naming OpenAI's OAI-SearchBot, ChatGPT-User and GPTBot, Anthropic's ClaudeBot and PerplexityBot among others. They found Gemini uses Googlebot's infrastructure and renders fully.\n- **Silence.** OpenAI's, Anthropic's and Perplexity's crawler pages, checked in November 2026, do not say whether their bots render JavaScript. Claude-SearchBot and Claude-User were not in the study's list.",
           whyItMatters:
             "If your prices, product details or answers only appear after JavaScript runs, some bots that are allowed in may still see an empty page. Server-rendered HTML is the safe default, because a crawler does not need to run JavaScript to read it.",
           example: {
@@ -439,10 +545,11 @@ export const LESSON_2: LessonContent = {
           },
           pitfall:
             "Checking the page in your own browser and deciding it is fine. Your browser runs JavaScript. Look at the raw HTML your server returns, with View Source or curl, to see what a non-rendering bot gets. And do not block your script files in robots.txt: Google says it \"won't render JavaScript from blocked files or on blocked pages\".",
-          sources: [GOOGLE_JS_SEO, CCBOT_FAQ, VERCEL_AI_CRAWLERS],
+          sources: [GOOGLE_JS_SEO, CCBOT_FAQ, APPLEBOT, VERCEL_AI_CRAWLERS],
         },
         {
           id: "c-sitemaps",
+          quiz: {"kind": "choice", "id": "cq-sitemaps", "prompt": "Where in robots.txt should the Sitemap line go?", "options": ["Anywhere: it is independent of the user-agent lines", "Inside the * group only", "At the very top, before any group", "In a group of its own named Sitemap"], "answer": 0, "explanation": "sitemaps.org says the Sitemap directive is independent of the user-agent line, so it doesn't matter where you place it in the file."},
           term: "XML sitemaps",
           summary: "A list of the URLs you want crawled, with hints such as the last-modified date.",
           explanation:
@@ -461,10 +568,11 @@ export const LESSON_2: LessonContent = {
         },
         {
           id: "c-indexnow",
+          quiz: {"kind": "choice", "id": "cq-indexnow", "prompt": "Your IndexNow ping returns HTTP 200. What does that tell you?", "options": ["The engine received your URL, nothing more", "The URL is now indexed by every participating engine", "Google has recrawled the page", "The page will be cited in AI answers"], "answer": 0, "explanation": "IndexNow's docs say a 200 only indicates that the engine received the URL, and the FAQ says IndexNow doesn't guarantee indexing. Google is not on the list of participants."},
           term: "IndexNow",
           summary: "A ping that tells participating engines a URL was added, updated or deleted.",
           explanation:
-            "Instead of waiting for a crawler to come back, you send the changed URL to an engine's `/indexnow` endpoint with a key. You prove you own the site by hosting \"a UTF-8 encoded text key file {your-key}.txt\" at the root. A single POST can carry \"up to 10,000 URLs\".\n\nEngines that adopt the protocol \"agree that submitted URLs will be automatically shared with all other participating search engines\", so one ping reaches all of them. IndexNow's list of participants names Bing, Yandex, Seznam, Naver, Yep, the Internet Archive and Amazonbot. Google is not on it.",
+            "Instead of waiting for a crawler to come back, you send the changed URL to an engine's `/indexnow` endpoint with a key. You prove you own the site by hosting \"a UTF-8 encoded text key file {your-key}.txt\" at the root. A single POST can carry \"up to 10,000 URLs\".\n\nEngines that adopt the protocol \"agree that submitted URLs will be automatically shared with all other participating search engines\", so one ping reaches all of them. IndexNow's list of participants, checked in November 2026, names Bing, Yandex, Seznam, Naver, Yep, the Internet Archive and Amazonbot. Google is not on it.",
           whyItMatters:
             "When a price, stock level or policy changes, you can tell the engines on that list straight away instead of waiting for their next visit.",
           example: {
@@ -479,12 +587,13 @@ export const LESSON_2: LessonContent = {
         },
         {
           id: "c-llms-txt",
+          quiz: {"kind": "choice", "id": "cq-llms-txt", "prompt": "What does Google's guide say publishing an llms.txt file does for your Google Search visibility?", "options": ["Neither harms nor helps it, because Google Search ignores the file", "Helps your pages appear in AI Overviews", "Is required for AI Mode", "Replaces your robots.txt rules for Google"], "answer": 0, "explanation": "Google says it's fine to keep llms.txt for other services, but doing so will neither harm nor help your visibility or rankings in Google Search, as Google Search ignores it."},
           term: "llms.txt, a proposal",
-          summary: "A suggested markdown file that gives AI agents a short guided tour of your site.",
+          summary: "A suggested markdown file that gives AI agents a short guided tour of your site. Google Search ignores it.",
           explanation:
-            "llms.txt is a proposal from Jeremy Howard, first published in September 2024 and last modified, as v2, in August 2026: \"We propose adding a /llms.txt markdown file to websites to provide LLM-friendly content.\" The file sits at `/llms.txt` or under a path such as `/docs/llms.txt`. The only required part is an H1 with the site or project name. A blockquote summary and H2 lists of links can follow.\n\nThe proposal says the file is \"used on demand, when an agent needs information about a topic while assisting a user\", and that it is used most heavily for software documentation. It also says \"robots.txt and llms.txt have different purposes\": llms.txt does not grant or refuse access.\n\nNone of the crawler pages from OpenAI, Anthropic or Perplexity used in this lesson say their bots read llms.txt. Google's AI features guide says \"You don't need to create new machine readable files, AI text files, or markup to appear in these features.\"",
+            "llms.txt is a proposal from Jeremy Howard, first published in September 2024 and last modified, as v2, in August 2026: \"We propose adding a /llms.txt markdown file to websites to provide LLM-friendly content.\" The file sits at `/llms.txt` or under a path such as `/docs/llms.txt`. The only required part is an H1 with the site or project name. A blockquote summary and H2 lists of links can follow.\n\nThe proposal says the file is \"used on demand, when an agent needs information about a topic while assisting a user\", and that it is used most heavily for software documentation. It notes that \"The AI labs themselves publish llms.txt files for their own developer docs\". It also says \"robots.txt and llms.txt have different purposes\": llms.txt does not grant or refuse access.\n\nGoogle's guide to generative AI features lists llms.txt among things \"you can ignore for Google Search\", because \"Google Search itself doesn't use them\". It adds: \"It's completely fine if you decide to create and maintain LLMS.txt files (or other similar files) for other services or systems that use these files.\" None of the crawler pages from OpenAI, Anthropic or Perplexity used in this lesson say their bots read llms.txt.",
           whyItMatters:
-            "It is cheap to publish and may help agents that do look for it, especially on documentation sites. Do not expect it to change whether you are crawled, indexed or cited. No source here documents that.",
+            "Google is explicit that the file will \"neither harm nor help your site's visibility or rankings in Google Search\". Publish one if agents you care about use it, such as coding agents reading your documentation. Do not expect it to change whether you are crawled, indexed or cited.",
           example: {
             kind: "code",
             language: "markdown",
@@ -493,7 +602,7 @@ export const LESSON_2: LessonContent = {
           },
           pitfall:
             "Putting llms.txt ahead of the basics. A crawler that is blocked by robots.txt or your CDN, or that cannot see content rendered by JavaScript, gains nothing from a well-written llms.txt.",
-          sources: [LLMS_TXT, GOOGLE_AI_FEATURES],
+          sources: [LLMS_TXT, GOOGLE_AI_GUIDE],
         },
       ],
       check: [
@@ -524,7 +633,7 @@ export const LESSON_2: LessonContent = {
           ],
           answer: 0,
           explanation:
-            "llmstxt.org presents it as a proposal and says it has a different purpose from robots.txt. RFC 9309 is the robots.txt standard. Google says you do not need new AI text files to appear in its AI features.",
+            "llmstxt.org presents it as a proposal and says it has a different purpose from robots.txt. RFC 9309 is the robots.txt standard. Google says Google Search ignores llms.txt files.",
         },
         {
           kind: "blank",
@@ -544,33 +653,73 @@ export const LESSON_2: LessonContent = {
       concepts: [
         {
           id: "c-cdn-blocking",
+          quiz: {"kind": "choice", "id": "cq-cdn-blocking", "prompt": "In Cloudflare's current docs, which AI policy covers chat fetch bots and browser-use agents?", "options": ["Agent", "Search", "Training", "None: Cloudflare cannot see them"], "answer": 0, "explanation": "Cloudflare's Agent behavior is automated activity acting in real time on a person's behalf, such as chat fetch bots and browser-use agents. Search and Training are separate policies."},
           term: "CDN and firewall bot rules",
           summary: "Your CDN can turn a bot away before robots.txt ever matters.",
           explanation:
-            "robots.txt is a request that well-behaved bots honor. A CDN or web application firewall (WAF) is different: it decides whether the request is served at all. If the CDN blocks a bot, an `Allow` in robots.txt does not help.\n\nCloudflare is one example, and it has changed its settings several times:\n\n- In July 2024 it added a one-click block for AI bots and said: \"It's available for all customers, including those on the free tier.\"\n- In July 2025 it said it was \"changing the default to block AI crawlers unless they pay creators for their content.\"\n- Its docs (updated July 2026) describe separate policies for **Search**, **Agent** (\"such as chat fetch bots and browser-use agents\") and **Training**. Training includes \"mixed-purpose crawlers that are used both for Training and for Search\". From 15 September 2026, Cloudflare said new domains would block Training and Agent bots on pages that display ads, with Search left allowed.",
+            "robots.txt is a request that well-behaved bots honor. A CDN or web application firewall (WAF) is different: it decides whether the request is served at all. If the CDN blocks a bot, an `Allow` in robots.txt does not help.\n\nCloudflare is one example, and it has changed its settings several times:\n\n- In July 2024 it added a one-click block for AI bots and said: \"It's available for all customers, including those on the free tier.\"\n- In July 2025 it said it was \"changing the default to block AI crawlers unless they pay creators for their content.\"\n- Its docs, updated 2 November 2026, call the feature **AI Crawler and Agent access policies**, with separate actions for **Search**, **Agent** (\"such as chat fetch bots and browser-use agents\") and **Training**. Training includes \"mixed-purpose crawlers that are used both for Training and for Search\". The actions are Block, Block on pages with ads, Allow, and, for Training only, a Disallow written to robots.txt. For new domains, the docs now say \"Search, Agents, and Training use Allow (do not block) by default.\"",
           whyItMatters:
-            "If someone else runs your CDN, such as IT, a developer or an agency, ask them what its AI bot settings are. On Cloudflare, a Training block also catches mixed-purpose crawlers, and an Agent block catches chat fetch bots. Your robots.txt will not show either.",
+            "The defaults have changed more than once, so do not guess what yours are. If someone else runs your CDN, such as IT, a developer or an agency, ask them. On Cloudflare, a Training block also catches mixed-purpose crawlers, and an Agent block catches chat fetch bots. Your robots.txt will not show either.",
           pitfall:
             "Blocking a vendor's IP addresses instead of using robots.txt. Anthropic warns this \"may not work correctly or persistently guarantee an opt-out\", because it stops its bots reading your robots.txt.",
           sources: [CLOUDFLARE_ONE_CLICK, CLOUDFLARE_DEFAULT_BLOCK, CLOUDFLARE_AI_BOTS_DOCS, ANTHROPIC_CRAWLERS],
         },
         {
+          id: "c-waf-allowlist",
+          quiz: {"kind": "choice", "id": "cq-waf-allowlist", "prompt": "Which firewall rule follows Perplexity's own advice for letting PerplexityBot through?", "options": ["Skip security rules when the user agent contains PerplexityBot and the IP is in PerplexityBot's published ranges", "Skip security rules for any request whose user agent contains PerplexityBot", "Skip security rules for any IP in either Perplexity file, whatever the user agent", "Add Allow: / for PerplexityBot in robots.txt; the firewall reads it"], "answer": 0, "explanation": "Perplexity's expression pairs each user agent with its own IP ranges. A user-agent check alone lets in anyone who copies the string, and robots.txt never reaches the firewall."},
+          term: "Letting verified bots through your firewall",
+          summary: "Allow a bot by its user agent and its published IP ranges together, never by user agent alone.",
+          explanation:
+            "Some vendors ask for this directly. OpenAI recommends allowing OAI-SearchBot in robots.txt \"and allowing requests from our published IP ranges below\". Perplexity says \"If you’re using a Web Application Firewall (WAF) to protect your site, you may need to explicitly allow Perplexity’s bots to ensure they can access your content.\"\n\nPerplexity's Cloudflare recipe shows the pattern: a custom rule that matches the user agent and the IP ranges together, with the action Skip. It warns: \"Each bot has its own IP ranges, so match each User-Agent against its own IP ranges.\" And: \"When the published ranges change, update them in this rule.\"\n\nAnthropic says the same for its hosted browsers: \"These addresses may change over time, so we recommend updating your rules from this file automatically rather than hardcoding them.\"",
+          whyItMatters:
+            "An allow rule on user agent alone lets in anyone who copies the string. An allow rule on stale IP ranges quietly blocks the real bot once the vendor adds new addresses.",
+          example: {
+            kind: "code",
+            language: "text",
+            caption: "Perplexity's Cloudflare WAF expression, with its placeholders. The rule action is Skip",
+            code: "(http.user_agent contains \"PerplexityBot\" and ip.src in {<PerplexityBot IP ranges>})\nor (http.user_agent contains \"Perplexity-User\" and ip.src in {<Perplexity-User IP ranges>})",
+          },
+          pitfall:
+            "Copying today's IP ranges into a rule and never touching it again. Pull the vendor's file on a schedule, or use a list you update, as Perplexity and Anthropic both suggest.",
+          sources: [OPENAI_CRAWLERS, PERPLEXITY_CRAWLERS, CLAUDE_AGENT],
+        },
+        {
+          id: "c-verify-bots",
+          quiz: {"kind": "match", "id": "cq-verify-bots", "prompt": "Match each visitor to how its vendor lets you verify it.", "pairs": [{"term": "ClaudeBot", "definition": "IP list at claude.com/crawling/bots.json"}, {"term": "Claude-Agent", "definition": "IP list at claude.com/.well-known/sail"}, {"term": "Applebot", "definition": "Reverse DNS under applebot.apple.com, or a CIDR file"}, {"term": "GPTBot", "definition": "IP list at openai.com/gptbot.json"}], "explanation": "Each vendor publishes its own method. Anthropic's crawlers and its hosted browsers use different lists, and OpenAI publishes one file per bot."},
+          term: "Who publishes what to verify their bots",
+          summary: "Every vendor here offers an IP list, reverse DNS, or both. Use theirs, not a third-party list.",
+          explanation:
+            "A user-agent string is only a claim. Each vendor gives you a way to check it:\n\n- **OpenAI:** one IP file per bot, such as `openai.com/searchbot.json`, `openai.com/gptbot.json` and `openai.com/chatgpt-user.json`.\n- **Perplexity:** `perplexitybot.json` and `perplexity-user.json`.\n- **Anthropic:** `claude.com/crawling/bots.json` for its crawlers. \"If a crawler has a source IP address on this list, it indicates that the crawler is coming from Anthropic.\" Claude-Agent traffic is listed separately, at `claude.com/.well-known/sail`.\n- **Google:** reverse DNS, or JSON files by category, from common crawlers such as Googlebot to user-triggered agents. Google says its common crawlers \"always respect robots.txt rules for automatic crawls\".\n- **Apple:** reverse DNS under `applebot.apple.com`, or a published file of CIDR prefixes.\n- **Common Crawl:** reverse DNS, and its ranges as JSON at `index.commoncrawl.org/ccbot.json`.\n\nGoogle's manual method is the model for reverse DNS: look up the IP's hostname, check its domain, then look that hostname up again and confirm it returns the same IP.",
+          whyItMatters:
+            "Anthropic puts it plainly: \"Anyone can send the same User-Agent header, so be sure to check that the traffic originated from one of the listed IPs before concluding that it is genuine.\" Without this step, your bot reports count impostors and your firewall lets them in.",
+          example: {
+            kind: "code",
+            language: "text",
+            caption: "Google's own example: the reverse lookup and the forward lookup agree",
+            code: "host 66.249.66.1\n1.66.249.66.in-addr.arpa domain name pointer crawl-66-249-66-1.googlebot.com.\n\nhost crawl-66-249-66-1.googlebot.com\ncrawl-66-249-66-1.googlebot.com has address 66.249.66.1",
+          },
+          pitfall:
+            "Stopping after the reverse lookup. Whoever controls an IP address can give it any reverse DNS name. The forward lookup is what shows the vendor controls that hostname.",
+          sources: [OPENAI_CRAWLERS, PERPLEXITY_CRAWLERS, ANTHROPIC_CRAWLERS, CLAUDE_AGENT, GOOGLE_VERIFY, APPLEBOT, CCBOT],
+        },
+        {
           id: "c-server-logs",
+          quiz: {"kind": "choice", "id": "cq-server-logs", "prompt": "A log line says GPTBot, but the IP is not in OpenAI's published list for GPTBot. How should you count it?", "options": ["As unverified: the user-agent string alone proves nothing", "As OpenAI, because the user agent says GPTBot", "As Googlebot, because it fetched robots.txt", "As a sign your robots.txt is broken"], "answer": 0, "explanation": "Cloudflare notes that user agents are trivial to change. Check the IP against the vendor's list before you count a request as that bot."},
           term: "Check your server logs",
           summary: "Logs show which bots actually reached you, and what status code they got.",
           explanation:
-            "Your server or CDN logs record each request's user-agent string and status code. Search them for the tokens in this lesson (`GPTBot`, `OAI-SearchBot`, `ClaudeBot`, `PerplexityBot` and so on) to see who arrives, which pages they fetch and whether they get a 200.\n\nA user-agent string is only a claim. Cloudflare notes that \"user agents are trivial for bot operators to change\". So verify the important ones:\n\n- **Published IP lists.** OpenAI publishes one per bot (for example `openai.com/gptbot.json`), Perplexity does the same, and Anthropic publishes `claude.com/crawling/bots.json`.\n- **Reverse DNS.** Google's method: look up the IP's hostname, check it is on googlebot.com, google.com or googleusercontent.com, then look that hostname up again and confirm it returns the same IP.\n\nOpenAI also says it may add a `robots.txt` marker to the user-agent string when fetching your robots.txt file, which helps you spot those requests.",
+            "Your server or CDN logs record each request's user-agent string and status code. Search them for the tokens in this lesson (`GPTBot`, `OAI-SearchBot`, `ClaudeBot`, `PerplexityBot`, `Applebot` and so on) to see who arrives, which pages they fetch and whether they get a 200. A 403 or 429 on pages you want cited usually points to a CDN or firewall rule.\n\nA user-agent string is only a claim. Cloudflare notes that \"user agents are trivial for bot operators to change\", so check the IPs of the bots that matter against the vendor lists on the previous card before you count them.\n\nOpenAI also says it may add a `robots.txt` marker to the user-agent string when fetching your robots.txt file, which helps you spot those requests.",
           whyItMatters:
             "Logs are the only place you can see whether a robots.txt change or a CDN rule actually changed bot behavior. Lesson 7 builds on this for reporting.",
           example: {
             kind: "code",
             language: "text",
             caption: "Made-up log lines (documentation-only IP addresses), with user-agent strings as OpenAI and Perplexity publish them",
-            code: "203.0.113.7 - - [26/Oct/2026:09:14:02 +0000] \"GET /guides/compost HTTP/1.1\" 200 18342 \"-\" \"Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; GPTBot/1.4; +https://openai.com/gptbot\"\n198.51.100.23 - - [26/Oct/2026:09:15:40 +0000] \"GET /compost-bin HTTP/1.1\" 403 512 \"-\" \"Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; PerplexityBot/1.0; +https://perplexity.ai/perplexitybot)\"",
+            code: "203.0.113.7 - - [06/Nov/2026:09:14:02 +0000] \"GET /guides/compost HTTP/1.1\" 200 18342 \"-\" \"Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; GPTBot/1.4; +https://openai.com/gptbot\"\n198.51.100.23 - - [06/Nov/2026:09:15:40 +0000] \"GET /compost-bin HTTP/1.1\" 403 512 \"-\" \"Mozilla/5.0 (compatible; PerplexityBot/1.0; +https://perplexity.ai/perplexitybot)\"",
           },
           pitfall:
             "Counting every request that says GPTBot as OpenAI. Check the IP against OpenAI's published list first. In the made-up lines above, neither address would pass, because both come from ranges reserved for documentation.",
-          sources: [OPENAI_CRAWLERS, PERPLEXITY_CRAWLERS, ANTHROPIC_CRAWLERS, GOOGLE_VERIFY, CLOUDFLARE_ONE_CLICK],
+          sources: [OPENAI_CRAWLERS, PERPLEXITY_CRAWLERS, CLOUDFLARE_ONE_CLICK],
         },
       ],
       check: [
@@ -602,6 +751,21 @@ export const LESSON_2: LessonContent = {
           explanation:
             "Reverse lookup, check the domain, forward lookup, compare. The last step matters because anyone can set a reverse DNS name on their own IP. The forward lookup proves Google controls that hostname.",
         },
+        {
+          kind: "choice",
+          id: "q-g4-waf",
+          prompt:
+            "Your developer added a firewall allow rule for ClaudeBot six months ago, using the IP ranges in Anthropic's file at the time. ClaudeBot now gets some 403s. What is the likeliest cause to check first?",
+          options: [
+            "Anthropic's published addresses have changed, and the hardcoded rule is out of date",
+            "ClaudeBot has stopped reading robots.txt",
+            "The XML sitemap is too large",
+            "ClaudeBot only accepts pages listed in llms.txt",
+          ],
+          answer: 0,
+          explanation:
+            "Vendors change their ranges. Anthropic recommends updating rules from its file automatically rather than hardcoding addresses, and Perplexity says to update its rule when the ranges change.",
+        },
       ],
     },
   ],
@@ -610,7 +774,7 @@ export const LESSON_2: LessonContent = {
     id: "x-fix-the-robots",
     title: "Fix the robots.txt",
     brief:
-      "Fernhill Garden Supply (made up) has three goals for AI bots: keep its content out of OpenAI and Anthropic model training, stay visible in ChatGPT search, Claude search and Perplexity, and keep /checkout/ off-limits to every bot. A developer wrote the file below. It is valid, but it misses two of the goals. Find the problems and fix them.",
+      "Fernhill Garden Supply (made up) has four goals for AI bots: keep its content out of OpenAI, Anthropic and Apple model training; stay visible in ChatGPT search, Claude search, Perplexity and Apple's Siri and Spotlight; keep /checkout/ off-limits to every bot; and make sure its CDN is not undoing any of that. A developer wrote the file below. It is valid, but it misses several goals. Fix the file, then check the CDN.",
     steps: [
       {
         kind: "spot",
@@ -634,7 +798,7 @@ export const LESSON_2: LessonContent = {
       {
         kind: "choice",
         id: "x-step-group",
-        prompt: "Which change to that group meets all three goals for OAI-SearchBot, GPTBot and ClaudeBot?",
+        prompt: "Which change to that group meets Fernhill's goals for OAI-SearchBot, GPTBot and ClaudeBot?",
         options: [
           "Delete the \"User-agent: OAI-SearchBot\" line, so OAI-SearchBot falls back to the * group",
           "Add \"Allow: /\" under \"Disallow: /\" in the same group",
@@ -649,7 +813,7 @@ export const LESSON_2: LessonContent = {
         kind: "blank",
         id: "x-step-fill",
         prompt:
-          "One problem is left: PerplexityBot has its own group, so it ignores the * rule for /checkout/. Fill in the fixed file.",
+          "Another problem: PerplexityBot has its own group, so it ignores the * rule for /checkout/. Fill in the fixed file.",
         text: "User-agent: *\nDisallow: /checkout/\n\nUser-agent: GPTBot\nUser-agent: ___\nDisallow: /\n\nUser-agent: PerplexityBot\nDisallow: ___",
         mono: true,
         answers: ["ClaudeBot", "/checkout/"],
@@ -657,20 +821,50 @@ export const LESSON_2: LessonContent = {
         explanation:
           "ClaudeBot is Anthropic's training crawler. Claude-SearchBot and OAI-SearchBot are search crawlers Fernhill wants to keep. PerplexityBot's group needs its own Disallow: /checkout/, because specific groups are not combined with *. Disallow: / would remove Fernhill from Perplexity. (Deleting the PerplexityBot group would also work, since it would then fall back to *.)",
       },
+      {
+        kind: "choice",
+        id: "x-step-apple",
+        prompt:
+          "The file still lets Apple train on Fernhill's content. Which line should Fernhill add to the GPTBot and ClaudeBot group, so it stays in Siri and Spotlight?",
+        options: [
+          "User-agent: Applebot-Extended",
+          "User-agent: Applebot",
+          "User-agent: Googlebot",
+          "Nothing: Applebot already follows the * group, which covers training",
+        ],
+        answer: 0,
+        explanation:
+          "Apple's training opt-out is a Disallow for Applebot-Extended. Adding Applebot would block Apple's search crawler and take Fernhill out of Siri, Spotlight and Safari. Adding Googlebot would remove Fernhill from Google Search. The * group only disallows /checkout/, which says nothing about training.",
+      },
+      {
+        kind: "choice",
+        id: "x-step-cdn",
+        prompt:
+          "The file is fixed. Fernhill's Cloudflare zone has its Training policy set to Block. According to Cloudflare's docs, what else can that block catch?",
+        options: [
+          "Mixed-purpose crawlers used for both Training and Search, which can cost search visibility",
+          "Nothing else: Training only covers GPTBot and ClaudeBot",
+          "Googlebot and every other search engine crawler",
+          "Only bots that ignore robots.txt",
+        ],
+        answer: 0,
+        explanation:
+          "Cloudflare says Training includes mixed-purpose crawlers used both for Training and for Search. robots.txt already states Fernhill's training choices, so ask whoever runs the CDN whether the block is worth that cost, and check the logs for 403s to the search crawlers Fernhill wants.",
+      },
     ],
     debrief:
-      "The two bugs came from one rule: a bot obeys only the group that names it. Stacking a search crawler into a training group blocked it. Giving another search crawler its own group quietly dropped the * rules. When you edit a real file, check each token against the vendor's page, re-read every group from the bot's point of view, and note the date. OpenAI says its search results can take about 24 hours to adjust after a robots.txt update, and Perplexity says its systems may take up to 24 hours to reflect changes.",
+      "Most of the bugs came from one rule: a bot obeys only the group that names it. Stacking a search crawler into a training group blocked it. Giving another search crawler its own group quietly dropped the * rules. Apple needed its own training token, and the CDN could still overrule the whole file. When you edit a real file, check each token against the vendor's page, re-read every group from the bot's point of view, check the CDN, and note the date. OpenAI says its search results can take about 24 hours to adjust after a robots.txt update, and Perplexity says its systems may take up to 24 hours to reflect changes.",
   },
 
   example: {
     title: "The Guardian's robots.txt",
     context:
-      "The robots.txt for theguardian.com, fetched on 26 October 2026. Its opening comments say uses of Guardian content for large language models, machine learning or other AI purposes are not permitted, and point to its licensing team. Then it sets out one long group for the bots it turns away. The excerpt below shows that group, with … marking lines left out.",
+      "The robots.txt for theguardian.com, fetched on 6 November 2026. Its opening comments say uses of Guardian content for large language models, machine learning or other AI purposes are not permitted, and point to its licensing team. Then it sets out one long group for the bots it turns away. The excerpt below shows that group, with … marking lines left out.",
     excerpt: {
       kind: "code",
       language: "robots",
-      caption: "Excerpt from https://www.theguardian.com/robots.txt, fetched 2026-10-26 (lines 65–68, 79–84 and 100–102)",
-      code: "User-agent: NewsNow\nUser-agent: CCBot\nUser-agent: TurnitinBot\nUser-agent: PetalBot\n…\nUser-Agent: PerplexityBot\nUser-Agent: yacy\nUser-agent: anthropic-ai\nUser-agent: ClaudeBot\nUser-agent: Claude-SearchBot\nUser-agent: Claude-User\n…\nUser-agent: AhrefsBot\nUser-agent: AhrefsSiteAudit\nDisallow: /",
+      caption: "Excerpt from https://www.theguardian.com/robots.txt, fetched 2026-11-06 (lines 65–68, 79–84, 89 and 100–102)",
+      code: "User-agent: NewsNow\nUser-agent: CCBot\nUser-agent: TurnitinBot\nUser-agent: PetalBot\n…\nUser-Agent: PerplexityBot\nUser-Agent: yacy\nUser-agent: anthropic-ai\nUser-agent: ClaudeBot\nUser-agent: Claude-SearchBot\nUser-agent: Claude-User\n…\nUser-agent: Applebot-Extended\n…\nUser-agent: AhrefsBot\nUser-agent: AhrefsSiteAudit\nDisallow: /",
     },
     points: [
       {
@@ -683,7 +877,7 @@ export const LESSON_2: LessonContent = {
       },
       {
         label: "Who is not named",
-        text: "GPTBot, OAI-SearchBot, ChatGPT-User and Google-Extended do not appear anywhere in the file on the day it was fetched. Under RFC 9309, those tokens fall back to the User-agent: * group, which only disallows particular paths such as /sendarticle/ and /email/.",
+        text: "GPTBot, OAI-SearchBot, ChatGPT-User, Google-Extended and Applebot do not appear anywhere in the file on the day it was fetched. Under RFC 9309, a token with no group of its own falls back to the User-agent: * group, which only disallows particular paths such as /sendarticle/ and /email/. Applebot-Extended is in the big group, so Apple's training opt-out is set while Apple's search crawler is not named.",
       },
       {
         label: "Old names linger",
@@ -762,7 +956,7 @@ export const LESSON_2: LessonContent = {
         { term: "noindex", definition: "Keeps a page Google can crawl out of Google's index" },
       ],
       explanation:
-        "Each one does a different job. Only robots.txt controls crawling, only noindex controls Google indexing, and llms.txt is still a proposal.",
+        "Each one does a different job. Only robots.txt controls crawling, only noindex controls Google indexing, and llms.txt is still a proposal that Google Search ignores.",
     },
     {
       kind: "order",
@@ -794,7 +988,7 @@ export const LESSON_2: LessonContent = {
       kind: "choice",
       id: "a-cloudflare-training",
       prompt:
-        "In Cloudflare's AI bot policies, as its docs describe them, what does the Training category include besides crawlers that only train models?",
+        "In Cloudflare's AI Crawler and Agent access policies, as its docs describe them, what does the Training category include besides crawlers that only train models?",
       options: [
         "Mixed-purpose crawlers that are used both for Training and for Search",
         "Every search engine crawler, including Googlebot",

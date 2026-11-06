@@ -181,7 +181,12 @@ describe("one place for JSON-LD", () => {
 
   it("names a Person only through the author module", () => {
     const offenders = files.filter(
-      (f) => f !== "src/lib/schema.ts" && !TOOL_FILES.includes(f) && /"@type":\s*"Person"|@type: "Person"/.test(fs.readFileSync(path.join(root, f), "utf8")),
+      // lesson content may show Person markup as example text for learners; it is never emitted as the site's JSON-LD
+      (f) =>
+        f !== "src/lib/schema.ts" &&
+        !TOOL_FILES.includes(f) &&
+        !f.startsWith("src/lib/content/") &&
+        /"@type":\s*"Person"|@type: "Person"/.test(fs.readFileSync(path.join(root, f), "utf8")),
     );
     expect(offenders).toEqual([]);
   });

@@ -17,13 +17,13 @@ import {
 
 const EXPECTED = [
   ["how-answer-engines-choose-sources", "The Gate", "How answer engines choose sources", "beginner", 25, true],
-  ["make-your-site-reachable-by-ai", "The Crawl Docks", "Make your site reachable by AI", "beginner", 30, false],
-  ["writing-citable-content", "The Answer Quarter", "Writing citable content", "beginner", 30, false],
-  ["structured-data-and-entities", "The Schema Works", "Structured data and entities", "intermediate", 30, false],
-  ["authority-beyond-your-site", "The Agora", "Authority beyond your site", "intermediate", 25, false],
-  ["platform-playbooks", "The Embassies", "Platform playbooks", "intermediate", 25, false],
-  ["measuring-ai-visibility", "The Observatory", "Measuring AI visibility", "advanced", 25, false],
-  ["running-an-aeo-program", "The Citadel", "Running an AEO program", "advanced", 20, false],
+  ["make-your-site-reachable-by-ai", "The Crawl Docks", "Make your site reachable by AI", "beginner", 40, false],
+  ["writing-citable-content", "The Answer Quarter", "Writing citable content", "beginner", 35, false],
+  ["structured-data-and-entities", "The Schema Works", "Structured data and entities", "intermediate", 40, false],
+  ["authority-beyond-your-site", "The Agora", "Authority beyond your site", "intermediate", 35, false],
+  ["platform-playbooks", "The Embassies", "Platform playbooks", "intermediate", 35, false],
+  ["measuring-ai-visibility", "The Observatory", "Measuring AI visibility", "advanced", 35, false],
+  ["running-an-aeo-program", "The Citadel", "Running an AEO program", "advanced", 35, false],
   ["products-and-shopping-in-ai-answers", "The Market", "Products and shopping in AI answers", "intermediate", 25, false],
   ["local-businesses-and-reviews", "The Neighborhoods", "Local businesses and reviews in AI answers", "intermediate", 35, false],
   ["video-images-and-youtube", "The Picture House", "Video, images and YouTube in AI answers", "intermediate", 25, false],
@@ -44,7 +44,7 @@ describe("lesson catalog", () => {
   });
 
   it("has totals and paths", () => {
-    expect(TOTAL_MINUTES).toBe(325);
+    expect(TOTAL_MINUTES).toBe(395);
     expect(FIRST_LESSON_PATH).toBe("/lessons/how-answer-engines-choose-sources");
     expect(lessonPath(FIRST_LESSON_ID)).toBe(FIRST_LESSON_PATH);
     expect(publicLessonPaths()).toEqual([FIRST_LESSON_PATH]);
