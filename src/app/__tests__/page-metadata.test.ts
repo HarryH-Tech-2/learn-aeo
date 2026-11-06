@@ -37,6 +37,7 @@ const PUBLIC: [string, string, () => Promise<PageModule>][] = [
   ["/tools/ai-crawler-checker", "AI Crawler Checker", () => import("@/app/tools/ai-crawler-checker/page")],
   ["/tools/llms-txt-generator", "llms.txt Generator", () => import("@/app/tools/llms-txt-generator/page")],
   ["/tools/schema-generator", "Schema Generator", () => import("@/app/tools/schema-generator/page")],
+  ["/tools/share-of-voice-tracker", "AI Share of Voice Tracker", () => import("@/app/tools/share-of-voice-tracker/page")],
   ["/tools/citability-checker", "Citability Checker", () => import("@/app/tools/citability-checker/page")],
   ["/glossary", "glossary", () => import("@/app/glossary/page")],
 ];

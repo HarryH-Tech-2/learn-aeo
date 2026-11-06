@@ -40,6 +40,13 @@ export const TOOLS: readonly ToolMeta[] = [
     kind: "server",
     status: "live",
   },
+  {
+    slug: "share-of-voice-tracker",
+    name: "Share of Voice Tracker",
+    summary: "Paste AI answers for your prompts to see how often each brand is named and cited, and your share of voice over time.",
+    kind: "client",
+    status: "live",
+  },
 ];
 
 export function toolPath(slug: string): string {
@@ -66,4 +73,5 @@ export const TOOL_RELATED: Readonly<Record<string, readonly string[]>> = {
     "/blog/get-cited-in-google-ai-overviews",
     "/blog/how-chatgpt-chooses-sources",
   ],
+  "share-of-voice-tracker": ["/glossary/ai-share-of-voice", "/glossary/brand-mention", "/glossary/citation", "/blog/how-chatgpt-chooses-sources"],
 };
