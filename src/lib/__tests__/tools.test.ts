@@ -9,13 +9,14 @@ describe("TOOLS catalog", () => {
       "schema-generator",
       "citability-checker",
       "share-of-voice-tracker",
+      "ai-bot-log-analyzer",
     ]);
     for (const t of TOOLS) expect(t.slug).toMatch(/^[a-z0-9-]+$/);
     expect(new Set(TOOLS.map((t) => t.slug)).size).toBe(TOOLS.length);
   });
 
   it("marks the server-side fetchers and the client-side builders", () => {
-    expect(TOOLS.map((t) => t.kind)).toEqual(["server", "client", "client", "server", "client"]);
+    expect(TOOLS.map((t) => t.kind)).toEqual(["server", "client", "client", "server", "client", "client"]);
   });
 
   it("has a one-sentence summary for each tool", () => {

@@ -47,6 +47,13 @@ export const TOOLS: readonly ToolMeta[] = [
     kind: "client",
     status: "live",
   },
+  {
+    slug: "ai-bot-log-analyzer",
+    name: "AI Bot Log Analyzer",
+    summary: "Drop in a server access log to see which AI bots visit, what they fetch and the errors they hit, without uploading it.",
+    kind: "client",
+    status: "live",
+  },
 ];
 
 export function toolPath(slug: string): string {
@@ -73,5 +80,6 @@ export const TOOL_RELATED: Readonly<Record<string, readonly string[]>> = {
     "/blog/get-cited-in-google-ai-overviews",
     "/blog/how-chatgpt-chooses-sources",
   ],
+  "ai-bot-log-analyzer": ["/glossary/gptbot", "/glossary/claudebot", "/glossary/perplexitybot", "/glossary/oai-searchbot", "/glossary/robots-txt"],
   "share-of-voice-tracker": ["/glossary/ai-share-of-voice", "/glossary/brand-mention", "/glossary/citation", "/blog/how-chatgpt-chooses-sources"],
 };
