@@ -183,6 +183,7 @@ export const LESSON_10: LessonContent = {
       concepts: [
         {
           id: "c-local-ranking",
+          quiz: {"kind": "choice", "id": "cq-local-ranking", "prompt": "Which of these does Google say can't improve your local ranking?", "options": ["Requesting or paying for a better ranking", "Adding complete, detailed business information", "Earning more links and reviews", "Becoming better known (prominence)"], "answer": 0, "explanation": "Google says there's no way to request or pay for a better local ranking. Relevance, distance and prominence are what count."},
           term: "Local ranking: relevance, distance, prominence",
           summary:
             "Google says local results are mainly based on how well a business matches the search, how far it is from the searcher, and how well known it is.",
@@ -196,6 +197,7 @@ export const LESSON_10: LessonContent = {
         },
         {
           id: "c-google-ai-local",
+          quiz: {"kind": "choice", "id": "cq-google-ai-local", "prompt": "Which tool does Google's AI guide name for helping local businesses be visible in AI responses?", "options": ["Google Business Profiles", "A separate AI Overviews local listing", "A special local AI markup", "A paid AI Mode placement"], "answer": 0, "explanation": "Google's guide names Business Profiles (and Merchant Center for products). It doesn't describe a separate local system for AI Overviews or AI Mode."},
           term: "Local businesses in Google's AI features",
           summary:
             "Google says its generative AI responses can include information about local businesses, and names Business Profiles as a way to be visible in them.",
@@ -209,6 +211,7 @@ export const LESSON_10: LessonContent = {
         },
         {
           id: "c-chatgpt-local",
+          quiz: {"kind": "choice", "id": "cq-chatgpt-local", "prompt": "Someone in the San Francisco area asks ChatGPT for good restaurants near me. What does OpenAI say ChatGPT may search for?", "options": ["top restaurants San Francisco", "The user's exact street address, taken from their device without asking", "Every restaurant's Google Business Profile", "restaurants near me, with no location"], "answer": 0, "explanation": "OpenAI's example: ChatGPT may estimate a general location from the IP address and rewrite the prompt as top restaurants San Francisco. Precise device location is optional and off by default."},
           term: "Local results in ChatGPT",
           summary:
             "ChatGPT search can use an approximate or shared location to find nearby businesses, may show a map, and gets business listings from third-party providers it doesn't name.",
@@ -222,6 +225,7 @@ export const LESSON_10: LessonContent = {
         },
         {
           id: "c-info-sources",
+          quiz: {"kind": "choice", "id": "cq-info-sources", "prompt": "Which of these is NOT among the sources Google lists for building a business profile?", "options": ["How much the business spends on Google Ads", "Crawled content from the business's website", "Licensed data from third parties", "Photos and reviews contributed by users"], "answer": 0, "explanation": "Google lists public web content, licensed third-party data, user contributions and its own interactions with the business. Ad spend isn't one of them."},
           term: "Where business information comes from",
           summary:
             "Google builds business profiles from websites, licensed data, user contributions and its own interactions with the business, not only from what the owner enters.",
@@ -296,6 +300,7 @@ export const LESSON_10: LessonContent = {
       concepts: [
         {
           id: "c-gbp-basics",
+          quiz: {"kind": "passage", "id": "cq-gbp-basics", "prompt": "A plumber works from home and travels to customers. Which setup follows Google's guidelines?", "passages": ["Hide the home address and set a service area instead, with one profile for the business.", "Show the home address, and add a second profile in the next town to reach more customers."], "answer": 0, "explanation": "A service-area business that travels to customers should hide a home address and set a service area, and Google allows only one profile per business."},
           term: "Google Business Profile basics",
           summary:
             "Verify the profile, then make it complete and accurate: address or service area, hours, category and attributes, with one profile per business.",
@@ -309,6 +314,7 @@ export const LESSON_10: LessonContent = {
         },
         {
           id: "c-business-name",
+          quiz: {"kind": "choice", "id": "cq-business-name", "prompt": "What does Google say can happen if you include unnecessary information, such as keywords, in your business name?", "options": ["Your Business Profile can be suspended", "Your profile ranks higher for those keywords", "Google moves the keywords into the description for you", "Nothing, as long as the real name comes first"], "answer": 0, "explanation": "Google says unnecessary information in the name isn't permitted and could result in suspension of the profile."},
           term: "The business name field",
           summary:
             "Use the real-world name only. Keywords, taglines, locations and hours in the name break Google's rules, and Apple's display name rules say the same.",
@@ -328,6 +334,7 @@ export const LESSON_10: LessonContent = {
         },
         {
           id: "c-apple-business",
+          quiz: {"kind": "choice", "id": "cq-apple-business", "prompt": "Another organization already manages your location in Apple Business. What does Apple let you do?", "options": ["Request a transfer, with documents such as a business license or utility bill", "Create a second place card for the same location", "Move the map pin to your parking lot entrance", "Nothing: a managed location can't change hands"], "answer": 0, "explanation": "Apple says you can request a transfer of a location another organization manages, with documents such as a business license or utility bill."},
           term: "Apple Business (formerly Business Connect)",
           summary:
             "Apple Business Connect is now part of Apple Business, where you claim each location and manage the place card shown in Maps, Siri and other Apple apps.",
@@ -341,6 +348,7 @@ export const LESSON_10: LessonContent = {
         },
         {
           id: "c-bing-places",
+          quiz: {"kind": "choice", "id": "cq-bing-places", "prompt": "What does Microsoft's support page say Bing Places for Business is for?", "options": ["Claiming or updating your listing in Bing Maps search results", "Choosing which local businesses Copilot recommends", "Sending a product feed to Copilot", "Reporting reviews on Google Maps"], "answer": 0, "explanation": "Microsoft's page only says Bing Places is how you claim or update your listing in Bing Maps results. How Copilot picks local businesses isn't explained there."},
           term: "Bing Places",
           summary: "Microsoft says to use Bing Places for Business to claim or update the listing that appears in Bing Maps results.",
           explanation:
@@ -353,6 +361,7 @@ export const LESSON_10: LessonContent = {
         },
         {
           id: "c-nap",
+          quiz: {"kind": "spot", "id": "cq-nap", "prompt": "Which of these (made-up) listings breaks NAP consistency?", "language": "text", "lines": ["Website footer: Fernhill Bakery, 214 Alder Street, (503) 555-0142", "Google: Fernhill Bakery, 214 Alder Street, (503) 555-0142", "Apple Maps: Fernhill Bakery, 212 Alder Street, (503) 555-0142", "Bing Maps: Fernhill Bakery, 214 Alder Street, (503) 555-0142"], "answer": 2, "explanation": "The Apple Maps listing gives 212 Alder Street instead of 214. A wrong street number is exactly the kind of detail an answer could repeat."},
           term: "Consistent name, address and phone (NAP)",
           summary:
             "Use the same name, address and phone number on your site, your profiles and directories, because platforms build listings from all of them.",
@@ -416,6 +425,7 @@ export const LESSON_10: LessonContent = {
       concepts: [
         {
           id: "c-localbusiness-markup",
+          quiz: {"kind": "blank", "id": "cq-localbusiness-markup", "prompt": "Complete Google's advice for the telephone property in LocalBusiness markup.", "text": "Be sure to include the ___ code and area code in the phone number.", "answers": ["country"], "distractors": ["postal", "extension", "store"], "explanation": "Google asks for the country code and the area code, as in +1-503-555-0142 in the example."},
           term: "LocalBusiness structured data",
           summary:
             "Mark up each location with the most specific LocalBusiness subtype, a name and full address, plus hours, phone, coordinates and the location's own URL.",
@@ -466,6 +476,7 @@ export const LESSON_10: LessonContent = {
         },
         {
           id: "c-markup-ratings",
+          quiz: {"kind": "choice", "id": "cq-markup-ratings", "prompt": "Which site does Google recommend use aggregateRating in LocalBusiness markup?", "options": ["A city guide that reviews many local bakeries", "A bakery showing its own Google rating on its site", "A bakery whose reviews widget adds the rating automatically", "Any business with a rating above 4"], "answer": 0, "explanation": "Rating properties on LocalBusiness are only recommended for sites that capture reviews about other local businesses. A business controlling reviews about itself, even through a widget, isn't eligible for stars."},
           term: "Ratings in your own markup",
           summary:
             "Google recommends review and aggregateRating on LocalBusiness only for sites that capture reviews about other local businesses, not for a business rating itself.",
@@ -479,6 +490,7 @@ export const LESSON_10: LessonContent = {
         },
         {
           id: "c-location-pages",
+          quiz: {"kind": "passage", "id": "cq-location-pages", "prompt": "Fernhill (made up) has three bakeries. Which setup follows the card?", "passages": ["All three Business Profiles link to the home page, which lists the three addresses.", "Each bakery has its own page with its address, phone, hours and markup, and each bakery's profile links to that page."], "answer": 1, "explanation": "Google's markup url is the specific location's URL, and its profile rules ask for a website that represents the individual location. Without location pages, each branch's facts live only on platforms you don't control."},
           term: "One page per location",
           summary:
             "Give each location its own page with its own address, phone, hours and markup, and link that location's profiles to it.",
@@ -539,6 +551,7 @@ export const LESSON_10: LessonContent = {
       concepts: [
         {
           id: "c-review-rules",
+          quiz: {"kind": "choice", "id": "cq-review-rules", "prompt": "Which kind of review incentive does the FTC rule specifically target?", "options": ["Incentives conditioned on the review expressing a particular sentiment", "Any review link printed on a receipt", "Thank-you emails sent after a purchase", "Public replies to negative reviews"], "answer": 0, "explanation": "The FTC rule covers incentives conditioned on a particular sentiment, positive or negative. Google goes further and bans incentives for any review, so follow the stricter rule."},
           term: "Review rules: Google and the FTC",
           summary:
             "Google bans any incentive for reviews and selective asking; the FTC's rule bans fake reviews, sentiment-conditioned incentives, undisclosed insider reviews and review suppression.",
@@ -552,6 +565,7 @@ export const LESSON_10: LessonContent = {
         },
         {
           id: "c-asking-reviews",
+          quiz: {"kind": "spot", "id": "cq-asking-reviews", "prompt": "Which step in this (made-up) review plan breaks Google's policy?", "language": "text", "lines": ["Print the review QR code on receipts", "Add the review link to every thank-you email", "Send only 4- and 5-star survey responders on to Google", "Ask every customer the same way, with no reward"], "answer": 2, "explanation": "Passing only happy customers on to Google is selective solicitation, which Google's policy doesn't allow. Ask everyone the same way."},
           term: "Asking for reviews",
           summary: "Ask every customer the same way, with no reward, using Google's review link or QR code.",
           explanation:
@@ -564,6 +578,7 @@ export const LESSON_10: LessonContent = {
         },
         {
           id: "c-responding",
+          quiz: {"kind": "choice", "id": "cq-responding", "prompt": "What must a business do before it can reply to reviews on its Google profile?", "options": ["Verify the profile", "Get the reviewer's permission", "Report the review first", "Offer the reviewer a discount"], "answer": 0, "explanation": "You must verify the profile before you can reply. Offering deals in replies is something Google says not to do."},
           term: "Responding to reviews",
           summary:
             "Reply as the verified business: short, specific and polite, never sharing private details, making threats or making false accusations.",
@@ -585,6 +600,7 @@ export const LESSON_10: LessonContent = {
         },
         {
           id: "c-review-platforms",
+          quiz: {"kind": "blank", "id": "cq-review-platforms", "prompt": "Complete Google's bar for lists in its Top Places List documentation.", "text": "The list must be curated by the content provider, be genuine, independent, and not ___.", "answers": ["sponsored"], "distractors": ["indexed", "translated", "dated"], "explanation": "Google only counts top lists that are genuine, independent and not sponsored, so paying for a place on a best-of list doesn't qualify."},
           term: "Third-party reviews and top lists",
           summary:
             "Your Google profile can show reviews from other sites and, in the US, editorial top lists, so reputation on review sites and local guides shows up there too.",

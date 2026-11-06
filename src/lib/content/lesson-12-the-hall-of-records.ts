@@ -214,6 +214,7 @@ export const LESSON_12: LessonContent = {
       concepts: [
         {
           id: "c-hallucination",
+          quiz: {"kind": "choice", "id": "cq-hallucination", "prompt": "What does OpenAI warn about how confident ChatGPT sounds?", "options": ["It may express high confidence even in incorrect answers", "It only sounds confident when it has a source", "It shows a confidence score next to each claim", "It refuses to answer when it isn't sure"], "answer": 0, "explanation": "OpenAI says the model may express high confidence even in incorrect answers, so a confident tone doesn't mean the answer came from a source."},
           term: "Hallucination",
           summary: "A language model predicts likely words, so it can state false facts fluently and confidently. The platforms say so themselves.",
           explanation:
@@ -232,6 +233,7 @@ export const LESSON_12: LessonContent = {
         },
         {
           id: "c-training-vs-retrieval",
+          quiz: {"kind": "choice", "id": "cq-training-vs-retrieval", "prompt": "A wrong answer about your brand shows no citations. What does the card say that may mean?", "options": ["It may come from training data, which you can't edit directly", "It must come from your own website", "It was fetched live from today's search results", "It came from Google's knowledge panel"], "answer": 0, "explanation": "A cited answer shows which pages it leaned on. An answer with no citations may be coming from training data, which you can only influence by making better information available."},
           term: "Training data vs live retrieval",
           summary: "An answer can come from what the model learned in training, which stops at a cutoff, or from pages it fetched for this question. The fix depends on which.",
           explanation:
@@ -244,6 +246,7 @@ export const LESSON_12: LessonContent = {
         },
         {
           id: "c-error-types",
+          quiz: {"kind": "choice", "id": "cq-error-types", "prompt": "Which kind of error does the card say to treat as a hallucination?", "options": ["Invented: the detail appears nowhere you can find", "Outdated: the fact was true once", "Inherited: a cited page says it"], "answer": 0, "explanation": "Invented errors have no source, so they're treated as hallucinations. Outdated and inherited errors are fixed on the pages that carry them."},
           term: "Three kinds of wrong answer",
           summary: "Sort each error before you act: invented (no source), outdated (an old fact the model or a page still holds), or inherited (a cited page says it).",
           explanation:
@@ -290,6 +293,7 @@ export const LESSON_12: LessonContent = {
       concepts: [
         {
           id: "c-read-citations",
+          quiz: {"kind": "choice", "id": "cq-read-citations", "prompt": "A wrong answer about Larkfield (made up) cites three pages. What does the card advise?", "options": ["Open every cited page and find the sentence that matches the error", "Check only the first citation, since that's where the error comes from", "Skip the citations and send feedback straight away", "Assume the error comes from training data"], "answer": 0, "explanation": "An answer can combine several pages, and the wrong detail may come from the third link, so open every cited page and note who controls it."},
           term: "Read the citations",
           summary: "Open every source a wrong answer cites. The page that says the wrong thing is usually the page you need to fix.",
           explanation:
@@ -302,6 +306,7 @@ export const LESSON_12: LessonContent = {
         },
         {
           id: "c-error-log",
+          quiz: {"kind": "spot", "id": "cq-error-log", "prompt": "Which line of this (made-up) error log entry falls short of what the card asks for?", "language": "text", "lines": ["Prompt and platform: how much is larkfield tea delivery, ChatGPT", "Date and evidence: 2026-11-02, conversation link saved", "Wrong statement: it said something about delivery being expensive", "Correct fact: UK delivery is free, see larkfieldtea.example/delivery"], "answer": 2, "explanation": "The card asks for the wrong statement word for word. A paraphrase doesn't give a reviewer what they need or let you check the same wording later."},
           term: "The error log",
           summary: "Record each error with the exact prompt, platform, date, wording, citations and correct fact. Every report route asks for some of this.",
           explanation:
@@ -314,6 +319,7 @@ export const LESSON_12: LessonContent = {
         },
         {
           id: "c-monitor",
+          quiz: {"kind": "choice", "id": "cq-monitor", "prompt": "When does the card say to close a row in your error log?", "options": ["When the error has stopped appearing across several runs", "After one clean answer", "As soon as you've sent feedback", "After 30 days, whatever the answers say"], "answer": 0, "explanation": "Answers vary from run to run, so close a row only after the error has stopped appearing across several runs, and reopen it if it comes back."},
           term: "Monitoring for recurring errors",
           summary: "Put the questions that produced errors into your prompt set and rerun them on a schedule, across phrasings, until the error stops appearing.",
           explanation:
@@ -357,6 +363,7 @@ export const LESSON_12: LessonContent = {
       concepts: [
         {
           id: "c-own-site",
+          quiz: {"kind": "passage", "id": "cq-own-site", "prompt": "Larkfield (made up) has made UK delivery free. Which approach follows the card?", "passages": ["Publish a new delivery page with the free delivery offer, and leave the 2023 FAQ with the old price live.", "Update the 2023 FAQ to say delivery is now free and when that changed, so no live page carries the old price."], "answer": 1, "explanation": "If the old page stays live, both can be retrieved and the old one may be cited. Update or remove pages that contradict the current fact."},
           term: "Your own site first",
           summary: "Make your site the clearest, most current statement of your facts, and remove or update old pages that contradict it.",
           explanation:
@@ -375,6 +382,7 @@ export const LESSON_12: LessonContent = {
         },
         {
           id: "c-business-listings",
+          quiz: {"kind": "match", "id": "cq-business-listings", "prompt": "Match each listing to the route the card gives for fixing it.", "pairs": [{"term": "Your own Google Business Profile", "definition": "Edit it while signed in; Google reviews changes before they go live"},{"term": "A Business Profile you don't own or manage", "definition": "Suggest an edit"},{"term": "Another directory or review site", "definition": "Claim your listing where the site allows it, and correct it"}], "explanation": "You edit your own profile directly, suggest edits to profiles you don't manage, and claim and correct listings on other sites, logging each change."},
           term: "Business Profile, maps and directories",
           summary: "Correct your own listings directly, and use each site's suggest-an-edit or report route for listings you don't control.",
           explanation:
@@ -387,6 +395,7 @@ export const LESSON_12: LessonContent = {
         },
         {
           id: "c-wikipedia",
+          quiz: {"kind": "choice", "id": "cq-wikipedia", "prompt": "When does Wikipedia's page for article subjects allow you to correct an article about yourself directly?", "options": ["In cases of blatant falsehoods, such as fake death dates", "Whenever the content is unflattering", "Once you've disclosed that you're paid", "Whenever you have a press release to cite"], "answer": 0, "explanation": "Wikipedia allows the narrow exception of blatant falsehoods. Otherwise, disclose your connection and request changes on the talk page, and don't remove content just because you find it objectionable."},
           term: "Wikipedia, under its conflict of interest rules",
           summary: "If a Wikipedia article about your brand is wrong, disclose your connection and request the change on the talk page; don't edit the article directly.",
           explanation:
@@ -399,6 +408,7 @@ export const LESSON_12: LessonContent = {
         },
         {
           id: "c-wikidata",
+          quiz: {"kind": "blank", "id": "cq-wikidata", "prompt": "Complete the line from Wikidata's self-promotion page.", "text": "Truth is not the same as ___.", "answers": ["verifiability"], "distractors": ["notability", "popularity", "neutrality"], "explanation": "Wikidata needs statements backed by independent, reliable sources, even when they're true."},
           term: "Wikidata",
           summary: "Wikidata wants items about notable subjects backed by independent sources, not self-written entries, and it doesn't control Google's panels.",
           explanation:
@@ -411,6 +421,7 @@ export const LESSON_12: LessonContent = {
         },
         {
           id: "c-knowledge-panel",
+          quiz: {"kind": "order", "id": "cq-knowledge-panel", "prompt": "Put the steps for claiming a knowledge panel and suggesting a change in order.", "items": ["Search for the entity and select Claim this knowledge panel", "Verify by signing in to one of the official sites or profiles Google lists", "Select Suggest edits, then Edit next to the item", "Describe what's wrong and add public URLs that support the change"], "explanation": "You claim and verify first; only then, signed in with that account, can you suggest edits backed by public evidence."},
           term: "Claiming a knowledge panel and suggesting edits",
           summary: "If your brand has a Google knowledge panel, you can claim it, then suggest changes to facts with public URLs as evidence.",
           explanation:
@@ -472,6 +483,7 @@ export const LESSON_12: LessonContent = {
       concepts: [
         {
           id: "c-platform-feedback",
+          quiz: {"kind": "choice", "id": "cq-platform-feedback", "prompt": "For which product does the card say an IT admin can turn off feedback?", "options": ["Copilot at work or school", "Google AI Overviews", "Perplexity", "ChatGPT"], "answer": 0, "explanation": "Microsoft says that if you're using Copilot at work or school, your IT admin can turn off feedback."},
           term: "In-product feedback",
           summary: "Each platform documents a way to flag a bad answer: Google's thumbs down, ChatGPT's thumbs down, Perplexity's flag icon, and thumbs down in Copilot for Microsoft 365 apps.",
           explanation:
@@ -484,6 +496,7 @@ export const LESSON_12: LessonContent = {
         },
         {
           id: "c-personal-data",
+          quiz: {"kind": "choice", "id": "cq-personal-data", "prompt": "What does OpenAI say about disputed facts in a request to remove personal data from ChatGPT?", "options": ["It can't independently investigate them, so explain why the information is wrong and include reliable evidence", "It investigates every disputed claim itself", "It approves every request from the person named", "Removal also takes the information off external websites"], "answer": 0, "explanation": "OpenAI says it cannot independently investigate disputed facts, assesses requests case by case, and that removal from ChatGPT doesn't remove information from external websites or search engines."},
           term: "OpenAI's personal-data requests",
           summary: "For inaccurate personal information about a person (such as a founder), OpenAI documents a correction or removal request through its privacy portal.",
           explanation:
@@ -496,6 +509,7 @@ export const LESSON_12: LessonContent = {
         },
         {
           id: "c-legal-routes",
+          quiz: {"kind": "choice", "id": "cq-legal-routes", "prompt": "What does Google advise before you create a legal removal request?", "options": ["Try to flag the content in the relevant product", "Post the problem on a public forum", "Send the request to several Google teams at once", "Wait for the content to disappear from the web"], "answer": 0, "explanation": "Google's legal help page says to try flagging the content in the relevant product first, and to be specific, with URLs, when you do file."},
           term: "Legal and policy reporting routes",
           summary: "Content that may break the law or a platform's terms has its own report forms; both Google and OpenAI point you to in-product reporting first.",
           explanation:
@@ -508,6 +522,7 @@ export const LESSON_12: LessonContent = {
         },
         {
           id: "c-what-not-to-do",
+          quiz: {"kind": "spot", "id": "cq-what-not-to-do", "prompt": "Which step in this (made-up) plan breaks the rules the card describes?", "language": "text", "lines": ["Correct the founding year on our own About page", "Ask five staff to post reviews from their personal accounts", "Disclose our connection when requesting a Wikipedia edit", "Write our Wikipedia edit request ourselves, without an AI tool"], "answer": 1, "explanation": "Google Maps treats content posted from multiple accounts by or at the request of one person as fake engagement and removes it. The other steps follow the card."},
           term: "What not to do",
           summary: "Fake reviews, sock puppet accounts and undisclosed self-editing break platform rules, and fake reviews are banned by the FTC in the US.",
           explanation:

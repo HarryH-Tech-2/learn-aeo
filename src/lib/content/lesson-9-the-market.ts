@@ -217,6 +217,7 @@ export const LESSON_9: LessonContent = {
       concepts: [
         {
           id: "c-chatgpt-products",
+          quiz: {"kind": "choice", "id": "cq-chatgpt-products", "prompt": "When several shops sell the same item, which of these does OpenAI list as a factor in how ChatGPT ranks the merchants?", "options": ["Whether the shop is the maker or primary seller of the item", "How much the shop spends on OpenAI partnerships", "How long the shop's product title is", "Whether the shop paid for a sponsored slot"], "answer": 0, "explanation": "OpenAI says merchants are ranked on factors like availability, price, quality and whether they are the maker or primary seller. Product results aren't ads and aren't influenced by OpenAI partnerships."},
           term: "ChatGPT product results",
           summary: "For shopping questions ChatGPT can show product cards with prices, review summaries and a list of merchants; OpenAI says these results are not ads.",
           explanation:
@@ -229,6 +230,7 @@ export const LESSON_9: LessonContent = {
         },
         {
           id: "c-shopping-graph",
+          quiz: {"kind": "blank", "id": "cq-shopping-graph", "prompt": "Complete how Google's AI shopping answers get their product facts.", "text": "Shopping answers in AI Mode combine Gemini models with the ___, which merchants feed through ___.", "answers": ["Shopping Graph", "Merchant Center"], "distractors": ["Knowledge Graph", "Search Console"], "explanation": "The Shopping Graph is Google's store of product listings, and a Merchant Center feed (including free listings) is the direct way to get your products into it."},
           term: "Google's Shopping Graph in AI Mode and Gemini",
           summary: "Google's AI shopping answers in AI Mode and the Gemini app draw on the Shopping Graph, which merchants feed through Merchant Center.",
           explanation:
@@ -241,6 +243,7 @@ export const LESSON_9: LessonContent = {
         },
         {
           id: "c-perplexity-copilot",
+          quiz: {"kind": "match", "id": "cq-perplexity-copilot", "prompt": "Match each item to what the card says about it.", "pairs": [{"term": "Perplexity's November 2025 checkout", "definition": "Powered by PayPal, with retailers as the merchant of record"},{"term": "Perplexity Merchant Program", "definition": "A free way for large retailers to share product specs"},{"term": "Microsoft Copilot", "definition": "Uses web information plus a Microsoft Merchant Center feed"}], "explanation": "Perplexity announced a free merchant program and later PayPal-powered checkout; Microsoft says Copilot draws on the web and the merchant's Microsoft Merchant Center feed."},
           term: "Perplexity and Microsoft Copilot",
           summary: "Perplexity and Copilot answer shopping questions too, drawing on the web plus merchant data: a merchant program and PayPal checkout at Perplexity, Microsoft Merchant Center feeds at Copilot.",
           explanation:
@@ -287,6 +290,7 @@ export const LESSON_9: LessonContent = {
       concepts: [
         {
           id: "c-snippet-vs-merchant",
+          quiz: {"kind": "choice", "id": "cq-snippet-vs-merchant", "prompt": "What does a merchant listing require that a product snippet doesn't?", "options": ["An Offer with a price greater than zero", "An editorial review of the product", "Links to other sites that sell the product", "A page where people can't buy the product"], "answer": 0, "explanation": "Merchant listings need an Offer because the merchant has to be the seller, and unlike product snippets they require a price above zero."},
           term: "Product snippet or merchant listing",
           summary: "Google has two classes of product markup: product snippets for pages that review or describe products, and merchant listings for pages where people can buy.",
           explanation:
@@ -299,6 +303,7 @@ export const LESSON_9: LessonContent = {
         },
         {
           id: "c-merchant-markup",
+          quiz: {"kind": "choice", "id": "cq-merchant-markup", "prompt": "Which of these is a required property for a Google merchant listing, not just a recommended one?", "options": ["image", "aggregateRating", "gtin13", "shippingDetails"], "answer": 0, "explanation": "A merchant listing's Product needs name, image and offers. aggregateRating, global identifiers such as gtin13 and shippingDetails are recommended."},
           term: "Merchant listing markup",
           summary: "A merchant listing needs a Product with name, image and an Offer with a price and ISO currency code; availability, identifiers, shipping and returns are recommended.",
           explanation:
@@ -317,6 +322,7 @@ export const LESSON_9: LessonContent = {
         },
         {
           id: "c-reviews-ratings",
+          quiz: {"kind": "blank", "id": "cq-reviews-ratings", "prompt": "Complete Google's advice for getting reviews matched to the right product in Merchant Center.", "text": "Reviews are matched to products mainly by identifier, so use globally unique product identifiers such as ___.", "answers": ["GTINs"], "distractors": ["page URLs", "product titles", "star ratings"], "explanation": "Merchant Center matches reviews to products mainly by identifier, and Google names GTINs as the globally unique identifiers to use."},
           term: "Reviews and ratings",
           summary: "Ratings reach AI shopping answers through page markup, Merchant Center's product ratings, feeds and reviews on other sites; identifiers decide whether they get matched to your product.",
           explanation:
@@ -329,6 +335,7 @@ export const LESSON_9: LessonContent = {
         },
         {
           id: "c-policies-markup",
+          quiz: {"kind": "passage", "id": "cq-policies-markup", "prompt": "Which setup follows the card's advice on return policies?", "passages": ["The product page says returns are accepted for 30 days, and Merchant Center says 14 days.", "One 30-day policy is stated on the page, in MerchantReturnPolicy markup under the Organization, and in Merchant Center."], "answer": 1, "explanation": "The card says to pick one source of truth and publish from it, so the page, the markup and Merchant Center all state the same policy."},
           term: "Shipping and return policies",
           summary: "State shipping costs and your return policy in markup and in Merchant Center, because shoppers and checkout protocols both depend on them.",
           explanation:
@@ -395,6 +402,7 @@ export const LESSON_9: LessonContent = {
       concepts: [
         {
           id: "c-merchant-center-feed",
+          quiz: {"kind": "choice", "id": "cq-merchant-center-feed", "prompt": "What does Google say is required to appear in the Google Shopping tab?", "options": ["Participation in Google Merchant Center", "Merchant listing markup on the page alone", "Turning on Google Business Profile", "Submitting the page in Search Console"], "answer": 0, "explanation": "Google says participation in Google Merchant Center is required to appear in the Shopping tab. Markup alone doesn't get you there."},
           term: "Google Merchant Center feeds",
           summary: "A Merchant Center feed tells Google about every product directly, including data that isn't on your pages; Google recommends using it alongside markup.",
           explanation:
@@ -407,6 +415,7 @@ export const LESSON_9: LessonContent = {
         },
         {
           id: "c-openai-feed",
+          quiz: {"kind": "choice", "id": "cq-openai-feed", "prompt": "A merchant sells through Shopify and wants its products in ChatGPT. What does OpenAI's merchant page say?", "options": ["The catalog is already integrated, with no extra setup or application needed", "It must apply to become an approved feed partner first", "It must build a feed with nine required fields by hand", "Shopify stores can't appear in ChatGPT"], "answer": 0, "explanation": "OpenAI says Shopify and Etsy catalogs are already integrated, with no additional setup or application. Direct feeds are for approved partners."},
           term: "OpenAI's product feed",
           summary: "Merchants can apply to send ChatGPT a product feed built on the Agentic Commerce Protocol: one row per item, nine required fields, a full snapshot at least daily.",
           explanation:
@@ -425,6 +434,7 @@ export const LESSON_9: LessonContent = {
         },
         {
           id: "c-microsoft-merchant-center",
+          quiz: {"kind": "blank", "id": "cq-microsoft-merchant-center", "prompt": "Complete Microsoft's split between feeds and UCP.", "text": "Feeds primarily enable ___, while UCP enables ___.", "answers": ["discovery", "transactions"], "distractors": ["ranking", "advertising", "reviews"], "explanation": "Microsoft says feeds get products showing up in AI responses (discovery), while UCP handles the purchase (transactions)."},
           term: "Microsoft Merchant Center for Copilot",
           summary: "Copilot uses the web and Microsoft Merchant Center feeds for organic product results; Microsoft calls a UCP-ready feed the first step.",
           explanation:
@@ -437,6 +447,7 @@ export const LESSON_9: LessonContent = {
         },
         {
           id: "c-identifiers-variants",
+          quiz: {"kind": "choice", "id": "cq-identifiers-variants", "prompt": "One of Larkfield's teas has no GTIN. What does OpenAI's spec say to do?", "options": ["Don't invent a value to replace the missing GTIN", "Make up a 13-digit number with a valid check digit", "Reuse the GTIN of a similar product", "Put the price in the ID instead"], "answer": 0, "explanation": "OpenAI's spec says not to invent a value to replace a missing GTIN. It also says never to reuse an item ID or put price in an offer ID."},
           term: "Identifiers and variants",
           summary: "Stable IDs, real GTINs and grouped variants let every platform tell your products apart and attach the right reviews and offers to each.",
           explanation:
@@ -496,6 +507,7 @@ export const LESSON_9: LessonContent = {
       concepts: [
         {
           id: "c-price-accuracy",
+          quiz: {"kind": "spot", "id": "cq-price-accuracy", "prompt": "Which line of this (made-up) pricing plan breaks Merchant Center's price rules?", "language": "text", "lines": ["The feed price matches the landing page and checkout", "The page, markup and feeds are generated from one product record", "Product pages show \"view price in cart\" instead of a price", "Feeds are sent daily"], "answer": 2, "explanation": "Merchant Center's price rules forbid showing \"view price in cart\". The other lines follow the card's advice."},
           term: "Price accuracy",
           summary: "Your feed, markup, landing page and checkout must show the same price; mismatches get products disapproved and stale prices mislead shoppers.",
           explanation:
@@ -514,6 +526,7 @@ export const LESSON_9: LessonContent = {
         },
         {
           id: "c-availability",
+          quiz: {"kind": "choice", "id": "cq-availability", "prompt": "When a shopper buys inside Google's AI Mode through its checkout protocol, whose job does Google say real-time inventory checks are?", "options": ["The merchant's, as merchant of record", "Google's", "The shopper's", "The feed provider's"], "answer": 0, "explanation": "Google's checkout protocol FAQ says that as the merchant of record, it is your responsibility to perform real-time inventory checks."},
           term: "Availability and stock",
           summary: "Stock status must match across feed, page and markup, and if checkout happens inside an assistant, you still check stock in real time.",
           explanation:
@@ -526,6 +539,7 @@ export const LESSON_9: LessonContent = {
         },
         {
           id: "c-agentic-checkout",
+          quiz: {"kind": "choice", "id": "cq-agentic-checkout", "prompt": "Which merchants does Microsoft say are eligible for Copilot Checkout for now?", "options": ["Only English-language merchants who sell to US buyers", "Only merchants on Shopify or Etsy", "Any merchant on Google's UCP waitlist", "Only merchants selling in Europe"], "answer": 0, "explanation": "Microsoft says that for now only English-language merchants who sell to US buyers are eligible for Copilot Checkout."},
           term: "Agentic checkout protocols",
           summary: "OpenAI and Stripe's ACP, Google's UCP, Microsoft's Copilot Checkout and Perplexity's PayPal checkout let shoppers buy inside an assistant, with the merchant as merchant of record.",
           explanation:

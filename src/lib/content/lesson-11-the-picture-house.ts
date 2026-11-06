@@ -176,6 +176,7 @@ export const LESSON_11: LessonContent = {
       concepts: [
         {
           id: "c-media-ai-features",
+          quiz: {"kind": "blank", "id": "cq-media-ai-features", "prompt": "Complete what Google's AI guide says about image and video best practices.", "text": "If you're already following our image SEO best practices and video SEO documentation, you're already optimizing for ___ search.", "answers": ["generative AI"], "distractors": ["voice", "local", "paid"], "explanation": "Google says its image and video SEO guidance already covers its generative AI features, and there's no special schema.org markup to add."},
           term: "Images and video in Google's AI features",
           summary: "Google says its AI features can bring in images and video, and that its existing image and video best practices are how you optimize for that.",
           explanation:
@@ -188,6 +189,7 @@ export const LESSON_11: LessonContent = {
         },
         {
           id: "c-youtube-on-google",
+          quiz: {"kind": "choice", "id": "cq-youtube-on-google", "prompt": "How can you see how people find your YouTube content through Google?", "options": ["Add your channel to Search Console as a platform property", "Read Google's published figures on YouTube videos in AI Overviews", "Open the AI Overviews view in Search Console's platform report", "Add VideoObject markup to your YouTube channel page"], "answer": 0, "explanation": "Search Console platform properties show how people find your YouTube content on Google Search, Discover and News. Google doesn't publish how often YouTube appears in AI Overviews, and the guide doesn't describe an AI Overviews view."},
           term: "YouTube and embedded video on Google",
           summary: "A video embedded from YouTube can be indexed on your page and on YouTube, and Search Console can now show how your YouTube content is found on Google.",
           explanation:
@@ -200,6 +202,7 @@ export const LESSON_11: LessonContent = {
         },
         {
           id: "c-ai-mode-lens",
+          quiz: {"kind": "order", "id": "cq-ai-mode-lens", "prompt": "Put a photo search in AI Mode in order.", "items": ["You snap or upload a photo and ask a question about it", "Lens identifies each object in the image", "AI Mode issues multiple queries about the image and the objects in it", "AI Mode answers with links to dive deeper"], "explanation": "The photo starts the search, but the answer is built from ordinary searches about what's in it, which is why pages that clearly name your products matter."},
           term: "Searching with a photo: Lens in AI Mode",
           summary: "AI Mode can take a photo as the question: Lens identifies the objects, then AI Mode searches about them and answers with links.",
           explanation:
@@ -212,6 +215,7 @@ export const LESSON_11: LessonContent = {
         },
         {
           id: "c-assistant-images",
+          quiz: {"kind": "choice", "id": "cq-assistant-images", "prompt": "What does OpenAI's help page document about images in ChatGPT search answers?", "options": ["You can select an image to view its source", "How ChatGPT chooses which images to show", "That images always come from the brand's own site", "That images are never shown in answers"], "answer": 0, "explanation": "OpenAI says you can select an image in a response to view its source, but it doesn't explain how images are chosen."},
           term: "Images in ChatGPT answers",
           summary: "OpenAI documents that images in a ChatGPT search answer link to their source; it doesn't document how they're chosen.",
           explanation:
@@ -273,6 +277,7 @@ export const LESSON_11: LessonContent = {
       concepts: [
         {
           id: "c-watch-page",
+          quiz: {"kind": "choice", "id": "cq-watch-page", "prompt": "Larkfield's watch page is indexed. What does Google say about the video on it?", "options": ["It isn't necessarily indexed as well", "It is always indexed along with the page", "It is indexed only if it loads after a click", "It is indexed only if the page has no text"], "answer": 0, "explanation": "Google says that just because the watch page is indexed doesn't mean the video will be. It also says not to rely on clicks or other user actions to load the video."},
           term: "The watch page",
           summary: "A watch page exists to show one video; Google's video features need one, and the page itself must be indexed first.",
           explanation:
@@ -291,6 +296,7 @@ export const LESSON_11: LessonContent = {
         },
         {
           id: "c-video-files",
+          quiz: {"kind": "blank", "id": "cq-video-files", "prompt": "Fill in the robots meta rule that allows video previews of up to 15 seconds.", "text": "<meta name=\"robots\" content=\"___:15\">", "mono": true, "answers": ["max-video-preview"], "distractors": ["nosnippet", "noindex", "video-length"], "explanation": "The max-video-preview rule caps preview length in seconds. Without it, Google may show a video snippet and decides the length itself."},
           term: "Fetchable files, thumbnails and previews",
           summary: "Previews and key moments need Google to fetch the video bytes; every video needs a valid thumbnail at a stable URL.",
           explanation:
@@ -309,6 +315,7 @@ export const LESSON_11: LessonContent = {
         },
         {
           id: "c-video-sitemap",
+          quiz: {"kind": "choice", "id": "cq-video-sitemap", "prompt": "In a video sitemap entry for a YouTube embed, what goes in the player location?", "options": ["The youtube.com/embed URL", "The watch page URL", "The thumbnail URL", "The YouTube channel URL"], "answer": 0, "explanation": "For a YouTube embed, the player location is the youtube.com/embed URL. The watch page goes in the loc tag."},
           term: "Video sitemaps",
           summary: "A video sitemap lists each watch page and its video's thumbnail, title, description, and file or player URL.",
           explanation:
@@ -379,6 +386,7 @@ export const LESSON_11: LessonContent = {
       concepts: [
         {
           id: "c-videoobject",
+          quiz: {"kind": "match", "id": "cq-videoobject", "prompt": "Match each VideoObject property to what it holds.", "pairs": [{"term": "name", "definition": "The video's title, unique for each video on your site"},{"term": "uploadDate", "definition": "When the video was published, in ISO 8601"},{"term": "contentUrl", "definition": "The URL of the video file"},{"term": "embedUrl", "definition": "The player URL, used if the file URL isn't available"}], "explanation": "name, thumbnailUrl and uploadDate are required. contentUrl is the most effective way for Google to fetch the file, and embedUrl is the fallback, such as a youtube.com/embed address."},
           term: "VideoObject structured data",
           summary: "VideoObject markup describes each video; Google requires name, thumbnailUrl and uploadDate, and recommends contentUrl or embedUrl.",
           explanation:
@@ -398,6 +406,7 @@ export const LESSON_11: LessonContent = {
         },
         {
           id: "c-key-moments",
+          quiz: {"kind": "choice", "id": "cq-key-moments", "prompt": "Larkfield doesn't want key moments shown for a video at all. What does Google say to use?", "options": ["The nosnippet rule", "SeekToAction markup", "Clip markup with no start times", "Removing timestamps from the page"], "answer": 0, "explanation": "Google says to use the nosnippet rule to opt out of key moments completely. Google tries to detect segments automatically, so leaving out markup doesn't stop them."},
           term: "Key moments: Clip and SeekToAction",
           summary: "Key moments let people jump to parts of a video; you can label them with Clip markup, point Google at your timestamp URLs with SeekToAction, or use YouTube timestamps.",
           explanation:
@@ -417,6 +426,7 @@ export const LESSON_11: LessonContent = {
         },
         {
           id: "c-youtube-chapters",
+          quiz: {"kind": "blank", "id": "cq-youtube-chapters", "prompt": "Complete YouTube's rules for chapters.", "text": "The first timestamp starts at 00:00, the video should have at least ___ timestamps in ascending order, and the minimum chapter length is ___ seconds.", "answers": ["three", "10"], "distractors": ["two", "30"], "explanation": "YouTube needs a first timestamp at 00:00, at least three timestamps in ascending order, and chapters of 10 seconds or more."},
           term: "YouTube chapters and timestamps",
           summary: "On YouTube, timestamps in the description create chapters, and Google can use them as key moments.",
           explanation:
@@ -435,6 +445,7 @@ export const LESSON_11: LessonContent = {
         },
         {
           id: "c-youtube-text",
+          quiz: {"kind": "passage", "id": "cq-youtube-text", "prompt": "Which YouTube title and description opening follows YouTube's advice?", "passages": ["Title: Sunday session #3. Description starts: Hey everyone, welcome back to the channel!", "Title: How to brew oolong tea at home (water temperature and timings). Description starts: Our tea buyer shows how hot the water should be and how long each infusion takes."], "answer": 1, "explanation": "YouTube says to describe the video in the first lines of the description and feature one or two main words in both title and description."},
           term: "YouTube titles and descriptions",
           summary: "YouTube's own advice: describe the video in the first lines, use one or two main words in title and description, and keep each description unique.",
           explanation:
@@ -453,6 +464,7 @@ export const LESSON_11: LessonContent = {
         },
         {
           id: "c-captions-transcripts",
+          quiz: {"kind": "choice", "id": "cq-captions-transcripts", "prompt": "What does YouTube say to do with automatic captions?", "options": ["Always review them and edit any parts that weren't properly transcribed", "Publish them as they are, since they're generated from the audio", "Replace them with tags", "Turn them off so they don't conflict with the title"], "answer": 0, "explanation": "YouTube warns that automatic captions might misrepresent what's said and tells you to always review and edit them. Product names are a common casualty."},
           term: "Captions and transcripts",
           summary: "Captions put the spoken words into text; review YouTube's automatic captions, and put the key points in text on your watch page too.",
           explanation:
@@ -502,6 +514,7 @@ export const LESSON_11: LessonContent = {
       concepts: [
         {
           id: "c-image-html",
+          quiz: {"kind": "spot", "id": "cq-image-html", "prompt": "Which of these images won't Google index?", "language": "html", "lines": ["<img src=\"/images/oolong-tin.jpg\" alt=\"A Larkfield Tea oolong tin\">", "<div class=\"hero\" style=\"background-image:url(/images/oolong-leaves.jpg)\"></div>", "<picture><source srcset=\"/images/oolong-cup.webp\"><img src=\"/images/oolong-cup.jpg\" alt=\"A cup of oolong\"></picture>"], "answer": 1, "explanation": "Google finds images in the src of img elements, including inside picture, and says it doesn't index CSS images such as a background-image."},
           term: "Images Google can find",
           summary: "Put images in HTML img elements, near relevant text, in a supported format with a descriptive file name; CSS background images aren't indexed.",
           explanation:
@@ -520,6 +533,7 @@ export const LESSON_11: LessonContent = {
         },
         {
           id: "c-alt-text",
+          quiz: {"kind": "choice", "id": "cq-alt-text", "prompt": "In Google's own example, which alt text is best for a photo of a Dalmatian puppy playing fetch?", "options": ["Dalmatian puppy playing fetch", "puppy", "A long list of dog words and breed names", "No alt attribute at all"], "answer": 0, "explanation": "Google's ladder rates no alt and keyword stuffing as bad, puppy as better, and Dalmatian puppy playing fetch as best: a useful description in context."},
           term: "Alt text",
           summary: "Alt text is the most important image metadata Google names; describe the image usefully in context, without stuffing keywords.",
           explanation:
@@ -538,6 +552,7 @@ export const LESSON_11: LessonContent = {
         },
         {
           id: "c-image-sitemap-preferred",
+          quiz: {"kind": "choice", "id": "cq-image-sitemap-preferred", "prompt": "You're suggesting which image represents a product page in og:image. Which choice does Google advise against?", "options": ["Your site logo", "A photo of the product itself", "A photo that is relevant and representative of the page"], "answer": 0, "explanation": "Google asks for a relevant, representative image and says to avoid a generic image, such as your site logo, or an image with text."},
           term: "Image sitemaps and the preferred image",
           summary: "Image sitemaps list images Google might miss; primaryImageOfPage, an image on the main entity, or og:image suggest which image represents a page.",
           explanation:
@@ -557,6 +572,7 @@ export const LESSON_11: LessonContent = {
         },
         {
           id: "c-image-license",
+          quiz: {"kind": "choice", "id": "cq-image-license", "prompt": "An image's ImageObject markup and its embedded IPTC metadata give different license details. Which does Google use?", "options": ["The structured data", "The IPTC metadata", "Whichever was added most recently", "Neither, until they match"], "answer": 0, "explanation": "Google says that if the two disagree, it uses the structured data information."},
           term: "Image license metadata",
           summary: "ImageObject markup or IPTC photo metadata can tell Google who made an image and how to license it, making it eligible for the Licensable badge.",
           explanation:
