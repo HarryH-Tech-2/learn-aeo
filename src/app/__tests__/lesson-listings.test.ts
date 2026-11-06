@@ -14,10 +14,13 @@ import { SITE } from "@/lib/site";
 import { LESSON_CATALOG } from "@/lib/lesson-catalog";
 
 describe("sitemap lessons", () => {
-  it("lists the free live lesson and no other lesson URL", async () => {
+  it("lists every live lesson (paid ones are public previews) and no coming-soon one", async () => {
     const urls = (await sitemap()).map((e) => e.url);
     const lessonUrls = urls.filter((u) => u.includes("/lessons/"));
-    expect(lessonUrls).toEqual([`${SITE.url}/lessons/how-answer-engines-choose-sources`]);
+    const live = LESSON_CATALOG.filter((l) => l.status === "live").map((l) => `${SITE.url}/lessons/${l.id}`);
+    expect(lessonUrls).toEqual(live);
+    expect(lessonUrls).toContain(`${SITE.url}/lessons/how-answer-engines-choose-sources`);
+    expect(lessonUrls).not.toContain(`${SITE.url}/lessons/running-an-aeo-program`);
   });
 });
 

@@ -6,8 +6,13 @@ const req = (path: string) => new NextRequest(`https://www.learnaeo.com${path}`)
 const isRedirect = (path: string) => [307, 308].includes(middleware(req(path)).status);
 
 describe("middleware", () => {
-  it("still sends signed-out visitors from a paid lesson to get-started", () => {
-    const res = middleware(req("/lessons/make-your-site-reachable-by-ai"));
+  it("lets signed-out visitors and crawlers open a live paid lesson's preview page", () => {
+    expect(isRedirect("/lessons/make-your-site-reachable-by-ai")).toBe(false);
+    expect(isRedirect("/lessons/when-ai-gets-your-brand-wrong")).toBe(false);
+  });
+
+  it("still sends signed-out visitors from other gated pages to get-started", () => {
+    const res = middleware(req("/dashboard"));
     expect(res.status).toBe(307);
     expect(res.headers.get("location")).toContain("/get-started");
   });
@@ -28,7 +33,8 @@ describe("unknown lesson addresses (SEO audit 2026-10-30)", () => {
     expect(isRedirect("/lessons/not-a-lesson")).toBe(false);
   });
 
-  it("still gates every paid lesson in the catalog", () => {
-    expect(isRedirect("/lessons/running-an-aeo-program")).toBe(true);
+  it("opens every live paid lesson at its exact address only", () => {
+    expect(isRedirect("/lessons/running-an-aeo-program")).toBe(false);
+    expect(isRedirect("/lessons/running-an-aeo-program/anything")).toBe(true);
   });
 });

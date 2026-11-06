@@ -16,7 +16,7 @@ import { BTN_PRIMARY, BTN_SECONDARY, EYEBROW } from "@/components/player/ui";
 import { trackEvent } from "@/lib/analytics";
 import { submitAuditResult } from "@/lib/audit-submit";
 import { HttpError, fetchJson } from "@/lib/fetch-json";
-import { lessonMeta, nextLessonMeta } from "@/lib/lesson-catalog";
+import { FIRST_LESSON_PATH, lessonMeta, nextLessonMeta } from "@/lib/lesson-catalog";
 import type { LessonMeta } from "@/lib/lesson-types";
 import type { LiveLesson } from "@/lib/lessons";
 import type { XpClaim } from "@/lib/xp-claims";
@@ -206,26 +206,61 @@ export default function LessonContent({ overview }: { overview?: React.ReactNode
     );
   }
 
+  // A paid lesson without access: its public preview. The hero (the page's one h1) and the server-rendered outline
+  // stay as they were while loading, with the unlock offer between them. A guest is offered the free lesson first.
   if (isLocked(lesson)) {
+    const location = guest ? "lesson_preview" : "locked_lesson";
     return (
       <Shell>
-        <section className={`${PANEL} text-center`}>
-          <p className={`${EYEBROW} mb-3`}>{lesson.district}</p>
-          <h1 className="font-display text-3xl sm:text-4xl text-sand-100 mb-4">{lesson.title}</h1>
-          <p className="font-sans text-base leading-relaxed text-sand-300 mb-8">{lesson.description}</p>
-          <p className="font-sans text-sm text-sand-300 mb-6">
-            This lesson is part of the full course. Unlock it, and every other lesson, for a one-time{" "}
-            <Price className="font-semibold text-sand-100" />.
+        <LessonHero lesson={lesson} />
+        <section className="lesson-gate mx-auto max-w-3xl" aria-labelledby="lesson-unlock">
+          <h2 id="lesson-unlock" className="font-display text-2xl font-bold text-sand-100 mb-2">
+            This lesson is part of the full course
+          </h2>
+          <p className="font-sans text-base text-sand-300 mb-6">
+            Unlock it, and every other lesson, for a one-time <Price className="font-semibold text-sand-100" />.
+            {guest ? " Or start with lesson 1, which is free with an account." : ""}
           </p>
-          <a
-            href={session ? "/checkout" : "/get-started?next=checkout"}
-            onClick={() => trackEvent("upgrade_panel_click", { location: "locked_lesson", target: "checkout" })}
-            className={`${BTN_PRIMARY} w-full sm:w-auto`}
-          >
-            Get Lifetime Access
-          </a>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <a
+              href={session ? "/checkout" : "/get-started?next=checkout"}
+              onClick={() => trackEvent("upgrade_panel_click", { location, target: "checkout" })}
+              className={`${BTN_PRIMARY} w-full sm:w-auto`}
+            >
+              Get Lifetime Access
+            </a>
+            {guest && (
+              <Link
+                href={FIRST_LESSON_PATH}
+                onClick={() => trackEvent("upgrade_panel_click", { location, target: "free_lesson" })}
+                className={`${BTN_SECONDARY} w-full sm:w-auto`}
+              >
+                Try lesson 1 free
+              </Link>
+            )}
+          </div>
           <GuaranteeNote included="Every lesson, including each new one as it is released" />
         </section>
+        {overview}
+        <p className="mx-auto mt-10 max-w-3xl font-sans text-base text-sand-300">
+          Ready for the full lesson?{" "}
+          <a
+            href={session ? "/checkout" : "/get-started?next=checkout"}
+            onClick={() => trackEvent("upgrade_panel_click", { location: `${location}_end`, target: "checkout" })}
+            className="font-semibold text-cyan-400 underline underline-offset-4"
+          >
+            Unlock every lesson for <Price />
+          </a>
+          {guest && (
+            <>
+              {" "}or{" "}
+              <Link href={FIRST_LESSON_PATH} className="font-semibold text-cyan-400 underline underline-offset-4">
+                start lesson 1 free
+              </Link>
+            </>
+          )}
+          .
+        </p>
       </Shell>
     );
   }

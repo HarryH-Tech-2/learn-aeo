@@ -4,7 +4,7 @@ import { devBypassAuth } from "@/lib/dev-bypass";
 import { COUNTRY_COOKIE } from "@/lib/pricing";
 import { ACCESS_COOKIE, ACCESS_COOKIE_MAX_AGE, accessTestPercent, pickVisitorArm } from "@/lib/access-test";
 // (edge runtime: the catalog only, never @/lib/lessons, which pulls in lesson content)
-import { LESSON_CATALOG, publicLessonPaths } from "@/lib/lesson-catalog";
+import { LESSON_CATALOG, previewLessonPaths, publicLessonPaths } from "@/lib/lesson-catalog";
 
 // Protected routes that require authentication
 const PROTECTED_PATHS = ["/dashboard", "/account", "/certificate", "/checkout", "/lessons"];
@@ -13,6 +13,10 @@ const PROTECTED_PATHS = ["/dashboard", "/account", "/certificate", "/checkout", 
 // crawler) gets the page. The page itself then asks a guest to sign in before the lesson starts.
 // Derived from `isFree` in the catalog (src/lib/lesson-catalog.ts).
 const PUBLIC_LESSONS = publicLessonPaths();
+
+// Live paid lessons pass too, at their exact address only: the page shows a signed-out visitor (and a crawler) a
+// public preview, and the lesson content stays behind /api/lessons/[id], which checks access itself.
+const PREVIEW_LESSONS = new Set(previewLessonPaths());
 
 // A lesson's share image (src/app/lessons/[id]/opengraph-image.tsx; Next adds a ?hash). Social
 // crawlers have no session, and a redirect here would leave paid lessons without a link preview.
@@ -65,7 +69,9 @@ export function middleware(request: NextRequest) {
 
   const isProtected = PROTECTED_PATHS.some((path) => pathname === path || pathname.startsWith(path + "/"));
   const isPublicLesson =
-    PUBLIC_LESSONS.some((path) => pathname === path || pathname.startsWith(path + "/")) || LESSON_OG_IMAGE.test(pathname);
+    PUBLIC_LESSONS.some((path) => pathname === path || pathname.startsWith(path + "/")) ||
+    PREVIEW_LESSONS.has(pathname) ||
+    LESSON_OG_IMAGE.test(pathname);
 
   // Only protect known protected routes — let everything else pass through
   // so Next.js can serve the page or return a proper 404

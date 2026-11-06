@@ -222,9 +222,22 @@ export function nextLessonMeta(id: string): LessonMeta | undefined {
   return LESSON_CATALOG.find((l) => l.order === current.order + 1);
 }
 
-/** Paths of free lessons (any status), which signed-out visitors may reach. */
+/** Paths of free lessons (any status), which signed-out visitors may reach, along with anything under them. */
 export function publicLessonPaths(): string[] {
   return LESSON_CATALOG.filter((l) => l.isFree).map((l) => lessonPath(l.id));
+}
+
+/**
+ * Paths of live paid lessons. Signed-out visitors (and crawlers) may open these exact pages, which show a public
+ * preview: the outline, intro, exercise brief and sources. The lesson itself stays behind /api/lessons/[id].
+ */
+export function previewLessonPaths(): string[] {
+  return LESSON_CATALOG.filter((l) => !l.isFree && l.status === "live").map((l) => lessonPath(l.id));
+}
+
+/** Lessons whose page a signed-out visitor can read: every live one (free in full, paid as a preview). */
+export function publicLessons(): LessonMeta[] {
+  return LESSON_CATALOG.filter((l) => l.status === "live");
 }
 
 /** A lesson title inside a sentence: only the first letter lowercased, so "AEO" and "AI" keep their capitals. */

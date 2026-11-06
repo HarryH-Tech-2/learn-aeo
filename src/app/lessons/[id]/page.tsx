@@ -5,7 +5,7 @@ import LessonContent from "./LessonContent";
 import LessonOverview from "./LessonOverview";
 import { getLesson, isLive } from "@/lib/lessons";
 import JsonLd from "@/components/JsonLd";
-import { learningResourceSchema } from "@/lib/schema";
+import { breadcrumbSchema, learningResourceSchema } from "@/lib/schema";
 import { pageMetadata } from "@/lib/seo";
 
 // Only the catalog's lessons exist: any other id is a real 404, not an empty shell.
@@ -47,14 +47,23 @@ export default async function LessonPage({
 }) {
   const { id } = await params;
   const lesson = lessonMeta(id);
-  // Free lessons are public, so they get server-rendered text; paid ones redirect signed-out visitors.
+  // Every live lesson gets server-rendered text: the free one in full once signed in, a paid one as its public
+  // preview (the outline, intro, exercise brief and sources; the lesson itself comes from /api/lessons/[id]).
   const full = getLesson(id);
-  const overview = isLive(full) && full.isFree ? <LessonOverview lesson={full} /> : undefined;
+  const overview = isLive(full) ? <LessonOverview lesson={full} /> : undefined;
 
   return (
     <>
       {lesson?.status === "live" && (
-        <JsonLd data={learningResourceSchema(lesson)} />
+        <JsonLd
+          data={[
+            learningResourceSchema(lesson),
+            breadcrumbSchema([
+              { name: "Course", path: "/course" },
+              { name: lesson.title, path: lessonPath(lesson.id) },
+            ]),
+          ]}
+        />
       )}
       <Suspense>
         <LessonContent overview={overview} />

@@ -27,9 +27,9 @@ export function buildLlmsTxt({ lessons, tools, posts, glossary }: LlmsTxtInput):
   const lessonLine = (l: LessonMeta) => {
     const notes = [l.level, `${l.minutes} min`, l.isFree ? "free" : null].filter(Boolean).join(", ");
     const name = `Lesson ${l.order}, ${l.district}: ${l.title}`;
-    // Link only what a signed-out assistant can open (the sitemap's rule): paid lessons redirect to sign-in.
+    // Link only what a signed-out assistant can open (the sitemap's rule): a paid lesson's page is its public preview.
     if (l.status !== "live") return `- ${name} (coming soon): ${l.summary}`;
-    if (!l.isFree) return `- ${name} (paid lesson; see ${absoluteUrl("/pricing")}): ${l.summary} (${notes})`;
+    if (!l.isFree) return `- [${name}](${absoluteUrl(lessonPath(l.id))}): ${l.summary} (${notes}, paid; the page is a public preview, see ${absoluteUrl("/pricing")})`;
     return `- [${name}](${absoluteUrl(lessonPath(l.id))}): ${l.summary} (${notes})`;
   };
 

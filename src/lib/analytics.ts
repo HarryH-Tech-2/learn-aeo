@@ -34,7 +34,8 @@
  *   lesson_section_continue — "Continue to section N" pressed on the break screen (lesson_id, section)
  *   lesson_section_resume   — returned later and picked up at a saved section (lesson_id, section)
  *   upgrade_panel_shown / upgrade_panel_click — upgrade screen at a section end or the outro
- *     (location: section_1 | section_2 | lesson_outro; offer: 0|1; target: checkout | pricing)
+ *     (location: section_1 | section_2 | lesson_outro | lesson_preview[_end] | locked_lesson[_end]; offer: 0|1;
+ *     target: checkout | pricing | free_lesson)
  *
  * Lesson player (2026-10-26, src/components/player/LessonPlayer.tsx):
  *   lesson_step           — a lesson step came on screen (lesson_id, step_kind: intro | concept | check | exercise | example | audit | outro)

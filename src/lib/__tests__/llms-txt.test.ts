@@ -24,16 +24,17 @@ describe("buildLlmsTxt", () => {
     expect(lines[2]).toMatch(/^> \S/);
   });
 
-  it("links only lessons a signed-out visitor can open: free and live", () => {
+  it("links every live lesson (paid ones as public previews) and no coming-soon one", () => {
     expect(LESSON_CATALOG.some((l) => l.status === "coming-soon"), "no coming-soon lesson to test").toBe(true);
     for (const l of LESSON_CATALOG) {
       const link = `](${absoluteUrl(lessonPath(l.id))})`;
       const line = lines.find((x) => x.includes(l.title));
-      if (l.status === "live" && l.isFree) expect(txt).toContain(link);
-      else {
+      if (l.status === "live") {
+        expect(txt).toContain(link);
+        if (!l.isFree) expect(line).toContain(`paid; the page is a public preview, see ${absoluteUrl("/pricing")}`);
+      } else {
         expect(txt).not.toContain(link);
-        if (l.status === "coming-soon") expect(line).toMatch(/coming soon/i);
-        else expect(line).toContain(`(paid lesson; see ${absoluteUrl("/pricing")})`);
+        expect(line).toMatch(/coming soon/i);
       }
     }
   });

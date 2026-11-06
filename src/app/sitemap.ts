@@ -110,12 +110,10 @@ export function buildSitemap({
     priority: 0.7,
   }));
 
-  // Only live lessons a signed-out visitor (i.e. Googlebot) can actually open.
-  // Paid lessons 307 to /get-started via middleware, and a sitemap full of
-  // redirecting URLs is a quality signal against the whole file. Coming-soon
-  // pages are noindex, so they stay out too.
+  // Every live lesson: a signed-out visitor (i.e. Googlebot) gets the free one's page and each paid one's public
+  // preview. Coming-soon pages are noindex (and gated), so they stay out.
   const lessonPages: MetadataRoute.Sitemap = LESSONS
-    .filter((lesson) => lesson.isFree && lesson.status === "live")
+    .filter((lesson) => lesson.status === "live")
     .map((lesson) => ({
       url: `${baseUrl}/lessons/${lesson.id}`,
       lastModified: LESSONS_LASTMOD,
