@@ -136,6 +136,7 @@ export default function LlmsGenerator() {
               onClick={() =>
                 navigator.clipboard?.writeText(output).then(() => {
                   setCopied(true);
+                  setTimeout(() => setCopied(false), 2000);
                   trackEvent("tool_used", { tool: "llms-txt-generator", action: "copy" });
                 }, () => {})
               }

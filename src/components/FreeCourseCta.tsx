@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import { trackEvent } from "@/lib/analytics";
 
 export const FREE_COURSE_LINES = [
-  "Every live lesson, and each new one as it opens",
+  "Every live lesson, and each new one as it is released",
   "Your XP, levels, badges and the leaderboard",
   "Your certificate when you finish",
 ];

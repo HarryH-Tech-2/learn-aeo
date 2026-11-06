@@ -63,7 +63,7 @@ export default function OfferBanner({
           <p className="font-body text-[10px] tracking-[0.25em] uppercase text-gold-500 mb-2">Limited offer · {offer.percentOff}% off</p>
           <h2 className="font-display text-2xl text-sand-100 mb-2">{headline}</h2>
           <p className="font-body text-sm text-sand-300 font-light leading-relaxed">
-            Lifetime access to every lesson, including each new one as it opens, for{" "}
+            Lifetime access to every lesson, including each new one as it is released, for{" "}
             <span className="text-sand-100 font-medium">{formatPrice(currency, discounted(currency, offer.percentOff))}</span>{" "}
             <span className="line-through text-sand-500">{formatPrice(currency)}</span>. One payment, no subscription. Code{" "}
             <span className="font-mono text-gold-400">{offer.code}</span> is applied automatically.

@@ -328,7 +328,7 @@ export default function CertificateContent() {
               <button
                 type="button"
                 onClick={() => {
-                  navigator.clipboard?.writeText(cert.url).then(() => setCopied(true), () => {});
+                  navigator.clipboard?.writeText(cert.url).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); }, () => {});
                 }}
                 className="btn-secondary py-2 px-5 text-xs"
               >

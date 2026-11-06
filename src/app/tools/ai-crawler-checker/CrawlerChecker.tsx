@@ -131,7 +131,7 @@ export default function CrawlerChecker() {
                 <pre className="bg-obsidian-lighter border border-gold-700/20 p-4 overflow-x-auto font-mono text-[13px] text-sand-200">{report.fixes}</pre>
                 <button
                   type="button"
-                  onClick={() => navigator.clipboard?.writeText(report.fixes).then(() => setCopied(true), () => {})}
+                  onClick={() => navigator.clipboard?.writeText(report.fixes).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); }, () => {})}
                   className="btn-secondary mt-3 py-2 px-5 text-xs"
                 >
                   {copied ? "Copied" : "Copy"}

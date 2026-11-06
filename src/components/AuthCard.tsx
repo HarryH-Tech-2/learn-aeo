@@ -212,20 +212,20 @@ export default function AuthCard({
 
         {cardState === "check-email" ? (
           <>
-            <h1 className="font-display text-3xl font-light text-sand-100 mb-2">
+            <h2 className="font-display text-3xl font-light text-sand-100 mb-2">
               Check Your{" "}
               <span className="text-gradient-gold font-medium">Email</span>
-            </h1>
+            </h2>
             <p className="font-body text-sm text-sand-500 font-light">
               We sent a sign-in link to your email. Click it to continue.
             </p>
           </>
         ) : cardState === "choice" ? (
           <>
-            <h1 className="font-display text-3xl font-light text-sand-100 mb-2">
+            <h2 className="font-display text-3xl font-light text-sand-100 mb-2">
               Welcome{" "}
               <span className="text-gradient-gold font-medium">Back</span>
-            </h1>
+            </h2>
             <p className="font-body text-sm text-sand-500 font-light">
               We found a Google account with this email. How would you like
               to sign in?
@@ -234,15 +234,15 @@ export default function AuthCard({
         ) : (
           <>
             {isSignIn ? (
-              <h1 className="font-display text-3xl font-light text-sand-100 mb-2">
+              <h2 className="font-display text-3xl font-light text-sand-100 mb-2">
                 Welcome{" "}
                 <span className="text-gradient-gold font-medium">back</span>
-              </h1>
+              </h2>
             ) : (
-              <h1 className="font-display text-3xl font-light text-sand-100 mb-2">
+              <h2 className="font-display text-3xl font-light text-sand-100 mb-2">
                 Start{" "}
                 <span className="text-gradient-gold font-medium">learning AEO</span>
-              </h1>
+              </h2>
             )}
             <p className="font-body text-sm text-sand-500 font-light">
               {isSignIn

@@ -26,7 +26,14 @@ const base = (process.argv[2] ?? CANONICAL_SITE_URL).replace(/\/+$/, "");
 const problems = [];
 
 async function get(url, init = {}) {
-  const res = await fetch(url, { redirect: "manual", ...init });
+  let res;
+  try {
+    res = await fetch(url, { redirect: "manual", ...init });
+  } catch (err) {
+    // A network failure (DNS, refused, TLS) is a finding, not a crash: the checks see status 0 and report it.
+    problems.push(`${url}: request failed (${err?.cause?.code ?? err?.message ?? err})`);
+    return { status: 0, headers: {}, body: "", location: undefined };
+  }
   return {
     status: res.status,
     headers: Object.fromEntries(res.headers),

@@ -18,9 +18,9 @@ const PUBLIC_LESSONS = publicLessonPaths();
 // public preview, and the lesson content stays behind /api/lessons/[id], which checks access itself.
 const PREVIEW_LESSONS = new Set(previewLessonPaths());
 
-// A lesson's share image (src/app/lessons/[id]/opengraph-image.tsx; Next adds a ?hash). Social
+// A lesson's share image (src/app/lessons/[id]/opengraph-image.tsx, served at .../opengraph-image/card; Next adds a ?hash). Social
 // crawlers have no session, and a redirect here would leave paid lessons without a link preview.
-const LESSON_OG_IMAGE = /^\/lessons\/[^/]+\/opengraph-image$/;
+const LESSON_OG_IMAGE = /^\/lessons\/[^/]+\/opengraph-image(?:\/card)?$/;
 
 // A lesson id that isn't in the catalog isn't gated: the page (dynamicParams = false) answers with a real 404
 // instead of a redirect to sign-up for a lesson that doesn't exist.

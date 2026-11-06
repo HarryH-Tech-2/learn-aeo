@@ -20,6 +20,7 @@ describe("middleware", () => {
   it("lets social crawlers fetch every lesson's share image", () => {
     expect(isRedirect("/lessons/make-your-site-reachable-by-ai/opengraph-image")).toBe(false);
     expect(isRedirect("/lessons/how-answer-engines-choose-sources/opengraph-image")).toBe(false);
+    expect(isRedirect("/lessons/make-your-site-reachable-by-ai/opengraph-image/card")).toBe(false);
   });
 
   it("does not open anything else under a paid lesson", () => {

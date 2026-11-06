@@ -100,9 +100,15 @@ describe("404 and dynamic routes", () => {
     expect((m.openGraph as { images?: unknown } | null | undefined)?.images).toBeUndefined();
   }, IMPORT_TIMEOUT);
 
-  it("blog posts and lesson share images render only known params", async () => {
+  it("blog posts render only known params", async () => {
     expect((await import("@/app/blog/[slug]/page")).dynamicParams).toBe(false);
-    expect((await import("@/app/lessons/[id]/opengraph-image")).dynamicParams).toBe(false);
+  }, IMPORT_TIMEOUT);
+
+  it("each lesson's share image has its own alt text, and an unknown lesson has no image", async () => {
+    const og = await import("@/app/lessons/[id]/opengraph-image");
+    const [meta] = await og.generateImageMetadata({ params: Promise.resolve({ id: "local-businesses-and-reviews" }) });
+    expect(meta.alt).toBe("Learn AEO lesson 10, The Neighborhoods: Local businesses and reviews in AI answers");
+    await expect(og.default({ params: Promise.resolve({ id: "nope" }) })).rejects.toThrow();
   }, IMPORT_TIMEOUT);
 
   it("an unknown blog post title is not branded twice", async () => {
