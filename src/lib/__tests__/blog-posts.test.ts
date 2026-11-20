@@ -16,16 +16,20 @@ const SLUGS = [
   "get-cited-in-google-ai-overviews",
   "llms-txt-explained",
 ];
+// Posts published after launch: [slug, publishedAt]
+const LATER: [string, string][] = [["ai-mode-click-study", "2026-11-19"]];
+const ALL = [...SLUGS, ...LATER.map(([s]) => s)];
+const PUBLISHED: Record<string, string> = Object.fromEntries(LATER);
 
 const sentences = (s: string) => s.split(/(?<=[.!?])\s+(?=[A-Z"(])/).filter(Boolean).length;
 
 describe("launch blog posts", () => {
-  it("has the 8 launch posts", () => {
-    expect(blogPosts.map((p) => p.slug).sort()).toEqual([...SLUGS].sort());
+  it("has the 8 launch posts and the later ones", () => {
+    expect(blogPosts.map((p) => p.slug).sort()).toEqual([...ALL].sort());
     expect(getPostBySlug("what-is-aeo")?.title).toBe("What is answer engine optimization (AEO)?");
   });
 
-  it.each(SLUGS)("%s: quick answer, FAQs, sources, length, links, art, date", (slug) => {
+  it.each(ALL)("%s: quick answer, FAQs, sources, length, links, art, date", (slug) => {
     const p = getPostBySlug(slug)!;
     expect(p).toBeDefined();
     expect(sentences(p.quickAnswer)).toBeGreaterThanOrEqual(1);
@@ -39,11 +43,11 @@ describe("launch blog posts", () => {
     const n = countWords(p.content);
     expect(n, `${slug} has ${n} words`).toBeGreaterThanOrEqual(900);
     expect(n, `${slug} has ${n} words`).toBeLessThanOrEqual(2000);
-    for (const r of p.relatedSlugs) expect(SLUGS).toContain(r);
+    for (const r of p.relatedSlugs) expect(ALL).toContain(r);
     expect(p.relatedSlugs).not.toContain(slug);
     expect(p.image).toBe(`/blog/${slug}.webp`);
     expect(existsSync(join(process.cwd(), "public", p.image)), `${p.image} exists`).toBe(true);
-    expect(p.publishedAt).toBe("2026-10-28");
+    expect(p.publishedAt).toBe(PUBLISHED[slug] ?? "2026-10-28");
   });
 
   it("names no person as author", () => {
@@ -55,7 +59,7 @@ describe("launch blog posts", () => {
       "/", "/pricing", "/blog", "/tools", "/tools/ai-crawler-checker", "/tools/llms-txt-generator", "/glossary",
       ...LESSON_CATALOG.map((l) => `/lessons/${l.id}`),
       ...GLOSSARY.map((t) => `/glossary/${t.slug}`),
-      ...SLUGS.map((s) => `/blog/${s}`),
+      ...ALL.map((s) => `/blog/${s}`),
     ]);
     for (const p of blogPosts) {
       const text = [p.content, p.quickAnswer, ...p.faqs.map((f) => f.answer)].join("\n");

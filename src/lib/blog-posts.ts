@@ -7,6 +7,7 @@ import { post as p_bestAeoCourses } from "./content/blog/best-aeo-courses";
 import { post as p_howChatgptChoosesSources } from "./content/blog/how-chatgpt-chooses-sources";
 import { post as p_getCitedInGoogleAiOverviews } from "./content/blog/get-cited-in-google-ai-overviews";
 import { post as p_llmsTxtExplained } from "./content/blog/llms-txt-explained";
+import { post as p_aiModeClickStudy } from "./content/blog/ai-mode-click-study";
 
 export type BlogFAQ = {
   question: string;
@@ -46,9 +47,10 @@ export type BlogPost = {
   sources: Source[];
 };
 
-/** The launch posts, one data file each in src/lib/content/blog/ (sources checked 2026-10-28). */
+/** One data file each in src/lib/content/blog/: the eight launch posts (sources checked 2026-10-28), then later posts. */
 export const blogPosts: BlogPost[] = [
   p_whatIsAeo, p_aeoVsSeoVsGeo, p_howToLearnAeo, p_isAeoWorthLearning, p_bestAeoCourses, p_howChatgptChoosesSources, p_getCitedInGoogleAiOverviews, p_llmsTxtExplained,
+  p_aiModeClickStudy,
 ];
 
 export function getPostBySlug(slug: string): BlogPost | undefined {
