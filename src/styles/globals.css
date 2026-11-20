@@ -1682,7 +1682,7 @@ html.light .city-hero-vignette {
   display: grid;
   gap: 0.35rem;
   margin-top: auto;
-  padding: 1.25rem 3.5rem 1.25rem 1.4rem;
+  padding: 1.25rem 1.4rem;
   border-radius: 1.25rem;
   color: #f4f8ff;
   background: linear-gradient(135deg, var(--rt-cyan-600), #16294a 70%);
@@ -1714,24 +1714,6 @@ html.light .city-hero-vignette {
   font-family: var(--font-body);
   font-size: 0.95rem;
   color: #c9d6ea;
-}
-.dash-continue-arrow {
-  position: absolute;
-  right: 1.25rem;
-  top: 50%;
-  transform: translateY(-50%);
-  display: grid;
-  place-items: center;
-  width: 2.4rem;
-  height: 2.4rem;
-  border-radius: 999px;
-  font-size: 1.2rem;
-  background: rgba(255, 255, 255, 0.14);
-  transition: transform 0.2s ease, background 0.2s ease;
-}
-.dash-continue:hover .dash-continue-arrow {
-  transform: translate(4px, -50%);
-  background: rgba(255, 255, 255, 0.24);
 }
 .dash-tile {
   border-radius: 1.1rem;
@@ -1783,7 +1765,7 @@ html.light .city-hero-vignette {
   stroke: var(--rt-cyan-400);
 }
 @media (prefers-reduced-motion: reduce) {
-  .dash-continue, .dash-continue-arrow { transition: none; }
+  .dash-continue { transition: none; }
   .dash-continue:hover { transform: none; }
 }
 

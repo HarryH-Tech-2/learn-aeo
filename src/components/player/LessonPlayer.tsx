@@ -407,7 +407,6 @@ export default function LessonPlayer({ lesson, onXP, onAuditComplete, upgrade, n
 
       <nav aria-label="Lesson steps" className="mt-5 flex items-center justify-between gap-3">
         <button type="button" className={BTN_SECONDARY} onClick={goBack} disabled={index === 0}>
-          <span aria-hidden="true">←</span>
           Back
         </button>
         <span className="text-sm text-sand-400" aria-live="polite">
@@ -422,7 +421,6 @@ export default function LessonPlayer({ lesson, onXP, onAuditComplete, upgrade, n
             title={canGoNext ? undefined : "Finish the audit to carry on"}
           >
             {moreBeats ? "Continue" : "Next"}
-            <span aria-hidden="true">{moreBeats ? "↓" : "→"}</span>
           </button>
         ) : (
           <span className="w-[5.5rem]" aria-hidden="true" />
@@ -505,7 +503,6 @@ function Outro({
             className={`inline-flex items-center gap-2 rounded-full bg-cyan-500 px-6 py-3 font-sans text-sm font-semibold text-obsidian transition-colors hover:bg-cyan-400 ${FOCUS}`}
           >
             Continue to {next.district}
-            <span aria-hidden="true">→</span>
           </Link>
         )
       ) : null}

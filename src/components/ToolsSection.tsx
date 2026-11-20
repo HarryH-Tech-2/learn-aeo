@@ -16,7 +16,7 @@ export function ToolCard({ tool }: { tool: ToolMeta }) {
         )}
       </div>
       <p className="font-body text-sm text-sand-400 leading-relaxed">{tool.summary}</p>
-      {live && <p className="mt-4 font-body text-sm font-semibold text-gold-400">Open the tool &rarr;</p>}
+      {live && <p className="mt-4 font-body text-sm font-semibold text-gold-400">Open the tool</p>}
     </>
   );
   return live ? (

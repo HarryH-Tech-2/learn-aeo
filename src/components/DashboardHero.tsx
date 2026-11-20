@@ -59,7 +59,6 @@ export default function DashboardHero({
               <span className="dash-continue-kicker">Course complete</span>
               <span className="dash-continue-title">Get your certificate</span>
               <span className="dash-continue-meta">Download it and share the verify link</span>
-              <span aria-hidden="true" className="dash-continue-arrow">→</span>
             </Link>
           ) : next ? (
             <Link href={lessonPath(next.id)} className="dash-continue group">
@@ -70,14 +69,12 @@ export default function DashboardHero({
               <span className="dash-continue-meta">
                 {next.minutes} min · {next.summary}
               </span>
-              <span aria-hidden="true" className="dash-continue-arrow">→</span>
             </Link>
           ) : firstLocked && !paid ? (
             <Link href="/pricing" className="dash-continue group">
               <span className="dash-continue-kicker">Next: District {firstLocked.order}: {firstLocked.district}</span>
               <span className="dash-continue-title">Unlock the rest of the course</span>
               <span className="dash-continue-meta">Every plan opens all {total} lessons</span>
-              <span aria-hidden="true" className="dash-continue-arrow">→</span>
             </Link>
           ) : null}
         </div>
