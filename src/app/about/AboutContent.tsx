@@ -1,7 +1,11 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import { LESSON_CATALOG, lessonPath } from "@/lib/lesson-catalog";
+import type { CSSProperties } from "react";
+import { LESSON_CATALOG, TOTAL_MINUTES, courseParts, lessonPath } from "@/lib/lesson-catalog";
+import { LESSONS, isLive } from "@/lib/lessons";
+import InView from "@/components/InView";
+import { reveal } from "@/components/reveal";
 import { SITE } from "@/lib/site";
 import JsonLd from "@/components/JsonLd";
 import { AUTHOR } from "@/lib/author";
@@ -31,12 +35,45 @@ const SOURCE_EXAMPLES = [
   "Anthropic",
   "Perplexity",
   "Microsoft Bing",
-  "the IETF's robots.txt standard (RFC 9309)",
-  "and research papers on arXiv",
+  "IETF robots.txt standard (RFC 9309)",
+  "Research papers on arXiv",
 ];
+
+const STEPS = [
+  { step: "Learn", body: "Short concept cards. Each one lists the sources it relies on and the date they were checked." },
+  { step: "Check", body: "A quick question on every concept, and a short check after each set, so you know it went in." },
+  { step: "Practice", body: "A hands-on exercise on real material: fix a robots.txt file, rewrite a passage, read a server log." },
+  { step: "Audit", body: "A final audit with no hints. Pass it to complete the lesson and move toward your certificate." },
+];
+
+/** Counted from the lesson content itself, so the page never claims more than the course holds. */
+function courseStats() {
+  const live = LESSONS.filter(isLive);
+  const concepts = live.flatMap((l) => l.content.groups.flatMap((g) => g.concepts));
+  const sources = new Set(concepts.flatMap((c) => c.sources.map((src) => src.url)));
+  const questions = live.reduce(
+    (n, l) =>
+      n +
+      l.content.groups.reduce((m, g) => m + g.check.length + g.concepts.filter((c) => c.quiz).length, 0) +
+      l.content.exercise.steps.length +
+      l.content.audit.length,
+    0,
+  );
+  const hours = Math.round((TOTAL_MINUTES / 60) * 2) / 2;
+  return [
+    { value: String(LESSON_CATALOG.length), label: "lessons" },
+    { value: `${hours}`, label: "hours of material" },
+    { value: String(concepts.length), label: "concepts explained" },
+    { value: String(questions), label: "questions and exercises" },
+    { value: String(sources.size), label: "sources cited" },
+  ];
+}
 
 export default function AboutContent() {
   const live = LESSON_CATALOG.filter((l) => l.status === "live");
+  const stats = courseStats();
+  const parts = courseParts();
+  const initials = AUTHOR.name.split(" ").map((w) => w[0]).join("");
   return (
     <main className="grain-overlay">
       <Navbar />
@@ -53,11 +90,19 @@ export default function AboutContent() {
             change so your pages are among them.
           </p>
         </div>
+        <dl className="enter-up about-stats max-w-5xl mx-auto mt-14" style={{ "--enter-delay": "0.15s" } as CSSProperties}>
+          {stats.map((s) => (
+            <div key={s.label} className="about-stat">
+              <dt className="font-body text-xs uppercase tracking-[0.18em] text-sand-400 order-2">{s.label}</dt>
+              <dd className="font-display text-4xl md:text-5xl font-semibold text-gradient-gold order-1">{s.value}</dd>
+            </div>
+          ))}
+        </dl>
       </section>
 
       {/* What it is */}
       <section className="relative py-16">
-        <div className="max-w-3xl mx-auto px-6 lg:px-8 space-y-6 font-body text-sand-400 leading-relaxed">
+        <div className="max-w-4xl mx-auto px-6 lg:px-8 space-y-6 font-body text-sand-400 leading-relaxed">
           <h2 className="font-display text-3xl md:text-4xl font-semibold text-sand-100">What the course is</h2>
           <p>
             Ask ChatGPT, Perplexity or Google&rsquo;s AI Overviews a question and you get an answer the engine has
@@ -72,29 +117,90 @@ export default function AboutContent() {
           </p>
           <p>
             {live.length === LESSON_CATALOG.length
-              ? `All ${live.length} lessons are live: `
-              : `${live.length} of the ${LESSON_CATALOG.length} lessons are live now: `}
-            {live.map((l, i) => (
-              <span key={l.id}>
-                <Link href={lessonPath(l.id)} className="text-cyan-500 underline underline-offset-4 hover:text-gold-400">
-                  {l.title}
-                </Link>
-                {i < live.length - 1 ? ", " : "."}
-              </span>
-            ))}{" "}
-            {live.length < LESSON_CATALOG.length && "The rest are coming soon. "}Lesson 1 is free once you sign in.
+              ? `All ${live.length} lessons are live. `
+              : `${live.length} of the ${LESSON_CATALOG.length} lessons are live now. The rest are coming soon. `}
+            Lesson 1 is free once you sign in.
           </p>
+        </div>
+      </section>
+
+      {/* Roadmap: the parts and their lessons, from the catalog */}
+      <section aria-labelledby="roadmap-heading" className="relative py-16">
+        <div className="max-w-5xl mx-auto px-6 lg:px-8">
+          <h2 id="roadmap-heading" className="font-display text-3xl md:text-4xl font-semibold text-sand-100 mb-3 text-center">
+            The path through the course
+          </h2>
+          <p className="font-body text-sand-400 text-center max-w-2xl mx-auto mb-12">
+            {parts.length} parts, in the order the work happens on a real site. Take them in order, or jump to the one you need.
+          </p>
+          <InView>
+            <ol className="about-roadmap">
+              {parts.map(({ part, number, lessons }, i) => (
+                <li key={part.title} className="about-part reveal" style={reveal(i * 0.08)}>
+                  <span aria-hidden="true" className="about-part-num">{number}</span>
+                  <div className="min-w-0">
+                    <h3 className="font-display text-xl md:text-2xl font-semibold text-sand-100">{part.title}</h3>
+                    <p className="font-body text-sm text-sand-400 mt-1 mb-4">{part.summary}</p>
+                    <ul className="flex flex-wrap gap-2">
+                      {lessons.map((l) => (
+                        <li key={l.id}>
+                          {l.status === "live" ? (
+                            <Link href={lessonPath(l.id)} className="about-lesson-chip">
+                              <span className="text-cyan-500 font-semibold">{l.order}</span>
+                              {l.title}
+                              <span className="text-sand-500">{l.minutes} min</span>
+                            </Link>
+                          ) : (
+                            <span className="about-lesson-chip opacity-60">
+                              <span className="text-cyan-500 font-semibold">{l.order}</span>
+                              {l.title}
+                              <span className="text-sand-500">soon</span>
+                            </span>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </InView>
+        </div>
+      </section>
+
+      {/* How a lesson works */}
+      <section aria-labelledby="steps-heading" className="relative py-16">
+        <div className="max-w-5xl mx-auto px-6 lg:px-8">
+          <h2 id="steps-heading" className="font-display text-3xl md:text-4xl font-semibold text-sand-100 mb-10 text-center">
+            How a lesson works
+          </h2>
+          <InView>
+            <ol className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {STEPS.map((st, i) => (
+                <li key={st.step} className="about-step reveal" style={reveal(i * 0.08)}>
+                  <span className="font-display text-sm font-bold text-cyan-500">0{i + 1}</span>
+                  <h3 className="font-display text-xl font-semibold text-sand-100 mt-2 mb-2">{st.step}</h3>
+                  <p className="font-body text-sm text-sand-400 leading-relaxed">{st.body}</p>
+                </li>
+              ))}
+            </ol>
+          </InView>
         </div>
       </section>
 
       {/* How lessons are sourced */}
       <section className="relative py-16">
-        <div className="max-w-3xl mx-auto px-6 lg:px-8 space-y-6 font-body text-sand-400 leading-relaxed">
+        <div className="max-w-4xl mx-auto px-6 lg:px-8 space-y-6 font-body text-sand-400 leading-relaxed">
           <h2 className="font-display text-3xl md:text-4xl font-semibold text-sand-100">How the lessons are sourced</h2>
           <p>
             Each concept in a lesson ends with its sources, linked to the original page, with the date it was
-            published or last updated, or the date we last checked it. Sources in the live lessons include {SOURCE_EXAMPLES.join(", ")}.
+            published or last updated, or the date we last checked it. Sources in the live lessons include:
           </p>
+          <ul className="flex flex-wrap gap-2">
+            {SOURCE_EXAMPLES.map((name) => (
+              <li key={name} className="about-source-chip">{name}</li>
+            ))}
+          </ul>
           <p>
             When a vendor documents how its own crawler or AI search tool behaves, that is the source we use.
           </p>
@@ -111,21 +217,30 @@ export default function AboutContent() {
       {/* Who writes it: the author every byline links to (src/lib/author.ts) */}
       <section id="author" aria-labelledby="author-heading" className="relative py-16 scroll-mt-28">
         <JsonLd data={personSchema()} />
-        <div className="max-w-3xl mx-auto px-6 lg:px-8 space-y-6 font-body text-sand-400 leading-relaxed">
+        <div className="max-w-4xl mx-auto px-6 lg:px-8 space-y-6 font-body text-sand-400 leading-relaxed">
           <h2 id="author-heading" className="font-display text-3xl md:text-4xl font-semibold text-sand-100">
             Who writes {SITE.name}
           </h2>
-          <p>{AUTHOR.bio}</p>
-          <p>
-            <a
-              href={AUTHOR.linkedIn}
-              target="_blank"
-              rel="me noopener noreferrer"
-              className="text-cyan-500 underline underline-offset-4 hover:text-gold-400"
-            >
-              {AUTHOR.name} on LinkedIn
-            </a>
-          </p>
+          <div className="about-author">
+            <span aria-hidden="true" className="about-author-avatar">{initials}</span>
+            <div className="space-y-3">
+              <div>
+                <p className="font-display text-xl font-semibold text-sand-100">{AUTHOR.name}</p>
+                <p className="font-body text-sm text-cyan-500">{AUTHOR.jobTitle}</p>
+              </div>
+              <p>{AUTHOR.bio}</p>
+              <p>
+                <a
+                  href={AUTHOR.linkedIn}
+                  target="_blank"
+                  rel="me noopener noreferrer"
+                  className="text-cyan-500 underline underline-offset-4 hover:text-gold-400"
+                >
+                  {AUTHOR.name} on LinkedIn
+                </a>
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
