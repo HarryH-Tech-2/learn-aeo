@@ -39,3 +39,20 @@ describe("unknown lesson addresses (SEO audit 2026-10-30)", () => {
     expect(isRedirect("/lessons/running-an-aeo-program/anything")).toBe(true);
   });
 });
+
+describe("country cookie", () => {
+  const visit = (headers: Record<string, string>) => middleware(new NextRequest("http://localhost/pricing", { headers }));
+
+  it("stamps the country on a first visit", () => {
+    expect(visit({ "x-vercel-ip-country": "PA" }).cookies.get("aeo_cc")?.value).toBe("PA");
+  });
+
+  it("re-stamps it when the visitor's country has changed", () => {
+    expect(visit({ "x-vercel-ip-country": "GB", cookie: "aeo_cc=PA" }).cookies.get("aeo_cc")?.value).toBe("GB");
+  });
+
+  it("leaves it alone when unchanged, or when there is no geo header", () => {
+    expect(visit({ "x-vercel-ip-country": "PA", cookie: "aeo_cc=PA" }).cookies.get("aeo_cc")).toBeUndefined();
+    expect(visit({ cookie: "aeo_cc=PA" }).cookies.get("aeo_cc")).toBeUndefined();
+  });
+});

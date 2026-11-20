@@ -44,12 +44,13 @@ function withAccessCookie(request: NextRequest, response: NextResponse): void {
  *  client components can show local pricing without a round trip. Also the free-unlock test group. */
 function withCountryCookie(request: NextRequest, response: NextResponse): NextResponse {
   withAccessCookie(request, response);
-  if (request.cookies.get(COUNTRY_COOKIE)) return response;
   const country =
     request.headers.get("x-vercel-ip-country") ??
     (request as NextRequest & { geo?: { country?: string } }).geo?.country ??
     null;
-  if (country) {
+  // Re-stamp when the visitor's country changes (they traveled), so a 30-day-old cookie
+  // doesn't keep showing another country's prices. With no geo header (local dev) the cookie stays.
+  if (country && request.cookies.get(COUNTRY_COOKIE)?.value !== country) {
     response.cookies.set(COUNTRY_COOKIE, country, {
       path: "/",
       maxAge: 60 * 60 * 24 * 30,
