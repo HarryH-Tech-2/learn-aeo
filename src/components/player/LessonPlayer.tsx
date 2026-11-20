@@ -17,6 +17,7 @@ import {
   type Step,
 } from "@/lib/lesson-flow";
 import { isLessonComplete } from "@/lib/pass-mark";
+import { conceptBeats } from "@/lib/concept-beats";
 import { XP_REWARDS } from "@/lib/gamification";
 import { trackEvent } from "@/lib/analytics";
 import UpgradePanel from "@/components/lesson/UpgradePanel";
@@ -220,13 +221,30 @@ export default function LessonPlayer({ lesson, onXP, onAuditComplete, upgrade, n
     trackEvent("concept_confidence", { lesson_id: lesson.id, concept_id: conceptId, confidence: c });
   };
 
+  // A concept card opens a beat at a time (src/lib/concept-beats.ts): the main button reveals the next beat until
+  // the card is whole, then moves on. A card already read in this sitting opens whole when revisited.
+  const [beatsShown, setBeatsShown] = useState(1);
+  const [readCards, setReadCards] = useState<ReadonlySet<number>>(() => new Set());
+  const beatsTotal = step.kind === "concept" ? conceptBeats(content.groups[step.group].concepts[step.concept]).length : 0;
+  const moreBeats = step.kind === "concept" && !readCards.has(index) && beatsShown < beatsTotal;
+  const showWholeCard = () => setBeatsShown(beatsTotal);
+
   const goNext = () => {
+    if (moreBeats) {
+      setBeatsShown((n) => n + 1);
+      return;
+    }
     if (step.kind === "concept") {
+      setReadCards((seen) => new Set(seen).add(index));
       award(conceptKey(content.groups[step.group].concepts[step.concept].id), XP_REWARDS.conceptRead);
     }
+    setBeatsShown(1);
     setIndex((i) => Math.min(i + 1, steps.length - 1));
   };
-  const goBack = () => setIndex((i) => Math.max(i - 1, 0));
+  const goBack = () => {
+    setBeatsShown(1);
+    setIndex((i) => Math.max(i - 1, 0));
+  };
 
   const finishAudit = (answers: boolean[]) => {
     const total = answers.length;
@@ -280,6 +298,8 @@ export default function LessonPlayer({ lesson, onXP, onAuditComplete, upgrade, n
             eyebrow={`${group.title} · ${s.concept + 1} of ${group.concepts.length}`}
             confidence={confidence[group.concepts[s.concept].id]}
             onConfidence={(c) => rateConcept(group.concepts[s.concept].id, c)}
+            shown={readCards.has(index) ? undefined : beatsShown}
+            onShowAll={showWholeCard}
           />
         );
       }
@@ -401,8 +421,8 @@ export default function LessonPlayer({ lesson, onXP, onAuditComplete, upgrade, n
             disabled={!canGoNext}
             title={canGoNext ? undefined : "Finish the audit to carry on"}
           >
-            Next
-            <span aria-hidden="true">→</span>
+            {moreBeats ? "Continue" : "Next"}
+            <span aria-hidden="true">{moreBeats ? "↓" : "→"}</span>
           </button>
         ) : (
           <span className="w-[5.5rem]" aria-hidden="true" />

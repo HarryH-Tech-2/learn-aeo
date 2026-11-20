@@ -8,6 +8,8 @@ import BeforeAfterPredict from "./BeforeAfterPredict";
 import ConfidenceCheck from "./ConfidenceCheck";
 import ConceptQuiz from "./ConceptQuiz";
 import type { Confidence } from "@/lib/concept-confidence";
+import { conceptBeats, type Beat } from "@/lib/concept-beats";
+import { BeatDots, BeatReveal, PitfallReveal } from "./BeatParts";
 import { EYEBROW, FOCUS, HEADING, PROSE, formatSourceDate } from "./ui";
 
 const MD_CLASSES =
@@ -69,54 +71,99 @@ type Props = {
   /** The learner's own "got it / not sure" rating; the check shows only when onConfidence is given. */
   confidence?: Confidence;
   onConfidence?: (c: Confidence) => void;
+  /**
+   * How many beats (src/lib/concept-beats.ts) to show so far. Leave it out to show the whole card at once, with
+   * the pitfall already open: a card the learner has come back to, and any render outside the player.
+   */
+  shown?: number;
+  /** Shown beside the progress dots while beats are still hidden. */
+  onShowAll?: () => void;
 };
 
-export default function ConceptCard({ concept, eyebrow, confidence, onConfidence }: Props) {
-  const { id, term, summary, explanation, whyItMatters, example, pitfall, sources, quiz } = concept;
+export default function ConceptCard({ concept, eyebrow, confidence, onConfidence, shown, onShowAll }: Props) {
+  const { id, term, summary, whyItMatters, example, pitfall, sources, quiz } = concept;
+  const beats = conceptBeats(concept);
+  const stepped = shown !== undefined;
+  const count = stepped ? Math.max(1, Math.min(shown, beats.length)) : beats.length;
+
+  const markdown = (text: string) => (
+    <div className={MD_CLASSES}>
+      <Markdown remarkPlugins={[remarkGfm]} components={MD_COMPONENTS}>
+        {text}
+      </Markdown>
+    </div>
+  );
+
+  function renderBeat(beat: Beat): ReactNode {
+    switch (beat.kind) {
+      case "idea":
+        return (
+          <div className="space-y-7">
+            <p className="key-idea max-w-[68ch] font-sans text-lg font-semibold leading-snug text-sand-100">
+              <span className="key-idea-label">Key idea</span>
+              {summary}
+            </p>
+            {markdown(beat.markdown)}
+          </div>
+        );
+      case "explain":
+        return markdown(beat.markdown);
+      case "quiz":
+        return quiz ? <ConceptQuiz key={quiz.id} question={quiz} conceptId={id} /> : null;
+      case "why":
+        return (
+          <Section title="Why it matters">
+            <p className={PROSE}>{whyItMatters}</p>
+          </Section>
+        );
+      case "example":
+        if (example?.kind === "code") return <CodeBlock language={example.language} code={example.code} caption={example.caption} />;
+        if (example?.kind === "before-after") return <BeforeAfterPredict example={example} conceptId={id} />;
+        return null;
+      case "pitfall":
+        return <PitfallReveal text={pitfall} startOpen={!stepped} />;
+      case "wrap":
+        return (
+          <div className="space-y-7">
+            {onConfidence && <ConfidenceCheck value={confidence} onChange={onConfidence} />}
+            {sources.length > 0 && (
+              <Section title="Sources">
+                <ul className="space-y-2 font-sans text-sm leading-relaxed">
+                  {sources.map((s, i) => (
+                    <li key={`${i}:${s.url}`}>
+                      <SourceLink source={s} />
+                    </li>
+                  ))}
+                </ul>
+              </Section>
+            )}
+          </div>
+        );
+    }
+  }
+
   return (
     <article className="space-y-7">
       <header className="space-y-2">
         {eyebrow && <p className={EYEBROW}>{eyebrow}</p>}
         <h2 className={HEADING}>{term}</h2>
+        {stepped && beats.length > 1 && (
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-1">
+            <BeatDots shown={count} total={beats.length} />
+            {count < beats.length && onShowAll && (
+              <button type="button" onClick={onShowAll} className={`font-sans text-sm text-sand-400 underline underline-offset-4 hover:text-cyan-400 ${FOCUS}`}>
+                Show the whole card
+              </button>
+            )}
+          </div>
+        )}
       </header>
 
-      <p className="key-idea max-w-[68ch] font-sans text-lg font-semibold leading-snug text-sand-100">
-        <span className="key-idea-label">Key idea</span>
-        {summary}
-      </p>
-
-      <div className={MD_CLASSES}>
-        <Markdown remarkPlugins={[remarkGfm]} components={MD_COMPONENTS}>
-          {explanation}
-        </Markdown>
-      </div>
-
-      {quiz && <ConceptQuiz key={quiz.id} question={quiz} conceptId={id} />}
-
-      <Section title="Why it matters">
-        <p className={PROSE}>{whyItMatters}</p>
-      </Section>
-
-      {example?.kind === "code" && <CodeBlock language={example.language} code={example.code} caption={example.caption} />}
-      {example?.kind === "before-after" && <BeforeAfterPredict example={example} conceptId={id} />}
-
-      <Section title="Pitfall" tone="warn">
-        <p className={PROSE}>{pitfall}</p>
-      </Section>
-
-      {onConfidence && <ConfidenceCheck value={confidence} onChange={onConfidence} />}
-
-      {sources.length > 0 && (
-        <Section title="Sources">
-          <ul className="space-y-2 font-sans text-sm leading-relaxed">
-            {sources.map((s, i) => (
-              <li key={`${i}:${s.url}`}>
-                <SourceLink source={s} />
-              </li>
-            ))}
-          </ul>
-        </Section>
-      )}
+      {beats.slice(0, count).map((beat, i) => (
+        <BeatReveal key={i} fresh={stepped && i > 0 && i === count - 1}>
+          {renderBeat(beat)}
+        </BeatReveal>
+      ))}
     </article>
   );
 }
