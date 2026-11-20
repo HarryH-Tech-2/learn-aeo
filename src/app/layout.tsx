@@ -1,3 +1,4 @@
+import ParticleField from "@/components/ParticleField";
 import type { Metadata, Viewport } from "next";
 import { THEME_INIT_SCRIPT, THEME_COLOR } from "@/lib/theme";
 import { gaCountryBlockScript, trafficTypeScript } from "@/lib/traffic-type";
@@ -146,6 +147,7 @@ export default function RootLayout({
             </Script>
           </>
         )}
+        <ParticleField />
         <Providers>
           <ThemeProvider>
             <AuthModalProvider>{children}</AuthModalProvider>

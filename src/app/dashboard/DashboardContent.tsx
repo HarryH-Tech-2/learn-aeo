@@ -131,7 +131,7 @@ function DashboardInner() {
 
   if (status === "loading") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-obsidian">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="font-body text-sand-500 text-sm">
             Loading your dashboard...
@@ -154,7 +154,7 @@ function DashboardInner() {
   const allCompleted = completedCount === LESSON_CATALOG.length;
 
   return (
-    <div className="min-h-screen bg-obsidian grain-overlay flex flex-col">
+    <div className="min-h-screen grain-overlay flex flex-col">
       {/* Toast */}
       <AnimatePresence>
         {toast && (

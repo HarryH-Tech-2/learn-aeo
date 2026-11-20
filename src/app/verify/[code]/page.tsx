@@ -27,7 +27,7 @@ export default async function VerifyPage({ params }: { params: Promise<{ code: s
   if (!cert) notFound();
 
   return (
-    <main className="grain-overlay min-h-screen flex items-center justify-center px-4 py-20 bg-obsidian">
+    <main className="grain-overlay min-h-screen flex items-center justify-center px-4 py-20">
       <div className="w-full max-w-lg border border-gold-700/30 bg-obsidian-light px-6 py-10 sm:px-10 text-center">
         <p className="font-body text-xs uppercase tracking-[0.2em] text-cyan-400 mb-4">
           <span aria-hidden="true">✓ </span>Verified

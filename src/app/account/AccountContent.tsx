@@ -74,7 +74,7 @@ export default function AccountContent() {
 
   if (status === "loading") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-obsidian">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <span className="mx-auto mb-4 block h-10 w-10 rounded-full border-2 border-cyan-500/30 border-t-cyan-500 animate-spin" aria-hidden="true" />
           <p className="font-body text-sand-500 text-sm">Loading your account...</p>
@@ -134,7 +134,7 @@ export default function AccountContent() {
   const isSubscription = subscription?.via === "monthly" || subscription?.via === "yearly";
 
   return (
-    <div className="min-h-screen bg-obsidian grain-overlay flex flex-col">
+    <div className="min-h-screen grain-overlay flex flex-col">
       {/* Toast */}
       {toast && (
         <motion.div

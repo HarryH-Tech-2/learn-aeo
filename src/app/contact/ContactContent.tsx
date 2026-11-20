@@ -37,7 +37,7 @@ const ROUTES = [
 
 export default function ContactContent() {
   return (
-    <div className="min-h-screen bg-obsidian grain-overlay">
+    <div className="min-h-screen grain-overlay">
       <JsonLd data={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Contact", path: "/contact" }])} />
       <Navbar />
 

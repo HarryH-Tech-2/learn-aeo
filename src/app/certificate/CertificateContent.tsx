@@ -130,7 +130,7 @@ export default function CertificateContent() {
 
   if (status === "loading" || allCompleted === null) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-obsidian">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <span className="text-5xl block mb-4 animate-pulse" aria-hidden="true">✦</span>
           <p className="font-body text-sand-500 text-sm">
@@ -143,7 +143,7 @@ export default function CertificateContent() {
 
   if (!session) {
     return (
-      <div className="min-h-screen bg-obsidian grain-overlay">
+      <div className="min-h-screen grain-overlay">
         <Navbar />
         <div className="max-w-3xl mx-auto px-6 pt-28 pb-20 text-center">
           <span className="text-5xl block mb-4" aria-hidden="true">✦</span>
@@ -164,7 +164,7 @@ export default function CertificateContent() {
 
   if (!allCompleted) {
     return (
-      <div className="min-h-screen bg-obsidian grain-overlay">
+      <div className="min-h-screen grain-overlay">
         <Navbar />
         <div className="max-w-3xl mx-auto px-6 pt-28 pb-20 text-center">
           <span className="text-5xl block mb-4" aria-hidden="true">✦</span>
@@ -209,7 +209,7 @@ export default function CertificateContent() {
   }
 
   return (
-    <div className="min-h-screen bg-obsidian grain-overlay">
+    <div className="min-h-screen grain-overlay">
       <Navbar />
       <canvas ref={canvasRef} className="hidden" />
 

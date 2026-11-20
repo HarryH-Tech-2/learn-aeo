@@ -15,7 +15,7 @@ export const metadata: Metadata = pageMetadata({
 
 export default function LeaderboardPage() {
   return (
-    <div className="min-h-screen bg-obsidian grain-overlay flex flex-col">
+    <div className="min-h-screen grain-overlay flex flex-col">
       <Navbar />
       <div className="max-w-3xl mx-auto px-6 lg:px-8 pt-28 pb-20 flex-1 w-full">
         <div className="mb-8">

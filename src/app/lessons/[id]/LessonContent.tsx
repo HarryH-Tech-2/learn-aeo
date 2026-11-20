@@ -36,7 +36,7 @@ function isPlayable(l: LessonResponse): l is LiveLesson & { preview?: boolean } 
 }
 
 // (bg-obsidian, not bg-ink: ink stays dark in the light theme, obsidian follows it)
-const PAGE = "min-h-screen bg-obsidian flex flex-col";
+const PAGE = "min-h-screen flex flex-col";
 const MAIN = "mx-auto w-full max-w-5xl flex-1 px-4 pb-20 pt-28 sm:px-6 lg:px-8";
 const PANEL = "mx-auto max-w-2xl rounded-2xl border border-sand-500/25 bg-obsidian-light p-6 sm:p-10";
 
@@ -176,7 +176,7 @@ export default function LessonContent({ overview }: { overview?: React.ReactNode
       );
     }
     return (
-      <div className="min-h-screen flex items-center justify-center bg-obsidian" role="status">
+      <div className="min-h-screen flex items-center justify-center" role="status">
         <div className="flex flex-col items-center gap-4">
           <svg className="h-8 w-8 text-cyan-400 motion-safe:animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <circle cx="12" cy="12" r="10" stroke="currentColor" strokeOpacity="0.25" strokeWidth="3" />

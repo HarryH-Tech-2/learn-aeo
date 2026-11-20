@@ -706,6 +706,167 @@ html.js:not(.anim-ready) .nav-cta::after {
   animation-play-state: paused;
 }
 
+/* ── Particle background (src/components/ParticleField.tsx): fixed behind every page ── */
+.particle-field {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+@media print {
+  .particle-field {
+    display: none;
+  }
+}
+
+/* ── About page ── */
+.about-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  width: calc(100% - 3rem);
+  border: 1px solid rgba(90, 160, 240, 0.18);
+  border-radius: 1rem;
+  overflow: hidden;
+  background: rgba(90, 160, 240, 0.18);
+}
+@media (min-width: 768px) {
+  .about-stats {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+.about-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 1.5rem 0.75rem;
+  text-align: center;
+  background: var(--rt-obsidian-light);
+}
+.about-stat:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+@media (min-width: 768px) {
+  .about-stat:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+}
+.about-roadmap {
+  position: relative;
+  display: grid;
+  gap: 1.25rem;
+}
+.about-roadmap::before {
+  content: "";
+  position: absolute;
+  left: 1.25rem;
+  top: 1.5rem;
+  bottom: 1.5rem;
+  width: 2px;
+  margin-left: -1px;
+  background: linear-gradient(to bottom, var(--rt-cyan-500), rgba(90, 160, 240, 0.1));
+  opacity: 0.5;
+}
+.about-part {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+.about-part > div {
+  padding: 1.25rem 1.5rem;
+  border: 1px solid rgba(90, 160, 240, 0.15);
+  border-radius: 1rem;
+  background: var(--rt-obsidian-light);
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+.about-part:hover > div {
+  border-color: rgba(111, 227, 255, 0.45);
+  transform: translateX(4px);
+}
+.about-part-num {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-top: 1rem;
+  border-radius: 9999px;
+  border: 2px solid var(--rt-cyan-500);
+  background: var(--rt-obsidian);
+  color: var(--rt-cyan-500);
+  font-weight: 700;
+}
+.about-lesson-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid rgba(90, 160, 240, 0.2);
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  color: var(--rt-sand-200);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+a.about-lesson-chip:hover {
+  border-color: var(--rt-cyan-500);
+  background: rgba(111, 227, 255, 0.08);
+}
+.about-step {
+  padding: 1.5rem;
+  border: 1px solid rgba(90, 160, 240, 0.15);
+  border-radius: 1rem;
+  background: var(--rt-obsidian-light);
+}
+.about-source-chip {
+  padding: 0.35rem 0.8rem;
+  border: 1px solid rgba(90, 160, 240, 0.2);
+  border-radius: 9999px;
+  background: var(--rt-obsidian-light);
+  font-size: 0.875rem;
+  color: var(--rt-sand-200);
+}
+.about-author {
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.75rem;
+  border: 1px solid rgba(90, 160, 240, 0.18);
+  border-radius: 1rem;
+  background: var(--rt-obsidian-light);
+}
+@media (min-width: 640px) {
+  .about-author {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 1.75rem;
+  }
+}
+.about-author-avatar {
+  display: grid;
+  place-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, var(--rt-cyan-600), var(--rt-cyan-700));
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+@media (prefers-reduced-motion: reduce) {
+  .about-part > div {
+    transition: none;
+  }
+  .about-part:hover > div {
+    transform: none;
+  }
+}
+
 /* ── Utility Classes ── */
 .grain-overlay::before {
   content: "";
@@ -2046,4 +2207,68 @@ html.light .city-hero-vignette {
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--rt-cyan-400);
+}
+
+/* ── Concept cards, a beat at a time (src/components/player/BeatParts.tsx) ── */
+@keyframes beat-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+.beat-in {
+  animation: beat-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.beat-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.beat-dot {
+  width: 1.25rem;
+  height: 0.3rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--rt-sand-500) 35%, transparent);
+  transition: background-color 0.3s ease;
+}
+.beat-dot-on {
+  background: var(--rt-cyan-500);
+}
+.pitfall-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  width: 100%;
+  max-width: 68ch;
+  padding: 1rem 1.15rem;
+  border-radius: 1rem;
+  border: 1px dashed color-mix(in srgb, var(--rt-gold-500) 60%, transparent);
+  background: color-mix(in srgb, var(--rt-gold-500) 6%, transparent);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+.pitfall-card:hover {
+  border-color: var(--rt-gold-500);
+  background: color-mix(in srgb, var(--rt-gold-500) 11%, transparent);
+  transform: translateY(-1px);
+}
+.pitfall-card-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rt-gold-400);
+}
+@media (prefers-reduced-motion: reduce) {
+  .beat-in {
+    animation: none;
+  }
+  .pitfall-card,
+  .beat-dot {
+    transition: none;
+  }
+  .pitfall-card:hover {
+    transform: none;
+  }
 }

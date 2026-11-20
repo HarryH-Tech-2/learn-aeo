@@ -132,7 +132,7 @@ export default function CheckoutContent() {
 
   if (left) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-obsidian px-6">
+      <div className="min-h-screen flex items-center justify-center px-6">
         <div className="text-center max-w-sm">
           <span className="mx-auto mb-4 block h-px w-16 bg-gold-500/60" aria-hidden="true" />
           <p className="font-body text-sand-200 mb-1">You left checkout.</p>
@@ -158,7 +158,7 @@ export default function CheckoutContent() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-obsidian">
+    <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
         <span className="mx-auto mb-4 block h-10 w-10 rounded-full border-2 border-cyan-500/30 border-t-cyan-500 animate-spin" aria-hidden="true" />
         <p className="font-body text-sand-400 text-sm">
