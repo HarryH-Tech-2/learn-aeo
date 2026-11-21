@@ -52,9 +52,7 @@ const faqs = [
   },
   {
     question: "What is in the course?",
-    answer: `${TOTAL} lessons, one for each district of the City of Answers: ${LESSON_CATALOG.map(
-      (l) => `${l.district} (${titleMidSentence(l.title)})`,
-    ).join(", ")}. Each lesson mixes short explanations with checks, hands-on exercises and an audit at the end.`,
+    answer: `${TOTAL} lessons: ${LESSON_CATALOG.map((l) => titleMidSentence(l.title)).join(", ")}. Each lesson mixes short explanations with checks, hands-on exercises and an audit at the end.`,
   },
   {
     question: "Are all the lessons out yet?",

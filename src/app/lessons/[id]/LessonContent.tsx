@@ -192,11 +192,11 @@ export default function LessonContent({ overview }: { overview?: React.ReactNode
     return (
       <Shell>
         <section className={PANEL}>
-          <p className={`${EYEBROW} mb-3`}>{lesson.district}</p>
+          <p className={`${EYEBROW} mb-3`}>Lesson {lesson.order}</p>
           <h1 className="font-display text-3xl sm:text-4xl text-sand-100 mb-4">{lesson.title}</h1>
           <p className="font-sans text-base leading-relaxed text-sand-300 mb-6">{lesson.description}</p>
           <p className="font-sans text-sm text-sand-200 mb-8 rounded-xl border border-cyan-500/30 bg-obsidian-lighter p-4">
-            This district opens soon. Lifetime access includes every new lesson.
+            This lesson opens soon. Lifetime access includes every new lesson.
           </p>
           <Link href="/dashboard" className={BTN_SECONDARY}>
             Back to the dashboard

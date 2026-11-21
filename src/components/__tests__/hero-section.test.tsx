@@ -1,11 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 
-// Review Focus 4: the headline, subline and CTA are in the server HTML, visible without JS or WebGL.
+// Review Focus 4: the headline, subline and CTA are in the server HTML, visible without JS.
 vi.mock("next-auth/react", () => ({ useSession: () => ({ data: null, status: "unauthenticated" }) }));
 vi.mock("@/components/AuthModal", () => ({ useAuthModal: () => ({ openAuthModal: vi.fn() }) }));
 
 import { renderToStaticMarkup } from "react-dom/server";
 import HeroSection from "@/components/HeroSection";
+import { LESSON_CATALOG } from "@/lib/lesson-catalog";
 
 describe("HeroSection server render", () => {
   const html = renderToStaticMarkup(<HeroSection />);
@@ -24,10 +25,17 @@ describe("HeroSection server render", () => {
   it("never hides the copy in the server HTML", () => {
     expect(html).not.toMatch(/<h1[^>]*opacity-0/);
     expect(html).not.toMatch(/class="[^"]*\bopacity-0\b[^"]*"[^>]*>[\s\S]*Start lesson 1/);
-    expect(html).not.toMatch(/city-hero-copy[^"]*\bhidden\b/);
+    expect(html).not.toMatch(/home-hero-copy[^"]*\bhidden\b/);
   });
 
-  it("renders a canvas host but no WebGL content on the server", () => {
-    expect(html).toContain("city-hero-canvas");
+  it("shows the mock cited answer as one labeled picture, with no video or canvas", () => {
+    expect(html).toContain("hero-answer");
+    expect(html).toMatch(/role="img" aria-label="An AI answer that cites three sources/);
+    expect(html).not.toMatch(/<video|<canvas/);
+  });
+
+  it("lists the course facts from the catalog", () => {
+    expect(html).toContain(`${LESSON_CATALOG.length} lessons`);
+    expect(html).toContain("Lesson 1 is free");
   });
 });

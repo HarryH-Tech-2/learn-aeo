@@ -197,8 +197,8 @@ export default function AccountContent() {
           {/* Shortcuts */}
           <nav aria-label="Account shortcuts" className="grid grid-cols-3 gap-3 mb-6">
             <Link href="/dashboard" className="acct-shortcut">
-              <span aria-hidden="true">🗺️</span>
-              City map
+              <span aria-hidden="true">📚</span>
+              My lessons
             </Link>
             <Link href="/dashboard?tab=badges" className="acct-shortcut">
               <span aria-hidden="true">🏅</span>

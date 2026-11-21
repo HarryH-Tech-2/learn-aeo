@@ -53,7 +53,7 @@ Do all of this in **test mode** first, then again in **live mode** with `--live`
    `STRIPE_SECRET_KEY=sk_test_... STRIPE_PRICE_ID=price_... STRIPE_PRICE_MONTHLY=price_... STRIPE_PRICE_YEARLY=price_... NEXT_PUBLIC_SITE_URL=https://<preview url> node scripts/stripe-check-launch.mjs`
    In live mode, drop `NEXT_PUBLIC_SITE_URL` (it then checks www.learnaeo.com) and add `--live`.
    *Worked when:* it prints ✓ and the price audit passes, with exit code 0.
-   If it says the `NEXT-DISTRICT-33` coupon must be limited to the Lifetime product, delete that coupon in the dashboard and re-run step 3. Do this before the site is live: deleting the coupon also cancels every open 33% offer code.
+   If it says the `NEXT-LESSON-33` coupon must be limited to the Lifetime product, delete that coupon in the dashboard and re-run step 3. Do this before the site is live: deleting the coupon also cancels every open 33% offer code.
 
 ## 5. Analytics
 
@@ -131,7 +131,7 @@ Then, on `https://<preview url>`:
 
 These pages have never been seen rendered with a database. Check each one at desktop width (dark) and at phone width (light):
 
-- [ ] Dashboard city map, XP, level title and badge shelf.
+- [ ] Dashboard lesson list, XP, level title and badge shelf.
 - [ ] Certificate: download the PNG, then open its `/verify/<code>` link (lowercase too, which redirects).
 - [ ] Leaderboard, and an account rename (the leaderboard and new certificates show the new name).
 - [ ] Newsletter sign-up, the welcome email, and its unsubscribe link.

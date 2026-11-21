@@ -127,10 +127,10 @@ describe("renderNurtureEmail", () => {
     for (const email of [fresh, partWay]) expect(email.html).toContain(`${base}${FIRST_LESSON_PATH}?utm_source=nurture`);
   });
 
-  it("next-door recaps what the learner covered in The Gate and names the next district", () => {
+  it("next-door recaps what the learner covered in Lesson 1 and names the next lesson", () => {
     const e = renderNurtureEmail("next-door", sampleContext(base, { lesson1Completed: true, lesson1Started: true }));
-    expect(e.subject).toBe("What you learned in The Gate");
-    expect(e.html).toContain(LESSON_CATALOG[1].district);
+    expect(e.subject).toBe("What you learned in Lesson 1");
+    expect(e.html).toContain(`Next is Lesson ${LESSON_CATALOG[1].order}`);
     expect(e.text).toContain(LESSON_CATALOG[1].title);
   });
 

@@ -72,7 +72,7 @@ export default function SchemaGeneratorPage() {
           </p>
           <p>
             Lesson 4,{" "}
-            <Link href="/lessons/structured-data-and-entities" className="text-cyan-400 underline underline-offset-2">The Schema Works</Link>,
+            <Link href="/lessons/structured-data-and-entities" className="text-cyan-400 underline underline-offset-2">Structured data and entities</Link>,
             covers structured data, entities and sameAs in depth.
           </p>
         </>

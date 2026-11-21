@@ -30,7 +30,7 @@ export async function generateMetadata({
   return pageMetadata({
     title: lesson.title,
     // The summary first (the line a result shows), then where it sits in the course.
-    description: `${lesson.summary} Lesson ${lesson.order} of the Learn AEO course: ${lesson.district}${lesson.isFree ? ", free with sign-in" : ""}.`,
+    description: `${lesson.summary} Lesson ${lesson.order} of the Learn AEO course${lesson.isFree ? ", free with sign-in" : ""}.`,
     path: lessonPath(id),
     type: "article",
     // The share image comes from ./opengraph-image.tsx.

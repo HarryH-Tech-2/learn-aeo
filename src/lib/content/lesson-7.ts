@@ -1,4 +1,4 @@
-// Lesson 7, The Observatory: measuring AI visibility.
+// Lesson 7: measuring AI visibility.
 // Claims about Google Analytics, Search Console, Bing Webmaster Tools, ChatGPT,
 // HTTP, server logs and crawler verification are tied to sources checked on the
 // `accessed` date. Mention rate, citation rate and share of voice are this
@@ -191,10 +191,10 @@ const APACHE_LOGS: Source = {
 
 export const LESSON_7: LessonContent = {
   intro:
-    "You have reached The Observatory, the seventh district of the City of Answers. From up here you can watch the whole city: which questions get asked, whose names come up in the answers, and who walks through your door afterwards. In this district you build the instruments: a versioned prompt set run under fixed conditions, a few honest metrics and a log to back them, the right reports in Analytics, Search Console and Bing, and a look at your own server logs.",
+    "This lesson is about measurement: which questions get asked, whose names come up in the answers, and who visits your site afterwards. You build the instruments: a versioned prompt set run under fixed conditions, a few honest metrics and a log to back them, the right reports in Analytics, Search Console and Bing, and a look at your own server logs.",
 
   outro:
-    "You leave The Observatory with a prompt set you can rerun, a method that allows for answers changing from run to run, metrics you can define in one line, AI traffic separated out in Google Analytics with its limits stated, first-party reports from Google and Bing, and a way to check which bots really visit. Next stop is The Citadel, the last district, where you turn everything into a program the business will back.",
+    "You now have a prompt set you can rerun, a method that allows for answers changing from run to run, metrics you can define in one line, AI traffic separated out in Google Analytics with its limits stated, first-party reports from Google and Bing, and a way to check which bots really visit. Lesson 8 is next, the last of the core program, where you turn everything into a program the business will back.",
 
   groups: [
     {
@@ -659,7 +659,7 @@ export const LESSON_7: LessonContent = {
           term: "AI bots in your server logs",
           summary: "Server logs show which AI bots really fetch your pages, what they asked for and what your server answered.",
           explanation:
-            "Analytics tags don't run for bots, so your server or CDN logs are where crawler visits show up. In Apache's Combined Log Format, each line ends with two quoted headers: the Referer, which \"gives the site that the client reports having been referred from\", and the User-Agent: \"This is the identifying information that the client browser reports about itself.\"\n\nFilter the user-agent field for the names from The Crawl Docks, and read them by job:\n\n- **Search crawlers** that gather pages for AI search results: OAI-SearchBot, Claude-SearchBot, PerplexityBot.\n- **User-triggered fetchers** that visit while answering someone: ChatGPT-User, Claude-User, Perplexity-User. OpenAI notes that \"Because these actions are initiated by a user, robots.txt rules may not apply.\"\n- **Training crawlers**: GPTBot, ClaudeBot.\n\nFor each, track which URLs it requested, the status codes it got and how often it came back. A run of 403s or 5xx errors on your key pages is something no other report will show you.",
+            "Analytics tags don't run for bots, so your server or CDN logs are where crawler visits show up. In Apache's Combined Log Format, each line ends with two quoted headers: the Referer, which \"gives the site that the client reports having been referred from\", and the User-Agent: \"This is the identifying information that the client browser reports about itself.\"\n\nFilter the user-agent field for the names from Lesson 2, and read them by job:\n\n- **Search crawlers** that gather pages for AI search results: OAI-SearchBot, Claude-SearchBot, PerplexityBot.\n- **User-triggered fetchers** that visit while answering someone: ChatGPT-User, Claude-User, Perplexity-User. OpenAI notes that \"Because these actions are initiated by a user, robots.txt rules may not apply.\"\n- **Training crawlers**: GPTBot, ClaudeBot.\n\nFor each, track which URLs it requested, the status codes it got and how often it came back. A run of 403s or 5xx errors on your key pages is something no other report will show you.",
           whyItMatters:
             "Logs answer questions no other report can: is OAI-SearchBot actually reaching the pages you care about, and did that firewall change really let PerplexityBot back in?",
           example: {

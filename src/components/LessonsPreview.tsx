@@ -41,9 +41,9 @@ export default function LessonsPreview() {
             className="reveal font-display text-4xl md:text-5xl lg:text-6xl font-light text-sand-100 mb-6"
             style={reveal(0.1, { y: 30 })}
           >
-            {LESSON_CATALOG.length} districts,
+            {LESSON_CATALOG.length} lessons,
             <br />
-            <span className="text-gradient-gold font-medium">one City of Answers</span>
+            <span className="text-gradient-gold font-medium">one complete AEO course</span>
           </h2>
         </div>
 
@@ -74,7 +74,7 @@ export default function LessonsPreview() {
                       >
                         <div className="min-w-0">
                           <span className="font-body text-[10px] tracking-[0.2em] uppercase text-sand-500 block">
-                            {lesson.order} · {lesson.district}
+                            Lesson {lesson.order}
                           </span>
                           <h4 className="font-display text-base md:text-lg font-semibold text-sand-100 mt-0.5 truncate">
                             {lesson.title}

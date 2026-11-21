@@ -1,9 +1,9 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { lessonPath } from "@/lib/lesson-catalog";
-import type { DistrictStatus, DistrictView } from "@/lib/city-map";
+import type { ProgressStatus, LessonView } from "@/lib/lesson-progress";
 
-const STATUS: Record<DistrictStatus, { label: string; badge: string; card: string; num: string }> = {
+const STATUS: Record<ProgressStatus, { label: string; badge: string; card: string; num: string }> = {
   done: {
     label: "Completed",
     badge: "text-gold-400 border-gold-500/40 bg-gold-500/10",
@@ -38,11 +38,11 @@ const STATUS: Record<DistrictStatus, { label: string; badge: string; card: strin
 
 const FOCUS = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan";
 
-function Card({ d, children }: { d: DistrictView; children: ReactNode }) {
-  const s = STATUS[d.districtStatus];
+function Card({ d, children }: { d: LessonView; children: ReactNode }) {
+  const s = STATUS[d.progressStatus];
   const base = `block min-w-0 border bg-obsidian-light p-4 sm:p-5 transition-colors ${s.card}`;
-  if (d.districtStatus === "coming-soon") return <div className={base}>{children}</div>;
-  const href = d.districtStatus === "locked" ? "/pricing" : lessonPath(d.id);
+  if (d.progressStatus === "coming-soon") return <div className={base}>{children}</div>;
+  const href = d.progressStatus === "locked" ? "/pricing" : lessonPath(d.id);
   return (
     <Link href={href} className={`${base} hover:bg-obsidian-lighter ${FOCUS}`}>
       {children}
@@ -50,15 +50,15 @@ function Card({ d, children }: { d: DistrictView; children: ReactNode }) {
   );
 }
 
-/** The districts of the City of Answers, in order, along one path. */
-export default function CityMap({ districts }: { districts: DistrictView[] }) {
+/** Every lesson in the course, in order, with where the learner stands on each. */
+export default function LessonList({ lessons }: { lessons: LessonView[] }) {
   return (
-    <ol className="relative space-y-4" aria-label="Districts of the City of Answers">
+    <ol className="relative space-y-4" aria-label="Course lessons">
       <span aria-hidden="true" className="absolute left-5 top-5 bottom-5 w-px bg-sand-500/25" />
-      {districts.map((d) => {
-        const s = STATUS[d.districtStatus];
+      {lessons.map((d) => {
+        const s = STATUS[d.progressStatus];
         return (
-          <li key={d.id} data-district={d.id} className="relative flex gap-4 items-start">
+          <li key={d.id} data-lesson={d.id} className="relative flex gap-4 items-start">
             <span
               aria-hidden="true"
               className={`relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border font-display text-xl ${s.num}`}
@@ -69,7 +69,7 @@ export default function CityMap({ districts }: { districts: DistrictView[] }) {
               <Card d={d}>
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
                   <p className="font-sans text-xs tracking-[0.15em] uppercase text-sand-400">
-                    District {d.order}: {d.district}
+                    Lesson {d.order}
                   </p>
                   <span className={`font-sans text-[11px] tracking-wide uppercase border px-2 py-0.5 ${s.badge}`}>{s.label}</span>
                 </div>
@@ -77,10 +77,10 @@ export default function CityMap({ districts }: { districts: DistrictView[] }) {
                 <p className="font-sans text-sm text-sand-400 mb-2">{d.summary}</p>
                 <p className="font-sans text-xs text-sand-500">
                   <span className="capitalize">{d.level}</span> · {d.minutes} min
-                  {d.districtStatus === "done" && d.bestScore !== null
+                  {d.progressStatus === "done" && d.bestScore !== null
                     ? ` · Best score ${d.bestScore}${d.auditTotal !== null ? ` of ${d.auditTotal}` : ""}`
                     : ""}
-                  {d.districtStatus === "next" && d.started ? " · In progress" : ""}
+                  {d.progressStatus === "next" && d.started ? " · In progress" : ""}
                 </p>
               </Card>
             </div>

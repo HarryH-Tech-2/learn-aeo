@@ -58,7 +58,7 @@ export async function POST(request: Request) {
   await recordQuizScore(user.id, lesson.id, score, total);
 
   // Finishing the free lesson is the highest-intent moment we have: open a
-  // 24-hour "next district" offer (no-op for paying users) and email it.
+  // 24-hour "next lesson" offer (no-op for paying users) and email it.
   let offer = null;
   // (no offer where the visitor's purchasing-power price is already lower: see pppBeatsOffer)
   const pppLower = pppBeatsOffer(requestCountry(request), OFFER_PERCENT_OFF);

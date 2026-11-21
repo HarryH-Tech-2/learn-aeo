@@ -110,10 +110,10 @@ export default function AboutContent() {
             what you already do for search, and some things you probably don&rsquo;t do yet.
           </p>
           <p>
-            The course is laid out as a City of Answers with {LESSON_CATALOG.length} districts, one lesson each. You
-            start at {LESSON_CATALOG[0].district}, where you see how an answer gets built, and work through crawling,
-            writing, structured data, authority, the individual platforms and measurement, to{" "}
-            {LESSON_CATALOG[LESSON_CATALOG.length - 1].district}, where you plan an AEO program of your own.
+            The course has {LESSON_CATALOG.length} lessons. You start with how an AI answer gets built, then work
+            through crawling, writing, structured data, authority, the individual platforms and measurement, and
+            plan an AEO program of your own. Four advanced lessons cover products, local businesses, video and
+            images, and fixing what AI gets wrong about your brand.
           </p>
           <p>
             {live.length === LESSON_CATALOG.length

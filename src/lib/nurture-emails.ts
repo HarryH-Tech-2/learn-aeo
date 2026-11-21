@@ -1,8 +1,7 @@
 /**
  * Copy and rendering for the nurture sequence (src/lib/nurture.ts).
  *
- * Written for marketers who know SEO basics, in the City of Answers voice: the course is a walk through
- * districts, one per lesson, starting at The Gate (Lesson 1, free). District names, titles and
+ * Written for marketers who know SEO basics, in a plain course voice. Lesson 1 is free. Lesson titles and
  * which lessons are live come from the catalog (src/lib/lesson-catalog.ts), so the copy never drifts
  * from the course. The look is the shared one in src/lib/email-layout.ts.
  *
@@ -12,7 +11,6 @@
  * with their sources.
  */
 import { FIRST_LESSON_PATH, LESSON_CATALOG } from "@/lib/lesson-catalog";
-import { LEVEL_THRESHOLDS } from "@/lib/gamification";
 import { NO_NAME, type NurtureStepKey } from "@/lib/nurture";
 import {
   BODY_FONT as FONT,
@@ -44,13 +42,11 @@ export type RenderedEmail = { subject: string; html: string; text: string };
 /** utm_source on every link in these emails; the campaign is the step key. */
 export const NURTURE_UTM_SOURCE = "nurture";
 
-const GATE = LESSON_CATALOG[0];
-/** The seven districts after The Gate, in course order. */
+const FIRST = LESSON_CATALOG[0];
+/** The lessons after Lesson 1, in course order. */
 const AHEAD = LESSON_CATALOG.slice(1);
 const ALL_LIVE = LESSON_CATALOG.every((l) => l.status === "live");
 const NEXT = AHEAD[0];
-const FIRST_LEVEL = LEVEL_THRESHOLDS[0].title;
-const TOP_LEVEL = LEVEL_THRESHOLDS[LEVEL_THRESHOLDS.length - 1].title;
 const MINUTES = LESSON_CATALOG.map((l) => l.minutes);
 const MIN_MINUTES = Math.min(...MINUTES);
 const MAX_MINUTES = Math.max(...MINUTES);
@@ -61,12 +57,12 @@ function fmtExpiry(d: Date): string {
 
 // ── building blocks (the shared ones are in src/lib/email-layout.ts) ─────────
 
-/** The districts after The Gate, with which are open now and which are coming soon. */
-function districtList(title = "The districts ahead"): string {
+/** The lessons after Lesson 1, with which are open now and which are coming soon. */
+function lessonList(title = "The lessons ahead"): string {
   const rows = AHEAD.map(
     (l) => `<tr>
       <td valign="top" style="padding:7px 12px 7px 0;font-family:${FONT};font-size:13px;font-weight:700;color:${C.gold};width:22px;">${l.order}</td>
-      <td style="padding:7px 0;font-family:${FONT};font-size:15px;line-height:1.45;color:${C.sand};"><strong style="font-weight:600;">${esc(l.district)}</strong>${l.status === "coming-soon" ? ` <span style="font-size:12px;color:${C.faint};">&middot; coming soon</span>` : ""}<br><span style="color:${C.muted};font-size:14px;">${esc(l.title)}</span></td>
+      <td style="padding:7px 0;font-family:${FONT};font-size:15px;line-height:1.45;color:${C.sand};"><strong style="font-weight:600;">${esc(l.title)}</strong>${l.status === "coming-soon" ? ` <span style="font-size:12px;color:${C.faint};">&middot; coming soon</span>` : ""}</td>
     </tr>`
   ).join("");
   return panel(
@@ -75,8 +71,8 @@ function districtList(title = "The districts ahead"): string {
   );
 }
 
-function districtText(): string {
-  return AHEAD.map((l) => `${l.order}. ${l.district}: ${l.title}${l.status === "coming-soon" ? " (coming soon)" : ""}`).join("\n");
+function lessonText(): string {
+  return AHEAD.map((l) => `${l.order}. ${l.title}${l.status === "coming-soon" ? " (coming soon)" : ""}`).join("\n");
 }
 
 /** A short list of points inside a panel. */
@@ -119,7 +115,7 @@ function textOf(lines: string[], ctx: NurtureEmailContext): string {
 }
 
 /** What Lesson 1 covers, one line each (matches the lesson's three concept groups). */
-const GATE_RECAP = [
+const LESSON_1_RECAP = [
   "An AI search tool like ChatGPT reads pages for the user and writes one answer, with links to a few sources. Being cited (a link to your page) and being mentioned (your name, no link) are different results, so track them separately.",
   "Engines retrieve passages first and then ground the answer in them. Retrieval runs over an index built by crawlers, so a page has to be reachable and indexed before it can be cited.",
   "Query fan-out turns one question into several searches. That widens the pool of candidate pages, but only the passages the answer relies on get cited, so each clearly answered sub-question is another way in.",
@@ -141,18 +137,18 @@ export function renderNurtureEmail(key: NurtureStepKey, ctx: NurtureEmailContext
 
   switch (key) {
     case "welcome": {
-      const intro = `Your account is ready, and Lesson 1 is free. It starts at ${GATE.district}, the first district of the City of Answers: how AI search tools such as Google's AI Overviews, ChatGPT search and Perplexity build an answer, and how they choose which pages to cite.`;
-      const what = `You will follow a question from the prompt to the finished answer, through retrieval, grounding and query fan-out, and see the difference between being cited and being mentioned. It takes about ${GATE.minutes} minutes, and your progress is saved as you go.`;
+      const intro = `Your account is ready, and Lesson 1 is free. It covers how AI search tools such as Google's AI Overviews, ChatGPT search and Perplexity build an answer, and how they choose which pages to cite.`;
+      const what = `You will follow a question from the prompt to the finished answer, through retrieval, grounding and query fan-out, and see the difference between being cited and being mentioned. It takes about ${FIRST.minutes} minutes, and your progress is saved as you go.`;
       const body = [
-        eyebrow("Welcome to the City of Answers"),
-        heading("Your first district is open"),
+        eyebrow("Welcome to Learn AEO"),
+        heading("Lesson 1 is ready for you"),
         hi,
         p(intro),
         p(what),
         button(lessonUrl, "Start Lesson 1"),
       ].join("");
       return {
-        subject: "Welcome to the City of Answers",
+        subject: "Welcome to Learn AEO",
         html: layout({ preheader: `Lesson 1 is free: how ChatGPT and other AI search tools choose their sources.`, body, ctx }),
         text: textOf([`Hi ${ctx.firstName},`, intro, what, `Start Lesson 1: ${lessonUrl}`], ctx),
       };
@@ -163,8 +159,8 @@ export function renderNurtureEmail(key: NurtureStepKey, ctx: NurtureEmailContext
       // Part-way through: their place is saved, so the ask is to carry on, not to begin.
       if (!ctx.lesson1Started) {
         const line1 = `You made an account, but you haven't started Lesson 1 yet. It is free, and it is the base the rest of the course builds on: how ChatGPT and other AI search tools pick the handful of pages they cite.`;
-        const line2 = `It takes about ${GATE.minutes} minutes in short parts, with quick checks as you go. Nothing to install and nothing to pay.`;
-        const body = [eyebrow(`Lesson 1 · ${esc(GATE.district)}`), heading("Lesson 1 is waiting for you"), hi, p(line1), p(line2), button(lessonUrl, "Start Lesson 1")].join("");
+        const line2 = `It takes about ${FIRST.minutes} minutes in short parts, with quick checks as you go. Nothing to install and nothing to pay.`;
+        const body = [eyebrow("Lesson 1 · free"), heading("Lesson 1 is waiting for you"), hi, p(line1), p(line2), button(lessonUrl, "Start Lesson 1")].join("");
         return {
           subject: "Lesson 1 is waiting for you",
           html: layout({ preheader: "It's free, and it shows how ChatGPT and other AI search tools pick their sources.", body, ctx }),
@@ -182,60 +178,60 @@ export function renderNurtureEmail(key: NurtureStepKey, ctx: NurtureEmailContext
     }
 
     case "next-door": {
-      const intro = `You finished Lesson 1. Here is what you learned in ${GATE.district}, in three lines:`;
-      const nextLine = `Next is ${NEXT.district}: ${NEXT.title}. ${NEXT.summary}`;
+      const intro = `You finished Lesson 1. Here is what you learned, in three lines:`;
+      const nextLine = `Next is Lesson ${NEXT.order}: ${NEXT.title}. ${NEXT.summary}`;
       if (ctx.freeUnlock) {
-        const open = "The whole course is open on your account, free. This is the road ahead:";
+        const open = "The whole course is open on your account, free. Here is what comes next:";
         const body = [
           eyebrow("Lesson 1 complete"),
-          heading(`What you learned in ${esc(GATE.district)}`),
+          heading("What you learned in Lesson 1"),
           hi,
           p(esc(intro)),
-          points(GATE_RECAP.map(esc)),
+          points(LESSON_1_RECAP.map(esc)),
           p(esc(nextLine)),
           p(open),
-          districtList(),
+          lessonList(),
           button(dashboardUrl, "Go to your dashboard"),
         ].join("");
         return {
-          subject: `What you learned in ${GATE.district}`,
+          subject: "What you learned in Lesson 1",
           html: layout({ preheader: "Three things to keep from Lesson 1, and where to go next.", body, ctx }),
           text: textOf(
-            [`Hi ${ctx.firstName},`, intro, GATE_RECAP.map((t) => `- ${t}`).join("\n"), nextLine, `${open}\n${districtText()}`, `Go to your dashboard: ${dashboardUrl}`],
+            [`Hi ${ctx.firstName},`, intro, LESSON_1_RECAP.map((t) => `- ${t}`).join("\n"), nextLine, `${open}\n${lessonText()}`, `Go to your dashboard: ${dashboardUrl}`],
             ctx
           ),
         };
       }
-      const pitch = "One payment opens every district, including each new lesson as it is released, and your certificate when you finish. If it is not for you, there is a full refund within 14 days.";
+      const pitch = "One payment opens every lesson, including each new one as it is released, and your certificate when you finish. If it is not for you, there is a full refund within 14 days.";
       const body = [
         eyebrow("Lesson 1 complete"),
-        heading(`What you learned in ${esc(GATE.district)}`),
+        heading("What you learned in Lesson 1"),
         hi,
         p(esc(intro)),
-        points(GATE_RECAP.map(esc)),
+        points(LESSON_1_RECAP.map(esc)),
         p(esc(nextLine)),
-        districtList(),
+        lessonList(),
         p(pitch),
         button(pricingUrl, "See the plans"),
       ].join("");
       return {
-        subject: `What you learned in ${GATE.district}`,
+        subject: "What you learned in Lesson 1",
         html: layout({ preheader: "Three things to keep from Lesson 1, and where to go next.", body, ctx }),
         text: textOf(
-          [`Hi ${ctx.firstName},`, intro, GATE_RECAP.map((t) => `- ${t}`).join("\n"), nextLine, `The districts ahead:\n${districtText()}`, pitch, `See the plans: ${pricingUrl}`],
+          [`Hi ${ctx.firstName},`, intro, LESSON_1_RECAP.map((t) => `- ${t}`).join("\n"), nextLine, `The lessons ahead:\n${lessonText()}`, pitch, `See the plans: ${pricingUrl}`],
           ctx
         ),
       };
     }
 
     case "free-stuff": {
-      const intro = `Each lesson is one district of the City of Answers and takes ${MIN_MINUTES} to ${MAX_MINUTES} minutes. They all work the same way:`;
+      const intro = `Each lesson takes ${MIN_MINUTES} to ${MAX_MINUTES} minutes. They all work the same way:`;
       const parts = [
         "Short concept cards, each with why it matters, a common mistake, and links to the sources it draws on.",
         "Quick checks as you read, so you know it has landed.",
         "A hands-on exercise, and a worked example taken apart.",
         "An audit at the end of the lesson to test what you have learned.",
-        `XP as you go, ${LEVEL_THRESHOLDS.length} levels from ${FIRST_LEVEL} to ${TOP_LEVEL}, badges, and a certificate when you finish the course.`,
+        "Your progress saved as you go, and a certificate when you finish the course.",
       ];
       const close = ctx.lesson1Completed
         ? { line: "You have already seen it in action in Lesson 1.", label: "Go to your dashboard", url: dashboardUrl }
@@ -246,15 +242,15 @@ export function renderNurtureEmail(key: NurtureStepKey, ctx: NurtureEmailContext
         hi,
         p(esc(intro)),
         points(parts.map(esc)),
-        districtList(`The districts after ${GATE.district}`),
+        lessonList("The lessons after Lesson 1"),
         p(close.line),
         button(close.url, close.label),
       ].join("");
       return {
         subject: "What's inside the course",
-        html: layout({ preheader: "How a lesson works, and the districts on the road ahead.", body, ctx }),
+        html: layout({ preheader: "How a lesson works, and the lessons ahead.", body, ctx }),
         text: textOf(
-          [`Hi ${ctx.firstName},`, intro, parts.map((t) => `- ${t}`).join("\n"), `The districts after ${GATE.district}:\n${districtText()}`, close.line, `${close.label}: ${close.url}`],
+          [`Hi ${ctx.firstName},`, intro, parts.map((t) => `- ${t}`).join("\n"), `The lessons after Lesson 1:\n${lessonText()}`, close.line, `${close.label}: ${close.url}`],
           ctx
         ),
       };
@@ -273,9 +269,9 @@ export function renderNurtureEmail(key: NurtureStepKey, ctx: NurtureEmailContext
         hi,
         p(line1),
         codeBox(offer.code, offer.percentOff, offer.expiresAt),
-        districtList(),
+        lessonList(),
         p(line2),
-        button(checkoutUrl, "Unlock every district"),
+        button(checkoutUrl, "Unlock every lesson"),
       ].join("");
       return {
         subject: `${offer.percentOff}% off lifetime access, for 60 hours`,
@@ -285,9 +281,9 @@ export function renderNurtureEmail(key: NurtureStepKey, ctx: NurtureEmailContext
             `Hi ${ctx.firstName},`,
             line1,
             `Code ${offer.code} takes ${offer.percentOff}% off lifetime access. It is applied automatically at checkout and ends ${fmtExpiry(offer.expiresAt)} (UK time).`,
-            `The districts ahead:\n${districtText()}`,
+            `The lessons ahead:\n${lessonText()}`,
             line2,
-            `Unlock every district: ${checkoutUrl}`,
+            `Unlock every lesson: ${checkoutUrl}`,
           ],
           ctx
         ),
@@ -301,16 +297,16 @@ export function renderNurtureEmail(key: NurtureStepKey, ctx: NurtureEmailContext
       const line2 = "If something could be clearer or is missing, reply to this email and tell us. It is the quickest way to make the course better.";
       const body = [
         eyebrow("Your account"),
-        heading("Every district is open to you"),
+        heading("Every lesson is open to you"),
         hi,
         p(line1),
         p(line2),
-        p(`Or just carry on: ${link(dashboardUrl, "your next district is waiting")}.`),
+        p(`Or just carry on: ${link(dashboardUrl, "your next lesson is waiting")}.`),
       ].join("");
       return {
         subject: "The course is yours",
         html: layout({ preheader: "Everything is open on your account. Reply with anything that could be better.", body, ctx }),
-        text: textOf([`Hi ${ctx.firstName},`, line1, line2, `Or carry on with your next district: ${dashboardUrl}`], ctx),
+        text: textOf([`Hi ${ctx.firstName},`, line1, line2, `Or carry on with your next lesson: ${dashboardUrl}`], ctx),
       };
     }
 

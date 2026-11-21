@@ -4,13 +4,13 @@ import { BADGE_DEFINITIONS } from "@/lib/gamification";
 
 describe("staleBadgeNames", () => {
   it("returns rows that are no longer defined", () => {
-    expect(staleBadgeNames(["Base Camp Secured", "Dockmaster"], BADGE_DEFINITIONS)).toEqual(["Base Camp Secured"]);
+    expect(staleBadgeNames(["Base Camp Secured", "Lesson 2 complete"], BADGE_DEFINITIONS)).toEqual(["Base Camp Secured"]);
   });
 
   it("leaves only the new definitions after re-seeding an old database", () => {
     const old = [
       "Base Camp Secured",
-      "Old District Cleared",
+      "Dockmaster",
       "Perfect Report",
       "Sharp Memory",
       "Old 3-Day Streak",
@@ -24,6 +24,6 @@ describe("staleBadgeNames", () => {
 
   it("returns nothing when every row is current", () => {
     expect(staleBadgeNames([], BADGE_DEFINITIONS)).toEqual([]);
-    expect(staleBadgeNames(["Dockmaster"], BADGE_DEFINITIONS)).toEqual([]);
+    expect(staleBadgeNames(["Lesson 2 complete"], BADGE_DEFINITIONS)).toEqual([]);
   });
 });

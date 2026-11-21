@@ -36,7 +36,7 @@ export default function GetStartedPage() {
             <ul>
               {lessons.map((l) => (
                 <li key={l.id}>
-                  Lesson {l.order}, {l.district}: {l.title}
+                  Lesson {l.order}: {l.title}
                   {l.status === "coming-soon" ? " (coming soon)" : l.isFree ? " (free)" : ""}. {l.summary}
                 </li>
               ))}

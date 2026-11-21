@@ -104,19 +104,19 @@ describe("sendWelcomeEmail", () => {
 describe("emails on the shared layout", () => {
   beforeEach(() => mockSend.mockClear());
 
-  it("lesson complete: names the lesson passed and the next district by its catalog title, with the code and checkout", async () => {
+  it("lesson complete: names the lesson passed and the next lesson by its catalog title, with the code and checkout", async () => {
     const { sendLessonCompleteEmail } = await import("@/lib/email");
     await sendLessonCompleteEmail({ name: "Ana", email: "a@example.com", code: "AEO-TEST20", expiresAt: new Date("2026-10-22T12:00:00Z"), percentOff: 20 });
     const [first, second] = LESSON_CATALOG;
     const { html, subject } = mockSend.mock.calls[0][0];
     expect(subject).toContain("20% off");
     expect(subject).toContain(first.title);
-    expect(subject).toContain(second.district);
+    expect(subject).toContain(`Next: Lesson ${second.order}`);
     expect(html).toContain(first.title);
-    expect(html).toContain(second.district);
+    expect(html).toContain(`Lesson ${second.order} is next`);
     expect(html).toContain(second.title);
     expect(html).toContain(`/lessons/${second.id}`);
-    expect(html).toContain("/email/city-header.png");
+    expect(html).toContain("/email/header.png");
     expect(html).toContain("/email/mark-aeo.png");
     expect(html).toContain("AEO-TEST20");
     expect(html).toContain("/get-started?next=checkout");
@@ -130,7 +130,7 @@ describe("emails on the shared layout", () => {
     await sendLessonCompleteEmail({ name: "Ana", email: "a@example.com", code: "AEO-TEST20", expiresAt: new Date("2026-10-22T12:00:00Z"), percentOff: 20, lessonId: second.id });
     const { html, subject } = mockSend.mock.calls[0][0];
     expect(subject).toContain(second.title);
-    expect(subject).toContain(third.district);
+    expect(subject).toContain(`Next: Lesson ${third.order}`);
     expect(html).toContain(`/lessons/${third.id}`);
   });
 

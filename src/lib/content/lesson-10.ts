@@ -1,4 +1,4 @@
-// Lesson 10, The Neighborhoods: local businesses and reviews in AI answers.
+// Lesson 10: local businesses and reviews in AI answers.
 // Every claim about Google Business Profile, Google Search, Apple Business,
 // Bing Places, ChatGPT search, schema.org and the FTC is tied to a source
 // checked on the `accessed` date. Where a platform doesn't document something
@@ -171,10 +171,10 @@ const FTC_RULE_QA: Source = {
 
 export const LESSON_10: LessonContent = {
   intro:
-    "You have reached The Neighborhoods, the district of the City of Answers where every question is about a place: a bakery near me, a plumber open now, somewhere to eat tonight. Answers to these questions lean less on articles and more on listings: business profiles, map place cards, structured data and reviews. In this district you learn where each platform gets its local facts, how to make those facts consistent, and how to earn and answer reviews without breaking Google's rules or the FTC's.",
+    "This lesson covers questions about a place: a bakery near me, a plumber open now, somewhere to eat tonight. Answers to these questions lean less on articles and more on listings: business profiles, map place cards, structured data and reviews. In this lesson you learn where each platform gets its local facts, how to make those facts consistent, and how to earn and answer reviews without breaking Google's rules or the FTC's.",
 
   outro:
-    "You leave The Neighborhoods knowing how Google ranks local results and where its AI features get local information, what ChatGPT documents about nearby results, how to claim and clean up your listings on Google, Apple and Bing, how to mark up each location, and how to ask for and answer reviews within the rules. Take a few local questions back to The Observatory and add them to your prompt set, so you can see whether the fixes show up in the answers.",
+    "You now know how Google ranks local results and where its AI features get local information, what ChatGPT documents about nearby results, how to claim and clean up your listings on Google, Apple and Bing, how to mark up each location, and how to ask for and answer reviews within the rules. Add a few local questions to your prompt set from Lesson 7, so you can see whether the fixes show up in the answers.",
 
   groups: [
     {
@@ -430,7 +430,7 @@ export const LESSON_10: LessonContent = {
           summary:
             "Mark up each location with the most specific LocalBusiness subtype, a name and full address, plus hours, phone, coordinates and the location's own URL.",
           explanation:
-            "Google's Local Business documentation says markup lets you \"tell Google about business hours, different departments within a business, reviews (if your site captures reviews about other businesses), and more.\"\n\nThe rules worth knowing:\n\n- **Type**: \"Define each local business location as a LocalBusiness type.\" Use \"the most specific LocalBusiness sub-type possible\". On schema.org, Bakery sits under LocalBusiness, then FoodEstablishment.\n- **Required**: `name` and `address`, a PostalAddress with as many properties as you can provide.\n- **Recommended**: `geo`, where \"The precision must be at least 5 decimal places.\"; `telephone`, where Google says \"Be sure to include the country code and area code in the phone number.\"; `url` for the specific location; `openingHoursSpecification`; and `menu` or `priceRange` where they fit.\n\nGoogle also says \"Since LocalBusiness is a subtype of Organization, we recommend following the fields for Organization\", which you met at The Schema Works.",
+            "Google's Local Business documentation says markup lets you \"tell Google about business hours, different departments within a business, reviews (if your site captures reviews about other businesses), and more.\"\n\nThe rules worth knowing:\n\n- **Type**: \"Define each local business location as a LocalBusiness type.\" Use \"the most specific LocalBusiness sub-type possible\". On schema.org, Bakery sits under LocalBusiness, then FoodEstablishment.\n- **Required**: `name` and `address`, a PostalAddress with as many properties as you can provide.\n- **Recommended**: `geo`, where \"The precision must be at least 5 decimal places.\"; `telephone`, where Google says \"Be sure to include the country code and area code in the phone number.\"; `url` for the specific location; `openingHoursSpecification`; and `menu` or `priceRange` where they fit.\n\nGoogle also says \"Since LocalBusiness is a subtype of Organization, we recommend following the fields for Organization\", which you met in Lesson 4.",
           whyItMatters:
             "Markup states the same facts as your profiles in a form machines can read without guessing, on the site that Google names as one of its sources for business information.",
           example: {

@@ -73,7 +73,7 @@ export default function CitabilityCheckerPage() {
           </p>
           <p>
             Lesson 3,{" "}
-            <Link href="/lessons/writing-citable-content" className="text-cyan-400 underline underline-offset-2">The Answer Quarter</Link>,
+            <Link href="/lessons/writing-citable-content" className="text-cyan-400 underline underline-offset-2">Writing citable content</Link>,
             covers answer-first writing, question headings and passage-level clarity in depth.
           </p>
         </>

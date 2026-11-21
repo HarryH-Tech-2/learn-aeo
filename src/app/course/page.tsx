@@ -45,7 +45,7 @@ const HOW = [
   { step: "Learn", body: "Short concept cards, each with the sources it relies on and the date they were checked." },
   { step: "Check", body: "A quick check after each group of concepts, so you know it went in before you move on." },
   { step: "Practice", body: "A hands-on exercise: trace an answer through an engine, fix a robots.txt file, rewrite a passage answer-first." },
-  { step: "Audit", body: "Each lesson ends with an audit that tests what you learned and earns XP toward your level in the City of Answers." },
+  { step: "Audit", body: "Each lesson ends with an audit that tests what you learned. Pass every audit to earn your certificate." },
 ];
 
 const FAQS = [
@@ -134,7 +134,7 @@ export default function CoursePage() {
           {parts.length} parts, {LESSON_CATALOG.length} lessons
         </h2>
         <p className="font-body text-lg text-sand-400 text-center max-w-2xl mx-auto mb-12">
-          Each lesson is a district of the City of Answers. Work through them in order, or jump to the one you need.
+          Work through the lessons in order, or jump to the one you need.
         </p>
         <ol className="space-y-10">
           {parts.map(({ part, number, lessons }) => (
@@ -150,7 +150,7 @@ export default function CoursePage() {
                     <span aria-hidden="true" className="course-lesson-num">{l.order}</span>
                     <div className="min-w-0">
                       <p className="font-body text-xs uppercase tracking-[0.2em] text-sand-500 mb-1">
-                        District {l.order}: {l.district}
+                        Lesson {l.order}
                       </p>
                       <h4 className="font-display text-xl font-bold text-sand-100 mb-2">
                         {l.isFree ? (

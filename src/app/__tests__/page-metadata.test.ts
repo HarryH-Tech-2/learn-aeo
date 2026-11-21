@@ -109,7 +109,7 @@ describe("404 and dynamic routes", () => {
   it("each lesson's share image has its own alt text, and an unknown lesson has no image", async () => {
     const og = await import("@/app/lessons/[id]/opengraph-image");
     const [meta] = await og.generateImageMetadata({ params: Promise.resolve({ id: "local-businesses-and-reviews" }) });
-    expect(meta.alt).toBe("Learn AEO lesson 10, The Neighborhoods: Local businesses and reviews in AI answers");
+    expect(meta.alt).toBe("Learn AEO lesson 10: Local businesses and reviews in AI answers");
     await expect(og.default({ params: Promise.resolve({ id: "nope" }) })).rejects.toThrow();
   }, IMPORT_TIMEOUT);
 

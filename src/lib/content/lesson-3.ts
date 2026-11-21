@@ -1,4 +1,4 @@
-// Lesson 3, The Answer Quarter: writing citable content.
+// Lesson 3: writing citable content.
 // Every claim about an engine, a style guide or an HTML element is tied to a
 // source checked on the `accessed` date. Fernhill Garden Supply is a made-up
 // shop, and its product facts (sizes, prices, timings, survey figures) and its
@@ -209,10 +209,10 @@ const GOVUK_HOLIDAY: Source = {
 
 export const LESSON_3: LessonContent = {
   intro:
-    "You have reached The Answer Quarter, the third district of the City of Answers. The bots you let in at The Crawl Docks bring pages here, and the city's answers are written from the passages they carry. In this district you learn to write passages that are easy to lift, easy to check and safe to quote, and to tell the advice the engines actually give from the advice they don't.",
+    "The bots you let in during Lesson 2 collect your pages, and AI answers are written from the passages they find there. In this lesson you learn to write passages that are easy to lift, easy to check and safe to quote, and to tell the advice the engines actually give from the advice they don't.",
 
   outro:
-    "You leave The Answer Quarter able to lead with the answer, write passages and numbers that stand on their own, lay them out in headings, lists and tables that keep their meaning, and back them with honest dates, named authors and real sources. Next stop is The Schema Works, where you describe those pages to machines with structured data.",
+    "You can now lead with the answer, write passages and numbers that stand on their own, lay them out in headings, lists and tables that keep their meaning, and back them with honest dates, named authors and real sources. Lesson 4 is next, where you describe those pages to machines with structured data.",
 
   groups: [
     {
@@ -388,7 +388,7 @@ export const LESSON_3: LessonContent = {
           explanation:
             "Google announced the change in October 2020. It said it had \"made a breakthrough in ranking\" and could now \"better understand the relevancy of specific passages\", so that it could \"find that needle-in-a-haystack information you're looking for\". It expected the change to \"improve 7 percent of search queries across all languages\" as it rolled out.\n\nGoogle's guide to its ranking systems now lists it by name: \"Passage ranking is an AI system we use to identify individual sections or \"passages\" of a web page to better understand how relevant a page is to a search.\"\n\nNote what is being ranked. The announcement says the improvement \"applies to how we rank web pages overall\", and the guide says passages help Google judge \"how relevant a page is\". What gets ranked is still the page. A long guide with one clear section on a narrow question can be relevant to that question without being split up.",
           whyItMatters:
-            "A single clear section can make a long page relevant to a narrow question. The Gate covered why answer engines cite passages. Passage ranking is Google's own evidence that classic Search also judges pages section by section.",
+            "A single clear section can make a long page relevant to a narrow question. Lesson 1 covered why answer engines cite passages. Passage ranking is Google's own evidence that classic Search also judges pages section by section.",
           pitfall:
             "Splitting one good guide into dozens of thin pages, one per question, on the theory that engines only want short pages. Google's description is about finding the right section within a page, not about page length.",
           sources: [GOOGLE_PASSAGES, GOOGLE_RANKING_SYSTEMS],

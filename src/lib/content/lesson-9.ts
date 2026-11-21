@@ -1,4 +1,4 @@
-// Lesson 9, The Market: products and shopping in AI answers.
+// Lesson 9: products and shopping in AI answers.
 // Every claim about ChatGPT, Google (Search, Merchant Center, AI Mode, Gemini,
 // the Universal Commerce Protocol), Microsoft Copilot, Perplexity and the
 // Agentic Commerce Protocol is tied to a primary source checked on the
@@ -205,10 +205,10 @@ const PPLX_SHOPPING_PAYPAL: Source = {
 
 export const LESSON_9: LessonContent = {
   intro:
-    "You have reached The Market, the ninth district of the City of Answers. Here people don't only ask questions, they buy things. AI assistants now answer shopping questions with product cards, prices, review summaries and, on some platforms, a buy button. In this district you learn where those products come from: the markup on your pages, the feeds you send to Google, Microsoft and OpenAI, your reviews, and how accurate your prices and stock are. You'll also meet the new checkout protocols that let an assistant complete the purchase.",
+    "People don't only ask AI assistants questions, they buy things. AI assistants now answer shopping questions with product cards, prices, review summaries and, on some platforms, a buy button. In this lesson you learn where those products come from: the markup on your pages, the feeds you send to Google, Microsoft and OpenAI, your reviews, and how accurate your prices and stock are. You'll also meet the new checkout protocols that let an assistant complete the purchase.",
 
   outro:
-    "You leave The Market knowing how ChatGPT, Google's AI Mode and Gemini, Copilot and Perplexity find products, which markup makes a product page a merchant listing, which feeds to send and what they need, why a price that drifts out of date costs you, and what the checkout protocols ask of a merchant. The common thread: one accurate product record, published the same way on your page and in every feed.",
+    "You now know how ChatGPT, Google's AI Mode and Gemini, Copilot and Perplexity find products, which markup makes a product page a merchant listing, which feeds to send and what they need, why a price that drifts out of date costs you, and what the checkout protocols ask of a merchant. The common thread: one accurate product record, published the same way on your page and in every feed.",
 
   groups: [
     {

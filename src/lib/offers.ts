@@ -15,7 +15,7 @@ import { prisma } from "@/lib/db";
 import { checkSubscription } from "@/lib/subscription";
 import { getStripe } from "@/lib/stripe";
 
-export const OFFER_COUPON_ID = "NEXT-DISTRICT-33";
+export const OFFER_COUPON_ID = "NEXT-LESSON-33";
 export const OFFER_PERCENT_OFF = 33;
 
 export type OfferSource = "section-complete" | "lesson-complete" | "checkout-abandoned" | "nurture";

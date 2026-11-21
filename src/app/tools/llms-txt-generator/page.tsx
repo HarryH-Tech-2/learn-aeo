@@ -75,7 +75,7 @@ export default function LlmsTxtGeneratorPage() {
           </p>
           <p>
             Lesson 2,{" "}
-            <Link href="/lessons/make-your-site-reachable-by-ai" className="text-cyan-400 underline underline-offset-2">The Crawl Docks</Link>,
+            <Link href="/lessons/make-your-site-reachable-by-ai" className="text-cyan-400 underline underline-offset-2">Make your site reachable by AI</Link>,
             covers llms.txt alongside robots.txt, sitemaps and IndexNow.
           </p>
         </>

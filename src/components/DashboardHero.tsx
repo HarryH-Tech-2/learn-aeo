@@ -4,10 +4,10 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { BADGE_DEFINITIONS, getLevelTitle, getXPForNextLevel } from "@/lib/gamification";
 import { lessonPath } from "@/lib/lesson-catalog";
-import type { DistrictView } from "@/lib/city-map";
+import type { LessonView } from "@/lib/lesson-progress";
 
 /**
- * The top of the dashboard: a greeting, the next district to work on as one big "continue" card, the learner's
+ * The top of the dashboard: a greeting, the next lesson to work on as one big "continue" card, the learner's
  * level as a ring, and three stat tiles (lessons, streak, badges).
  */
 export default function DashboardHero({
@@ -15,22 +15,22 @@ export default function DashboardHero({
   xp,
   streak,
   badgesEarned,
-  districts,
+  lessons,
   paid,
 }: {
   firstName: string;
   xp: number;
   streak: number;
   badgesEarned: number;
-  districts: DistrictView[];
+  lessons: LessonView[];
   paid: boolean;
 }) {
   const { currentLevel, nextLevelXP, progress } = getXPForNextLevel(xp);
   const title = getLevelTitle(currentLevel);
-  const done = districts.filter((d) => d.districtStatus === "done").length;
-  const total = districts.length;
-  const next = districts.find((d) => d.districtStatus === "next");
-  const firstLocked = districts.find((d) => d.districtStatus === "locked");
+  const done = lessons.filter((d) => d.progressStatus === "done").length;
+  const total = lessons.length;
+  const next = lessons.find((d) => d.progressStatus === "next");
+  const firstLocked = lessons.find((d) => d.progressStatus === "locked");
   const allDone = done === total;
 
   // SVG ring: circumference of r=42
@@ -48,10 +48,10 @@ export default function DashboardHero({
           </h1>
           <p className="font-body text-lg text-sand-300 mb-6">
             {allDone
-              ? "You've walked every district of the City of Answers."
+              ? "You've completed every lesson in the course."
               : done === 0
-                ? "Your tour of the City of Answers starts at The Gate."
-                : `${done} of ${total} districts done. Keep going.`}
+                ? "Start with Lesson 1 to see how AI answers choose their sources."
+                : `${done} of ${total} lessons complete.`}
           </p>
 
           {allDone ? (
@@ -63,7 +63,7 @@ export default function DashboardHero({
           ) : next ? (
             <Link href={lessonPath(next.id)} className="dash-continue group">
               <span className="dash-continue-kicker">
-                {next.started ? "Continue" : "Up next"} · District {next.order}: {next.district}
+                {next.started ? "Continue" : "Up next"} · Lesson {next.order}
               </span>
               <span className="dash-continue-title">{next.title}</span>
               <span className="dash-continue-meta">
@@ -72,7 +72,7 @@ export default function DashboardHero({
             </Link>
           ) : firstLocked && !paid ? (
             <Link href="/pricing" className="dash-continue group">
-              <span className="dash-continue-kicker">Next: District {firstLocked.order}: {firstLocked.district}</span>
+              <span className="dash-continue-kicker">Next: Lesson {firstLocked.order}</span>
               <span className="dash-continue-title">Unlock the rest of the course</span>
               <span className="dash-continue-meta">Every plan opens all {total} lessons</span>
             </Link>

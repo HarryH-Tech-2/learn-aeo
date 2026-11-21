@@ -1,4 +1,4 @@
-// Lesson 6, The Embassies: platform playbooks.
+// Lesson 6: platform playbooks.
 // Each platform section uses only what that platform documents about itself
 // (or a dated, named announcement), checked on the `accessed` date. Where a
 // vendor doesn't document something (how it ranks or picks citations, say), the
@@ -215,10 +215,10 @@ const APPLEBOT: Source = {
 
 export const LESSON_6: LessonContent = {
   intro:
-    "You have reached The Embassies, the sixth district of the City of Answers. Each AI search platform keeps an embassy here, and each publishes its own rules: where its answers get their web results, which bot to let in, what it shows and how it credits sources. In this district you visit them one at a time (Google, Gemini, ChatGPT, Claude, Perplexity, Microsoft Copilot and Apple), plus the AI agents that now browse for users. You use only what each platform documents about itself, note where it documents nothing, and finish with a fair way to test your pages on all of them.",
+    "Each AI search platform publishes its own rules: where its answers get their web results, which bot to let in, what it shows and how it credits sources. In this lesson you take them one at a time (Google, Gemini, ChatGPT, Claude, Perplexity, Microsoft Copilot and Apple), plus the AI agents that now browse for users. You use only what each platform documents about itself, note where it documents nothing, and finish with a fair way to test your pages on all of them.",
 
   outro:
-    "You leave The Embassies knowing, for each platform, where its answers come from, which bot or setting controls your place in them, what it says about showing sources, and how to test it by hand. You also know where the vendors stay silent: none of them publishes a list of AI ranking factors. Next stop is The Observatory, where you turn these one-off tests into ongoing measurement.",
+    "You now know, for each platform, where its answers come from, which bot or setting controls your place in them, what it says about showing sources, and how to test it by hand. You also know where the vendors stay silent: none of them publishes a list of AI ranking factors. Lesson 7 is next, where you turn these one-off tests into ongoing measurement.",
 
   groups: [
     {
@@ -677,7 +677,7 @@ export const LESSON_6: LessonContent = {
           term: "Bing's AI Performance report",
           summary: "Bing Webmaster Tools shows citations, cited pages and the grounding queries behind them across Copilot, Bing's AI summaries and select partners.",
           explanation:
-            "In February 2026 Bing Webmaster Tools added AI Performance, which \"shows how publisher content appears across Microsoft Copilot, AI-generated summaries in Bing, and select partner integrations.\" It reports total citations, average cited pages, citation counts by page, and grounding queries, which Bing describes as \"the key phrases the AI used when retrieving content that was referenced in AI-generated answers.\"\n\nIn June 2026 Bing added Intents, Topics, Citation Share and Compare. Citation Share \"is calculated as the percentage of citations attributed to your site out of all citations shown across all sites for that same grounding query.\" In October 2026 a Topics Portfolio beta added Opportunity Queries, which list \"the top queries in the same topic where other sites appear and yours does not\".\n\nOf the platforms in this district, Bing is the only one that shows site owners the phrases its AI searched with. Lesson 7 shows how to track these numbers over time.",
+            "In February 2026 Bing Webmaster Tools added AI Performance, which \"shows how publisher content appears across Microsoft Copilot, AI-generated summaries in Bing, and select partner integrations.\" It reports total citations, average cited pages, citation counts by page, and grounding queries, which Bing describes as \"the key phrases the AI used when retrieving content that was referenced in AI-generated answers.\"\n\nIn June 2026 Bing added Intents, Topics, Citation Share and Compare. Citation Share \"is calculated as the percentage of citations attributed to your site out of all citations shown across all sites for that same grounding query.\" In October 2026 a Topics Portfolio beta added Opportunity Queries, which list \"the top queries in the same topic where other sites appear and yours does not\".\n\nOf the platforms in this lesson, Bing is the only one that shows site owners the phrases its AI searched with. Lesson 7 shows how to track these numbers over time.",
           whyItMatters:
             "Grounding queries show which phrasing pulled your page in, and Opportunity Queries show where others are cited and you aren't. That turns a vague goal of more AI visibility into a list of specific pages to write or improve.",
           example: {
@@ -825,7 +825,7 @@ export const LESSON_6: LessonContent = {
           term: "Diagnosing a gap",
           summary: "When you're cited on one platform but not another, check that platform's own access, index and settings before touching the content.",
           explanation:
-            "Each platform reaches your site differently, so a gap usually has a platform-specific cause:\n\n- **AI Overviews or AI Mode?** Check the page is indexed and can show a snippet (URL Inspection in Search Console), that no nosnippet or noindex is set, and that the Search generative AI control is set to include.\n- **Gemini app?** Check robots.txt for a Google-Extended block.\n- **ChatGPT search?** Check OAI-SearchBot isn't disallowed, and allow about 24 hours after a fix.\n- **Claude?** Check Claude-SearchBot and Claude-User aren't blocked.\n- **Perplexity?** Check PerplexityBot in robots.txt and in your firewall.\n- **Copilot?** Check the page is indexed in Bing.\n- **Siri or Spotlight?** Check Applebot, and any Googlebot rules it falls back on.\n\nOnly when access is clear does it make sense to look at the content itself (The Answer Quarter) or what others say about you (The Agora).",
+            "Each platform reaches your site differently, so a gap usually has a platform-specific cause:\n\n- **AI Overviews or AI Mode?** Check the page is indexed and can show a snippet (URL Inspection in Search Console), that no nosnippet or noindex is set, and that the Search generative AI control is set to include.\n- **Gemini app?** Check robots.txt for a Google-Extended block.\n- **ChatGPT search?** Check OAI-SearchBot isn't disallowed, and allow about 24 hours after a fix.\n- **Claude?** Check Claude-SearchBot and Claude-User aren't blocked.\n- **Perplexity?** Check PerplexityBot in robots.txt and in your firewall.\n- **Copilot?** Check the page is indexed in Bing.\n- **Siri or Spotlight?** Check Applebot, and any Googlebot rules it falls back on.\n\nOnly when access is clear does it make sense to look at the content itself (Lesson 3) or what others say about you (Lesson 5).",
           whyItMatters:
             "Access problems are quick to fix and block everything else. Rewriting content for a platform that can't reach the page wastes the work.",
           example: {
@@ -894,7 +894,7 @@ export const LESSON_6: LessonContent = {
 
   exercise: {
     id: "x-embassy-test",
-    title: "Run an embassy test",
+    title: "Run a platform test",
     brief:
       "Larkfield Tea (made up) ran a quick test and found it is cited by Perplexity for \"best loose-leaf green tea UK\" but appears in neither ChatGPT search nor AI Overviews for the same question. Work out why and design a proper test.",
     steps: [
@@ -975,7 +975,7 @@ export const LESSON_6: LessonContent = {
       },
     ],
     debrief:
-      "Larkfield's content was never the problem: one stacked user-agent line kept it out of ChatGPT search. That is the usual shape of a platform gap. Each embassy has its own door (a bot, an index, a setting), and the cheapest wins come from checking every door is open before you change a word on the page.",
+      "Larkfield's content was never the problem: one stacked user-agent line kept it out of ChatGPT search. That is the usual shape of a platform gap. Each platform has its own door (a bot, an index, a setting), and the cheapest wins come from checking every door is open before you change a word on the page.",
   },
 
   example: {
@@ -1001,7 +1001,7 @@ export const LESSON_6: LessonContent = {
       },
       {
         label: "Read the vendor page",
-        text: "Every platform in this district publishes a page like this, and they change: Google added a Search Console opt-out in 2026, and Anthropic added an agent browser page. Date your checks and reread them when a result surprises you.",
+        text: "Every platform in this lesson publishes a page like this, and they change: Google added a Search Console opt-out in 2026, and Anthropic added an agent browser page. Date your checks and reread them when a result surprises you.",
       },
     ],
     source: OPENAI_CRAWLERS,

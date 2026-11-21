@@ -1,4 +1,4 @@
-// The course catalog: ids, districts, titles, levels and blurbs, one entry per lesson.
+// The course catalog: ids, titles, levels and blurbs, one entry per lesson.
 // Imported by middleware, so it must stay edge-safe: import only lesson-types.
 
 import type { LessonMeta } from "./lesson-types";
@@ -7,7 +7,6 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
   {
     id: "how-answer-engines-choose-sources",
     order: 1,
-    district: "The Gate",
     title: "How answer engines choose sources",
     summary: "See how AI answers get built, and why they are not ten blue links.",
     description:
@@ -20,7 +19,6 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
   {
     id: "make-your-site-reachable-by-ai",
     order: 2,
-    district: "The Crawl Docks",
     title: "Make your site reachable by AI",
     summary: "Let the right AI bots in, and stop your own setup turning them away.",
     description:
@@ -33,7 +31,6 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
   {
     id: "writing-citable-content",
     order: 3,
-    district: "The Answer Quarter",
     title: "Writing citable content",
     summary: "Write pages with passages ChatGPT and other AI search tools can lift and trust.",
     description:
@@ -46,7 +43,6 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
   {
     id: "structured-data-and-entities",
     order: 4,
-    district: "The Schema Works",
     title: "Structured data and entities",
     summary: "Mark up your pages and make your brand an unambiguous entity.",
     description:
@@ -59,7 +55,6 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
   {
     id: "authority-beyond-your-site",
     order: 5,
-    district: "The Agora",
     title: "Authority beyond your site",
     summary: "Earn the mentions, reviews and lists that engines lean on.",
     description:
@@ -72,7 +67,6 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
   {
     id: "platform-playbooks",
     order: 6,
-    district: "The Embassies",
     title: "Platform playbooks",
     summary: "Where each AI platform gets its answers, which bot or setting controls you, and how to test it.",
     description:
@@ -85,7 +79,6 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
   {
     id: "measuring-ai-visibility",
     order: 7,
-    district: "The Observatory",
     title: "Measuring AI visibility",
     summary: "Track whether you appear in AI answers, and what it sends you.",
     description:
@@ -98,7 +91,6 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
   {
     id: "running-an-aeo-program",
     order: 8,
-    district: "The Citadel",
     title: "Running an AEO program",
     summary: "Turn everything you have learned into a plan the business will back.",
     description:
@@ -111,7 +103,6 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
   {
     id: "products-and-shopping-in-ai-answers",
     order: 9,
-    district: "The Market",
     title: "Products and shopping in AI answers",
     summary: "Get your products into the shopping answers AI assistants give.",
     description:
@@ -124,7 +115,6 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
   {
     id: "local-businesses-and-reviews",
     order: 10,
-    district: "The Neighborhoods",
     title: "Local businesses and reviews in AI answers",
     summary: "Get your local business into AI answers with accurate listings, markup and reviews.",
     description:
@@ -137,7 +127,6 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
   {
     id: "video-images-and-youtube",
     order: 11,
-    district: "The Picture House",
     title: "Video, images and YouTube in AI answers",
     summary: "How AI answers use video and images, and the Google and YouTube basics that get yours shown and credited.",
     description:
@@ -150,7 +139,6 @@ export const LESSON_CATALOG: readonly LessonMeta[] = [
   {
     id: "when-ai-gets-your-brand-wrong",
     order: 12,
-    district: "The Hall of Records",
     title: "When AI gets your brand wrong",
     summary: "Trace a wrong AI answer about your brand to its source, fix it, and report it the right way.",
     description:

@@ -1,5 +1,5 @@
 // The Share of Voice Tracker's logic (src/app/tools/share-of-voice-tracker): find which tracked brands an AI answer
-// names and which of their sites it cites, then score a run with the course's definitions (lesson 7, The Observatory):
+// names and which of their sites it cites, then score a run with the course's definitions (lesson 7):
 //   mention rate   = answers that name the brand ÷ answers checked
 //   citation rate  = answers that cite the brand's site ÷ answers checked
 //   share of voice = the brand's mentions ÷ mentions of every tracked brand, across the same answers

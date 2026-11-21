@@ -3,7 +3,7 @@
 // Used by the canvas render on /certificate and the preview on the dashboard.
 
 export const CERTIFICATE = {
-  src: "/certificate-aeo-v2.webp",
+  src: "/certificate-aeo-v3.webp",
   /** Name center, as fractions of the image width and height (the y is the text baseline). */
   nameX: 0.5,
   nameY: 0.57,

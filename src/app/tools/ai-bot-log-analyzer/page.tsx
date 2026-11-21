@@ -83,9 +83,9 @@ export default function BotLogAnalyzerPage() {
           </p>
           <p>
             Lesson 2,{" "}
-            <Link href="/lessons/make-your-site-reachable-by-ai" className="text-cyan-400 underline underline-offset-2">The Crawl Docks</Link>,
+            <Link href="/lessons/make-your-site-reachable-by-ai" className="text-cyan-400 underline underline-offset-2">Make your site reachable by AI</Link>,
             covers letting the right bots in, and lesson 7,{" "}
-            <Link href="/lessons/measuring-ai-visibility" className="text-cyan-400 underline underline-offset-2">The Observatory</Link>, reading
+            <Link href="/lessons/measuring-ai-visibility" className="text-cyan-400 underline underline-offset-2">Measuring AI visibility</Link>, reading
             bot hits as part of measuring AI visibility.
           </p>
         </>

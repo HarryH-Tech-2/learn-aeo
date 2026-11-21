@@ -100,7 +100,7 @@ describe("GET /api/lessons/[id]", () => {
     const { response, body } = await get(SOON_ID);
     expect(response.status).toBe(200);
     expect(body.status).toBe("coming-soon");
-    expect(body.district).toBe("The Citadel");
+    expect(body.title).toBe("Running an AEO program");
     expect("content" in body).toBe(false);
   });
 

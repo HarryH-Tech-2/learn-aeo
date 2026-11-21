@@ -23,7 +23,7 @@ function remaining(expiresAt: string): { h: number; m: number; s: number; done: 
 }
 
 /**
- * "Unlock the rest of the city" — shown after the free lesson and on the
+ * "Unlock the rest of the course" — shown after the free lesson and on the
  * dashboard while an offer is live. The code is applied automatically at
  * checkout; it's displayed only so the learner can see it's real.
  */
@@ -54,7 +54,7 @@ export default function OfferBanner({
       ? `Your ${offer.percentOff}% off is still open · ends ${offerEndsLabel(offer.expiresAt)}`
       : offer.source === "checkout-abandoned"
         ? "Your place is still open"
-        : "Unlock the rest of the city";
+        : "Unlock the rest of the course";
 
   return (
     <div className="relative border border-gold-500/40 bg-gold-500/5 p-6 md:p-7 overflow-hidden">

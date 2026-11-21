@@ -8,7 +8,7 @@
  *   day 0  welcome         sent from the sign-up hook when NURTURE_ENABLED=true (cron catches failures)
  *   day 1  door-sealed     lesson 1 not finished   } one or the other
  *                          (copy differs: never started = "Lesson 1 is waiting", part-way = "your place is saved")
- *   day 1  next-door       lesson 1 finished: what you learned in The Gate, and the districts ahead
+ *   day 1  next-door       lesson 1 finished: what you learned in Lesson 1, and the lessons ahead
  *   day 3  free-stuff      what's inside the course (how a lesson works, levels, certificate)
  *   day 5  offer           33% code (src/lib/offers.ts, source "nurture")
  *   day 7  offer-expires   only while that code is still live

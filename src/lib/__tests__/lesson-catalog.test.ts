@@ -16,26 +16,26 @@ import {
 } from "../lesson-catalog";
 
 const EXPECTED = [
-  ["how-answer-engines-choose-sources", "The Gate", "How answer engines choose sources", "beginner", 25, true],
-  ["make-your-site-reachable-by-ai", "The Crawl Docks", "Make your site reachable by AI", "beginner", 40, false],
-  ["writing-citable-content", "The Answer Quarter", "Writing citable content", "beginner", 35, false],
-  ["structured-data-and-entities", "The Schema Works", "Structured data and entities", "intermediate", 40, false],
-  ["authority-beyond-your-site", "The Agora", "Authority beyond your site", "intermediate", 35, false],
-  ["platform-playbooks", "The Embassies", "Platform playbooks", "intermediate", 35, false],
-  ["measuring-ai-visibility", "The Observatory", "Measuring AI visibility", "advanced", 35, false],
-  ["running-an-aeo-program", "The Citadel", "Running an AEO program", "advanced", 35, false],
-  ["products-and-shopping-in-ai-answers", "The Market", "Products and shopping in AI answers", "intermediate", 25, false],
-  ["local-businesses-and-reviews", "The Neighborhoods", "Local businesses and reviews in AI answers", "intermediate", 35, false],
-  ["video-images-and-youtube", "The Picture House", "Video, images and YouTube in AI answers", "intermediate", 25, false],
-  ["when-ai-gets-your-brand-wrong", "The Hall of Records", "When AI gets your brand wrong", "intermediate", 30, false],
+  ["how-answer-engines-choose-sources", "How answer engines choose sources", "beginner", 25, true],
+  ["make-your-site-reachable-by-ai", "Make your site reachable by AI", "beginner", 40, false],
+  ["writing-citable-content", "Writing citable content", "beginner", 35, false],
+  ["structured-data-and-entities", "Structured data and entities", "intermediate", 40, false],
+  ["authority-beyond-your-site", "Authority beyond your site", "intermediate", 35, false],
+  ["platform-playbooks", "Platform playbooks", "intermediate", 35, false],
+  ["measuring-ai-visibility", "Measuring AI visibility", "advanced", 35, false],
+  ["running-an-aeo-program", "Running an AEO program", "advanced", 35, false],
+  ["products-and-shopping-in-ai-answers", "Products and shopping in AI answers", "intermediate", 25, false],
+  ["local-businesses-and-reviews", "Local businesses and reviews in AI answers", "intermediate", 35, false],
+  ["video-images-and-youtube", "Video, images and YouTube in AI answers", "intermediate", 25, false],
+  ["when-ai-gets-your-brand-wrong", "When AI gets your brand wrong", "intermediate", 30, false],
 ] as const;
 
 describe("lesson catalog", () => {
   it("matches the agreed lesson table", () => {
     expect(LESSON_CATALOG).toHaveLength(12);
     LESSON_CATALOG.forEach((l, i) => {
-      const [id, district, title, level, minutes, isFree] = EXPECTED[i];
-      expect(l).toMatchObject({ id, district, title, level, minutes, isFree, order: i + 1 });
+      const [id, title, level, minutes, isFree] = EXPECTED[i];
+      expect(l).toMatchObject({ id, title, level, minutes, isFree, order: i + 1 });
       expect(l.summary.length).toBeGreaterThan(10);
       expect(l.description.length).toBeGreaterThan(40);
       expect(l.status).toBe("live");

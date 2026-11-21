@@ -4,7 +4,7 @@
  */
 
 export const STATEMENT_DESCRIPTOR = "LEARNAEO";
-export const OFFER_COUPON_ID = "NEXT-DISTRICT-33";
+export const OFFER_COUPON_ID = "NEXT-LESSON-33";
 
 /** Keep in sync with src/lib/ppp.ts (PPP_COUPON_ID, PPP_PERCENT) and src/lib/offers.ts (OFFER_COUPON_ID). */
 export const COUPONS = [

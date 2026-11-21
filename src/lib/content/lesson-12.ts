@@ -1,4 +1,4 @@
-// Lesson 12, The Hall of Records: when AI gets your brand wrong.
+// Lesson 12: when AI gets your brand wrong.
 // Claims about how ChatGPT, Google AI Overviews, Perplexity and Copilot handle
 // errors and feedback, knowledge panels, Business Profiles, Wikipedia and
 // Wikidata conduct rules, OpenAI's personal-data requests, Google's legal
@@ -202,10 +202,10 @@ const FTC_FAKE_REVIEWS: Source = {
 
 export const LESSON_12: LessonContent = {
   intro:
-    "Welcome to The Hall of Records, where the City of Answers keeps what it believes about everyone, your brand included. Sometimes the record is wrong: an AI answer gives old prices, a closed branch, a founder who never existed. In this district you learn why that happens, how to trace a wrong answer back to the pages it relied on, how to fix those pages under each site's rules, which feedback and request routes the platforms actually document, and what not to do, however tempting it is.",
+    "AI answers repeat what the web says about your brand, and sometimes that is wrong: an AI answer gives old prices, a closed branch, a founder who never existed. In this lesson you learn why that happens, how to trace a wrong answer back to the pages it relied on, how to fix those pages under each site's rules, which feedback and request routes the platforms actually document, and what not to do, however tempting it is.",
 
   outro:
-    "You leave The Hall of Records with a method: sort the error, trace it to its sources, fix the source you control, ask for fixes where you don't, use each platform's own feedback route, and rerun the same prompts until the error is gone. None of it rewrites a model overnight, but all of it changes what the answer engines read next time.",
+    "You now have a method: sort the error, trace it to its sources, fix the source you control, ask for fixes where you don't, use each platform's own feedback route, and rerun the same prompts until the error is gone. None of it rewrites a model overnight, but all of it changes what the answer engines read next time.",
 
   groups: [
     {
@@ -323,7 +323,7 @@ export const LESSON_12: LessonContent = {
           term: "Monitoring for recurring errors",
           summary: "Put the questions that produced errors into your prompt set and rerun them on a schedule, across phrasings, until the error stops appearing.",
           explanation:
-            "A single clean answer doesn't prove a fix. Google's own advice for checking AI Overviews is to \"ask multiple versions of your question\" and to \"always check important info in more than one place\". Apply the same habit to monitoring:\n\n- Add every question that produced an error to the prompt set from The Observatory, with two or three phrasings.\n- Rerun them on the same schedule as the rest of the set, on each platform where the error appeared.\n- Close a log row only when the error has stopped appearing across several runs, and reopen it if the error comes back.\n\nPerplexity's report page lists \"repetitive behavior\" and \"outdated information\" among the issues it looks for, so recurring errors are worth reporting again with your log.",
+            "A single clean answer doesn't prove a fix. Google's own advice for checking AI Overviews is to \"ask multiple versions of your question\" and to \"always check important info in more than one place\". Apply the same habit to monitoring:\n\n- Add every question that produced an error to the prompt set from Lesson 7, with two or three phrasings.\n- Rerun them on the same schedule as the rest of the set, on each platform where the error appeared.\n- Close a log row only when the error has stopped appearing across several runs, and reopen it if the error comes back.\n\nPerplexity's report page lists \"repetitive behavior\" and \"outdated information\" among the issues it looks for, so recurring errors are worth reporting again with your log.",
           whyItMatters:
             "Answers vary from run to run. Without a fixed recheck you can't tell a real fix from a lucky answer.",
           pitfall:

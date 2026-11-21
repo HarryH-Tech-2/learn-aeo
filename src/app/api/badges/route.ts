@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { badgeDisplay } from "@/lib/gamification";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -17,9 +18,7 @@ export async function GET() {
   return NextResponse.json(
     userBadges.map((ub) => ({
       id: ub.badge.id,
-      name: ub.badge.name,
-      description: ub.badge.description,
-      icon: ub.badge.icon,
+      ...badgeDisplay(ub.badge),
       earnedAt: ub.earnedAt.toISOString(),
     }))
   );

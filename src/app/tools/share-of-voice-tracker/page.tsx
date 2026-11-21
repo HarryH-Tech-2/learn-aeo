@@ -14,7 +14,7 @@ export const metadata: Metadata = pageMetadata({
   path: "/tools/share-of-voice-tracker",
 });
 
-// Definitions are the course's own (lesson 7, The Observatory), so the tool and the lesson agree.
+// Definitions are the course's own (lesson 7), so the tool and the lesson agree.
 const FAQS: ToolFaq[] = [
   {
     question: "What is share of voice in AI search?",
@@ -75,7 +75,7 @@ export default function ShareOfVoiceTrackerPage() {
           </p>
           <p>
             Lesson 7,{" "}
-            <Link href="/lessons/measuring-ai-visibility" className="text-cyan-400 underline underline-offset-2">The Observatory</Link>,
+            <Link href="/lessons/measuring-ai-visibility" className="text-cyan-400 underline underline-offset-2">Measuring AI visibility</Link>,
             shows how to build a prompt set, measure AI referral traffic in GA4 and report the results.
           </p>
         </>

@@ -1,4 +1,4 @@
-// Lesson 2, The Crawl Docks: make your site reachable by AI.
+// Lesson 2: make your site reachable by AI.
 // Every claim about a crawler, robots.txt, rendering, sitemaps, IndexNow,
 // llms.txt, training-preference signals, bot verification or CDN blocking is
 // tied to a source checked on the `accessed` date.
@@ -245,10 +245,10 @@ const GUARDIAN_ROBOTS: Source = {
 
 export const LESSON_2: LessonContent = {
   intro:
-    "You have reached The Crawl Docks, the second district of the City of Answers. Bots arrive here all day to collect pages for the city's indexes and answers, and the well-behaved ones read your robots.txt before they take anything. Your job in this district is to make sure the right ones get in, and that nothing on your side turns them away by accident.",
+    "Bots visit your site all day to collect pages for AI indexes and answers, and the well-behaved ones read your robots.txt before they take anything. Your job in this lesson is to make sure the right ones get in, and that nothing on your side turns them away by accident.",
 
   outro:
-    "You leave The Crawl Docks knowing who is knocking, what your robots.txt actually says to each of them, how to tell a real bot from an impostor, and where a CDN setting can overrule all of it. Next stop is The Answer Quarter, where you work on the passages those bots carry away.",
+    "You now know who is knocking, what your robots.txt actually says to each of them, how to tell a real bot from an impostor, and where a CDN setting can overrule all of it. Lesson 3 is next, where you work on the passages those bots carry away.",
 
   groups: [
     {
@@ -261,7 +261,7 @@ export const LESSON_2: LessonContent = {
           term: "Three jobs, three kinds of bot",
           summary: "Training crawlers, search crawlers and user-triggered fetchers each get their own user-agent token.",
           explanation:
-            "The Gate introduced these bots. Here is the full set you will write rules for, grouped by the job each vendor says it does:\n\n- **Training.** OpenAI's `GPTBot` crawls content \"that may be used in training our generative AI foundation models\". Anthropic's `ClaudeBot` collects content \"that could potentially contribute to their training\".\n- **Search.** `OAI-SearchBot` surfaces sites in ChatGPT's search features. `Claude-SearchBot` analyzes content \"to enhance the relevance and accuracy of search responses\". `PerplexityBot` surfaces and links sites in Perplexity's results, and Perplexity says \"It is not used to crawl content for AI foundation models.\"\n- **User-triggered.** `ChatGPT-User`, `Claude-User` and `Perplexity-User` visit a page because someone asked a question that needs it.\n\nOpenAI also runs `OAI-AdsBot`, which \"only visits pages submitted as ads\" on ChatGPT. Google and Apple split the jobs differently: their search crawlers also gather the content, and a separate control token (`Google-Extended`, `Applebot-Extended`) carries the training choice. The next cards cover both.",
+            "Lesson 1 introduced these bots. Here is the full set you will write rules for, grouped by the job each vendor says it does:\n\n- **Training.** OpenAI's `GPTBot` crawls content \"that may be used in training our generative AI foundation models\". Anthropic's `ClaudeBot` collects content \"that could potentially contribute to their training\".\n- **Search.** `OAI-SearchBot` surfaces sites in ChatGPT's search features. `Claude-SearchBot` analyzes content \"to enhance the relevance and accuracy of search responses\". `PerplexityBot` surfaces and links sites in Perplexity's results, and Perplexity says \"It is not used to crawl content for AI foundation models.\"\n- **User-triggered.** `ChatGPT-User`, `Claude-User` and `Perplexity-User` visit a page because someone asked a question that needs it.\n\nOpenAI also runs `OAI-AdsBot`, which \"only visits pages submitted as ads\" on ChatGPT. Google and Apple split the jobs differently: their search crawlers also gather the content, and a separate control token (`Google-Extended`, `Applebot-Extended`) carries the training choice. The next cards cover both.",
           whyItMatters:
             "Each token is a separate switch. OpenAI says \"Each setting is independent of the others\", and Perplexity says \"Each setting works independently\". You can say no to training and yes to search in the same file, but only if you name the right tokens.",
           example: {

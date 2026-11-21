@@ -48,10 +48,8 @@ const GROUPS = [
 
 export default function Footer() {
   return (
-    // Always dark, in both themes (hero-media pins the dark tokens). The hero's skyline rises out of its foot
-    // (.site-footer-city), so the page ends in the same city it opens on.
+    // Always dark, in both themes (hero-media pins the dark tokens).
     <footer className="site-footer hero-media relative overflow-hidden">
-      <div aria-hidden="true" className="site-footer-city" />
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-12 md:pt-14">
         <div className="grid gap-10 lg:grid-cols-[1fr_2fr] lg:gap-12">
           <div>

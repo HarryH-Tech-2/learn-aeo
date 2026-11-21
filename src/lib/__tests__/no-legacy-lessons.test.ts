@@ -88,7 +88,7 @@ describe("legacy lesson system is gone", () => {
       ...walk(path.join(SRC, "app/dashboard")),
       ...walk(path.join(SRC, "components/player")),
       ...walk(path.join(SRC, "lib/content")),
-      path.join(SRC, "components/CityMap.tsx"),
+      path.join(SRC, "components/LessonList.tsx"),
       path.join(SRC, "lib/lessons.ts"),
       ...fs
         .readdirSync(path.join(SRC, "lib"))

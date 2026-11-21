@@ -10,7 +10,7 @@ import type { GlossaryTerm } from "@/lib/glossary-types";
 // signal. Bump a date when those pages are substantively edited.
 // Marketing and legal pages: Learn AEO copy (Plans 3–5).
 const SITE_LASTMOD = new Date("2026-11-04");
-// The home page: the gate hero and the course in four parts.
+// The home page: the hero and the course in parts.
 const HOME_LASTMOD = new Date("2026-10-30");
 // The lesson catalog and lessons 1–8 (all live).
 const LESSONS_LASTMOD = new Date("2026-10-30");

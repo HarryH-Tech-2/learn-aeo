@@ -38,7 +38,7 @@ export type LessonPlayerProps = {
   onXP: (claim: XpClaim) => void;
   onAuditComplete: (score: number, total: number) => void;
   upgrade: { paid: boolean | null; offer: OfferData | null };
-  /** For the outro's "next district" link. */
+  /** For the outro's "next lesson" link. */
   next?: LessonMeta;
   /** Default true: save and restore the step in localStorage[resumeKey(id)]. */
   persist?: boolean;
@@ -372,7 +372,7 @@ export default function LessonPlayer({ lesson, onXP, onAuditComplete, upgrade, n
     <div ref={topRef} className="mx-auto w-full max-w-3xl scroll-mt-24 font-sans">
       <header className="mb-5 space-y-3">
         <p className="flex flex-wrap items-baseline gap-x-2 text-sm text-sand-400">
-          <span className="font-semibold text-cyan-400">{lesson.district}</span>
+          <span className="font-semibold text-cyan-400">Lesson {lesson.order}</span>
           <span aria-hidden="true">·</span>
           <span>{STEP_LABEL[step.kind]}</span>
         </p>
@@ -455,7 +455,7 @@ function Outro({
   return (
     <article className="space-y-6">
       <header className="space-y-2">
-        <p className={EYEBROW}>{lesson.district}</p>
+        <p className={EYEBROW}>Lesson {lesson.order}</p>
         <h2 className={HEADING}>{passed ? "Lesson complete" : "Nearly there"}</h2>
       </header>
 
@@ -495,14 +495,14 @@ function Outro({
       ) : waiting ? null : next ? (
         next.status === "coming-soon" ? (
           <p className="rounded-xl border border-sand-500/30 bg-obsidian-lighter p-4 font-sans text-sm text-sand-300">
-            Next: <span className="font-semibold text-sand-100">{next.district}</span>, {next.title}. Coming soon.
+            Next: <span className="font-semibold text-sand-100">Lesson {next.order}</span>, {next.title}. Coming soon.
           </p>
         ) : (
           <Link
             href={lessonPath(next.id)}
             className={`inline-flex items-center gap-2 rounded-full bg-cyan-500 px-6 py-3 font-sans text-sm font-semibold text-obsidian transition-colors hover:bg-cyan-400 ${FOCUS}`}
           >
-            Continue to {next.district}
+            Continue to Lesson {next.order}
           </Link>
         )
       ) : null}

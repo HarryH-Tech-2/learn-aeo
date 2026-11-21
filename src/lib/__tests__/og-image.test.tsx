@@ -8,8 +8,8 @@ describe("ogCard", () => {
   });
 
   it("shows the eyebrow, title, footer and brand", () => {
-    const html = renderToStaticMarkup(ogCard({ eyebrow: "Lesson 2 · The Crawl Docks", title: "Make your site reachable by AI", footer: "30 minutes" }));
-    for (const t of ["Lesson 2 · The Crawl Docks", "Make your site reachable by AI", "30 minutes", "Learn", "AEO"]) expect(html).toContain(t);
+    const html = renderToStaticMarkup(ogCard({ eyebrow: "Lesson 2 of 12", title: "Make your site reachable by AI", footer: "30 minutes" }));
+    for (const t of ["Lesson 2 of 12", "Make your site reachable by AI", "30 minutes", "Learn", "AEO"]) expect(html).toContain(t);
   });
 
   it("sets long titles smaller so they fit", () => {

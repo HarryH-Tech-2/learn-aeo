@@ -14,7 +14,7 @@ const ready = () => ({
     { id: "AEO_PPP_B", percent_off: 30, duration: "forever" },
     { id: "AEO_PPP_C", percent_off: 50, duration: "forever" },
     { id: "AEO_PPP_D", percent_off: 65, duration: "forever" },
-    { id: "NEXT-DISTRICT-33", percent_off: 33, duration: "once", applies_to: { products: [LIFETIME] } },
+    { id: "NEXT-LESSON-33", percent_off: 33, duration: "once", applies_to: { products: [LIFETIME] } },
   ],
   webhooks: [{ url: `${SITE}/api/webhooks/stripe`, status: "enabled", enabled_events: [...WEBHOOK_EVENTS] }],
 });
@@ -53,7 +53,7 @@ describe("checkStripeLaunch", () => {
       s.coupons[3] = { ...s.coupons[3], applies_to } as (typeof s.coupons)[number];
       const p = checkStripeLaunch(s);
       expect(p).toHaveLength(1);
-      expect(p[0]).toMatch(/NEXT-DISTRICT-33.*Lifetime/);
+      expect(p[0]).toMatch(/NEXT-LESSON-33.*Lifetime/);
     }
   });
 

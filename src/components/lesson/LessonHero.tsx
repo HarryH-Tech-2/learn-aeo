@@ -6,7 +6,7 @@ import { BADGE_DEFINITIONS } from "@/lib/gamification";
 const LEVEL: Record<string, string> = { beginner: "Beginner", intermediate: "Intermediate", advanced: "Advanced" };
 
 /**
- * The top of a lesson page: the district's badge, where the lesson sits in the course, its title and one-line summary,
+ * The top of a lesson page: the lesson's badge, where the lesson sits in the course, its title and one-line summary,
  * and chips for level, length and price. Used while the lesson loads, on the sign-up gate and above the player.
  */
 export default function LessonHero({ lesson, breadcrumb = true }: { lesson: LessonMeta; breadcrumb?: boolean }) {
@@ -16,7 +16,7 @@ export default function LessonHero({ lesson, breadcrumb = true }: { lesson: Less
       <div aria-hidden="true" className="lesson-hero-glow" />
       <div className="relative flex flex-col sm:flex-row gap-5 sm:items-center">
         {badge && (
-          // the district's badge, earned at the end of the lesson
+          // the lesson's badge, earned at the end of the lesson
           <img src={badge.icon} alt="" width={96} height={96} className="lesson-hero-badge" />
         )}
         <div className="min-w-0">
@@ -27,7 +27,7 @@ export default function LessonHero({ lesson, breadcrumb = true }: { lesson: Less
               </Link>
               <span aria-hidden="true">/</span>
               <span className="text-cyan-400">
-                Lesson {lesson.order} of {LESSON_CATALOG.length}: {lesson.district}
+                Lesson {lesson.order} of {LESSON_CATALOG.length}
               </span>
             </nav>
           )}
@@ -37,7 +37,6 @@ export default function LessonHero({ lesson, breadcrumb = true }: { lesson: Less
             <li className="lesson-chip">{LEVEL[lesson.level] ?? lesson.level}</li>
             <li className="lesson-chip">{lesson.minutes} min</li>
             {lesson.isFree && <li className="lesson-chip lesson-chip-free">Free</li>}
-            {badge && <li className="lesson-chip">Badge: {badge.name}</li>}
           </ul>
         </div>
       </div>

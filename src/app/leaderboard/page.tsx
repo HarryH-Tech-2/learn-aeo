@@ -23,7 +23,7 @@ export default function LeaderboardPage() {
             <span className="font-body text-xs tracking-[0.2em] uppercase text-gold-500">Leaderboard</span>
           </div>
           <h1 className="font-display text-4xl md:text-5xl font-light text-sand-100 mb-2">
-            Who knows the <span className="text-gradient-gold font-medium">city</span> best?
+            Top <span className="text-gradient-gold font-medium">learners</span>
           </h1>
           <p className="font-body text-sand-500 font-light">
             XP comes from every concept card you read, every quick check and exercise you get right, and every audit answer.

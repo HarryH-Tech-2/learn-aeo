@@ -10,7 +10,7 @@ import FAQSection from "@/components/FAQSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 
-/** The homepage: the Gate hero (HeroSection), then what you'll learn, the lessons, the free tools, pricing, FAQ and contact. */
+/** The homepage: the hero (HeroSection), then what you'll learn, the lessons, the free tools, pricing, FAQ and contact. */
 export default function HomePage() {
   return (
     <main className="grain-overlay">

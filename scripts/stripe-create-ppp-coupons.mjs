@@ -3,7 +3,7 @@
  * Create the Learn AEO Stripe coupons:
  *   - purchasing-power parity (src/lib/ppp.ts): AEO_PPP_B / C / D at 30 / 50 / 65% off, duration "forever" so
  *     the monthly subscription keeps the discount;
- *   - the completion offer (src/lib/offers.ts): NEXT-DISTRICT-33, 33% off once, limited in Stripe to the
+ *   - the completion offer (src/lib/offers.ts): NEXT-LESSON-33, 33% off once, limited in Stripe to the
  *     Lifetime product (so it can't discount Monthly even if a code leaks). The site attaches it to
  *     Lifetime checkouts only, through single-use AEO- promotion codes. Run stripe-create-plans.mjs first.
  * The coupon list lives in scripts/lib/stripe-launch-check.mjs, shared with stripe-check-launch.mjs.

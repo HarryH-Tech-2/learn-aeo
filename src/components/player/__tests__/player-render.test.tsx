@@ -72,7 +72,6 @@ const CHOICE: Question = {
 const LESSON: LiveLesson = {
   id: "test-lesson",
   order: 1,
-  district: "The Test District",
   title: "A test lesson",
   summary: "One line.",
   description: "Two sentences. For the test.",
@@ -81,8 +80,8 @@ const LESSON: LiveLesson = {
   isFree: true,
   status: "live",
   content: {
-    intro: "You arrive at the test district, where the answers are made.",
-    outro: "You leave the test district.",
+    intro: "This test lesson shows where the answers are made.",
+    outro: "You have finished the test lesson.",
     groups: [{ id: "g1", title: "Group one", concepts: [CONCEPT], check: [CHOICE] }],
     exercise: { id: "x1", title: "Exercise", brief: "Do the thing.", steps: [ORDER], debrief: "Done." },
     example: {
@@ -110,9 +109,9 @@ describe("LessonPlayer", () => {
     />,
   );
 
-  it("renders the intro text, the district name and a Next button", () => {
-    expect(html).toContain("You arrive at the test district, where the answers are made.");
-    expect(html).toContain("The Test District");
+  it("renders the intro text, the lesson number and a Next button", () => {
+    expect(html).toContain("This test lesson shows where the answers are made.");
+    expect(html).toMatch(/Lesson (<!-- -->)?\d+/);
     expect(buttons(html).some((b) => />\s*Next\b/.test(b) || /aria-label="Next/.test(b))).toBe(true);
   });
 });
@@ -216,7 +215,7 @@ describe("ConceptCard", () => {
 
 describe("Lesson 1 content", () => {
   it("renders every concept, question and the example without throwing", async () => {
-    const { LESSON_1 } = await import("@/lib/content/lesson-1-the-gate");
+    const { LESSON_1 } = await import("@/lib/content/lesson-1");
     const ExampleDissect = (await import("@/components/player/ExampleDissect")).default;
     for (const g of LESSON_1.groups) {
       for (const c of g.concepts) expect(renderToStaticMarkup(<ConceptCard concept={c} />)).toContain(c.term);

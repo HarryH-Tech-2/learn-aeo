@@ -1,95 +1,96 @@
 "use client";
 
-import { FIRST_LESSON_PATH } from "@/lib/lesson-catalog";
+import { FIRST_LESSON_PATH, LESSON_CATALOG, TOTAL_MINUTES } from "@/lib/lesson-catalog";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import type { CSSProperties } from "react";
 import { trackEvent } from "@/lib/analytics";
 import { useAuthModal } from "@/components/AuthModal";
-import HeroVideo from "@/components/home/HeroVideo";
+import HeroAnswer from "@/components/home/HeroAnswer";
+
+/** Course facts under the buttons, all from the catalog. */
+const FACTS = [
+  `${LESSON_CATALOG.length} lessons`,
+  `About ${Math.round(TOTAL_MINUTES / 60)} hours`,
+  "Certificate on completion",
+  "Lesson 1 is free",
+];
 
 /**
- * The homepage hero: the Gate video (HeroVideo) behind a dark band (hero-media pins the dark tokens
- * in both themes, and the navbar floats over it from `lg` up). The copy sits low so the scene's cited source
- * rises above it, and is plain server HTML: the headline, one line on who the course is for, the free first
- * lesson and a second way in to the curriculum never wait on the video.
+ * The homepage hero: a dark band in both themes (hero-media pins the dark tokens, and the navbar floats over it
+ * from `lg` up). Copy on the left, a mock cited AI answer (HeroAnswer) on the right; stacked on small screens.
+ * All plain server HTML: the headline, who the course is for, the free first lesson and the way in to the
+ * curriculum never wait on JavaScript.
  */
 export default function HeroSection() {
   const { data: session } = useSession();
   const { openAuthModal } = useAuthModal();
 
   return (
-    <section className="city-hero hero-media relative flex flex-col justify-end overflow-hidden pb-[16vh] bg-[#04060d]">
-      {/* Background: navy with a cyan glow behind the headline and a faint gold one low down. Fixed colors,
-          never theme-tinted, because the hero is dark in both themes. */}
-      <div className="absolute inset-0" aria-hidden="true">
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 70% 55% at 50% 42%, rgba(111,227,255,0.14) 0%, rgba(111,227,255,0.05) 45%, transparent 75%)",
-          }}
-        />
-        <div
-          className="absolute bottom-0 left-0 right-0 h-[60%]"
-          style={{
-            background:
-              "radial-gradient(ellipse 120% 60% at 50% 100%, rgba(111,178,255,0.10) 0%, rgba(111,178,255,0.03) 40%, transparent 70%)",
-          }}
-        />
-      </div>
+    <section className="home-hero hero-media relative overflow-hidden bg-[#04060d]">
+      <div className="home-hero-glow" aria-hidden="true" />
 
-      <HeroVideo />
+      <div className="home-hero-grid relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="home-hero-copy">
+          <p className="font-body text-xs sm:text-sm uppercase tracking-[0.2em] text-cyan-400 mb-5">
+            An AEO course for marketers who know SEO
+          </p>
+          {/* Visible at first paint (no opacity fade): Chrome ignores opacity-0 text for LCP. */}
+          <h1 className="hero-title font-display text-4xl sm:text-5xl lg:text-6xl font-light leading-[1.05] mb-6 tracking-tight">
+            <span className="text-sand-100">Learn answer engine</span>{" "}
+            <span className="text-gradient-gold font-medium">optimization</span>
+          </h1>
 
-      {/* Content */}
-      <div className="city-hero-copy relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <p className="font-body text-xs sm:text-sm uppercase tracking-[0.2em] text-cyan-400 mb-5">
-          An AEO course for marketers who know SEO
-        </p>
-        {/* Visible at first paint (no opacity fade): Chrome ignores opacity-0 text for LCP. */}
-        <h1 className="hero-title font-display text-4xl sm:text-6xl md:text-7xl font-light leading-[1.02] mb-6 sm:mb-8 tracking-tight">
-          <span className="text-sand-100">Learn answer engine</span> <span className="text-gradient-gold font-medium">optimization</span>
-        </h1>
-
-        <p
-          className="enter-up hero-subtitle font-body text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-8 sm:mb-12 leading-relaxed font-normal"
-          style={{ "--enter-delay": "0.2s" } as CSSProperties}
-        >
-          See how ChatGPT, Perplexity and Google AI Overviews choose the sources they cite, then work on the pages,
-          crawler rules and passages that decide whether one of them is yours.
-        </p>
-
-        <div
-          className="enter-up flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6"
-          style={{ "--enter-delay": "0.4s" } as CSSProperties}
-        >
-          {session ? (
-            <Link href="/dashboard" className="hero-cta">
-              <span className="hero-cta-label">Continue the course</span>
-            </Link>
-          ) : (
-            <button
-              type="button"
-              onClick={() => {
-                trackEvent("free_lesson_cta", { location: "hero" });
-                openAuthModal({ next: FIRST_LESSON_PATH });
-              }}
-              className="hero-cta"
-            >
-              <span className="hero-cta-label">Start lesson 1</span>
-            </button>
-          )}
-          <a
-            href="#lessons"
-            className="inline-flex items-center gap-2 rounded-full border border-sand-400/40 px-6 py-3 font-body text-sm sm:text-base font-semibold text-sand-100 hover:border-gold-400 hover:text-gold-400 transition-colors"
+          <p
+            className="enter-up hero-subtitle font-body text-base sm:text-lg md:text-xl max-w-xl mb-8 leading-relaxed font-normal"
+            style={{ "--enter-delay": "0.15s" } as CSSProperties}
           >
-            See the curriculum
-          </a>
+            See how ChatGPT, Perplexity and Google AI Overviews choose the sources they cite, then work on the pages,
+            crawler rules and passages that decide whether one of them is yours.
+          </p>
+
+          <div
+            className="enter-up home-hero-actions flex flex-col sm:flex-row items-center gap-4 sm:gap-5"
+            style={{ "--enter-delay": "0.3s" } as CSSProperties}
+          >
+            {session ? (
+              <Link href="/dashboard" className="hero-cta">
+                <span className="hero-cta-label">Continue the course</span>
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  trackEvent("free_lesson_cta", { location: "hero" });
+                  openAuthModal({ next: FIRST_LESSON_PATH });
+                }}
+                className="hero-cta"
+              >
+                <span className="hero-cta-label">Start lesson 1</span>
+              </button>
+            )}
+            <a
+              href="#lessons"
+              className="inline-flex items-center gap-2 rounded-full border border-sand-400/40 px-6 py-3 font-body text-sm sm:text-base font-semibold text-sand-100 hover:border-gold-400 hover:text-gold-400 transition-colors"
+            >
+              See the curriculum
+            </a>
+          </div>
+
+          <ul className="enter-up home-hero-facts" style={{ "--enter-delay": "0.45s" } as CSSProperties}>
+            {FACTS.map((f) => (
+              <li key={f}>{f}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="enter-up home-hero-visual" style={{ "--enter-delay": "0.25s" } as CSSProperties}>
+          <HeroAnswer />
         </div>
       </div>
 
-      {/* The foot of the hero: a tall, eased fade into the page background, in either theme (.city-hero-fade). */}
-      <div className="city-hero-fade" aria-hidden="true" />
+      {/* The foot of the hero: an eased fade into the page background, in either theme (.home-hero-fade). */}
+      <div className="home-hero-fade" aria-hidden="true" />
     </section>
   );
 }

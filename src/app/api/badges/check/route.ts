@@ -4,14 +4,14 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { getLesson, isLive } from "@/lib/lessons";
 import { LESSON_CATALOG } from "@/lib/lesson-catalog";
-import { HALF_CITY } from "@/lib/gamification";
+import { HALFWAY, badgeCriteriaKeys, badgeDisplay } from "@/lib/gamification";
 import { checkSubscription } from "@/lib/subscription";
 
 /**
  * POST /api/badges/check { lessonId, score, total }
  * Called after /api/progress/complete has saved the audit. Checked the same way before anything is
  * awarded: the lesson is live, the total is that lesson's audit length and the score a whole number
- * within it (400 otherwise), and a paid lesson needs access (403). The district and Perfect Audit
+ * within it (400 otherwise), and a paid lesson needs access (403). The lesson and Perfect Audit
  * badges then come from the stored LessonProgress row (completed, bestScore), never from the
  * numbers sent.
  */
@@ -68,7 +68,7 @@ export async function POST(request: Request) {
       });
       if (!existing) {
         await prisma.userBadge.create({ data: { userId: user.id, badgeId: completionBadge.id } });
-        awarded.push(completionBadge.name);
+        awarded.push(badgeDisplay(completionBadge).name);
       }
     }
   }
@@ -82,7 +82,7 @@ export async function POST(request: Request) {
       });
       if (!existing) {
         await prisma.userBadge.create({ data: { userId: user.id, badgeId: perfectBadge.id } });
-        awarded.push(perfectBadge.name);
+        awarded.push(badgeDisplay(perfectBadge).name);
       }
     }
   }
@@ -99,7 +99,7 @@ export async function POST(request: Request) {
           });
           if (!existing) {
             await prisma.userBadge.create({ data: { userId: user.id, badgeId: streakBadge.id } });
-            awarded.push(streakBadge.name);
+            awarded.push(badgeDisplay(streakBadge).name);
           }
         }
       }
@@ -112,21 +112,21 @@ export async function POST(request: Request) {
 
   const milestones = [
     { criteria: "milestone:first-lesson", check: startedCount >= 1 },
-    // (counted from the catalog, so adding districts moves the milestones with them)
-    { criteria: "milestone:half-city", check: completedCount >= HALF_CITY },
-    { criteria: "milestone:all-districts", check: completedCount >= LESSON_CATALOG.length },
+    // (counted from the catalog, so adding lessons moves the milestones with them)
+    { criteria: "milestone:halfway", check: completedCount >= HALFWAY },
+    { criteria: "milestone:all-lessons", check: completedCount >= LESSON_CATALOG.length },
   ];
 
   for (const m of milestones) {
     if (m.check) {
-      const badge = await prisma.badge.findFirst({ where: { criteria: m.criteria } });
+      const badge = await prisma.badge.findFirst({ where: { criteria: { in: badgeCriteriaKeys(m.criteria) } } });
       if (badge) {
         const existing = await prisma.userBadge.findUnique({
           where: { userId_badgeId: { userId: user.id, badgeId: badge.id } },
         });
         if (!existing) {
           await prisma.userBadge.create({ data: { userId: user.id, badgeId: badge.id } });
-          awarded.push(badge.name);
+          awarded.push(badgeDisplay(badge).name);
         }
       }
     }

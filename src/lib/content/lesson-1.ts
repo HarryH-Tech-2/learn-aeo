@@ -1,4 +1,4 @@
-// Lesson 1, The Gate: how answer engines choose sources.
+// Lesson 1: how answer engines choose sources.
 // Every claim about an engine is tied to a primary source checked on the
 // `accessed` date. Brands such as Brightdesk and Northwind Planner are made up.
 
@@ -134,10 +134,10 @@ const BING_COPILOT_SEARCH: Source = {
 
 export const LESSON_1: LessonContent = {
   intro:
-    "You have reached The Gate, the first district of the City of Answers. Every question that enters the city leaves as a single written answer, with a short list of sources attached. Before you work on getting your pages onto that list, you need to see how the list gets made.",
+    "Ask an AI search tool a question and you get a single written answer, with a short list of sources attached. Before you work on getting your pages onto that list, you need to see how the list gets made.",
 
   outro:
-    "You leave The Gate with the model the rest of the course builds on: an engine retrieves pages from an index, grounds its answer in a few passages, and cites the ones it relied on. Next stop is The Crawl Docks, where you make sure the bots doing that retrieving can actually reach your site.",
+    "You now have the model the rest of the course builds on: an engine retrieves pages from an index, grounds its answer in a few passages, and cites the ones it relied on. Lesson 2 is next, where you make sure the bots doing that retrieving can actually reach your site.",
 
   groups: [
     {

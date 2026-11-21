@@ -14,7 +14,7 @@ export function generateStaticParams() {
 /** The share card's alt text, so a screen reader or a feed that can't load the image still names the lesson. */
 export function lessonImageAlt(id: string): string {
   const lesson = lessonMeta(id) ?? LESSON_CATALOG[0];
-  return `Learn AEO lesson ${lesson.order}, ${lesson.district}: ${lesson.title}`;
+  return `Learn AEO lesson ${lesson.order}: ${lesson.title}`;
 }
 
 export async function generateImageMetadata({ params }: { params: Promise<{ id: string }> | { id: string } }) {
@@ -28,7 +28,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
   if (!lesson) notFound();
   return new ImageResponse(
     ogCard({
-      eyebrow: `Lesson ${lesson.order} · ${lesson.district}`,
+      eyebrow: `Lesson ${lesson.order} of ${LESSON_CATALOG.length}`,
       title: lesson.title,
       footer: lesson.status === "coming-soon" ? "Coming soon" : lesson.isFree ? `Free · ${lesson.minutes} minutes` : `${lesson.minutes} minutes`,
     }),

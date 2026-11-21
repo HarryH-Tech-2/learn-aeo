@@ -1,4 +1,4 @@
-// Lesson 4, The Schema Works: structured data and entities.
+// Lesson 4: structured data and entities.
 // Every claim about Google, Bing, schema.org or JSON-LD is tied to a source
 // checked on the `accessed` date. Google retired the How-to rich result in 2023,
 // a group of lesser-used features in 2025 (book actions was later kept), the
@@ -214,10 +214,10 @@ const MAILCHIMP_HOME: Source = {
 
 export const LESSON_4: LessonContent = {
   intro:
-    "You have reached The Schema Works, the fourth district of the City of Answers. In The Answer Quarter you wrote passages that people and engines can lift. Here you describe those pages, the people who write them and the organization behind them, in a form machines can read without guessing: structured data. You will also find out what markup no longer does, because some of the most repeated advice about it is out of date.",
+    "In Lesson 3 you wrote passages that people and engines can lift. Here you describe those pages, the people who write them and the organization behind them, in a form machines can read without guessing: structured data. You will also find out what markup no longer does, because some of the most repeated advice about it is out of date.",
 
   outro:
-    "You leave The Schema Works able to write JSON-LD that matches the page, test it with the right tool, pick the types Google still uses, tell a client honestly what markup does today, and describe your brand, your site and your authors as unambiguous entities joined by one @id. Next stop is The Agora, where you work on what the rest of the web says about that entity.",
+    "You can now write JSON-LD that matches the page, test it with the right tool, pick the types Google still uses, tell a client honestly what markup does today, and describe your brand, your site and your authors as unambiguous entities joined by one @id. Lesson 5 is next, where you work on what the rest of the web says about that entity.",
 
   groups: [
     {
@@ -521,7 +521,7 @@ export const LESSON_4: LessonContent = {
           explanation:
             "Google says Article markup can help it \"show better title text, images, and date information\" for the article. It isn't a gate: \"there's no markup requirement to be eligible for Google News features like Top stories\", but it lets you state explicitly what the content is and who wrote it. As with Organization, \"There are no required properties\". The useful ones:\n\n- `@type`: `Article`, `NewsArticle` or `BlogPosting`, whichever fits.\n- `headline`: the title.\n- `datePublished` and `dateModified`: \"in ISO 8601 format\", with a timezone.\n- `image`: images relevant to the article, which Google must be able to crawl and index.\n- `author`: a Person or an Organization. A brand blog without named writers can use the Organization.\n- `publisher`: the organization, ideally by its `@id`.\n\nFor authors, Google recommends a URL that identifies them and adds: \"Google can understand both sameAs and url when disambiguating authors.\"",
           whyItMatters:
-            "Dates and authorship are facts readers check before they trust a page. The Answer Quarter covered showing them on the page; Article markup states the same facts for machines, and Google says it helps it show better date information.",
+            "Dates and authorship are facts readers check before they trust a page. Lesson 3 covered showing them on the page; Article markup states the same facts for machines, and Google says it helps it show better date information.",
           pitfall:
             "Updating dateModified on a schedule when nothing changed. The markup must match the page, and Google's own description is \"The date and time the article was most recently modified\", not the date you last republished it.",
           sources: [GOOGLE_ARTICLE],
@@ -595,7 +595,7 @@ export const LESSON_4: LessonContent = {
           term: "Product markup and reviews",
           summary: "Product markup describes a product's price, availability and ratings; review markup has strict rules against self-serving and fake reviews.",
           explanation:
-            "For a product snippet (a result with ratings, price and availability), Google requires a `name` and says: \"Product snippets require either review or aggregateRating or offers\". If people can buy on the page, Google's docs ask: \"Can customers purchase products from you? Consider adding merchant listing markup.\" Merchant listings have stricter rules, which The Market covers in depth.\n\nReviews come with rules. Google says: \"Don't include fake or undisclosed incentivized reviews on your page or in your structured data markup.\" And for brands reviewing themselves: \"If the entity that's being reviewed controls the reviews about itself, their pages that use LocalBusiness or any other type of Organization structured data are ineligible for star review feature.\" That covers reviews shown through an embedded widget too.\n\nIn November 2025 Google also clarified that \"site owners should avoid using multiple ways of indicating what's being reviewed\".",
+            "For a product snippet (a result with ratings, price and availability), Google requires a `name` and says: \"Product snippets require either review or aggregateRating or offers\". If people can buy on the page, Google's docs ask: \"Can customers purchase products from you? Consider adding merchant listing markup.\" Merchant listings have stricter rules, which Lesson 9 covers in depth.\n\nReviews come with rules. Google says: \"Don't include fake or undisclosed incentivized reviews on your page or in your structured data markup.\" And for brands reviewing themselves: \"If the entity that's being reviewed controls the reviews about itself, their pages that use LocalBusiness or any other type of Organization structured data are ineligible for star review feature.\" That covers reviews shown through an embedded widget too.\n\nIn November 2025 Google also clarified that \"site owners should avoid using multiple ways of indicating what's being reviewed\".",
           whyItMatters:
             "Price, availability and ratings are facts you want stated precisely, not inferred from a page layout. Review markup is also where a well-meant shortcut, such as marking up your own testimonials, can break Google's rules.",
           example: {
@@ -691,7 +691,7 @@ export const LESSON_4: LessonContent = {
             note: "A made-up audit line, rewritten to match Google's changelog and its current structured data gallery.",
           },
           pitfall:
-            "Deleting good FAQ content along with the idea of the rich result. Questions with direct answers on the page are still useful to readers and to engines (The Answer Quarter). It's the promise of a bigger Google result that ended.",
+            "Deleting good FAQ content along with the idea of the rich result. Questions with direct answers on the page are still useful to readers and to engines (Lesson 3). It's the promise of a bigger Google result that ended.",
           sources: [GOOGLE_HOWTO_FAQ_2023, GOOGLE_UPDATES, GOOGLE_GALLERY],
         },
         {
@@ -859,7 +859,7 @@ export const LESSON_4: LessonContent = {
           term: "Entity",
           summary: "An entity is a distinct real-world thing, such as a company, person or product, that a search engine keeps track of as one thing.",
           explanation:
-            "In 2012 Google introduced the Knowledge Graph, a model \"that understands real-world entities and their relationships to one another: things, not strings.\" Its example was the query [taj mahal]: \"Language can be ambiguous—do you mean Taj Mahal the monument, or Taj Mahal the musician?\"\n\nToday Google describes the Knowledge Graph as \"our database of billions of facts about people, places, and things.\" Its facts \"come from a variety of sources that compile factual information\", plus licensed data and information \"directly from content owners in various ways\". The visible result is the knowledge panel, and Google says \"Knowledge panels are created automatically by Google Search algorithm when there is enough information available on the open web.\" Claiming a panel and suggesting edits is covered in The Hall of Records.\n\nYour brand is an entity in this sense too, and it is recognized from what your site and other sites say about it.",
+            "In 2012 Google introduced the Knowledge Graph, a model \"that understands real-world entities and their relationships to one another: things, not strings.\" Its example was the query [taj mahal]: \"Language can be ambiguous—do you mean Taj Mahal the monument, or Taj Mahal the musician?\"\n\nToday Google describes the Knowledge Graph as \"our database of billions of facts about people, places, and things.\" Its facts \"come from a variety of sources that compile factual information\", plus licensed data and information \"directly from content owners in various ways\". The visible result is the knowledge panel, and Google says \"Knowledge panels are created automatically by Google Search algorithm when there is enough information available on the open web.\" Claiming a panel and suggesting edits is covered in Lesson 12.\n\nYour brand is an entity in this sense too, and it is recognized from what your site and other sites say about it.",
           whyItMatters:
             "Search engines keep track of things, not just words, and ambiguity is the problem the Knowledge Graph was built to solve. Consistent names, descriptions and details give engines one clear entity to recognize as your brand, instead of leaving them to work out which of several similar names you are.",
           pitfall:
@@ -885,7 +885,7 @@ export const LESSON_4: LessonContent = {
           term: "sameAs",
           summary: "sameAs lists pages on other sites that are about the same entity, such as its Wikipedia, Wikidata and official social profiles.",
           explanation:
-            "Schema.org defines `sameAs` as the \"URL of a reference Web page that unambiguously indicates the item's identity. E.g. the URL of the item's Wikipedia page, Wikidata entry, or official website.\"\n\nGoogle's Organization docs describe it as \"The URL of a page on another website with additional information about your organization\", such as a profile on \"a social media or review site\", and note \"You can provide multiple sameAs URLs.\" Google also says it \"can make general use of the sameAs property\" beyond its documented features, and its author guidance accepts `sameAs` alongside `url` for people.\n\nOnly list pages you'd stand behind as yours: your verified social profiles, your Wikidata item and your Wikipedia article if one exists. Whether a brand should have a Wikipedia article or Wikidata item at all is covered in The Agora.",
+            "Schema.org defines `sameAs` as the \"URL of a reference Web page that unambiguously indicates the item's identity. E.g. the URL of the item's Wikipedia page, Wikidata entry, or official website.\"\n\nGoogle's Organization docs describe it as \"The URL of a page on another website with additional information about your organization\", such as a profile on \"a social media or review site\", and note \"You can provide multiple sameAs URLs.\" Google also says it \"can make general use of the sameAs property\" beyond its documented features, and its author guidance accepts `sameAs` alongside `url` for people.\n\nOnly list pages you'd stand behind as yours: your verified social profiles, your Wikidata item and your Wikipedia article if one exists. Whether a brand should have a Wikipedia article or Wikidata item at all is covered in Lesson 5.",
           whyItMatters:
             "sameAs links the entity on your site to the same entity elsewhere. It is a direct way to tell machines that your LinkedIn page, your Wikidata item and your website are all one organization.",
           pitfall:

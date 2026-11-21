@@ -3,8 +3,8 @@
 import OfferBanner, { type OfferData } from "@/components/OfferBanner";
 import UpgradePanel from "@/components/lesson/UpgradePanel";
 import { LESSON_CATALOG } from "@/lib/lesson-catalog";
-import { districtViews } from "@/lib/city-map";
-import CityMap from "@/components/CityMap";
+import { lessonViews } from "@/lib/lesson-progress";
+import LessonList from "@/components/LessonList";
 
 import { setAnalyticsUserProperty, trackEvent } from "@/lib/analytics";
 
@@ -42,7 +42,7 @@ type Me = {
 };
 
 const TABS = [
-  { id: "journey", label: "City map", short: "Map" },
+  { id: "journey", label: "Lessons", short: "Lessons" },
   { id: "badges", label: "Badges", short: "Badges" },
   { id: "ranks", label: "Leaderboard", short: "Ranks" },
   { id: "certificate", label: "Certificate", short: "Certificate" },
@@ -146,7 +146,7 @@ function DashboardInner() {
     return null;
   }
 
-  const districts = districtViews(LESSON_CATALOG, progress?.lessons ?? null, !!hasSubscription, me?.auditLengths);
+  const lessons = lessonViews(LESSON_CATALOG, progress?.lessons ?? null, !!hasSubscription, me?.auditLengths);
   const liveLessons = LESSON_CATALOG.filter((l) => l.status === "live");
   const comingSoon = LESSON_CATALOG.length - liveLessons.length;
   const completedLive = liveLessons.filter((l) => progress?.lessons[l.id]?.completed).length;
@@ -176,7 +176,7 @@ function DashboardInner() {
           xp={progress?.xp ?? 0}
           streak={progress?.streak ?? 0}
           badgesEarned={badges.length}
-          districts={districts}
+          lessons={lessons}
           paid={!!hasSubscription}
         />
 
@@ -260,13 +260,13 @@ function DashboardInner() {
         {tab === "journey" && (
           <>
         <div className="mb-8">
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-sand-100 mb-2">The City of Answers</h2>
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-sand-100 mb-2">Your lessons</h2>
           <p className="font-sans text-sm text-sand-400">
             {completedLive} of {liveLessons.length} {liveLessons.length === 1 ? "lesson" : "lessons"} complete
-            {comingSoon > 0 ? ` · ${comingSoon} more ${comingSoon === 1 ? "district" : "districts"} opening soon` : ""}
+            {comingSoon > 0 ? ` · ${comingSoon} more ${comingSoon === 1 ? "lesson" : "lessons"} opening soon` : ""}
           </p>
         </div>
-        <CityMap districts={districts} />
+        <LessonList lessons={lessons} />
           </>
         )}
 

@@ -26,9 +26,10 @@ vi.mock("@/lib/db", async () => {
   return {
     prisma: {
       badge: {
-        findFirst: vi.fn(async ({ where }: { where: { criteria: string } }) =>
-          badges.find((b) => b.criteria === where.criteria) ?? null
-        ),
+        findFirst: vi.fn(async ({ where }: { where: { criteria: string | { in: string[] } } }) => {
+          const keys = typeof where.criteria === "string" ? [where.criteria] : where.criteria.in;
+          return badges.find((b) => keys.includes(b.criteria)) ?? null;
+        }),
       },
       userBadge: { findUnique: vi.fn(async () => null), create: vi.fn(async () => ({})) },
       userStreak: { findUnique: vi.fn(async () => db.streak) },
@@ -80,7 +81,7 @@ describe("POST /api/badges/check", () => {
     db.streak = null;
   });
 
-  it("awards the district badge and Perfect Audit for a stored perfect audit", async () => {
+  it("awards the lesson badge and Perfect Audit for a stored perfect audit", async () => {
     db.progress = [row(PAID.id, PAID_TOTAL, true)];
     const { awarded } = await check({ lessonId: PAID.id, score: PAID_TOTAL, total: PAID_TOTAL });
     expect(awarded).toContain(nameOf(`complete:${PAID.id}`));
@@ -94,7 +95,7 @@ describe("POST /api/badges/check", () => {
     expect(awarded).not.toContain(nameOf("perfect-audit"));
   });
 
-  it("bases the district and Perfect Audit badges on stored progress, not the numbers sent", async () => {
+  it("bases the lesson and Perfect Audit badges on stored progress, not the numbers sent", async () => {
     // A valid-looking perfect score with nothing stored for the lesson earns neither.
     const { awarded } = await check({ lessonId: FREE.id, score: FREE_TOTAL, total: FREE_TOTAL });
     expect(awarded).not.toContain(nameOf(`complete:${FREE.id}`));
@@ -146,26 +147,26 @@ describe("POST /api/badges/check", () => {
     expect(awarded).toEqual([nameOf("milestone:first-lesson")]);
   });
 
-  it("fires half-city at 6 completed districts (half of 12), not 5", async () => {
+  it("fires halfway at 6 completed lessons (half of 12), not 5", async () => {
     db.progress = others(6, 5);
     expect((await check({ lessonId: FREE.id, score: 0, total: FREE_TOTAL })).awarded).not.toContain(
-      nameOf("milestone:half-city")
+      nameOf("milestone:halfway")
     );
     db.progress = others(6, 6);
     expect((await check({ lessonId: FREE.id, score: 0, total: FREE_TOTAL })).awarded).toContain(
-      nameOf("milestone:half-city")
+      nameOf("milestone:halfway")
     );
   });
 
-  it("fires all-districts at 12 completed districts, not 11", async () => {
+  it("fires all-lessons at 12 completed lessons, not 11", async () => {
     db.progress = others(12, 11);
     expect((await check({ lessonId: FREE.id, score: 0, total: FREE_TOTAL })).awarded).not.toContain(
-      nameOf("milestone:all-districts")
+      nameOf("milestone:all-lessons")
     );
     db.progress = others(12, 12);
     const { awarded } = await check({ lessonId: FREE.id, score: 0, total: FREE_TOTAL });
-    expect(awarded).toContain(nameOf("milestone:all-districts"));
-    expect(awarded).toContain(nameOf("milestone:half-city"));
+    expect(awarded).toContain(nameOf("milestone:all-lessons"));
+    expect(awarded).toContain(nameOf("milestone:halfway"));
   });
 
   it("returns 401 without a session", async () => {

@@ -166,7 +166,7 @@ function firstNameOf(name: string | null | undefined): string | null {
 
 /**
  * Sent when a learner who hasn't bought passes a lesson (today only the free one, from
- * src/app/api/progress/complete/route.ts): names the lesson they passed and the next district,
+ * src/app/api/progress/complete/route.ts): names the lesson they passed and the next one,
  * with their offer code. `lessonId` is the lesson passed; it defaults to the first lesson.
  */
 export async function sendLessonCompleteEmail(input: OfferEmailInput & { lessonId?: string }): Promise<void> {
@@ -178,22 +178,22 @@ export async function sendLessonCompleteEmail(input: OfferEmailInput & { lessonI
   const nextUrl = next ? `${base}${lessonPath(next.id)}` : `${base}/pricing`;
   const expiry = fmtExpiry(input.expiresAt);
   const nextLine = next
-    ? `Next is ${strong(esc(next.district))}: ${esc(next.title)}. ${esc(next.summary)}${next.status === "coming-soon" ? " It is coming soon, and included when it opens." : ""}`
-    : "That was the last district, so the whole course is behind you.";
+    ? `Next is ${strong(`Lesson ${next.order}: ${esc(next.title)}`)}. ${esc(next.summary)}${next.status === "coming-soon" ? " It is coming soon, and included when it opens." : ""}`
+    : "That was the last lesson, so the whole course is behind you.";
   const result = await getResend().emails.send({
     from: brandFrom(),
     to: input.email,
-    subject: `You passed ${passed.title}${next ? `. Next: ${next.district}` : ""} (${input.percentOff}% off until ${expiry})`,
+    subject: `You passed ${passed.title}${next ? `. Next: Lesson ${next.order}` : ""} (${input.percentOff}% off until ${expiry})`,
     html: emailLayout({
       baseUrl: layoutBase(),
-      preheader: `You passed ${passed.district}. Here is ${input.percentOff}% off the rest of the course.`,
-      body: `${heading(next ? `${esc(next.district)} is next` : "You finished the course")}
-        ${p(`${first ? `${esc(first)}, you` : "You"} passed ${strong(`${esc(passed.district)}: ${esc(passed.title)}`)}.`)}
+      preheader: `You passed Lesson ${passed.order}. Here is ${input.percentOff}% off the rest of the course.`,
+      body: `${heading(next ? `Lesson ${next.order} is next` : "You finished the course")}
+        ${p(`${first ? `${esc(first)}, you` : "You"} passed ${strong(`Lesson ${passed.order}: ${esc(passed.title)}`)}.`)}
         ${p(nextLine)}
         ${codePanel(`Your ${input.percentOff}% off code`, input.code, `Applied automatically at checkout &middot; expires ${expiry}`)}
         ${p("Lifetime access opens every lesson, including each new one as it is released, and your certificate when you finish.")}
-        ${button(checkoutUrl, next ? `Unlock ${esc(next.district)}` : "Unlock the course")}
-        ${p(link(nextUrl, next ? `See what ${esc(next.district)} covers` : "See the plans"), { size: 14 })}`,
+        ${button(checkoutUrl, next ? `Unlock Lesson ${next.order}` : "Unlock the course")}
+        ${p(link(nextUrl, next ? `See what Lesson ${next.order} covers` : "See the plans"), { size: 14 })}`,
       reason: `You are getting this because you passed a lesson at learnaeo.com.<br/>${OFFER_FOOT}<br/>${contactLine()}`,
     }),
   });

@@ -35,51 +35,51 @@ describe("calculateLevel", () => {
 });
 
 describe("level titles", () => {
-  it("has the City of Answers thresholds and titles, exactly", () => {
+  it("has the level thresholds and titles, exactly", () => {
     expect(LEVEL_THRESHOLDS.map((t) => [t.level, t.xp, t.title])).toEqual([
-      [1, 0, "Query Rookie"],
-      [2, 200, "Crawl Wrangler"],
-      [3, 500, "Snippet Smith"],
-      [4, 1000, "Entity Architect"],
-      [5, 2000, "Citation Hunter"],
-      [6, 3500, "Answer Strategist"],
-      [7, 5000, "Answer Engine Authority"],
+      [1, 0, "Beginner"],
+      [2, 200, "Learner"],
+      [3, 500, "Practitioner"],
+      [4, 1000, "Proficient"],
+      [5, 2000, "Advanced"],
+      [6, 3500, "Strategist"],
+      [7, 5000, "Expert"],
     ]);
   });
 
-  it("titles 0 XP Query Rookie and 5000 XP Answer Engine Authority", () => {
-    expect(getLevelTitle(calculateLevel(0))).toBe("Query Rookie");
-    expect(getLevelTitle(calculateLevel(5000))).toBe("Answer Engine Authority");
+  it("titles 0 XP Beginner and 5000 XP Expert", () => {
+    expect(getLevelTitle(calculateLevel(0))).toBe("Beginner");
+    expect(getLevelTitle(calculateLevel(5000))).toBe("Expert");
   });
 
-  it("falls back to Query Rookie for an unknown level", () => {
-    expect(getLevelTitle(0)).toBe("Query Rookie");
-    expect(getLevelTitle(99)).toBe("Query Rookie");
+  it("falls back to Beginner for an unknown level", () => {
+    expect(getLevelTitle(0)).toBe("Beginner");
+    expect(getLevelTitle(99)).toBe("Beginner");
   });
 });
 
 describe("BADGE_DEFINITIONS", () => {
-  it("is the City of Answers badge list, exactly", () => {
+  it("is the badge list, exactly", () => {
     expect(BADGE_DEFINITIONS.map((b) => [b.name, b.criteria, b.description])).toEqual([
-      ["Through the Gate", "complete:how-answer-engines-choose-sources", "Completed The Gate"],
-      ["Dockmaster", "complete:make-your-site-reachable-by-ai", "Completed The Crawl Docks"],
-      ["Quotable", "complete:writing-citable-content", "Completed The Answer Quarter"],
-      ["Schema Smith", "complete:structured-data-and-entities", "Completed The Schema Works"],
-      ["Voice of the Agora", "complete:authority-beyond-your-site", "Completed The Agora"],
-      ["Ambassador", "complete:platform-playbooks", "Completed The Embassies"],
-      ["Stargazer", "complete:measuring-ai-visibility", "Completed The Observatory"],
-      ["Keeper of the Citadel", "complete:running-an-aeo-program", "Completed The Citadel"],
-      ["Market Maker", "complete:products-and-shopping-in-ai-answers", "Completed The Market"],
-      ["Local Hero", "complete:local-businesses-and-reviews", "Completed The Neighborhoods"],
-      ["Picture Perfect", "complete:video-images-and-youtube", "Completed The Picture House"],
-      ["Record Keeper", "complete:when-ai-gets-your-brand-wrong", "Completed The Hall of Records"],
+      ["Lesson 1 complete", "complete:how-answer-engines-choose-sources", "Completed How answer engines choose sources"],
+      ["Lesson 2 complete", "complete:make-your-site-reachable-by-ai", "Completed Make your site reachable by AI"],
+      ["Lesson 3 complete", "complete:writing-citable-content", "Completed Writing citable content"],
+      ["Lesson 4 complete", "complete:structured-data-and-entities", "Completed Structured data and entities"],
+      ["Lesson 5 complete", "complete:authority-beyond-your-site", "Completed Authority beyond your site"],
+      ["Lesson 6 complete", "complete:platform-playbooks", "Completed Platform playbooks"],
+      ["Lesson 7 complete", "complete:measuring-ai-visibility", "Completed Measuring AI visibility"],
+      ["Lesson 8 complete", "complete:running-an-aeo-program", "Completed Running an AEO program"],
+      ["Lesson 9 complete", "complete:products-and-shopping-in-ai-answers", "Completed Products and shopping in AI answers"],
+      ["Lesson 10 complete", "complete:local-businesses-and-reviews", "Completed Local businesses and reviews in AI answers"],
+      ["Lesson 11 complete", "complete:video-images-and-youtube", "Completed Video, images and YouTube in AI answers"],
+      ["Lesson 12 complete", "complete:when-ai-gets-your-brand-wrong", "Completed When AI gets your brand wrong"],
       ["Perfect Audit", "perfect-audit", "Scored 100% on a lesson audit"],
       ["3-Day Streak", "streak:3", "Kept a 3-day streak"],
       ["7-Day Streak", "streak:7", "Kept a 7-day streak"],
       ["30-Day Streak", "streak:30", "Kept a 30-day streak"],
-      ["First Steps", "milestone:first-lesson", "Started your first lesson"],
-      ["Halfway Across the City", "milestone:half-city", "Completed 6 districts"],
-      ["The Whole City", "milestone:all-districts", "Completed all 12 districts"],
+      ["First Lesson", "milestone:first-lesson", "Started your first lesson"],
+      ["Halfway", "milestone:halfway", "Completed 6 lessons"],
+      ["Course Complete", "milestone:all-lessons", "Completed all 12 lessons"],
     ]);
   });
 

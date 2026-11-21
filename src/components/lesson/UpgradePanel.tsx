@@ -42,8 +42,6 @@ const NUMBER_WORDS = ["No", "One", "Two", "Three", "Four", "Five", "Six", "Seven
 const PAID_LESSONS = LESSON_CATALOG.filter((l) => !l.isFree);
 const ALL_LIVE = LESSON_CATALOG.every((l) => l.status === "live");
 const REMAINING = NUMBER_WORDS[PAID_LESSONS.length] ?? String(PAID_LESSONS.length);
-const FIRST_PAID = PAID_LESSONS[0]?.district;
-const LAST_PAID = PAID_LESSONS[PAID_LESSONS.length - 1]?.district;
 
 export default function UpgradePanel({ paid, offer: given, location, progressLine, freeUnlock }: Props) {
   const freeGuest = useFreeCourseGuest();
@@ -75,14 +73,14 @@ function PaidPitch({ paid, offer: given, location, progressLine }: Props) {
   const lifetime = PLANS.lifetime;
   return (
     <section aria-label="Unlock the full course" className={SHEET}>
-      <p className="font-sans text-xs font-semibold uppercase tracking-[0.14em] text-cyan-400 mb-2">The rest of the City of Answers</p>
+      <p className="font-sans text-xs font-semibold uppercase tracking-[0.14em] text-cyan-400 mb-2">The rest of the course</p>
       <h3 className="font-display text-2xl md:text-3xl text-sand-100 mb-2">
-        {REMAINING} more districts are waiting
+        {REMAINING} more lessons are waiting
       </h3>
       <p className="font-sans text-sm text-sand-300 leading-relaxed mb-5 max-w-2xl">
         {progressLine ? `${progressLine}. ` : ""}
         {location === "dashboard" ? "Lesson 1 stays free to the end." : "This lesson stays free to the end."}{" "}
-        {FIRST_PAID && LAST_PAID ? `From ${FIRST_PAID} to ${LAST_PAID}, the rest of the course` : "The rest of the course"} opens
+        The rest of the course opens
         with Lifetime access, or the {PLANS.yearly.name} or {PLANS.monthly.name} plan.{" "}
         {ALL_LIVE ? "Lifetime includes any lessons added later." : "New lessons are being released in turn, and Lifetime includes every future lesson."}
       </p>

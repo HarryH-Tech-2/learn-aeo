@@ -1,4 +1,4 @@
-// Lesson 11, The Picture House: video, images and YouTube in AI answers.
+// Lesson 11: video, images and YouTube in AI answers.
 // Every claim about Google Search, Search Console, YouTube, schema.org and
 // ChatGPT is tied to a source checked on the `accessed` date. Google says its
 // generative AI features can bring in images and video, and that following its
@@ -164,10 +164,10 @@ const SCHEMA_VIDEOOBJECT: Source = {
 
 export const LESSON_11: LessonContent = {
   intro:
-    "Welcome to The Picture House, the eleventh district of the City of Answers. Not every answer is text: AI answers can show a video, a product photo or a still from a how-to, with a link back to whoever published it. In this district you learn what Google, YouTube and OpenAI actually document about pictures and video in search and AI answers, and you set up Larkfield Tea's first brewing video and product photos so they can be found, understood and credited.",
+    "Not every answer is text: AI answers can show a video, a product photo or a still from a how-to, with a link back to whoever published it. In this lesson you learn what Google, YouTube and OpenAI actually document about pictures and video in search and AI answers, and you set up Larkfield Tea's first brewing video and product photos so they can be found, understood and credited.",
 
   outro:
-    "You leave The Picture House knowing that pictures and video in AI answers run on the same documented basics as image and video search: a real watch page, fetchable files, VideoObject and key moments, a clear YouTube title, description, chapters and captions, and images in plain HTML with useful alt text and, where it fits, license metadata. None of it is a trick for one AI tool, which is exactly why it keeps working as the tools change.",
+    "You now know that pictures and video in AI answers run on the same documented basics as image and video search: a real watch page, fetchable files, VideoObject and key moments, a clear YouTube title, description, chapters and captions, and images in plain HTML with useful alt text and, where it fits, license metadata. None of it is a trick for one AI tool, which is exactly why it keeps working as the tools change.",
 
   groups: [
     {

@@ -2,7 +2,7 @@ import InView from "@/components/InView";
 import { reveal } from "@/components/reveal";
 import { LESSON_CATALOG } from "@/lib/lesson-catalog";
 
-/** Six "what you'll learn" cards. Each names the districts (lessons) it comes from; the district names, lesson
+/** Six "what you'll learn" cards. Each names the lessons it comes from; the lesson
  *  numbers and live / coming-soon status are read from the catalog, so they never drift from the course. */
 const features: { title: string; description: string; lessons: number[] }[] = [
   {
@@ -53,8 +53,6 @@ function lessonsFor(orders: number[]) {
 
 // Server component; scroll-reveal is CSS via <InView> + .reveal.
 export default function FeaturesSection() {
-  const first = LESSON_CATALOG[0];
-  const last = LESSON_CATALOG[LESSON_CATALOG.length - 1];
   return (
     <section id="features" className="relative py-20 overflow-hidden">
       <InView className="max-w-7xl mx-auto px-6 lg:px-8" margin="-100px">
@@ -75,8 +73,7 @@ export default function FeaturesSection() {
           </h2>
 
           <p className="reveal font-body text-lg text-sand-400 max-w-2xl mx-auto font-light" style={reveal(0.2)}>
-            The course is a City of Answers with {LESSON_CATALOG.length} districts, one lesson each. You come in at{" "}
-            {first.district} and finish at {last.district}.
+            {LESSON_CATALOG.length} lessons take you from how an AI answer is built to running AEO as an ongoing program.
           </p>
         </div>
 
@@ -94,9 +91,7 @@ export default function FeaturesSection() {
                     key={lesson.id}
                     className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 px-3 py-1 font-body text-xs text-cyan-500"
                   >
-                    <span>
-                      Lesson {lesson.order} · {lesson.district}
-                    </span>
+                    <span>Lesson {lesson.order}</span>
                     {lesson.status === "coming-soon" && <span className="text-sand-400">· coming soon</span>}
                   </li>
                 ))}

@@ -1207,23 +1207,6 @@ html.light footer.site-footer {
   background: linear-gradient(90deg, transparent, rgba(111, 227, 255, 0.7) 50%, transparent);
   box-shadow: 0 0 24px 2px rgba(111, 178, 255, 0.35);
 }
-/* the hero's skyline, rising out of the bottom and fading up into the navy */
-.site-footer-city {
-  position: absolute;
-  inset: auto 0 0 0;
-  height: min(300px, 55%);
-  pointer-events: none;
-  background: url("/hero/city-poster.webp") center 62% / cover no-repeat;
-  opacity: 0.7;
-  -webkit-mask-image: linear-gradient(to top, #000 15%, transparent 100%);
-  mask-image: linear-gradient(to top, #000 15%, transparent 100%);
-}
-@media (max-width: 640px) {
-  .site-footer-city {
-    background-size: 220% auto;
-    background-position: center bottom;
-  }
-}
 /* ── Cookie notice (CookieScroll.tsx): an answer engine's reply ── */
 .cookie-card {
   position: fixed;
@@ -1413,180 +1396,238 @@ html:not(.light) .faq-a {
 .font-display.font-semibold {
   font-weight: 700;
 }
-/* ── City of Answers hero (src/components/home/CityHero.tsx) ──
-   The scene fills the section; the copy sits low over a soft dark pool so it stays readable. */
-.city-hero {
-  min-height: max(560px, 100svh);
-  /* clears the search bar (top + height below, plus a gap): on a short window the hero grows instead of the eyebrow
-     sliding under the bar */
-  padding-top: calc(clamp(88px, 17vh, 190px) + clamp(48px, 6.4vh, 60px) + 1.75rem);
-}
-.city-hero-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-  transition: opacity 0.6s ease;
-}
-.city-hero-vignette {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse at 50% 42%, transparent 45%, rgba(4, 6, 13, 0.8) 100%),
-    linear-gradient(to bottom, transparent 50%, rgba(4, 6, 13, 0.82) 100%);
-}
-@media (max-aspect-ratio: 4/5) {
-  .city-hero-vignette {
-    background:
-      radial-gradient(ellipse at 50% 30%, transparent 40%, rgba(4, 6, 13, 0.8) 100%),
-      linear-gradient(to bottom, transparent 30%, rgba(4, 6, 13, 0.92) 72%);
-  }
-}
-/* the video is 16:9 with the gate in the middle; on narrow screens keep the gate and its gold tower centered */
-.city-hero-video {
-  object-fit: cover;
-  object-position: 50% 40%;
-}
-/* the intro sits over the loop and steps aside once the loop is playing under it (their frames match there) */
-.city-hero-intro[data-done] {
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.6s ease, visibility 0s linear 0.6s;
-}
-/* The hero's search bar: the brand's glowing pill, set above the gold tower. */
-.city-hero-search {
-  position: absolute;
-  z-index: 5;
-  left: 50%;
-  top: clamp(88px, 17vh, 190px);
-  transform: translateX(-50%);
-  width: min(560px, calc(100% - 32px));
-  height: clamp(48px, 6.4vh, 60px);
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0 0.45rem 0 1.1rem;
-  border-radius: 999px;
-  border: 2px solid #bff3ff;
-  background: rgba(4, 6, 13, 0.45);
-  backdrop-filter: blur(6px);
-  box-shadow:
-    0 0 24px rgba(111, 227, 255, 0.55),
-    0 0 60px rgba(111, 227, 255, 0.18),
-    inset 0 0 16px rgba(111, 227, 255, 0.18);
-  pointer-events: none;
-}
-.city-hero-search-icon {
-  display: grid;
-  width: 1.4rem;
-  height: 1.4rem;
-  color: #bff3ff;
-  flex: none;
-}
-.city-hero-search-text {
-  flex: 1;
-  min-width: 0;
-  font-family: var(--font-body);
-  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
-  color: #eef3ff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.city-hero-caret {
-  display: inline-block;
-  width: 2px;
-  height: 1.1em;
-  margin-left: 2px;
-  vertical-align: -0.18em;
-  background: #6fe3ff;
-}
-.city-hero-search-go {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: clamp(34px, 4.6vh, 44px);
-  height: clamp(34px, 4.6vh, 44px);
-  border-radius: 50%;
-  background: radial-gradient(circle at 40% 35%, #d6ecff, #6fb2ff 55%, #3d8de6);
-  box-shadow: 0 0 20px rgba(111, 178, 255, 0.6);
-}
-.city-hero-search-go svg {
-  width: 45%;
-  height: 45%;
-}
-@media (prefers-reduced-motion: no-preference) {
-  .city-hero-caret-blink {
-    animation: city-hero-blink 1.05s steps(1) infinite;
-  }
-}
-@keyframes city-hero-blink {
-  50% {
-    opacity: 0;
-  }
-}
-/* The hero's foot: the video melts into the page, cream or navy (--page-rgb). A short linear fade from the dark
-   video to cream reads as gray mud; this one is tall and eased (a scrim curve: barely there at the top, quick at
-   the bottom), and in the light theme the vignette's dark floor is lifted, so the video still shows blue where
-   the haze begins. The copy sits above it (pb-[16vh] on the section). */
+/* ── Homepage hero (src/components/HeroSection.tsx, home/HeroAnswer.tsx) ──
+   A dark band in both themes: copy on the left, a mock cited AI answer on the right, stacked below `lg`. */
 :root {
   --page-rgb: 4, 6, 13;
 }
 html.light {
   --page-rgb: 246, 248, 252;
 }
-.city-hero-fade {
+.home-hero {
+  display: flex;
+  align-items: center;
+  padding: 6.5rem 0 6rem;
+}
+.home-hero-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 60% at 78% 45%, rgba(111, 178, 255, 0.16), transparent 70%),
+    radial-gradient(ellipse 50% 50% at 12% 20%, rgba(111, 227, 255, 0.08), transparent 70%);
+}
+.home-hero-grid {
+  display: grid;
+  gap: 3.5rem;
+  align-items: center;
+}
+.home-hero-copy {
+  text-align: center;
+}
+.home-hero-copy .hero-subtitle {
+  margin-left: auto;
+  margin-right: auto;
+}
+.home-hero-actions {
+  justify-content: center;
+}
+.home-hero-facts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.5rem;
+  margin-top: 2.25rem;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: #a3afc6;
+}
+.home-hero-facts li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.home-hero-facts li::before {
+  content: "";
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: #6fe3ff;
+  opacity: 0.8;
+}
+.home-hero-visual {
+  width: 100%;
+  max-width: 34rem;
+  margin: 0 auto;
+}
+@media (min-width: 1024px) {
+  .home-hero {
+    min-height: min(860px, 100svh);
+    padding: 7.5rem 0 7rem;
+  }
+  .home-hero-grid {
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+    gap: 4rem;
+  }
+  .home-hero-copy {
+    text-align: left;
+  }
+  .home-hero-copy .hero-subtitle {
+    margin-left: 0;
+  }
+  .home-hero-actions,
+  .home-hero-facts {
+    justify-content: flex-start;
+  }
+  .home-hero-visual {
+    margin: 0 0 0 auto;
+  }
+}
+/* the mock answer */
+.hero-answer {
+  border: 1px solid rgba(111, 227, 255, 0.22);
+  border-radius: 1.25rem;
+  background: linear-gradient(180deg, rgba(16, 26, 46, 0.92), rgba(9, 14, 26, 0.92));
+  box-shadow:
+    0 30px 80px -20px rgba(0, 0, 0, 0.7),
+    0 0 60px -10px rgba(111, 178, 255, 0.25);
+  overflow: hidden;
+  font-family: var(--font-body);
+  text-align: left;
+}
+.hero-answer-query {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(163, 175, 198, 0.16);
+  color: #eef3ff;
+  font-size: 1rem;
+}
+.hero-answer-query-icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  flex: none;
+  color: #6fe3ff;
+}
+.hero-answer-query-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hero-answer-body {
+  padding: 1.25rem 1.25rem 1.4rem;
+}
+.hero-answer-label {
+  margin: 0 0 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #8d9bb5;
+}
+.hero-answer-text {
+  margin: 0 0 1.4rem;
+  font-size: 0.9875rem;
+  line-height: 1.65;
+  color: #d5dcea;
+}
+.hero-answer-cite {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.15rem;
+  height: 1.15rem;
+  margin-left: 0.2rem;
+  padding: 0 0.25rem;
+  border-radius: 0.35rem;
+  background: rgba(163, 175, 198, 0.18);
+  color: #c4cee0;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1;
+  vertical-align: baseline;
+  position: relative;
+  top: -0.35em;
+}
+.hero-answer-cite-yours {
+  background: #6fe3ff;
+  color: #04060d;
+}
+.hero-answer-sources {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hero-answer-source {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid rgba(163, 175, 198, 0.14);
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  color: #8d9bb5;
+}
+.hero-answer-source[data-yours] {
+  border-color: rgba(111, 227, 255, 0.55);
+  background: rgba(111, 227, 255, 0.07);
+}
+.hero-answer-source-n {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 0.4rem;
+  background: rgba(163, 175, 198, 0.16);
+  color: #c4cee0;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.hero-answer-source[data-yours] .hero-answer-source-n {
+  background: #6fe3ff;
+  color: #04060d;
+}
+.hero-answer-source-url {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hero-answer-source-url strong {
+  font-weight: 600;
+  color: #e6ebf5;
+}
+.hero-answer-source-tag {
+  flex: none;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(111, 227, 255, 0.16);
+  color: #6fe3ff;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+/* The hero's foot: the dark band eases into the page background, cream or navy (--page-rgb). */
+.home-hero-fade {
   position: absolute;
   inset: auto 0 0 0;
-  height: 30vh;
+  height: 7rem;
   pointer-events: none;
   background: linear-gradient(
     to bottom,
     rgba(var(--page-rgb), 0) 0%,
-    rgba(var(--page-rgb), 0.013) 8.1%,
-    rgba(var(--page-rgb), 0.049) 15.5%,
-    rgba(var(--page-rgb), 0.104) 22.5%,
-    rgba(var(--page-rgb), 0.175) 29%,
-    rgba(var(--page-rgb), 0.259) 35.3%,
-    rgba(var(--page-rgb), 0.352) 41.2%,
-    rgba(var(--page-rgb), 0.45) 47.1%,
-    rgba(var(--page-rgb), 0.55) 52.9%,
-    rgba(var(--page-rgb), 0.648) 58.8%,
-    rgba(var(--page-rgb), 0.741) 64.7%,
-    rgba(var(--page-rgb), 0.825) 71%,
-    rgba(var(--page-rgb), 0.896) 77.5%,
-    rgba(var(--page-rgb), 0.951) 84.5%,
-    rgba(var(--page-rgb), 0.987) 91.9%,
+    rgba(var(--page-rgb), 0.1) 22%,
+    rgba(var(--page-rgb), 0.35) 41%,
+    rgba(var(--page-rgb), 0.65) 59%,
+    rgba(var(--page-rgb), 0.9) 78%,
     rgb(var(--page-rgb)) 100%
   );
-}
-html.light .city-hero-vignette {
-  background: radial-gradient(ellipse at 50% 42%, transparent 45%, rgba(4, 6, 13, 0.7) 100%),
-    linear-gradient(to bottom, transparent 45%, rgba(4, 6, 13, 0.55) 70%, rgba(4, 6, 13, 0.2) 100%);
-}
-.city-hero-copy::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  left: 50%;
-  bottom: -9vh;
-  width: min(900px, 140vw);
-  height: 130%;
-  transform: translateX(-50%);
-  background: radial-gradient(ellipse at 50% 60%, rgba(4, 6, 13, 0.86), rgba(4, 6, 13, 0.5) 45%, transparent 72%);
-  pointer-events: none;
-}
-/* the open gate is bright behind the copy: a soft shadow keeps the eyebrow and subtitle readable over it */
-.city-hero-copy p {
-  text-shadow: 0 0 6px rgba(4, 6, 13, 0.95), 0 1px 16px rgba(4, 6, 13, 0.9);
-}
-/* (the pool's box ends inside the hero's fade, so its foot is masked away too: cut straight, it drew a hard gray
-   edge across the cream in the light theme) */
-.city-hero-copy::before {
-  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 88%);
-  mask-image: linear-gradient(to bottom, #000 55%, transparent 88%);
 }
 
 /* ── /course page (src/app/course/page.tsx) ── */

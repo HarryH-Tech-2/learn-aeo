@@ -8,6 +8,7 @@ import { getActiveOffer } from "@/lib/offers";
 import { pppBeatsOffer, requestCountry } from "@/lib/ppp";
 import { ACCESS_TEST_GAME, armOf } from "@/lib/access-test";
 import { auditLengths } from "@/lib/lessons";
+import { badgeDisplay } from "@/lib/gamification";
 
 /**
  * GET /api/me — everything the dashboard needs in one round trip: one
@@ -36,7 +37,7 @@ export async function GET(request: Request) {
 
   return NextResponse.json({
     progress,
-    badges: badges.map((ub) => ({ id: ub.badge.id, name: ub.badge.name, description: ub.badge.description, icon: ub.badge.icon, earnedAt: ub.earnedAt.toISOString() })),
+    badges: badges.map((ub) => ({ id: ub.badge.id, ...badgeDisplay(ub.badge), earnedAt: ub.earnedAt.toISOString() })),
     access,
     // (not where the visitor's purchasing-power price is already lower: checkout would never use it)
     offer: offer && !pppBeatsOffer(requestCountry(request), offer.percentOff) ? { code: offer.code, expiresAt: offer.expiresAt.toISOString(), percentOff: offer.percentOff, source: offer.source } : null,
@@ -44,7 +45,7 @@ export async function GET(request: Request) {
     accessTest: armOf(states.find((s) => s.game === ACCESS_TEST_GAME)?.state),
     // false once they have answered "How did you find us?" (the dashboard card was removed 2026-11-04; the field stays for old clients)
     askHeardAbout: !account?.heardAbout,
-    // Questions in each live lesson's audit, so the city map can show a stored best score as "N of M"
+    // Questions in each live lesson's audit, so the lesson list can show a stored best score as "N of M"
     auditLengths: auditLengths(),
   });
 }

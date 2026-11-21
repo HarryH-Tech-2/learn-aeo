@@ -98,7 +98,6 @@ export type LessonContent = {
 export type LessonMeta = {
   id: string;
   order: number;
-  district: string;
   title: string;
   /** One line. */
   summary: string;

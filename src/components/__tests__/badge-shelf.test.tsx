@@ -14,8 +14,8 @@ describe("BadgeShelf", () => {
   });
 
   it("explains the milestone thresholds", () => {
-    expect(getHowToEarn("milestone:half-city")).toMatch(/4/);
-    expect(getHowToEarn("milestone:all-districts")).toMatch(/8|every/);
+    expect(getHowToEarn("milestone:halfway")).toMatch(/6 of the 12 lessons/);
+    expect(getHowToEarn("milestone:all-lessons")).toMatch(/every lesson/);
     expect(getHowToEarn("perfect-audit")).toMatch(/audit/i);
   });
 

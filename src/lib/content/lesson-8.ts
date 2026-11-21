@@ -1,4 +1,4 @@
-// Lesson 8, The Citadel: running an AEO program.
+// Lesson 8: running an AEO program.
 // Claims about what Google, OpenAI and Microsoft document (crawlers, indexing,
 // Search Console and Bing Webmaster Tools reports, GA4's AI Assistant channel,
 // fix validation, user permissions, spam policies), Google's advice on audits,
@@ -190,10 +190,10 @@ const FTC_ENDORSEMENTS: Source = {
 
 export const LESSON_8: LessonContent = {
   intro:
-    "You have reached The Citadel, the eighth district of the City of Answers and the last stop of the core program. Everything you have learned so far is a set of tools; here you learn to run them as a program. You will audit a site from the gate to the observatory, write each finding so someone can act on it, decide what to fix first, report it honestly, keep the program safe and current, and leave with a 90-day plan you can start on Monday.",
+    "This is Lesson 8, the last lesson of the core program. Everything you have learned so far is a set of tools; here you learn to run them as a program. You will audit a site from access to measurement, write each finding so someone can act on it, decide what to fix first, report it honestly, keep the program safe and current, and leave with a 90-day plan you can start on Monday.",
 
   outro:
-    "You have walked the heart of the City of Answers: how answers are built, how bots get in, how passages get lifted, how markup and other sites describe you, how each platform works, how to measure it, and now how to run it all as a program. That completes the core program. The advanced playbooks come next, starting with Lesson 9, The Market, on products and shopping; then local businesses and reviews, video and images, and what to do when AI gets your brand wrong. Complete every lesson, the advanced playbooks included, and your certificate is ready on the Certificate tab of your dashboard.",
+    "You have now covered the core of AEO: how answers are built, how bots get in, how passages get lifted, how markup and other sites describe you, how each platform works, how to measure it, and now how to run it all as a program. That completes the core program. The advanced playbooks come next, starting with Lesson 9, on products and shopping; then local businesses and reviews, video and images, and what to do when AI gets your brand wrong. Complete every lesson, the advanced playbooks included, and your certificate is ready on the Certificate tab of your dashboard.",
 
   groups: [
     {
@@ -219,7 +219,7 @@ export const LESSON_8: LessonContent = {
           term: "An AEO audit",
           summary: "An AEO audit checks six areas in order, from whether bots can reach you to whether you can measure the result, on a sample of pages, and estimates the work to fix each gap.",
           explanation:
-            "Use the course as your checklist, in this order:\n\n1. **Access** (The Crawl Docks): the right bots allowed in robots.txt and through the CDN or firewall; pages indexed in Google and Bing.\n2. **Content** (The Answer Quarter): answer-first passages, question headings, honest dates, and something only you can say.\n3. **Structured data** (The Schema Works): Organization, Article and Product markup that matches the page; one @id; sameAs.\n4. **Authority** (The Agora): reviews, forum presence, coverage, Wikipedia and Wikidata.\n5. **Platforms** (The Embassies): each platform's bot and index checked.\n6. **Measurement** (The Observatory): a prompt set, the right reports, verified bot logs.\n\nYou won't check every page. Sample the pages that earn money, one page per template, and the pages your prompt set should surface. For the content area, Google publishes self-assessment questions and says \"Evaluating your own content against these questions can help you gauge if the content you're making is helpful and reliable.\"\n\nGoogle's advice on hiring an SEO sets the standard for the result: \"An SEO audit should be about giving you realistic estimates of improvement, and an estimate of the work involved.\"",
+            "Use the course as your checklist, in this order:\n\n1. **Access** (Lesson 2): the right bots allowed in robots.txt and through the CDN or firewall; pages indexed in Google and Bing.\n2. **Content** (Lesson 3): answer-first passages, question headings, honest dates, and something only you can say.\n3. **Structured data** (Lesson 4): Organization, Article and Product markup that matches the page; one @id; sameAs.\n4. **Authority** (Lesson 5): reviews, forum presence, coverage, Wikipedia and Wikidata.\n5. **Platforms** (Lesson 6): each platform's bot and index checked.\n6. **Measurement** (Lesson 7): a prompt set, the right reports, verified bot logs.\n\nYou won't check every page. Sample the pages that earn money, one page per template, and the pages your prompt set should surface. For the content area, Google publishes self-assessment questions and says \"Evaluating your own content against these questions can help you gauge if the content you're making is helpful and reliable.\"\n\nGoogle's advice on hiring an SEO sets the standard for the result: \"An SEO audit should be about giving you realistic estimates of improvement, and an estimate of the work involved.\"",
           whyItMatters:
             "A fixed checklist means nothing is skipped because it is unfamiliar, and two audits of the same site, months apart, can be compared line by line.",
           example: {
@@ -258,7 +258,7 @@ export const LESSON_8: LessonContent = {
             kind: "code",
             language: "text",
             caption: "A made-up finding, written so it can be checked",
-            code: "FINDING A-03 (Access, indexing stage)\nURL:     larkfieldtea.example/tea/assam-breakfast\n         (and 399 other product pages on the same template)\nSaw:     Page indexing report lists the URL as not indexed\n         because of a noindex tag; URL Inspection live test\n         shows the same meta robots noindex in the HTML\nChecked: Search Console, 2026-11-03\nWhy:     a page outside Google's index can't be a supporting\n         link in AI Overviews or AI Mode\nArea:    1 Access (The Crawl Docks)",
+            code: "FINDING A-03 (Access, indexing stage)\nURL:     larkfieldtea.example/tea/assam-breakfast\n         (and 399 other product pages on the same template)\nSaw:     Page indexing report lists the URL as not indexed\n         because of a noindex tag; URL Inspection live test\n         shows the same meta robots noindex in the HTML\nChecked: Search Console, 2026-11-03\nWhy:     a page outside Google's index can't be a supporting\n         link in AI Overviews or AI Mode\nArea:    1 Access (Lesson 2)",
           },
           pitfall:
             "Writing findings as conclusions (*product pages have SEO problems*) with no URL, tool or date. Nobody can check them, and nobody can tell later whether they were fixed.",
@@ -789,7 +789,7 @@ export const LESSON_8: LessonContent = {
           term: "Keeping the program current",
           summary: "After the first quarter, keep the monthly report going and recheck each platform's documentation, because the rules change.",
           explanation:
-            "AI search changes faster than most of SEO. Two examples from this course: Google's documentation changelog records that the FAQ rich result \"will no longer appear in Google Search starting May 7, 2026\", years after FAQ markup became standard advice. And in June 2026 Bing added four new views to its AI reporting: \"Intents, Topics, Citation Share, and Compare.\" One change removed something you may have relied on; the other gave you new data to use.\n\nBuild the check into the program: each quarter, reread the vendor pages you rely on (the crawler pages from The Crawl Docks, Google's AI features and AI guide pages, the reporting help pages), note the date, and update your robots.txt, markup, reports and do-not-do list if anything moved. Keep a short log of what you checked and when, so the next person can carry on.",
+            "AI search changes faster than most of SEO. Two examples from this course: Google's documentation changelog records that the FAQ rich result \"will no longer appear in Google Search starting May 7, 2026\", years after FAQ markup became standard advice. And in June 2026 Bing added four new views to its AI reporting: \"Intents, Topics, Citation Share, and Compare.\" One change removed something you may have relied on; the other gave you new data to use.\n\nBuild the check into the program: each quarter, reread the vendor pages you rely on (the crawler pages from Lesson 2, Google's AI features and AI guide pages, the reporting help pages), note the date, and update your robots.txt, markup, reports and do-not-do list if anything moved. Keep a short log of what you checked and when, so the next person can carry on.",
           whyItMatters:
             "A program built on last year's documentation slowly drifts into doing things that no longer work, or missing new reports and controls.",
           pitfall:
@@ -995,13 +995,13 @@ export const LESSON_8: LessonContent = {
       id: "a-match-areas",
       prompt: "Match each audit finding to the lesson that fixes it.",
       pairs: [
-        { term: "PerplexityBot blocked by the firewall", definition: "The Crawl Docks" },
-        { term: "Pages open with a long warm-up before the answer", definition: "The Answer Quarter" },
-        { term: "sameAs points to a news article", definition: "The Schema Works" },
-        { term: "Reviews requested only from happy customers", definition: "The Agora" },
-        { term: "No prompt set or baseline", definition: "The Observatory" },
+        { term: "PerplexityBot blocked by the firewall", definition: "Lesson 2: Make your site reachable by AI" },
+        { term: "Pages open with a long warm-up before the answer", definition: "Lesson 3: Writing citable content" },
+        { term: "sameAs points to a news article", definition: "Lesson 4: Structured data and entities" },
+        { term: "Reviews requested only from happy customers", definition: "Lesson 5: Authority beyond your site" },
+        { term: "No prompt set or baseline", definition: "Lesson 7: Measuring AI visibility" },
       ],
-      explanation: "The audit follows the course, so each finding points back to the district that covers it.",
+      explanation: "The audit follows the course, so each finding points back to the lesson that covers it.",
     },
     {
       kind: "passage",

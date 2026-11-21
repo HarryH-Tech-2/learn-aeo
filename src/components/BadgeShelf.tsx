@@ -2,7 +2,8 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
-import { BADGE_DEFINITIONS } from "@/lib/gamification";
+import { BADGE_DEFINITIONS, HALFWAY } from "@/lib/gamification";
+import { LESSON_CATALOG } from "@/lib/lesson-catalog";
 
 type Badge = {
   id: string;
@@ -17,7 +18,7 @@ type BadgeDef = (typeof BADGE_DEFINITIONS)[number];
 
 export function getHowToEarn(criteria: string): string {
   if (criteria.startsWith("complete:")) {
-    return "Finish this district's lesson and pass its audit to earn this badge.";
+    return "Finish this lesson and pass its audit to earn this badge.";
   }
   if (criteria === "perfect-audit") {
     return "Answer every question right in the audit at the end of a lesson.";
@@ -29,11 +30,11 @@ export function getHowToEarn(criteria: string): string {
   if (criteria === "milestone:first-lesson") {
     return "Start your first lesson and take the audit at its end.";
   }
-  if (criteria === "milestone:half-city") {
-    return "Complete 4 of the 8 districts.";
+  if (criteria === "milestone:halfway") {
+    return `Complete ${HALFWAY} of the ${LESSON_CATALOG.length} lessons.`;
   }
-  if (criteria === "milestone:all-districts") {
-    return "Complete every district in the City of Answers.";
+  if (criteria === "milestone:all-lessons") {
+    return "Complete every lesson in the course.";
   }
   return "Keep working through the lessons to unlock this badge.";
 }

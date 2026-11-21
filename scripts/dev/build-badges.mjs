@@ -1,10 +1,10 @@
 /**
  * Draws the Learn AEO badge set and the certificate template as SVG and renders them with sharp:
  *   public/badges/<name>.webp   one per entry in BADGE_DEFINITIONS (src/lib/gamification.ts), 512 x 512
- *   public/certificate-aeo-v2.webp the certificate background, 2000 x 1414 (A4 landscape ratio)
+ *   public/certificate-aeo-v3.webp the certificate background, 2000 x 1414 (A4 landscape ratio)
  *
  * The family: a navy disc with a gold outer ring and a cyan inner ring around a simple geometric
- * emblem. District badges carry their district's emblem; the audit, streak and milestone badges
+ * emblem. Lesson badges carry their own emblem (lessons 9 to 12 were drawn by hand and are not built here); the audit, streak and milestone badges
  * share the frame with their own marks. Text is a system serif stack (librsvg cannot load web
  * fonts); the certificate's lettering is the brand's Instrument Serif look-alike at print size.
  * The learner's name is drawn on the certificate at runtime (src/lib/certificate.ts), so keep the
@@ -13,7 +13,8 @@
  * Run once, commit the output (file names must change when the art changes: /badges is cached
  * immutably):
  *
- *   node scripts/dev/build-badges.mjs
+ *   node scripts/dev/build-badges.mjs                (badges and certificate)
+ *   node scripts/dev/build-badges.mjs --certificate  (certificate only)
  */
 import { mkdir } from "node:fs/promises";
 import sharp from "sharp";
@@ -35,15 +36,15 @@ const goldLine = (width = 14) =>
 // ── Emblems, drawn in a 512 box centered on (256, 256), kept inside a radius of about 130 ──
 
 const EMBLEMS = {
-  // The Gate: an arched gateway with a gold keystone
-  "district-the-gate": `
+  // Lesson 1: an arched gateway with a gold keystone
+  "lesson-1": `
     <path d="M166 364 V246 A90 90 0 0 1 346 246 V364" ${line()}/>
     <path d="M206 364 V256 A50 50 0 0 1 306 256 V364" ${line(10)}/>
     <path d="M140 364 H372" ${line()}/>
     <path d="M244 142 H268 L262 172 H250 Z" fill="${GOLD}" stroke="${GOLD}" stroke-width="6" stroke-linejoin="round"/>`,
 
-  // The Crawl Docks: an anchor
-  "district-the-crawl-docks": `
+  // Lesson 2: an anchor
+  "lesson-2": `
     <circle cx="256" cy="152" r="22" ${goldLine(12)}/>
     <path d="M256 176 V368" ${line()}/>
     <path d="M204 212 H308" ${line()}/>
@@ -51,8 +52,8 @@ const EMBLEMS = {
     <path d="M140 316 L160 292 L184 310" ${line(12)}/>
     <path d="M372 316 L352 292 L328 310" ${line(12)}/>`,
 
-  // The Answer Quarter: a pair of quotation marks over a gold line
-  "district-the-answer-quarter": `
+  // Lesson 3: a pair of quotation marks over a gold line
+  "lesson-3": `
     <g fill="${CYAN}">
       <circle cx="206" cy="250" r="36"/>
       <path d="M176 262 C176 206 196 176 238 160 L244 174 C216 188 206 212 210 236 Z"/>
@@ -61,8 +62,8 @@ const EMBLEMS = {
     </g>
     <path d="M168 340 H344" ${goldLine()}/>`,
 
-  // The Schema Works: curly brackets around a gold gear
-  "district-the-schema-works": `
+  // Lesson 4: curly brackets around a gold gear
+  "lesson-4": `
     <path d="M196 150 C164 150 166 172 166 206 C166 236 160 250 136 256 C160 262 166 276 166 306 C166 340 164 362 196 362" ${line()}/>
     <path d="M316 150 C348 150 346 172 346 206 C346 236 352 250 376 256 C352 262 346 276 346 306 C346 340 348 362 316 362" ${line()}/>
     <g transform="translate(256 256)" fill="${GOLD}">
@@ -71,23 +72,23 @@ const EMBLEMS = {
       <circle r="18" fill="${NAVY}"/>
     </g>`,
 
-  // The Agora: a colonnade under a gold pediment
-  "district-the-agora": `
+  // Lesson 5: a colonnade under a gold pediment
+  "lesson-5": `
     <path d="M144 196 L256 140 L368 196 Z" fill="${GOLD}" stroke="${GOLD}" stroke-width="10" stroke-linejoin="round"/>
     <path d="M152 216 H360" ${line(12)}/>
     <path d="M180 236 V334 M228 236 V334 M284 236 V334 M332 236 V334" ${line()}/>
     <path d="M144 356 H368" ${line()}/>`,
 
-  // The Embassies: two flags on poles
-  "district-the-embassies": `
+  // Lesson 6: two flags on poles
+  "lesson-6": `
     <path d="M176 372 V140" ${line()}/>
     <path d="M176 150 C206 132 230 172 268 154 V226 C230 244 206 204 176 222 Z" fill="${GOLD}" stroke="${GOLD}" stroke-width="8" stroke-linejoin="round"/>
     <path d="M300 372 V196" ${line()}/>
     <path d="M300 206 C326 190 348 226 380 210 V270 C348 286 326 250 300 266 Z" fill="${CYAN}" stroke="${CYAN}" stroke-width="8" stroke-linejoin="round"/>
     <path d="M140 372 H372" ${line()}/>`,
 
-  // The Observatory: a telescope on a tripod, looking at a gold star
-  "district-the-observatory": `
+  // Lesson 7: a telescope on a tripod, looking at a gold star
+  "lesson-7": `
     <g transform="rotate(-30 236 250)">
       <rect x="146" y="226" width="196" height="48" rx="12" ${line(12)}/>
       <path d="M342 218 V282" ${line()}/>
@@ -96,8 +97,8 @@ const EMBLEMS = {
     <path d="M240 278 L190 372 M240 278 L290 372 M240 278 V372" ${line(12)}/>
     <path d="M352 126 L360 148 L382 150 L364 164 L370 186 L352 172 L334 186 L340 164 L322 150 L344 148 Z" fill="${GOLD}"/>`,
 
-  // The Citadel: a crenellated tower with a gold pennant
-  "district-the-citadel": `
+  // Lesson 8: a crenellated tower with a gold pennant
+  "lesson-8": `
     <path d="M196 368 V206 H210 V182 H234 V206 H246 V182 H266 V206 H278 V182 H302 V206 H316 V368" ${line(12)}/>
     <path d="M236 368 V320 A20 20 0 0 1 276 320 V368" ${line(10)}/>
     <path d="M150 368 H362" ${line()}/>
@@ -128,14 +129,14 @@ function streakEmblem(days) {
     <text x="256" y="400" text-anchor="middle" font-family="${SANS}" font-weight="bold" font-size="68" fill="${CYAN}">${days}</text>`;
 }
 
-// Milestones: a skyline of eight towers, one per district; lit towers are gold
-function skylineEmblem(lit, withStar = false) {
+// Milestones: a row of eight bars; filled bars are gold
+function barsEmblem(lit, withStar = false) {
   const heights = [70, 110, 90, 140, 100, 124, 80, 106];
   const w = 22;
   const gap = 6;
   const x0 = 256 - (heights.length * w + (heights.length - 1) * gap) / 2;
   const base = 346;
-  const towers = heights
+  const bars = heights
     .map((h, i) => {
       const x = x0 + i * (w + gap);
       return i < lit
@@ -143,7 +144,7 @@ function skylineEmblem(lit, withStar = false) {
         : `<rect x="${x + 3}" y="${base - h + 3}" width="${w - 6}" height="${h - 3}" rx="2" fill="none" stroke="${CYAN}" stroke-width="6"/>`;
     })
     .join("");
-  return `${towers}
+  return `${bars}
     <path d="M136 362 H376" ${line(12)}/>
     ${withStar ? star(256, 160, 30) : ""}`;
 }
@@ -153,9 +154,9 @@ const BADGES = {
   "streak-3-days": streakEmblem(3),
   "streak-7-days": streakEmblem(7),
   "streak-30-days": streakEmblem(30),
-  "milestone-first-lesson": skylineEmblem(1),
-  "milestone-half-city": skylineEmblem(4),
-  "milestone-all-districts": skylineEmblem(8, true),
+  "milestone-first-lesson": barsEmblem(1),
+  "milestone-halfway": barsEmblem(4),
+  "milestone-all-lessons": barsEmblem(8, true),
 };
 
 function badgeSvg(emblem) {
@@ -174,7 +175,7 @@ function badgeSvg(emblem) {
 }
 
 await mkdir("public/badges", { recursive: true });
-for (const [name, emblem] of Object.entries(BADGES)) {
+for (const [name, emblem] of process.argv.includes("--certificate") ? [] : Object.entries(BADGES)) {
   const file = `public/badges/${name}.webp`;
   await sharp(Buffer.from(badgeSvg(emblem))).webp({ quality: 90, alphaQuality: 100 }).toFile(file);
   console.log(`${file} 512x512`);
@@ -186,7 +187,7 @@ for (const [name, emblem] of Object.entries(BADGES)) {
 const W = 2000;
 const H = 1414;
 const nameBaseline = Math.round(H * 0.57);
-const skyline = (() => {
+const mark = (() => {
   const heights = [34, 54, 44, 70, 50, 62, 40, 52];
   const w = 14;
   const gap = 8;
@@ -210,7 +211,7 @@ const certificate = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height
   <rect x="80" y="80" width="${W - 160}" height="${H - 160}" fill="none" stroke="${GOLD}" stroke-width="2" stroke-opacity="0.6"/>
   ${[[80, 80], [W - 80, 80], [80, H - 80], [W - 80, H - 80]].map(([x, y]) => `<rect x="${x - 10}" y="${y - 10}" width="20" height="20" transform="rotate(45 ${x} ${y})" fill="${GOLD}"/>`).join("")}
 
-  ${skyline}
+  ${mark}
   <text x="${W / 2}" y="380" text-anchor="middle" font-family="${SERIF}" font-size="110" fill="${SAND}">Learn <tspan fill="${GOLD}" font-style="italic">AEO</tspan></text>
   <text x="${W / 2}" y="476" text-anchor="middle" font-family="${SANS}" font-size="38" letter-spacing="14" fill="${CYAN}">CERTIFICATE OF COMPLETION</text>
 
@@ -219,11 +220,11 @@ const certificate = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height
 
   <text x="${W / 2}" y="${nameBaseline + 140}" text-anchor="middle" font-family="${SANS}" font-size="34" fill="${MUTED}">has completed the course</text>
   <text x="${W / 2}" y="${nameBaseline + 260}" text-anchor="middle" font-family="${SERIF}" font-size="92" fill="${SAND}">Answer Engine <tspan fill="${GOLD}" font-style="italic">Optimization</tspan></text>
-  <text x="${W / 2}" y="${nameBaseline + 336}" text-anchor="middle" font-family="${SANS}" font-size="30" fill="${MUTED}">All eight districts of the City of Answers</text>
+  <text x="${W / 2}" y="${nameBaseline + 336}" text-anchor="middle" font-family="${SANS}" font-size="30" fill="${MUTED}">The complete Learn AEO course</text>
 
   <!-- y 1222 and 1278 stay blank: the issue date and verification URL are drawn at runtime
        (CERTIFICATE.dateY / urlY in src/lib/certificate.ts). -->
 </svg>`;
 
-await sharp(Buffer.from(certificate)).webp({ quality: 92 }).toFile("public/certificate-aeo-v2.webp");
-console.log(`public/certificate-aeo-v2.webp ${W}x${H}`);
+await sharp(Buffer.from(certificate)).webp({ quality: 92 }).toFile("public/certificate-aeo-v3.webp");
+console.log(`public/certificate-aeo-v3.webp ${W}x${H}`);

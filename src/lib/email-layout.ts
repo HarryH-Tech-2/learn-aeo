@@ -1,6 +1,6 @@
 /**
- * One look for every email the site sends: the site's navy, cyan and gold, the City of Answers skyline across
- * the top (public/email/city-header.png) and a cyan rule with a gold diamond at the foot (public/email/rule.png),
+ * One look for every email the site sends: the site's navy, cyan and gold, the search bar across
+ * the top (public/email/header.png) and a cyan rule with a gold diamond at the foot (public/email/rule.png),
  * the Learn AEO mark (public/email/mark-aeo.png) over the name, and the body inside a double frame. The images
  * are drawn by scripts/dev/build-email-art.mjs; mail clients need PNG, not SVG or WebP.
  *
@@ -121,7 +121,7 @@ export type EmailLayoutOptions = {
 
 export function emailLayout(o: EmailLayoutOptions): string {
   const sig = o.signature === false ? "" : signature(typeof o.signature === "string" ? o.signature : undefined);
-  const header = `<img src="${o.baseUrl}/email/city-header.png" width="600" height="100" alt="" style="display:block;width:100%;max-width:600px;height:auto;border:0;">`;
+  const header = `<img src="${o.baseUrl}/email/header.png" width="600" height="100" alt="" style="display:block;width:100%;max-width:600px;height:auto;border:0;">`;
   const rule = `<img src="${o.baseUrl}/email/rule.png" width="600" height="12" alt="" style="display:block;width:100%;max-width:600px;height:auto;border:0;">`;
   return `<!doctype html>
 <html lang="en"><head>

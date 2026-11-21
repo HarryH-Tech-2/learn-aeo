@@ -78,9 +78,9 @@ export default function AiCrawlerCheckerPage() {
           <p>
             What it does not check: CDN and firewall bot blocking, JavaScript rendering, or whether a crawler actually visits.{" "}
             <Link href="/lessons/make-your-site-reachable-by-ai" className="text-cyan-400 underline underline-offset-2">
-              Lesson 2, The Crawl Docks
-            </Link>
-            , covers all of those.
+              Lesson 2
+            </Link>{" "}
+            covers all of those.
           </p>
         </>
       }

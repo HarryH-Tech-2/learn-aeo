@@ -2,7 +2,7 @@
 
 Learn AEO is a course for marketers on answer engine optimization: how to get a brand cited and recommended by ChatGPT, Perplexity, Google AI Overviews and other answer engines. It is a Next.js app (App Router, Prisma, NextAuth, Stripe, Resend) forked from an earlier course codebase, with the old subject-specific features removed. Pricing is $100 lifetime or $10 a month (GBP options at £80 and £8).
 
-Status: Plan 1 (fork, strip, rebrand, pricing) and Plan 2 (lesson model, lesson player, lessons 1-3) are done. Plan 3 (removal of the old theme, server-side XP, levels and badges, certificate, rewritten emails, site-wide ban test) is done. Plan 4 (US spelling, verifiable certificate with /verify/<code>, the City of Answers 3D hero, the tools section) is done. Plan 5 (schema helper, page metadata and Open Graph on every page, lesson share images, llms.txt and sitemap from the catalogs) is done. Plan 6 (AI Crawler Checker, llms.txt Generator, tools hub, a 30-term glossary, eight sourced launch posts) is done. Plan 7 (deploy readiness: env check that fails a bad production build, Stripe launch check, post-deploy smoke test, runbook) is done. Next: the launch steps in [docs/DEPLOY.md](docs/DEPLOY.md), then lessons 4-8.
+Status: Plan 1 (fork, strip, rebrand, pricing) and Plan 2 (lesson model, lesson player, lessons 1-3) are done. Plan 3 (removal of the old theme, server-side XP, levels and badges, certificate, rewritten emails, site-wide ban test) is done. Plan 4 (US spelling, verifiable certificate with /verify/<code>, the homepage hero, the tools section) is done. Plan 5 (schema helper, page metadata and Open Graph on every page, lesson share images, llms.txt and sitemap from the catalogs) is done. Plan 6 (AI Crawler Checker, llms.txt Generator, tools hub, a 30-term glossary, eight sourced launch posts) is done. Plan 7 (deploy readiness: env check that fails a bad production build, Stripe launch check, post-deploy smoke test, runbook) is done. Next: the launch steps in [docs/DEPLOY.md](docs/DEPLOY.md), then lessons 4-8.
 
 ## Setup
 
@@ -69,13 +69,13 @@ Needs a database: anything that reads or writes Postgres (real sign-in and sessi
 
 ## Lessons
 
-The course is eight lessons, one per district of the City of Answers. Lessons 1-3 are live; 4-8 show as "coming soon". Lesson 1 is free with a sign-in; the rest need Lifetime or Monthly access. A lesson lives at `/lessons/<id>`.
+The course is twelve lessons, shown as "Lesson N: title". Lesson 1 is free with a sign-in; the rest need Lifetime or Monthly access. A lesson lives at `/lessons/<id>`.
 
 ### How a lesson is built
 
-- `src/lib/lesson-catalog.ts`: the catalog. One entry per lesson (id, order, district, title, summary, description, level, minutes, `isFree`, `status: "live" | "coming-soon"`). Middleware imports it, so it must stay edge-safe: it imports only `lesson-types.ts`.
+- `src/lib/lesson-catalog.ts`: the catalog. One entry per lesson (id, order, title, summary, description, level, minutes, `isFree`, `status: "live" | "coming-soon"`). Middleware imports it, so it must stay edge-safe: it imports only `lesson-types.ts`.
 - `src/lib/lesson-types.ts`: the types for content (`LessonContent`, `Concept`, `Question`, `Source`, ...). Types only.
-- `src/lib/content/lesson-<n>-<district>.ts`: one file per live lesson, exporting its `LessonContent`: an intro, 3-4 concept groups (each concept with an explanation, why it matters, a pitfall and at least one source; each group ends with a quick check), a signature exercise, a real-world example to dissect, an audit of 8-12 questions, and an outro.
+- `src/lib/content/lesson-<n>.ts`: one file per live lesson, exporting its `LessonContent`: an intro, 3-4 concept groups (each concept with an explanation, why it matters, a pitfall and at least one source; each group ends with a quick check), a signature exercise, a real-world example to dissect, an audit of 8-12 questions, and an outro.
 - `src/lib/lessons.ts`: the registry. Joins the catalog with `CONTENT` (lesson id to content). A catalog entry marked `live` with no content throws at import.
 - `src/lib/questions.ts`: answer checking for the six question kinds (`choice`, `passage`, `blank`, `order`, `match`, `spot`). In a `blank` question, `___` marks each gap and `\n` starts a new line.
 - `src/components/player/`: the lesson player (`LessonPlayer.tsx`) and one component per question kind under `questions/`. The learner's place is saved in localStorage under `aeo_lesson_<id>`. The audit passes at 60% (`isLessonComplete` in `src/lib/progress.ts`).
@@ -90,7 +90,7 @@ CHECK_SOURCES=1 npx vitest run src/lib/__tests__/lesson-sources.live.test.ts
 
 ### Adding a lesson
 
-1. Write `src/lib/content/lesson-<n>-<district>.ts` exporting a `LessonContent`, following lessons 1-3. Source every claim; British English; no author bylines.
+1. Write `src/lib/content/lesson-<n>.ts` exporting a `LessonContent`, following lessons 1-3. Source every claim; British English; no author bylines.
 2. Add it to `CONTENT` in `src/lib/lessons.ts` under the lesson's catalog id.
 3. Set that catalog entry's `status` to `"live"` in `src/lib/lesson-catalog.ts`. Do not change ids: they are the URLs.
 4. Run `npx tsc --noEmit && npm test && npm run build`, then the `CHECK_SOURCES=1` check above.
@@ -116,7 +116,7 @@ A `sk_live_` key is refused unless you pass `--live`. The scripts are idempotent
 - Resend: verify the learnaeo.com domain, set `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `RESEND_AUDIENCE_ID`.
 - Stripe: run the plan scripts, add a webhook to `/api/webhooks/stripe` and set `STRIPE_WEBHOOK_SECRET`, and set the account default statement descriptor to `LEARNAEO`.
   - Webhook events to subscribe: `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, `checkout.session.expired`, `customer.subscription.updated`, `customer.subscription.deleted`, `charge.refunded`, `charge.dispute.created`, `charge.dispute.closed`.
-  - Before going live: restrict the NEXT-DISTRICT-33 coupon to the Lifetime product (applies_to) in Stripe.
+  - Before going live: restrict the NEXT-LESSON-33 coupon to the Lifetime product (applies_to) in Stripe.
 - GA4: create a property, set `NEXT_PUBLIC_GA_ID` and `GA4_MP_API_SECRET`.
 
 ## Next

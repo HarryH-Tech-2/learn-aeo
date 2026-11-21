@@ -1,7 +1,7 @@
 import { LESSON_CATALOG } from "./lesson-catalog";
 
-/** Districts to complete for the "Halfway Across the City" badge: half the catalog, rounded up. */
-export const HALF_CITY = Math.ceil(LESSON_CATALOG.length / 2);
+/** Lessons to complete for the "Halfway" badge: half the catalog, rounded up. */
+export const HALFWAY = Math.ceil(LESSON_CATALOG.length / 2);
 
 export const XP_REWARDS = {
   // The AEO lesson player (src/components/player)
@@ -23,13 +23,13 @@ export const XP_REWARDS = {
 export const AUDIT_LENGTH = { min: 8, max: 12 } as const;
 
 export const LEVEL_THRESHOLDS = [
-  { level: 1, xp: 0, title: "Query Rookie" },
-  { level: 2, xp: 200, title: "Crawl Wrangler" },
-  { level: 3, xp: 500, title: "Snippet Smith" },
-  { level: 4, xp: 1000, title: "Entity Architect" },
-  { level: 5, xp: 2000, title: "Citation Hunter" },
-  { level: 6, xp: 3500, title: "Answer Strategist" },
-  { level: 7, xp: 5000, title: "Answer Engine Authority" },
+  { level: 1, xp: 0, title: "Beginner" },
+  { level: 2, xp: 200, title: "Learner" },
+  { level: 3, xp: 500, title: "Practitioner" },
+  { level: 4, xp: 1000, title: "Proficient" },
+  { level: 5, xp: 2000, title: "Advanced" },
+  { level: 6, xp: 3500, title: "Strategist" },
+  { level: 7, xp: 5000, title: "Expert" },
 ] as const;
 
 export function calculateLevel(xp: number): number {
@@ -44,7 +44,7 @@ export function calculateLevel(xp: number): number {
 
 export function getLevelTitle(level: number): string {
   const found = LEVEL_THRESHOLDS.find((t) => t.level === level);
-  return found?.title ?? "Query Rookie";
+  return found?.title ?? "Beginner";
 }
 
 export function getXPForNextLevel(xp: number): {
@@ -81,26 +81,47 @@ export function getXPForNextLevel(xp: number): {
   };
 }
 
-// One badge per district (lesson), plus audit, streak and milestone badges.
-// Icons are drawn by scripts/dev/build-badges.mjs and named after the criteria.
+// One badge per lesson, plus audit, streak and milestone badges.
+// Icons are drawn by scripts/dev/build-badges.mjs: lesson-<order>.webp for a lesson, otherwise named after the criteria.
 export const BADGE_DEFINITIONS = [
-  { name: "Through the Gate", criteria: "complete:how-answer-engines-choose-sources", description: "Completed The Gate", icon: "/badges/district-the-gate.webp" },
-  { name: "Dockmaster", criteria: "complete:make-your-site-reachable-by-ai", description: "Completed The Crawl Docks", icon: "/badges/district-the-crawl-docks.webp" },
-  { name: "Quotable", criteria: "complete:writing-citable-content", description: "Completed The Answer Quarter", icon: "/badges/district-the-answer-quarter.webp" },
-  { name: "Schema Smith", criteria: "complete:structured-data-and-entities", description: "Completed The Schema Works", icon: "/badges/district-the-schema-works.webp" },
-  { name: "Voice of the Agora", criteria: "complete:authority-beyond-your-site", description: "Completed The Agora", icon: "/badges/district-the-agora.webp" },
-  { name: "Ambassador", criteria: "complete:platform-playbooks", description: "Completed The Embassies", icon: "/badges/district-the-embassies.webp" },
-  { name: "Stargazer", criteria: "complete:measuring-ai-visibility", description: "Completed The Observatory", icon: "/badges/district-the-observatory.webp" },
-  { name: "Keeper of the Citadel", criteria: "complete:running-an-aeo-program", description: "Completed The Citadel", icon: "/badges/district-the-citadel.webp" },
-  { name: "Market Maker", criteria: "complete:products-and-shopping-in-ai-answers", description: "Completed The Market", icon: "/badges/district-the-market.webp" },
-  { name: "Local Hero", criteria: "complete:local-businesses-and-reviews", description: "Completed The Neighborhoods", icon: "/badges/district-the-neighborhoods.webp" },
-  { name: "Picture Perfect", criteria: "complete:video-images-and-youtube", description: "Completed The Picture House", icon: "/badges/district-the-picture-house.webp" },
-  { name: "Record Keeper", criteria: "complete:when-ai-gets-your-brand-wrong", description: "Completed The Hall of Records", icon: "/badges/district-the-hall-of-records.webp" },
+  ...LESSON_CATALOG.map((l) => ({
+    name: `Lesson ${l.order} complete`,
+    criteria: `complete:${l.id}`,
+    description: `Completed ${l.title}`,
+    icon: `/badges/lesson-${l.order}.webp`,
+  })),
   { name: "Perfect Audit", criteria: "perfect-audit", description: "Scored 100% on a lesson audit", icon: "/badges/perfect-audit.webp" },
   { name: "3-Day Streak", criteria: "streak:3", description: "Kept a 3-day streak", icon: "/badges/streak-3-days.webp" },
   { name: "7-Day Streak", criteria: "streak:7", description: "Kept a 7-day streak", icon: "/badges/streak-7-days.webp" },
   { name: "30-Day Streak", criteria: "streak:30", description: "Kept a 30-day streak", icon: "/badges/streak-30-days.webp" },
-  { name: "First Steps", criteria: "milestone:first-lesson", description: "Started your first lesson", icon: "/badges/milestone-first-lesson.webp" },
-  { name: "Halfway Across the City", criteria: "milestone:half-city", description: `Completed ${HALF_CITY} districts`, icon: "/badges/milestone-half-city.webp" },
-  { name: "The Whole City", criteria: "milestone:all-districts", description: `Completed all ${LESSON_CATALOG.length} districts`, icon: "/badges/milestone-all-districts.webp" },
-] as const;
+  { name: "First Lesson", criteria: "milestone:first-lesson", description: "Started your first lesson", icon: "/badges/milestone-first-lesson.webp" },
+  { name: "Halfway", criteria: "milestone:halfway", description: `Completed ${HALFWAY} lessons`, icon: "/badges/milestone-halfway.webp" },
+  { name: "Course Complete", criteria: "milestone:all-lessons", description: `Completed all ${LESSON_CATALOG.length} lessons`, icon: "/badges/milestone-all-lessons.webp" },
+] as const satisfies readonly { name: string; criteria: string; description: string; icon: string }[];
+
+/** Criteria keys from before the badges were renamed: the seed uses these to rename existing rows in place. */
+export const LEGACY_BADGE_CRITERIA: Readonly<Record<string, string>> = {
+  "milestone:half-city": "milestone:halfway",
+  "milestone:all-districts": "milestone:all-lessons",
+};
+
+/** Every criteria key a badge row may be stored under: the current one, plus any legacy key that maps to it. */
+export function badgeCriteriaKeys(criteria: string): string[] {
+  return [criteria, ...Object.keys(LEGACY_BADGE_CRITERIA).filter((old) => LEGACY_BADGE_CRITERIA[old] === criteria)];
+}
+
+/**
+ * What to show for a stored badge row: the current definition for its criteria, so a row seeded under an older
+ * name still reads right before the seed is rerun. Falls back to the row itself for an unknown criteria.
+ */
+export function badgeDisplay(row: { name: string; description: string; icon: string; criteria: string }): {
+  name: string;
+  description: string;
+  icon: string;
+} {
+  const criteria = LEGACY_BADGE_CRITERIA[row.criteria] ?? row.criteria;
+  const def = BADGE_DEFINITIONS.find((d) => d.criteria === criteria);
+  return def
+    ? { name: def.name, description: def.description, icon: def.icon }
+    : { name: row.name, description: row.description, icon: row.icon };
+}
