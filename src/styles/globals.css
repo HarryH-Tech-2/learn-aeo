@@ -316,166 +316,97 @@ html.js .enter-down {
   animation: enter-down 0.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
-/* The hero's button: a metallic-blue pill. A sheen crosses it every few seconds, so it draws the eye without a
-   busy pulse. */
-.hero-cta {
-  position: relative;
-  isolation: isolate;
+/* The hero's two buttons: a flat solid primary and a matching outline secondary. Same height, same radius,
+   no gloss or glow, so they read as ordinary product buttons. */
+.hero-cta,
+.hero-cta-secondary {
   display: inline-flex;
   align-items: center;
-  padding: 0.8rem 1.8rem;
-  border: 0;
-  border-radius: 999px;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0 1.5rem;
+  border-radius: 0.625rem;
   cursor: pointer;
-  text-align: left;
-  color: #04122a;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0) 46%),
-    linear-gradient(100deg, #6fb2ff 0%, #d6ecff 28%, #6fb2ff 55%, #3d8de6 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(230, 244, 255, 0.9),
-    inset 0 -3px 0 rgba(10, 50, 110, 0.45),
-    0 18px 40px -12px rgba(60, 150, 255, 0.75),
-    0 0 70px -14px rgba(90, 170, 255, 0.55);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
   transition:
-    transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
-    box-shadow 0.25s ease,
-    filter 0.25s ease;
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
 }
-/* the sheen, clipped to the pill */
-.hero-cta::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.7) 50%, transparent 65%) no-repeat;
-  background-size: 250% 100%;
-  background-position: 150% 0;
-  mix-blend-mode: soft-light;
-  animation: hero-cta-sheen 4.5s ease-in-out 1.5s infinite;
-  pointer-events: none;
+.hero-cta {
+  border: 1px solid #6fb2ff;
+  color: #04122a;
+  background: #6fb2ff;
 }
 .hero-cta:hover {
-  transform: translateY(-3px);
-  filter: brightness(1.06) saturate(1.05);
-  box-shadow:
-    inset 0 1px 0 rgba(230, 244, 255, 0.9),
-    inset 0 -3px 0 rgba(10, 50, 110, 0.45),
-    0 24px 48px -12px rgba(60, 150, 255, 0.9),
-    0 0 90px -10px rgba(90, 170, 255, 0.7);
+  border-color: #8cc2ff;
+  background: #8cc2ff;
 }
-.hero-cta:active {
-  transform: translateY(0);
+.hero-cta-secondary {
+  border: 1px solid rgba(163, 175, 198, 0.4);
+  color: #e6ebf5;
+  background: rgba(255, 255, 255, 0.03);
 }
-.hero-cta:focus-visible {
+.hero-cta-secondary:hover {
+  border-color: rgba(163, 175, 198, 0.75);
+  background: rgba(255, 255, 255, 0.07);
+}
+.hero-cta:focus-visible,
+.hero-cta-secondary:focus-visible {
   outline: 2px solid #e6f3ff;
-  outline-offset: 10px;
+  outline-offset: 3px;
 }
 .hero-cta-label {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 700;
-  white-space: nowrap;
-  letter-spacing: 0.01em;
-  line-height: 1.15;
+  font: inherit;
 }
 @media (min-width: 640px) {
-  .hero-cta {
-    padding: 0.95rem 2.2rem;
-  }
-  .hero-cta-label {
-    font-size: 1.3rem;
-  }
-}
-@keyframes hero-cta-sheen {
-  0% {
-    background-position: 150% 0;
-  }
-  45%,
-  100% {
-    background-position: -50% 0;
+  .hero-cta,
+  .hero-cta-secondary {
+    min-height: 3.25rem;
+    padding: 0 1.75rem;
+    font-size: 1.0625rem;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .hero-cta::after {
-    animation: none;
-  }
-}
-/* Navbar buttons (2026-10-01): "First Lesson" is a small version of the hero's gold button (same gradient, glow and
-   sheen) with a "Free" tag; "Sign In" is a quiet gold-outlined pill beside it, so the free lesson is the obvious pick. */
+/* Navbar buttons: the hero's two buttons at navbar size. "Sign up" / "Dashboard" is the flat solid primary,
+   "Log in" / "Account" the matching outline. Same height and radius, no gloss, glow, sheen or lift. */
 .nav-cta,
 .nav-signin {
-  position: relative;
-  isolation: isolate;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  border-radius: 999px;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.95rem;
+  min-height: 2.5rem;
+  padding: 0 1.1rem;
+  border-radius: 0.625rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9375rem;
   line-height: 1;
-  letter-spacing: 0.02em;
   white-space: nowrap;
   cursor: pointer;
   transition:
-    transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
-    box-shadow 0.2s ease,
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease,
-    filter 0.2s ease;
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
 }
 .nav-cta {
-  overflow: hidden;
-  padding: 0.48rem 1.2rem 0.48rem 0.48rem;
-  border: 0;
+  border: 1px solid #6fb2ff;
   color: #04122a;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0) 50%),
-    linear-gradient(100deg, #6fb2ff 0%, #d6ecff 28%, #6fb2ff 55%, #3d8de6 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(230, 244, 255, 0.9),
-    inset 0 -2px 0 rgba(10, 50, 110, 0.4),
-    0 0 0 1px rgba(140, 195, 255, 0.35),
-    0 8px 22px -8px rgba(60, 150, 255, 0.75);
-}
-.nav-cta::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.75) 50%, transparent 65%) no-repeat;
-  background-size: 250% 100%;
-  background-position: 150% 0;
-  mix-blend-mode: soft-light;
-  animation: hero-cta-sheen 5s ease-in-out 2.5s infinite;
-  pointer-events: none;
+  background: #6fb2ff;
 }
 .nav-cta:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.06);
-  box-shadow:
-    inset 0 1px 0 rgba(230, 244, 255, 0.9),
-    inset 0 -2px 0 rgba(10, 50, 110, 0.4),
-    0 0 0 1px rgba(140, 195, 255, 0.55),
-    0 12px 28px -8px rgba(60, 150, 255, 0.95);
-}
-.nav-cta-free {
-  padding: 0.32rem 0.55rem;
-  border-radius: 999px;
-  background: rgba(4, 14, 32, 0.9);
-  color: #9ccaff;
-  font-size: 0.66rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  border-color: #8cc2ff;
+  background: #8cc2ff;
 }
 .nav-signin {
-  padding: 0.66rem 1.15rem 0.66rem 0.9rem;
-  border: 1px solid rgba(110, 178, 255, 0.6);
+  border: 1px solid rgba(163, 175, 198, 0.4);
   /* (no backdrop blur: over the hero video it was recomputed on every frame) */
-  background: rgba(5, 12, 26, 0.6);
-  color: #cfe6ff;
+  background: rgba(5, 12, 26, 0.45);
+  color: #e6ebf5;
 }
 
 /* A soft dark band behind the transparent bar over the hero video (the bar is
@@ -503,75 +434,73 @@ html.js .enter-down {
   height: 1.1rem;
 }
 .nav-signin:hover {
-  transform: translateY(-1px);
-  border-color: #6eb2ff;
-  background: rgba(110, 178, 255, 0.14);
-  color: #e6f3ff;
-  box-shadow: 0 0 18px -4px rgba(110, 178, 255, 0.5);
+  border-color: rgba(163, 175, 198, 0.75);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+html.light .nav-cta {
+  border-color: #1f6fd0;
+  color: #ffffff;
+  background: #1f6fd0;
+}
+html.light .nav-cta:hover {
+  border-color: #185bb0;
+  background: #185bb0;
 }
 html.light .nav-signin {
-  border-color: rgba(26, 85, 150, 0.55);
-  background: rgba(255, 255, 255, 0.55);
-  color: #154780;
+  border-color: rgba(20, 40, 70, 0.28);
+  background: rgba(255, 255, 255, 0.6);
+  color: #14283f;
 }
 html.light .nav-signin:hover {
-  border-color: #1a5596;
-  background: rgba(40, 105, 180, 0.12);
-  color: #0f3463;
+  border-color: rgba(20, 40, 70, 0.5);
+  background: rgba(20, 40, 70, 0.06);
+  color: #0b1a2c;
 }
 /* Light theme, but the bar is still floating over the homepage's dark hero (the navbar carries hero-media
-   until it is scrolled): the pale pill with brown letters could not be read there, so it keeps the dark look. */
+   until it is scrolled): the light-theme buttons could not be read there, so they keep the dark look. */
+html.light .hero-media .nav-cta,
+html.light .lg\:hero-media .nav-cta {
+  border-color: #6fb2ff;
+  color: #04122a;
+  background: #6fb2ff;
+}
+html.light .hero-media .nav-cta:hover,
+html.light .lg\:hero-media .nav-cta:hover {
+  border-color: #8cc2ff;
+  background: #8cc2ff;
+}
 html.light .hero-media .nav-signin,
 html.light .lg\:hero-media .nav-signin {
-  border-color: rgba(110, 178, 255, 0.75);
-  background: rgba(5, 12, 26, 0.55);
-  color: #d6ecff;
+  border-color: rgba(163, 175, 198, 0.4);
+  background: rgba(5, 12, 26, 0.45);
+  color: #e6ebf5;
 }
 html.light .hero-media .nav-signin:hover,
 html.light .lg\:hero-media .nav-signin:hover {
-  border-color: #6eb2ff;
-  background: rgba(110, 178, 255, 0.22);
-  color: #e6f3ff;
-}
-/* text-only pills (no "Free" tag or icon): even padding */
-.nav-cta.nav-cta-plain,
-.nav-signin.nav-cta-plain {
-  padding: 0.74rem 1.4rem;
-}
-@media (min-width: 1280px) {
-  .nav-cta.nav-cta-plain,
-  .nav-signin.nav-cta-plain {
-    padding: 0.82rem 1.65rem;
-  }
+  border-color: rgba(163, 175, 198, 0.75);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
 }
 /* the full-width version at the top of the mobile menu */
 .nav-cta.w-full {
-  padding: 0.6rem 1rem;
-  font-size: 0.95rem;
+  min-height: 2.75rem;
 }
 .nav-cta:focus-visible,
 .nav-signin:focus-visible {
-  outline: 2px solid #6eb2ff;
+  outline: 2px solid #e6f3ff;
   outline-offset: 3px;
+}
+html.light .nav-cta:focus-visible,
+html.light .nav-signin:focus-visible {
+  outline-color: #1f6fd0;
 }
 @media (min-width: 1280px) {
   .nav-cta,
   .nav-signin {
-    font-size: 1.08rem;
-  }
-  .nav-cta {
-    padding: 0.55rem 1.45rem 0.55rem 0.55rem;
-  }
-  .nav-signin {
-    padding: 0.75rem 1.35rem 0.75rem 1.05rem;
-  }
-  .nav-cta-free {
-    font-size: 0.72rem;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .nav-cta::after {
-    animation: none;
+    min-height: 2.75rem;
+    padding: 0 1.3rem;
+    font-size: 1rem;
   }
 }
 /* the gold word is background-clipped, so text-shadow can't reach it; a drop-shadow can */
@@ -700,9 +629,7 @@ html.light .lg\:hero-media .nav-signin:hover {
    src/lib/theme.ts a second after load). The gold shimmer animates background-position, which can't run on the
    compositor: left running from first paint, its repaints sat in the load window and slowed every page. */
 html.js:not(.anim-ready) .text-gradient-gold,
-html.js:not(.anim-ready) .card-shine::after,
-html.js:not(.anim-ready) .hero-cta::after,
-html.js:not(.anim-ready) .nav-cta::after {
+html.js:not(.anim-ready) .card-shine::after {
   animation-play-state: paused;
 }
 
@@ -1103,6 +1030,137 @@ html.light .card-shine::after {
   opacity: 1;
 }
 
+/* ── "What you'll learn" cards (src/components/FeaturesSection.tsx) ──
+   Their own class rather than .card-ancient, which many other pages share. A rounded panel with a soft top-lit
+   surface, a blue-to-cyan rule along the top edge, a large quiet step number in the corner and filled lesson
+   chips. Hover lifts the card and brightens the rule and the number; nothing animates on its own. */
+.learn-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 2rem 2rem 2.1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(111, 178, 255, 0.16);
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(111, 178, 255, 0.1) 0%, transparent 55%),
+    linear-gradient(180deg, #0f1728 0%, #0a0f1c 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 18px 40px -24px rgba(0, 0, 0, 0.7);
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+/* the rule along the top edge: always there, brighter on hover */
+.learn-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, #6fb2ff 0%, #5fe0f0 55%, rgba(95, 224, 240, 0) 100%);
+  opacity: 0.55;
+  transition: opacity 0.3s ease;
+}
+.learn-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(111, 178, 255, 0.38);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 28px 50px -24px rgba(0, 0, 0, 0.8),
+    0 0 44px -12px rgba(111, 178, 255, 0.28);
+}
+.learn-card:hover::before {
+  opacity: 1;
+}
+/* the step number: decoration only (aria-hidden), so it stays faint */
+.learn-card-num {
+  position: absolute;
+  top: 1.05rem;
+  right: 1.4rem;
+  z-index: -1;
+  font-family: var(--font-display);
+  font-size: 3.25rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: transparent;
+  background: linear-gradient(180deg, rgba(111, 178, 255, 0.3), rgba(111, 178, 255, 0.04));
+  -webkit-background-clip: text;
+  background-clip: text;
+  transition: opacity 0.3s ease;
+  opacity: 0.8;
+  user-select: none;
+}
+.learn-card:hover .learn-card-num {
+  opacity: 1;
+}
+.learn-card-lessons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  /* keeps a second chip clear of the number */
+  padding-right: 4.5rem;
+}
+.learn-card-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(95, 224, 240, 0.22);
+  background: rgba(95, 224, 240, 0.09);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #8fe6f2;
+}
+.learn-card-title {
+  letter-spacing: -0.01em;
+}
+html.light .learn-card {
+  border-color: rgba(26, 85, 150, 0.14);
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(31, 111, 208, 0.07) 0%, transparent 55%),
+    linear-gradient(180deg, #ffffff 0%, #f3f6fb 100%);
+  box-shadow:
+    0 1px 2px rgba(15, 35, 70, 0.05),
+    0 14px 30px -20px rgba(15, 35, 70, 0.22);
+}
+html.light .learn-card::before {
+  background: linear-gradient(90deg, #1f6fd0 0%, #0e9bb5 55%, rgba(14, 155, 181, 0) 100%);
+  opacity: 0.7;
+}
+html.light .learn-card:hover {
+  border-color: rgba(31, 111, 208, 0.34);
+  box-shadow:
+    0 1px 2px rgba(15, 35, 70, 0.05),
+    0 26px 44px -22px rgba(15, 35, 70, 0.3),
+    0 0 36px -14px rgba(31, 111, 208, 0.3);
+}
+html.light .learn-card-num {
+  background: linear-gradient(180deg, rgba(31, 111, 208, 0.22), rgba(31, 111, 208, 0.03));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+html.light .learn-card-chip {
+  border-color: rgba(14, 116, 144, 0.2);
+  background: rgba(14, 116, 144, 0.08);
+  color: #0c637b;
+}
+@media (prefers-reduced-motion: reduce) {
+  .learn-card,
+  .learn-card::before,
+  .learn-card-num {
+    transition: none;
+  }
+  .learn-card:hover {
+    transform: none;
+  }
+}
+
 /* ── Light mode: misc element overrides ── */
 html.light nav {
   color: #0b1220;
@@ -1409,13 +1467,87 @@ html.light {
   align-items: center;
   padding: 6.5rem 0 6rem;
 }
-.home-hero-glow {
+/* the background clip (home/HeroBackdrop.tsx) and the scrim over it: darkest on the left, under the copy */
+.home-hero-backdrop {
   position: absolute;
   inset: 0;
   pointer-events: none;
+}
+.home-hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: 65% 50%;
+}
+/* a still wash that lifts the light source at the right edge, with a warm echo of the gold trails low on the
+   right. All the movement comes from the clip: nothing here or on the video is animated (transforming a playing
+   video makes it judder). */
+.home-hero-glow {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: screen;
   background:
-    radial-gradient(ellipse 55% 60% at 78% 45%, rgba(111, 178, 255, 0.16), transparent 70%),
-    radial-gradient(ellipse 50% 50% at 12% 20%, rgba(111, 227, 255, 0.08), transparent 70%);
+    radial-gradient(ellipse 46% 60% at 100% 46%, rgba(72, 168, 255, 0.3) 0%, rgba(72, 168, 255, 0.1) 45%, transparent 72%),
+    radial-gradient(ellipse 30% 34% at 82% 78%, rgba(255, 186, 96, 0.12) 0%, transparent 70%);
+}
+/* the scrim only darkens where the copy sits (the left), and under the navbar; the right is left open */
+.home-hero-scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(4, 6, 13, 0.8) 0%,
+      rgba(4, 6, 13, 0.72) 34%,
+      rgba(4, 6, 13, 0.4) 52%,
+      rgba(4, 6, 13, 0.08) 72%,
+      rgba(4, 6, 13, 0) 100%
+    ),
+    linear-gradient(180deg, rgba(4, 6, 13, 0.55) 0%, transparent 22%);
+}
+@media (max-width: 1023px) {
+  /* stacked layout: the copy runs the full width, so the whole image stays dimmed */
+  .home-hero-scrim {
+    background: rgba(4, 6, 13, 0.7);
+  }
+  .home-hero-glow {
+    opacity: 0.6;
+  }
+}
+/* Light theme: the hero stays a dark band with light text, but lifted from near-black to a deep blue so it sits
+   better above the cream page. A screen wash raises the clip's blacks (no filter on the playing video), and the
+   scrim under the copy turns navy and thins out sooner, so more of the bright clip shows on the right. */
+html.light .home-hero {
+  background-color: #0d1b3d;
+}
+html.light .home-hero-glow {
+  background:
+    radial-gradient(ellipse 46% 60% at 100% 46%, rgba(120, 190, 255, 0.38) 0%, rgba(120, 190, 255, 0.14) 45%, transparent 72%),
+    radial-gradient(ellipse 30% 34% at 82% 78%, rgba(255, 196, 120, 0.14) 0%, transparent 70%),
+    linear-gradient(rgba(88, 140, 255, 0.26), rgba(88, 140, 255, 0.26));
+}
+html.light .home-hero-scrim {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(13, 27, 61, 0.78) 0%,
+      rgba(13, 27, 61, 0.66) 34%,
+      rgba(13, 27, 61, 0.3) 52%,
+      rgba(13, 27, 61, 0.04) 70%,
+      rgba(13, 27, 61, 0) 100%
+    ),
+    linear-gradient(180deg, rgba(13, 27, 61, 0.45) 0%, transparent 22%);
+}
+@media (max-width: 1023px) {
+  html.light .home-hero-scrim {
+    background: rgba(13, 27, 61, 0.64);
+  }
+  html.light .home-hero-glow {
+    opacity: 0.8;
+  }
 }
 .home-hero-grid {
   display: grid;

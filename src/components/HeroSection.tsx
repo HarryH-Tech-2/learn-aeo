@@ -7,6 +7,7 @@ import type { CSSProperties } from "react";
 import { trackEvent } from "@/lib/analytics";
 import { useAuthModal } from "@/components/AuthModal";
 import HeroAnswer from "@/components/home/HeroAnswer";
+import HeroBackdrop from "@/components/home/HeroBackdrop";
 
 /** Course facts under the buttons, all from the catalog. */
 const FACTS = [
@@ -18,8 +19,8 @@ const FACTS = [
 
 /**
  * The homepage hero: a dark band in both themes (hero-media pins the dark tokens, and the navbar floats over it
- * from `lg` up). Copy on the left, a mock cited AI answer (HeroAnswer) on the right; stacked on small screens.
- * All plain server HTML: the headline, who the course is for, the free first lesson and the way in to the
+ * from `lg` up). A looping abstract clip plays behind it (HeroBackdrop). Copy on the left, a mock cited AI answer
+ * (HeroAnswer) on the right; stacked on small screens. The copy is plain server HTML: the headline, who the course is for, the free first lesson and the way in to the
  * curriculum never wait on JavaScript.
  */
 export default function HeroSection() {
@@ -28,7 +29,7 @@ export default function HeroSection() {
 
   return (
     <section className="home-hero hero-media relative overflow-hidden bg-[#04060d]">
-      <div className="home-hero-glow" aria-hidden="true" />
+      <HeroBackdrop />
 
       <div className="home-hero-grid relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="home-hero-copy">
@@ -71,7 +72,7 @@ export default function HeroSection() {
             )}
             <a
               href="#lessons"
-              className="inline-flex items-center gap-2 rounded-full border border-sand-400/40 px-6 py-3 font-body text-sm sm:text-base font-semibold text-sand-100 hover:border-gold-400 hover:text-gold-400 transition-colors"
+              className="hero-cta-secondary"
             >
               See the curriculum
             </a>

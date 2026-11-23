@@ -5,9 +5,9 @@
  * one label instead of the made-up text.
  */
 const SOURCES = [
-  { n: 1, host: "yoursite.com", path: "/guides/pricing", yours: true },
-  { n: 2, host: "industry-review.example", path: "/best-tools", yours: false },
-  { n: 3, host: "docs.vendor.example", path: "/setup", yours: false },
+  { n: 1, host: "yoursite.com", path: "/guides/zero-click-search", yours: true },
+  { n: 2, host: "search-study.example", path: "/ai-answers-and-clicks", yours: false },
+  { n: 3, host: "docs.engine.example", path: "/how-sources-are-chosen", yours: false },
 ] as const;
 
 export default function HeroAnswer() {
@@ -18,23 +18,23 @@ export default function HeroAnswer() {
           <circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" strokeWidth="2" />
           <path d="m15.5 15.5 5 5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
         </svg>
-        <span className="hero-answer-query-text">Which tool should a small team use?</span>
+        <span className="hero-answer-query-text">Why is our traffic down if rankings held?</span>
       </div>
 
       <div className="hero-answer-body" aria-hidden="true">
         <p className="hero-answer-label">Answer</p>
         <p className="hero-answer-text">
-          For a small team, the best fit is the one with clear per-seat pricing and a short{" "}
+          Rankings can hold while clicks fall, because more searches now end at an AI{" "}
           <span className="whitespace-nowrap">
-            setup<sup className="hero-answer-cite hero-answer-cite-yours">1</sup>.
+            answer<sup className="hero-answer-cite hero-answer-cite-yours">1</sup>.
           </span>{" "}
-          Independent reviews rate it highly for{" "}
+          The pages still earning visits are the ones those answers{" "}
           <span className="whitespace-nowrap">
-            support<sup className="hero-answer-cite">2</sup>,
+            cite<sup className="hero-answer-cite">2</sup>,
           </span>{" "}
-          and it can be running in under an{" "}
+          and they tend to state the answer in their opening{" "}
           <span className="whitespace-nowrap">
-            hour<sup className="hero-answer-cite">3</sup>.
+            lines<sup className="hero-answer-cite">3</sup>.
           </span>
         </p>
 

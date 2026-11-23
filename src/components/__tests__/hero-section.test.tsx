@@ -28,10 +28,16 @@ describe("HeroSection server render", () => {
     expect(html).not.toMatch(/home-hero-copy[^"]*\bhidden\b/);
   });
 
-  it("shows the mock cited answer as one labeled picture, with no video or canvas", () => {
+  it("shows the mock cited answer as one labeled picture, with no canvas", () => {
     expect(html).toContain("hero-answer");
     expect(html).toMatch(/role="img" aria-label="An AI answer that cites three sources/);
-    expect(html).not.toMatch(/<video|<canvas/);
+    expect(html).not.toMatch(/<canvas/);
+  });
+
+  it("plays a silent, decorative background clip that has a poster and is skipped for reduced motion", () => {
+    expect(html).toMatch(/<div class="home-hero-backdrop" aria-hidden="true"><video[^>]*\bmuted=""[^>]*\bposter="\/hero\/flow-poster\.webp"/);
+    expect(html).toMatch(/<source src="\/hero\/flow\.webm"[^>]*media="\(prefers-reduced-motion: no-preference\)"/);
+    expect(html).toMatch(/<source src="\/hero\/flow\.mp4"[^>]*media="\(prefers-reduced-motion: no-preference\)"/);
   });
 
   it("lists the course facts from the catalog", () => {

@@ -9,7 +9,7 @@ interface ThemeContextValue {
 }
 
 const ThemeContext = createContext<ThemeContextValue>({
-  theme: "dark",
+  theme: "light",
   toggleTheme: () => {},
 });
 
@@ -18,11 +18,11 @@ export function useTheme() {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("dark");
+  const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
-    // Same rule as the inline <head> script (saved choice, else light on
-    // phones / dark on larger screens) so hydration never flips the theme.
+    // Same rule as the inline <head> script (saved choice, else light) so
+    // hydration never flips the theme.
     let stored: string | null = null;
     try {
       stored = localStorage.getItem(THEME_STORAGE_KEY);

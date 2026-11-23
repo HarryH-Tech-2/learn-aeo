@@ -11,11 +11,11 @@ export const THEME_STORAGE_KEY = `${COOKIE_PREFIX}theme`;
 /**
  * Decide the theme for this visit.
  * 1. An explicit choice saved by the toggle always wins.
- * 2. Otherwise dark, on every screen size (2026-11-04: phones used to start in light).
+ * 2. Otherwise light, on every screen size (2026-11-23; it was dark before that).
  */
 export function resolveInitialTheme(stored: string | null): Theme {
   if (stored === "light" || stored === "dark") return stored;
-  return "dark";
+  return "light";
 }
 
 /**
@@ -25,7 +25,7 @@ export function resolveInitialTheme(stored: string | null): Theme {
  */
 export const THEME_INIT_SCRIPT =
   `(function(){try{var t=localStorage.getItem('${THEME_STORAGE_KEY}');` +
-  "if(t!=='light'&&t!=='dark'){t='dark'}" +
+  "if(t!=='light'&&t!=='dark'){t='light'}" +
   // `js` lets globals.css hide scroll-reveal content only when scripts run.
   "var c=document.documentElement.classList;c.add('js');if(t==='light'){c.add('light')}else{c.remove('light')}" +
   // `anim-ready` a second after load: globals.css holds the infinite decorative animations (gold shimmer, card

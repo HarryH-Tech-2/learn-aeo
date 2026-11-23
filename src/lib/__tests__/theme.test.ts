@@ -4,15 +4,15 @@ import { join } from "node:path";
 import { resolveInitialTheme, THEME_INIT_SCRIPT, THEME_STORAGE_KEY } from "@/lib/theme";
 
 describe("resolveInitialTheme", () => {
-  it("defaults to dark", () => {
-    expect(resolveInitialTheme(null)).toBe("dark");
+  it("defaults to light", () => {
+    expect(resolveInitialTheme(null)).toBe("light");
   });
   it("always honors a saved choice", () => {
     expect(resolveInitialTheme("dark")).toBe("dark");
     expect(resolveInitialTheme("light")).toBe("light");
   });
   it("ignores garbage in storage", () => {
-    expect(resolveInitialTheme("banana")).toBe("dark");
+    expect(resolveInitialTheme("banana")).toBe("light");
   });
 });
 
@@ -68,7 +68,7 @@ describe("decorative animations wait for load (SEO audit 2026-10-30)", () => {
 
   it("the stylesheet pauses the infinite decorative animations until then", () => {
     const css = readFileSync(join(process.cwd(), "src/styles/globals.css"), "utf8");
-    for (const sel of [".text-gradient-gold", ".card-shine::after", ".hero-cta::after", ".nav-cta::after"]) {
+    for (const sel of [".text-gradient-gold", ".card-shine::after"]) {
       expect(css, sel).toContain(`html.js:not(.anim-ready) ${sel}`);
     }
   });

@@ -82,22 +82,25 @@ export default function FeaturesSection() {
           {features.map((feature, i) => (
             <div
               key={feature.title}
-              className="reveal card-ancient p-8"
+              className="reveal learn-card"
               style={reveal(0.3 + i * 0.1, { y: 40, dur: 0.6 })}
             >
-              <ul className="mb-5 flex flex-wrap gap-2">
+              <span className="learn-card-num" aria-hidden="true">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <ul className="learn-card-lessons">
                 {lessonsFor(feature.lessons).map((lesson) => (
                   <li
                     key={lesson.id}
-                    className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 px-3 py-1 font-body text-xs text-cyan-500"
+                    className="learn-card-chip"
                   >
                     <span>Lesson {lesson.order}</span>
                     {lesson.status === "coming-soon" && <span className="text-sand-400">· coming soon</span>}
                   </li>
                 ))}
               </ul>
-              <h3 className="font-display text-xl font-semibold text-sand-100 mb-3">{feature.title}</h3>
-              <p className="font-body text-sm text-sand-400 leading-relaxed font-light">{feature.description}</p>
+              <h3 className="learn-card-title font-display text-xl font-semibold text-sand-100 mb-3">{feature.title}</h3>
+              <p className="font-body text-sm text-sand-400 leading-relaxed">{feature.description}</p>
             </div>
           ))}
         </div>
