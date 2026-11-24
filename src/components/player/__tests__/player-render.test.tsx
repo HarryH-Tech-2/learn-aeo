@@ -213,6 +213,65 @@ describe("ConceptCard", () => {
   });
 });
 
+describe("ConceptCard hands-on examples", () => {
+  const render = (example: Concept["example"]) => renderToStaticMarkup(<ConceptCard concept={{ ...CONCEPT, example }} />);
+
+  it("opens a walkthrough on its first step only", () => {
+    const html = render({
+      kind: "walkthrough",
+      title: "How it runs",
+      steps: [
+        { label: "Search", text: "It searches first." },
+        { label: "Read", text: "Then it reads." },
+        { label: "Write", text: "Then it writes." },
+      ],
+      note: "A closing note.",
+    });
+    expect(html).toContain("It searches first.");
+    expect(html).not.toContain("Then it reads.");
+    expect(html).toContain("Next: Read");
+    expect(html).toContain("Step 1 of 3");
+    expect(html).not.toContain("A closing note.");
+  });
+
+  it("shows gates as switches and names the first one that is off", () => {
+    const html = render({
+      kind: "gates",
+      title: "Get cited",
+      intro: "Turn them all on.",
+      gates: [
+        { label: "Crawlable", on: true, offReason: "Blocked by robots." },
+        { label: "Indexed", on: false, offReason: "Not in the index." },
+        { label: "Answers it", on: false, offReason: "No clear passage." },
+      ],
+      pass: "All good.",
+    });
+    expect(html.match(/role="switch"/g)).toHaveLength(3);
+    expect(html.match(/aria-checked="true"/g)).toHaveLength(1);
+    expect(html).toContain("the page drops out at step 2");
+    expect(html).toContain("Not in the index.");
+    expect(html).not.toContain("No clear passage.");
+    expect(html).not.toContain("All good.");
+  });
+
+  it("lists a fan-out's searches with their passages hidden", () => {
+    const html = render({
+      kind: "fanout",
+      prompt: "Which kettle is best?",
+      queries: [
+        { query: "kettle reviews", passage: "We tested six kettles.", source: "reviews.example/kettles", cited: true },
+        { query: "kettle price", passage: "Prices vary.", source: "shop.example/kettles", cited: false },
+      ],
+      note: "All made up.",
+    });
+    expect(html).toContain("Which kettle is best?");
+    expect(html).toContain("kettle reviews");
+    expect(html).toContain("0 of 2 run.");
+    expect(html).not.toContain("We tested six kettles.");
+    expect(html).not.toContain("All made up.");
+  });
+});
+
 describe("Lesson 1 content", () => {
   it("renders every concept, question and the example without throwing", async () => {
     const { LESSON_1 } = await import("@/lib/content/lesson-1");

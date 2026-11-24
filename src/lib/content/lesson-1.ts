@@ -153,6 +153,33 @@ export const LESSON_1: LessonContent = {
             "A classic results page hands the user ten links and leaves the reading to them. An answer engine does the reading itself and writes a response, then attaches links to the pages it drew on.\n\nYou already know the main ones. Google's AI Overviews and AI Mode surface links alongside the AI response, and Google says AI Mode gives \"a comprehensive AI-powered response with links to supporting websites\". Microsoft says Copilot Search \"cites its sources prominently\". Perplexity says each answer \"includes numbered citations linking to the original sources\". ChatGPT search and Claude's web search work the same way: search, read, write, cite.",
           whyItMatters:
             "The user may never scroll a list of results. Your visibility comes down to one question: is your page among the handful of sources attached to the answer?",
+          example: {
+            "kind": "walkthrough",
+            "title": "What an answer engine does with one question",
+            "steps": [
+              {
+                "label": "The question",
+                "text": "A user types a full question, not a couple of keywords.",
+                "code": "Q: Which project tool suits a ten-person design agency?"
+              },
+              {
+                "label": "Search",
+                "text": "The engine runs one or more searches against an index of the web and gets back a set of pages.",
+                "code": "brightdesk.example/features\nreviews.example/agency-project-tools\nnorthwind.example/pricing"
+              },
+              {
+                "label": "Read",
+                "text": "It reads those pages and picks out the passages that answer the question.",
+                "code": "\"Client approval is included on every Brightdesk plan.\"\n\"Northwind Planner costs less per user for teams under 20.\""
+              },
+              {
+                "label": "Write and cite",
+                "text": "It writes one response in its own words and attaches a link to each page it took a claim from.",
+                "code": "Brightdesk includes client approval on every plan [1].\nNorthwind Planner is cheaper per user for small teams [2].\n\n[1] brightdesk.example/features\n[2] reviews.example/agency-project-tools"
+              }
+            ],
+            "note": "The brands and pages are made up. Three pages were read and two were cited: the rest of this lesson is about what decides that."
+          },
           pitfall:
             "Treating AI Overviews as a separate system that needs special tricks. Google's own guidance says there are no extra requirements: a page has to be indexed and eligible to appear in Search with a snippet.",
           sources: [GOOGLE_AI_FEATURES, BING_COPILOT_SEARCH, PERPLEXITY_HOW, OPENAI_WEB_SEARCH, CLAUDE_WEB_SEARCH],
@@ -270,6 +297,33 @@ export const LESSON_1: LessonContent = {
             "Lewis et al. (2020) set out the retrieve-then-generate pattern that the engines' own docs show in outline: search first, then answer from the results. A **retriever** searches an index for the passages most relevant to the question. A **generator** then writes the answer using those passages as context. In the paper, the index was \"a dense vector index of Wikipedia, accessed with a pre-trained neural retriever\".\n\nThe paper also showed why retrieval matters for freshness. Because the knowledge lives in the index, it \"can be easily updated at test time\" by swapping the index, with no retraining.",
           whyItMatters:
             "This is why indexing and passage quality come before anything else. If your passage is not retrieved, the generator never sees it, however good the model is.",
+          example: {
+            "kind": "walkthrough",
+            "title": "Retrieve, then generate",
+            "steps": [
+              {
+                "label": "The question arrives",
+                "text": "A user asks something the model may not know, or may only know an old answer to.",
+                "code": "Q: How long does Larkfield Tea take to deliver in the UK?"
+              },
+              {
+                "label": "Retrieve",
+                "text": "The retriever searches the index and returns the passages that best match the question. Nothing has been written yet.",
+                "code": "Passage 1 (larkfieldtea.example/delivery):\n\"Larkfield Tea delivers UK orders in 2 to 4 working days.\"\n\nPassage 2 (larkfieldtea.example/returns):\n\"Unopened tea can be returned within 30 days.\""
+              },
+              {
+                "label": "Augment",
+                "text": "The retrieved passages are placed in front of the generator together with the question. This is the only route by which your page reaches the model at answer time.",
+                "code": "Context: [Passage 1] [Passage 2]\nQuestion: How long does Larkfield Tea take to deliver in the UK?"
+              },
+              {
+                "label": "Generate",
+                "text": "The generator writes the answer from that context. It used Passage 1, so Passage 1 is the one that can be cited.",
+                "code": "A: UK orders arrive in 2 to 4 working days [1].\n\n[1] larkfieldtea.example/delivery"
+              }
+            ],
+            "note": "A simplified picture with a made-up shop. Real engines add steps of their own and do not publish them."
+          },
           pitfall:
             "Reading the paper as a specification of ChatGPT or Google. It sets out a research pattern. Each commercial engine builds its own, much larger version and does not publish the details.",
           sources: [RAG_PAPER, RAG_PAPER_FULL],
@@ -283,6 +337,12 @@ export const LESSON_1: LessonContent = {
             "Grounding connects what the model writes to sources it can point to. Google's Gemini docs put it plainly: \"If you want to connect your model with world knowledge, a wide possible range of topics, or up-to-date information on the Internet, then use Grounding with Google Search.\"\n\nRetrieval is a decision, not a given. Anthropic's docs say \"Claude determines when to search based on the prompt\", and OpenAI's say the model \"can choose to search the web or not based on the content of the input prompt\".",
           whyItMatters:
             "Anthropic says Claude searches when a request depends on information that is \"current, changing, or outside its training data\". Questions about prices, policies and recent releases fit that description, so they are your best chance of being cited.",
+          example: {
+            "kind": "code",
+            "language": "text",
+            "caption": "A made-up question, answered two ways",
+            "code": "Q: What does Larkfield Tea charge for UK delivery?\n\nAnswered from training only (no search):\n  Larkfield Tea charges around £3.50 for UK delivery.\n  (No sources. The figure is whatever the model last saw.)\n\nGrounded (searched first):\n  UK delivery costs £3.95, and is free on orders over £30 [1].\n\n  [1] larkfieldtea.example/delivery"
+          },
           pitfall:
             "Assuming every prompt triggers a search. Broad, stable questions may be answered from training alone, with no citations for anyone to win.",
           sources: [GEMINI_GROUNDING, CLAUDE_WEB_SEARCH, OPENAI_WEB_SEARCH],
@@ -296,6 +356,39 @@ export const LESSON_1: LessonContent = {
             "Every engine here retrieves from an index of the web. For Google's AI features, the page must be in Google's index. PerplexityBot exists \"to surface and link websites in search results on Perplexity\". OAI-SearchBot does the same job for ChatGPT search. Anthropic says disabling Claude-SearchBot \"prevents our system from indexing your content for search optimization, which may reduce your site's visibility and accuracy in user search results\". Copilot Search runs inside Bing.\n\nSeparate user-triggered fetchers (ChatGPT-User, Perplexity-User, Claude-User) visit a page while answering a particular question. Lesson 2 covers how they treat robots.txt.",
           whyItMatters:
             "Classic technical SEO is the entry ticket. A page the crawler cannot reach, or that the index drops, is not a candidate for any answer.",
+          example: {
+            "kind": "gates",
+            "title": "Get this page cited",
+            "intro": "A made-up shop's delivery page never shows up in AI answers. Each switch is something that has to be true. Turn them all on, and watch where the page drops out until you do.",
+            "gates": [
+              {
+                "label": "robots.txt lets the engine's search crawler in",
+                "on": true,
+                "offReason": "robots.txt disallows the engine's search crawler, so it never fetches the page. Nothing after this step can happen."
+              },
+              {
+                "label": "The firewall or CDN lets that crawler through",
+                "on": false,
+                "offReason": "robots.txt allows the crawler, but a firewall or CDN rule blocks it. It still cannot fetch the page, so the page never reaches the index. Lesson 2 shows how to check this."
+              },
+              {
+                "label": "The page is in the engine's index",
+                "on": true,
+                "offReason": "The crawler can reach the page, but the page is not in the index, so no search can return it. For Google's AI features a page has to be indexed and eligible to show with a snippet."
+              },
+              {
+                "label": "A search or sub-query retrieves the page",
+                "on": true,
+                "offReason": "The page is indexed, but none of the searches the engine ran brought it back. It needs a section that answers one of the sub-questions people ask."
+              },
+              {
+                "label": "A passage on it answers the question on its own",
+                "on": false,
+                "offReason": "The page was retrieved, but no passage on it gives a clear, standalone answer, so the engine cites a different page. Engines consult more sources than they cite."
+              }
+            ],
+            "pass": "The crawler can reach the page, the page is indexed, a search retrieves it and a passage on it supports the answer. Each step depends on the one before, which is why crawling and indexing come first."
+          },
           pitfall:
             "Polishing copy for AI while a robots.txt rule or a firewall setting quietly blocks the search crawler.",
           sources: [GOOGLE_AI_FEATURES, PERPLEXITY_CRAWLERS, OPENAI_CRAWLERS, ANTHROPIC_CRAWLERS],
@@ -358,6 +451,41 @@ export const LESSON_1: LessonContent = {
             "Google is explicit about this. When it launched AI Mode, it said the feature uses query fan-out, \"breaking down your question into subtopics and issuing a multitude of queries simultaneously on your behalf\". Its Search Central docs say AI Overviews may use the same technique. Google's Gemini grounding docs show the pattern from the developer's side: \"A single prompt might lead to one or more search queries.\" Their example turns *\"Tell me about the life of Albert Einstein\"* into three searches: his early life and education, the theory of relativity, and his life in the US.\n\nTake the prompt *\"Is a heat pump worth it for a 1930s semi?\"* A fan-out could plausibly search running costs, heat pumps in older and less insulated homes, available grants, and air-source versus ground-source.",
           whyItMatters:
             "You can be cited for one sub-question even if you would never rank for the long original prompt. Each clearly answered subtopic on your page is another way in.",
+          example: {
+            "kind": "fanout",
+            "prompt": "Which loose leaf tea subscription is best for a gift?",
+            "queries": [
+              {
+                "query": "loose leaf tea subscription gift options",
+                "passage": "Larkfield Tea's gift subscription sends two blends a month for 3, 6 or 12 months, with a card in the first box.",
+                "source": "larkfieldtea.example/gift-subscription",
+                "cited": true,
+                "why": "It names the product and answers this search in one sentence."
+              },
+              {
+                "query": "tea subscription price per month",
+                "passage": "Leafline subscriptions start at £9 a month, including UK delivery.",
+                "source": "leafline.example/pricing",
+                "cited": true,
+                "why": "A price, a period and a condition, all in one sentence."
+              },
+              {
+                "query": "best tea subscription reviews",
+                "passage": "We tried six tea subscriptions over three months. Larkfield Tea had the widest range.",
+                "source": "reviews.example/tea-subscriptions",
+                "cited": true,
+                "why": "The review site earns this citation. Larkfield Tea only gets the mention."
+              },
+              {
+                "query": "tea subscription delivery times",
+                "passage": "We work hard to get every box to you as quickly as we can.",
+                "source": "brewhouse.example/delivery",
+                "cited": false,
+                "why": "Retrieved for the search, but it states no delivery time, so there is nothing in it to cite."
+              }
+            ],
+            "note": "The shops, searches and passages are made up to show the pattern: engines do not publish the searches they fan out to. Three different sites were cited, each for a different part of the question, and none of them had to rank for the whole prompt."
+          },
           pitfall:
             "Treating the sub-queries above as real data. Google does not publish the queries it fans out to. The list is an illustration of the pattern, not a log.",
           sources: [GOOGLE_AI_MODE, GOOGLE_AI_FEATURES, GEMINI_GROUNDING],
@@ -371,6 +499,33 @@ export const LESSON_1: LessonContent = {
             "Each sub-query brings back its own results, so the pool of candidate pages is wider than one results page. Google says that as responses are generated its models \"identify more supporting web pages\", so it can show a wider and more varied set of links than a classic search.\n\nThe pool is then narrowed. OpenAI's web search docs say the number of sources the model consulted \"is often greater than the number of citations\" it shows.",
           whyItMatters:
             "Being outside the top three for a head term does not rule you out. Being retrieved does not guarantee a citation either. The passage has to be the one the answer actually relies on.",
+          example: {
+            "kind": "walkthrough",
+            "title": "From a wide pool to a few citations",
+            "steps": [
+              {
+                "label": "Several searches run",
+                "text": "A fan-out sends several searches, and each one returns its own results.",
+                "code": "4 searches, about 5 results each"
+              },
+              {
+                "label": "The pool",
+                "text": "Some pages come back for more than one search. With the repeats removed, the engine has a pool of candidate pages that is wider than one results page.",
+                "code": "about 14 different pages"
+              },
+              {
+                "label": "Reading",
+                "text": "The model reads passages from the pool. Many repeat each other, or do not answer the question.",
+                "code": "passages from 6 pages are worth a close read"
+              },
+              {
+                "label": "Citations",
+                "text": "Only the pages the answer actually relied on are shown as sources.",
+                "code": "3 pages are cited"
+              }
+            ],
+            "note": "The numbers are invented to show the shape: a wide pool, narrowed twice. No engine publishes its real figures."
+          },
           pitfall:
             "Judging AI visibility from rankings for one head keyword. The sub-queries, and the passages they surface, matter more.",
           sources: [GOOGLE_AI_FEATURES, OPENAI_WEB_SEARCH],
@@ -446,7 +601,7 @@ export const LESSON_1: LessonContent = {
     id: "x-trace-an-answer",
     title: "Trace an answer",
     brief:
-      "Follow one prompt through an answer engine: \"Which project management tool is best for a ten-person design agency?\" Put the steps in order, predict the sub-queries, then sort out who was cited and who was only mentioned.",
+      "Follow one prompt through an answer engine: \"Which project management tool is best for a ten-person design agency?\" Put the steps in order, predict the sub-queries, pick the passage that gets cited, sort out who was cited and who was only mentioned, then decide what the brand that missed out should do.",
     steps: [
       {
         kind: "order",
@@ -476,6 +631,19 @@ export const LESSON_1: LessonContent = {
           "Fan-out breaks a question into the subtopics needed to answer it: tools for small agencies, features agencies need, and cost for a team of ten. Single words lose the meaning, and the last set wanders off the question.",
       },
       {
+        kind: "passage",
+        id: "x-step-passage",
+        prompt:
+          "One of those searches is \"project tools with client approval\". Which passage from a (made-up) features page is more likely to be the one the answer cites?",
+        passages: [
+          "Client approval is included on every Brightdesk plan: clients sign off designs from a shared link, without needing an account.",
+          "Our powerful collaboration features help teams and their clients work together more smoothly than ever before.",
+        ],
+        answer: 0,
+        explanation:
+          "The first passage answers the search directly. It names the product, says the feature is on every plan and says how it works, so it still makes sense when quoted alone. The second could describe any tool and states nothing an answer could rely on.",
+      },
+      {
         kind: "match",
         id: "x-step-classify",
         prompt:
@@ -487,6 +655,21 @@ export const LESSON_1: LessonContent = {
         ],
         explanation:
           "Brightdesk won both. Northwind Planner was named, but the evidence for its claim came from a review site, which earned the citation and any click. That is why mentions and citations need tracking separately.",
+      },
+      {
+        kind: "choice",
+        id: "x-step-next",
+        prompt:
+          "You work for Northwind Planner. It was named, but the citation for its price went to a review site. What is the most direct way to earn that citation yourself?",
+        options: [
+          "State the per-user price on your own crawlable pricing page, in a sentence that makes sense on its own",
+          "Ask the engine to stop citing the review site",
+          "Add the word \"cheapest\" to every page title",
+          "Block the review site's crawler in your robots.txt",
+        ],
+        answer: 0,
+        explanation:
+          "An engine cites the passage its answer relied on. If your own page gives the price in a clear, standalone sentence, and the search crawler can reach it, your page can be the evidence. You cannot remove someone else's citation, and your robots.txt has no effect on other sites.",
       },
     ],
     debrief:

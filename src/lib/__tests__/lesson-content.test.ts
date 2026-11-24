@@ -130,6 +130,29 @@ describe.each(live.map((l) => [l.id, l] as const))("lesson content: %s", (_id, l
     checkSource(c.example.source);
   });
 
+  it("has solvable hands-on examples", () => {
+    for (const k of c.groups.flatMap((g) => g.concepts)) {
+      const e = k.example;
+      if (e?.kind === "walkthrough") {
+        expect(e.steps.length, k.id).toBeGreaterThanOrEqual(3);
+        expect(new Set(e.steps.map((s) => s.label)).size, k.id).toBe(e.steps.length);
+      } else if (e?.kind === "gates") {
+        expect(e.gates.length, k.id).toBeGreaterThanOrEqual(3);
+        // Something has to be off at the start, or there is nothing to work out.
+        expect(e.gates.some((g) => !g.on), k.id).toBe(true);
+        expect(new Set(e.gates.map((g) => g.label)).size, k.id).toBe(e.gates.length);
+        for (const g of e.gates) expect(g.offReason.length, k.id).toBeGreaterThan(20);
+      } else if (e?.kind === "fanout") {
+        expect(e.queries.length, k.id).toBeGreaterThanOrEqual(3);
+        expect(new Set(e.queries.map((q) => q.query)).size, k.id).toBe(e.queries.length);
+        expect(e.queries.some((q) => q.cited), k.id).toBe(true);
+        expect(e.queries.some((q) => !q.cited), k.id).toBe(true);
+        // Invented sites only: a real domain would read as a claim about that site.
+        for (const q of e.queries) expect(q.source, k.id).toMatch(/^[a-z0-9-]+\.example\//);
+      }
+    }
+  });
+
   it("has valid questions", () => {
     allQuestions(c).forEach(checkQuestion);
   });

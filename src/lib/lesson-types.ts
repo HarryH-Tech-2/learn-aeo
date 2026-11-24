@@ -27,6 +27,34 @@ export type CodeLanguage = "text" | "robots" | "json" | "html" | "http" | "markd
 export type CodeExample = { kind: "code"; language: CodeLanguage; caption?: string; code: string };
 export type BeforeAfterExample = { kind: "before-after"; before: string; after: string; note: string };
 
+// Hands-on examples (src/components/player/InteractiveExamples.tsx). Practice only: none of them earns XP.
+/** A process the learner steps through one stage at a time. */
+export type WalkthroughExample = {
+  kind: "walkthrough";
+  title: string;
+  steps: { label: string; text: string; /** Shown in a monospace box under the text. */ code?: string }[];
+  /** Shown once the last step is open. */
+  note?: string;
+};
+/** Conditions that must all hold, as switches. The first one that is off is where the page drops out. */
+export type GatesExample = {
+  kind: "gates";
+  title: string;
+  intro: string;
+  gates: { label: string; /** The switch's starting position. */ on: boolean; /** Shown when this is the first switch that is off. */ offReason: string }[];
+  /** Shown when every switch is on. */
+  pass: string;
+};
+/** One question and the searches it fans out into; the learner runs each search to see the passage it brings back. */
+export type FanOutExample = {
+  kind: "fanout";
+  prompt: string;
+  queries: { query: string; passage: string; /** Host and path, shown as text. */ source: string; cited: boolean; why?: string }[];
+  /** Shown once every search has been run. */
+  note: string;
+};
+export type ConceptExample = CodeExample | BeforeAfterExample | WalkthroughExample | GatesExample | FanOutExample;
+
 export type Concept = {
   id: string;
   term: string;
@@ -34,7 +62,7 @@ export type Concept = {
   /** Markdown. */
   explanation: string;
   whyItMatters: string;
-  example?: CodeExample | BeforeAfterExample;
+  example?: ConceptExample;
   pitfall: string;
   sources: Source[];
   /**

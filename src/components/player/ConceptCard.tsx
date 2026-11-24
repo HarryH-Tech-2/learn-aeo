@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import type { Concept, Source } from "@/lib/lesson-types";
 import CodeBlock from "./CodeBlock";
 import BeforeAfterPredict from "./BeforeAfterPredict";
+import { FanOutExplorer, GateSimulator, Walkthrough } from "./InteractiveExamples";
 import ConfidenceCheck from "./ConfidenceCheck";
 import ConceptQuiz from "./ConceptQuiz";
 import type { Confidence } from "@/lib/concept-confidence";
@@ -119,6 +120,9 @@ export default function ConceptCard({ concept, eyebrow, confidence, onConfidence
       case "example":
         if (example?.kind === "code") return <CodeBlock language={example.language} code={example.code} caption={example.caption} />;
         if (example?.kind === "before-after") return <BeforeAfterPredict example={example} conceptId={id} />;
+        if (example?.kind === "walkthrough") return <Walkthrough example={example} conceptId={id} />;
+        if (example?.kind === "gates") return <GateSimulator example={example} conceptId={id} />;
+        if (example?.kind === "fanout") return <FanOutExplorer example={example} conceptId={id} />;
         return null;
       case "pitfall":
         return <PitfallReveal text={pitfall} startOpen={!stepped} />;
